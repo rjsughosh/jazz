@@ -1,0 +1,4 @@
+service : webapp
+domain : jazz
+owner: ARadhak2
+create_cloudfront_url: true
