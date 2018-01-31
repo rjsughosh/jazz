@@ -1,4 +1,4 @@
 service : webapp
 domain : jazz
-owner: ARadhak2
+owner: Smalire
 create_cloudfront_url: true
