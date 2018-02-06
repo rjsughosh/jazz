@@ -4,5 +4,4 @@ cd ..
 rm -rf app
 npm install -g @angular/cli@latest
 npm install --save
-ng build --prod --aot=false
-mv dist app
+ng build --prod --aot=false --output-path=app
