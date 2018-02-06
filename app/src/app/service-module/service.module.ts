@@ -10,7 +10,7 @@ import {ServicesComponent} from '../pages/services/services.component';
 import {PopoverModule} from 'ng2-popover';
 import {ChartsModule} from 'ng2-charts';
 import {DropdownModule} from 'ng2-dropdown';
-import {ToasterModule} from 'angular2-toaster';
+// import {ToasterModule} from 'angular2-toaster';
 import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datepicker';
 import {MomentModule} from 'angular2-moment';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
@@ -22,7 +22,7 @@ import {ServicesListComponent} from '../pages/services-list/services-list.compon
 import {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';
 import {AmountComponent} from '../primary-components/amount/amount.component';
 import {BarGraphComponent} from '../secondary-components/bar-graph/bar-graph.component';
-import { EnvironmentModule } from 'app/environment-module/environment.module';
+import { EnvironmentModule } from '../environment-module/environment.module';
 
 @NgModule({
   imports: [
@@ -32,7 +32,7 @@ import { EnvironmentModule } from 'app/environment-module/environment.module';
     DropdownModule,
     DatePickerModule,
     MomentModule,
-    ToasterModule,
+    // ToasterModule,
     PopoverModule,
     ChartsModule,
     IonRangeSliderModule,

@@ -29,7 +29,7 @@ import {DropdownModule} from 'ng2-dropdown';
 import {PopoverModule} from 'ng2-popover';
 import {ChartsModule} from 'ng2-charts';
 import {BrowserModule} from '@angular/platform-browser';
-import {ToasterModule} from 'angular2-toaster';
+// import {ToasterModule} from 'angular2-toaster';
 import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datepicker';
 import {MomentModule} from 'angular2-moment';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
@@ -45,7 +45,7 @@ import {FooterComponent} from '../secondary-components/footer/footer.component';
     DropdownModule,
     DatePickerModule,
     MomentModule,
-    ToasterModule,
+    // ToasterModule,
     PopoverModule,
     ChartsModule,
     IonRangeSliderModule,
