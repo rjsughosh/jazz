@@ -447,7 +447,7 @@ gituserpwd:any= '';
     }
 
     this.isLoading = true;
-    this.http.post('/platform/create-serverless-service' , payload)
+    this.http.post('/jazz/create-serverless-service' , payload)
         .subscribe(
         (Response) => {
           var service = payload.service_name;
