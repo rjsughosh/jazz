@@ -1,6 +1,3 @@
-cd app
-cp -rf . ..
-cd ..
 rm -rf app
 npm install -g @angular/cli@1.5.3
 npm install 
