@@ -296,7 +296,7 @@ export class ServiceOverviewComponent implements OnInit {
             //     "description": this.desc_temp  || ""
             // };
 
-            this.http.put('/platform/services/'+this.service.id, this.update_payload)
+            this.http.put('/jazz/services/'+this.service.id, this.update_payload)
             .subscribe(
                 (Response)=>{
 
@@ -547,7 +547,7 @@ export class ServiceOverviewComponent implements OnInit {
                     this.statusprogress = 100;
                     localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
                     // alert('last stage');
-                    this.http.get('/platform/services/'+this.service.id).subscribe(
+                    this.http.get('/jazz/services/'+this.service.id).subscribe(
                         (response) => {
                             this.serviceDetail.onDataFetched(response.data);
                         }

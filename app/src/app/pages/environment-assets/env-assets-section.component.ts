@@ -74,7 +74,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 				domain: this.service.domain,
 				environment: this.env
 				};
-				this.subscription = this.http.post('https://cloud-api.corporate.t-mobile.com/api/platform/assets/search', payload).subscribe(
+				this.subscription = this.http.post('https://cloud-api.corporate.t-mobile.com/api/jazz/assets/search', payload).subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
 
       // this.subscription = this.http.get('/platform/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
@@ -160,7 +160,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 					this.envResponseError = true;
           this.getTime();
 					this.errorURL = window.location.href;
-					this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/platform/assets/search";
+					this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/assets/search";
 					this.errorRequest = payload;
 					this.errorUser = this.authenticationservice.getUserId();
 					this.errorResponse = JSON.parse(error._body);

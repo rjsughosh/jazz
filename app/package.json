@@ -67,7 +67,7 @@
     "protractor": "~4.0.13",
     "ts-node": "1.2.1",
     "tslint": "^4.5.1",
-    "typescript": "^2.0.10"
+    "typescript": ">=2.0.2 <2.3.0"
   },
   "browserify-shim": {
     "jquery": "global:$"
