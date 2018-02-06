@@ -289,7 +289,7 @@ export class ServiceMetricsComponent implements OnInit {
     };
 
     serviceMetric.assets.forEach(function(eachAsset){
-      // temporary fix as /jazz/services backfilling is not done due to which we will not get proper value in of service.serviceType
+      // temporary fix as /platform/services backfilling is not done due to which we will not get proper value in of service.serviceType
       if( (_this.service.serviceType == "api" && eachAsset.type == "apigateway" )|| ((_this.service.serviceType == "function" || _this.service.serviceType == "lambda") && eachAsset.type == "lambda" ) || (_this.service.serviceType == "website" && eachAsset.type == "cloudfront" ) ){
         var eachAssetMetric = [];
         var stat = eachAsset.statistics;
@@ -372,7 +372,7 @@ export class ServiceMetricsComponent implements OnInit {
     	 if ( this.subscription ) {
       this.subscription.unsubscribe();
     }
-		this.subscription = this.http.post('/jazz/metrics', this.payload).subscribe(
+		this.subscription = this.http.post('/platform/metrics', this.payload).subscribe(
     // this.http.get('https://api.myjson.com/bins/x4j5f').subscribe(
       response => {
         console.log("response = ", response);
@@ -425,7 +425,7 @@ export class ServiceMetricsComponent implements OnInit {
         errorMessage=this.toastmessage.errorMessage(err,"serviceMetrics");
         this.getTime();
 			  this.errorURL = window.location.href;
-			  this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/metrics";
+			  this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/platform/metrics";
 			  this.errorRequest = this.payload;
         this.errorUser = this.authenticationservice.getUserId();
         this.errorResponse = JSON.parse(err._body);

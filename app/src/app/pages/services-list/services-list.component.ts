@@ -138,7 +138,7 @@ export class ServicesListComponent implements OnInit {
   selectedListData:any;
   prevActivePage: number = 0;
   message;
-  relativeUrl : string = '/jazz/services';
+  relativeUrl : string = '/platform/services';
   limitValue : number = 10;
   tableEmptyMessage: string = '';
 
@@ -376,7 +376,7 @@ export class ServicesListComponent implements OnInit {
     // this.serviceList = this.filter.filterListFunction('type' , this.selectedListData , this.backupdata);
     //   this.serviceList  = this.filter.searchFunction("any" , this.searchbar , this.serviceList);
 
-    // this.relativeUrl = '/jazz/services?filter_by='+this.selectedListData;
+    // this.relativeUrl = '/platform/services?filter_by='+this.selectedListData;
 
     // if( this.relativeUrl.indexOf('?') > -1 ){
     //   this.relativeUrl += '?';
@@ -530,7 +530,7 @@ export class ServicesListComponent implements OnInit {
     this.deletedServiceId = this.cache.get('deletedServiceId');
     // this.fetchServices();
     // this.paginatePage(1);
-    // this.relativeUrl = '/jazz/services?limit=' + this.limitValue + '&offset=' + 0;
+    // this.relativeUrl = '/platform/services?limit=' + this.limitValue + '&offset=' + 0;
     // this.serviceCall();
     this.paginationInit();
     this.updateList = this.cache.get("updateServiceList");
