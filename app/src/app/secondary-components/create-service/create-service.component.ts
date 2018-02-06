@@ -283,7 +283,7 @@ gituserpwd:any= '';
     this.model.domainName = this.model.domainName.toLowerCase();
 
 
-    this.http.get('/platform/is-service-available/?service='+this.model.serviceName+'&domain='+this.model.domainName)
+    this.http.get('/jazz/is-service-available/?service='+this.model.serviceName+'&domain='+this.model.domainName)
         .subscribe(
         (Response) => {
 
@@ -447,7 +447,7 @@ gituserpwd:any= '';
     }
 
     this.isLoading = true;
-    this.http.post('/platform/create-serverless-service' , payload)
+    this.http.post('/jazz/create-serverless-service' , payload)
         .subscribe(
         (Response) => {
           var service = payload.service_name;

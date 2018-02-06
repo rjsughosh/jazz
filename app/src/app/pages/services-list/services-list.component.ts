@@ -138,7 +138,7 @@ export class ServicesListComponent implements OnInit {
   selectedListData:any;
   prevActivePage: number = 0;
   message;
-  relativeUrl : string = '/platform/services';
+  relativeUrl : string = '/jazz/services';
   limitValue : number = 10;
   tableEmptyMessage: string = '';
 

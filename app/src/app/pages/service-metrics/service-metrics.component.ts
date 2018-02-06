@@ -372,7 +372,7 @@ export class ServiceMetricsComponent implements OnInit {
     	 if ( this.subscription ) {
       this.subscription.unsubscribe();
     }
-		this.subscription = this.http.post('/platform/metrics', this.payload).subscribe(
+		this.subscription = this.http.post('/jazz/metrics', this.payload).subscribe(
     // this.http.get('https://api.myjson.com/bins/x4j5f').subscribe(
       response => {
         console.log("response = ", response);
@@ -425,7 +425,7 @@ export class ServiceMetricsComponent implements OnInit {
         errorMessage=this.toastmessage.errorMessage(err,"serviceMetrics");
         this.getTime();
 			  this.errorURL = window.location.href;
-			  this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/platform/metrics";
+			  this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/metrics";
 			  this.errorRequest = this.payload;
         this.errorUser = this.authenticationservice.getUserId();
         this.errorResponse = JSON.parse(err._body);
