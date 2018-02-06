@@ -3,6 +3,6 @@ cp -rf . ..
 cd ..
 rm -rf app
 ls
-npm install -g @angular/cli@1.1.2
-npm install 
+npm install -g @angular/cli@latest
+npm install --save
 ng build --prod --aot=false 
