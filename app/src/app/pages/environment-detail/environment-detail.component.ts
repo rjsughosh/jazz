@@ -151,7 +151,7 @@ env(event){
          if ( this.subscription ) {
             this.subscription.unsubscribe();
           }
-          this.subscription = this.http.get('/platform/services/'+id).subscribe(
+          this.subscription = this.http.get('/jazz/services/'+id).subscribe(
             response => {
               
                   // let service = response.data.data;
