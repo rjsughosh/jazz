@@ -1,6 +1,8 @@
+cd app
+cp -rf . ..
+cd ..
 rm -rf app
 ls
 npm install -g @angular/cli@1.1.2
 npm install 
-ls
 ng build --prod --aot=false 
