@@ -180,11 +180,11 @@ export class EnvCodequalitySectionComponent implements OnInit {
   }
   
   displayGraph(){
-    // this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
-    this.http.get('/jazz/codeq?domain='+this.service.domain+'&service='+this.service.name+'&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
+    this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
+    // this.http.get('/jazz/codeq?domain='+this.service.domain+'&service='+this.service.name+'&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
       response => {
         var res = response;
-        // console.log("response = ",response)
+        console.log("response = ",response)
         if(res.data == undefined || res.data == null || res.data.length == 0){
           this.emptydata = true;
           this.notemptydata = false;
