@@ -994,18 +994,28 @@ img:hover {
 }
 
 .grey-section {
-    height: auto;
-    // @media screen and (max-width: $break-mobile) {
-    //     height: auto;
-    // }
-    // background-color: rgba(40,48,58,1);
-    background-color:transparent;
+      background-image: url("/assets/landing/jpg/BG-Header@1x.png.jpg");
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 100%;
     color: #fff;
-    padding-bottom: 30px;
-    margin-bottom: -2px;
+    padding-bottom: 5rem;
+    // height: 20rem;
+    // height: calc(100% - 3.5vh);
+    @media screen and (max-width: $break-medium) {
+        background-size: 200%;
+        // background-position: 70% 0%;
+        padding-bottom: 5rem;
+    }
+    @media screen and (max-width: $break-small) {
+        background-size: 200%;
+        // background-position: 70% 0%;
+        padding-bottom: 5rem;
+    }
     .pattern-parallax{
         position: absolute;
-        background: #28303a;
+        background-position: left top;
+        background-size: 100%;
         transform: translateZ(-0.1px);
         top: 0rem;
         right: -6rem;
@@ -1225,4 +1235,34 @@ a:hover {
   .btn-primary{
     letter-spacing: .4rem;
   }
+}
+
+.statistics{
+    padding-bottom: 50px;
+}
+
+.user-stats{
+    width: 80%;
+    display: block;
+    margin: 50px auto;
+    height: 100px;
+    background-color: #000;
+}
+
+.service-stats{
+    width: 80%;
+    display: block;
+    margin: 50px auto;
+    height: 100px;
+    background-color: #000;
+}
+
+.release-data-container{  
+    width: 40%;
+    display: block;
+    margin: 50px auto;
+    height: 400px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 4px 0 rgba(180, 180, 211, 0.4);
+    border-radius: 3px;
 }
