@@ -289,7 +289,7 @@ export class ServiceMetricsComponent implements OnInit {
     };
 
     serviceMetric.assets.forEach(function(eachAsset){
-      // temporary fix as /platform/services backfilling is not done due to which we will not get proper value in of service.serviceType
+      // temporary fix as /jazz/services backfilling is not done due to which we will not get proper value in of service.serviceType
       if( (_this.service.serviceType == "api" && eachAsset.type == "apigateway" )|| ((_this.service.serviceType == "function" || _this.service.serviceType == "lambda") && eachAsset.type == "lambda" ) || (_this.service.serviceType == "website" && eachAsset.type == "cloudfront" ) ){
         var eachAssetMetric = [];
         var stat = eachAsset.statistics;

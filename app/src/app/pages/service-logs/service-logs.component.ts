@@ -147,7 +147,7 @@ export class ServiceLogsComponent implements OnInit {
 			time: '2017-05-30T09:36:13.815Z',
 			requestId: '6b0bfa2b-451b-11e7-8b01-d9deac4f71e0',
 			logLevel: 'VERBOSE',
-			message: 'after appending vpc { uri: \'https://cloud-api.corporate.t-mobile.com/api/platform/create-serverless-service\', method: \'POST\', json:  { service_type: \'api\', service_name: \'testService-capi32830d\', runtime: \'java\', username: \'aanand12\', approvers: [ \'AAnand12\' ], domain: \'domain\', request_id: \'6b85e4e0-451b-11e7-b7ca-73e8a165d222\', slack_channel: \'general\', require_internal_access: true }, rejectUnauthorized: false } '
+			message: 'after appending vpc { uri: \'https://cloud-api.corporate.t-mobile.com/api/jazz/create-serverless-service\', method: \'POST\', json:  { service_type: \'api\', service_name: \'testService-capi32830d\', runtime: \'java\', username: \'aanand12\', approvers: [ \'AAnand12\' ], domain: \'domain\', request_id: \'6b85e4e0-451b-11e7-b7ca-73e8a165d222\', slack_channel: \'general\', require_internal_access: true }, rejectUnauthorized: false } '
 		},
 		{
 			time: '2017-05-30T09:36:14.703Z',
