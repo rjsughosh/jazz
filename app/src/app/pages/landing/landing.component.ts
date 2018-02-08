@@ -23,6 +23,10 @@ export class LandingComponent implements OnInit {
     subtitle = 'Our API Services system allows you to seamlessly create, deploy, and manage all you API needs.';
     override = false;
     private IDLE_TIMEOUT = 60*10; //seconds
+    num_ser_cr:number=160;
+    num_users:number=1000;
+    num_act_usr:number=20;
+    num_act_ser:number=120;
 
     public getStartedNow(){
        
@@ -96,6 +100,77 @@ export class LandingComponent implements OnInit {
         }
     }
 
+    loop(j){
+        setTimeout(() => {
+            this.stat_arr[j].i++;                     //  increment the counter
+            if (this.stat_arr[j].i <= this.stat_arr[j].limit) {  
+                switch(j){
+                    case 0:this.num_ser_cr=this.stat_arr[j].i;break;
+                    case 1:this.num_users=this.stat_arr[j].i;break;
+                    case 2:this.num_act_usr=this.stat_arr[j].i;break;
+                    case 3:this.num_act_ser=this.stat_arr[j].i;break;
+                }
+                // this.num_ser_cr=this.i;
+                // console.log('inside set time',this.num_ser_cr);          //  if the counter < 10, call the loop function
+                this.loop(j);             //  ..  again which will trigger another 
+            }      
+          }, (2000/this.stat_arr[j].limit));
+    }
+
+    limit:number;
+    i:number=0;
+    stat_arr=[
+        {
+            j:0,
+            limit:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            i:0
+        }
+    ]
+
+    loadnumbers(){
+        var arr=[this.num_ser_cr,this.num_users,this.num_act_usr,this.num_act_ser]
+        
+        // this.limit=this.num_ser_cr;
+        this.num_ser_cr=0;
+        this.i=0;
+        for(var j=0;j<4;j++){
+            this.stat_arr[j].limit=arr[j];
+            // this.loop(j);
+        }
+        this.loop(0);
+        this.loop(1);
+        this.loop(2);
+        this.loop(3);
+
+        // var i=0;
+        // this.loop();
+
+       
+        
+
+        // for(var i=0;i<limit;i++){
+        //     console.log('outside set timeout',i)
+        //     setTimeout(() => {
+        //         console.log('inside set timeout',i)
+        //         this.num_ser_cr=i;
+        //       }, 10000);
+        // }
+    }
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -107,6 +182,7 @@ export class LandingComponent implements OnInit {
     };
     
     ngOnInit() {
+        this.loadnumbers()
         if(this.authenticationservice.isLoggedIn()){
             this.buttonText ='GO TO SERVICES' ;
         } else{
