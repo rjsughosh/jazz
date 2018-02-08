@@ -156,7 +156,7 @@
   <!-- Commented for production push - Sprint close #18 -->
   <!-- <btn-tmobile-secondary class='btn-edit-overview' *ngIf='showCancel'  text='CANCEL' (click)='onCancelClick()' ></btn-tmobile-secondary> -->
   <a  *ngIf='showCancel' (click)='onCancelClick()'>CANCEL</a>
-  <btn-tmobile-secondary class='btn-edit-overview'  text='{{edit_save}}' [class.diabledbtn]="service.status === 'creation started'" [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableSaveBtn()'></btn-tmobile-secondary>
+  <btn-tmobile-secondary class='btn-edit-overview'  text='{{edit_save}}'  [class.diabledbtn]="service.status === 'creation started'" [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableSaveBtn() || service.status == "creation started"'></btn-tmobile-secondary>
   <!-- [style.borders]="edit_save=='SAVE'? 'none':'1px solid'"  -->
 </div><br>
 <div class='show-service-overview' [class.hide]="disp_show">

@@ -58,7 +58,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
   graphname:any;
   sonarlink:any;
   metricsIndex:any;
-  startDate = "2017-06-25T12:00:00-0700";
+  startDate = "";
   endDate = (new Date()).toISOString();
   graphInput:Array<any>;
   filtersList = ['DAILY', 'WEEKLY', 'MONTHLY'];
@@ -180,10 +180,12 @@ export class EnvCodequalitySectionComponent implements OnInit {
   }
   
   displayGraph(){
+    
     this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
     // this.http.get('/jazz/codeq?domain='+this.service.domain+'&service='+this.service.name+'&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
       response => {
         var res = response;
+        
         console.log("response = ",response)
         if(res.data == undefined || res.data == null || res.data.length == 0){
           this.emptydata = true;
@@ -209,6 +211,13 @@ export class EnvCodequalitySectionComponent implements OnInit {
            this.graphArray[i] = this.cqList[i].data;
            if(this.graphArray[i].length != 0){
            this.value[i] = this.graphArray[i][Math.floor((this.graphArray[i].length)-1)].value;
+           if(this.value[i] >= 1000){
+             this.value[i] = (this.value[i]/1000).toFixed(1) + "K";
+           }if(this.value[i] >= 1000000){
+            this.value[i] = (this.value[i]/1000000).toFixed(1) + "M";
+          }if(this.value[i] >= 1000000000){
+            this.value[i] = (this.value[i]/1000000000).toFixed(1) + "B";
+          }
            this.date[i] = this.graphArray[i][Math.floor((this.graphArray[i].length)-1)].ts.slice(0,-14).split("-").reverse().join("-");
            }else{
              this.value[i] = "";
@@ -224,7 +233,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
             this.graphArray[i][j].date = new Date(this.graphArray[i][j].ts);
           }
         }
-
+        
        if(this.cqList.length != 0 ){
           this.isGraphLoading=false;
           this.graphDataAvailable=true;
@@ -238,6 +247,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
         // this.checkcarausal();
       }
       
+      
     }
     this.filteron=false;
     this.filterdone=true;
@@ -250,6 +260,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
       this.noData=true;
       this.yesdata=false;
     }
+    this.checkcarausal();
   },
       error => {
         this.graphDataAvailable=false;
@@ -268,7 +279,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
 			  this.errorRequest = this.payload;
 			  this.errorUser = this.authenticationservice.getUserId();
 			  this.errorResponse = JSON.parse(error._body);
-
+        
 			// let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
             // this.popToast('error', 'Oops!', errorMessage);
 		})
@@ -425,7 +436,16 @@ export class EnvCodequalitySectionComponent implements OnInit {
 		if(this.env=='prd'){
       this.env='prod';
   }
+
+  var date = new Date();
+      date.setDate(date.getDate() - 180);
+      var dateString = date.toISOString();
+      this.startDate = dateString;
+      console.log("start date ======== ", this.startDate)
+    
   this.displayGraph();
+  // this.selectedMetrics(1,"gname","link")
+ 
   }
 
   public goToAbout(hash){
@@ -440,19 +460,19 @@ export class EnvCodequalitySectionComponent implements OnInit {
     this.displayGraph();
   }
 
-//  checkcarausal(){
-//     setInterval(() => { var mainEle = document.getElementsByClassName('scroll-cards-wrap');
-//     var cardWidth = (mainEle[0].clientWidth + 12);
-//     var element = document.getElementById('graph-container');
-//     var containerWidth = element.offsetWidth;
-//     if( cardWidth < containerWidth ){
-//         this.maxCards = false;
-//         this.minCards = false;
-//         this.safeTransformX = 0;
-//     }else{
-//       this.maxCards = true;
-//     }} , 5000);
-//   }
+  checkcarausal(){
+
+        var mainEle = document.getElementsByClassName('scroll-cards-wrap')[0].clientWidth;
+       
+        var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
+        
+        if(mainEle > limit){
+          this.maxCards = true;
+        } else {
+          this.maxCards = false;
+          this.minCards = false;
+        }
+ }
 
   leftArrowClick(){
     var mainEle = document.getElementsByClassName('scroll-cards-wrap');
