@@ -4,7 +4,7 @@
   * @author
 */
 
-import { Component, OnInit, EventEmitter, Output} from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild} from '@angular/core';
 import { ToasterService} from 'angular2-toaster';
 import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
@@ -14,6 +14,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
+import { FilterTagsServicesComponent } from '../../secondary-components/filter-tags-services/filter-tags-services.component';
+import { TableTemplateComponent} from '../../secondary-components/table-template/table-template.component';
+import {SearchBoxComponent} from './../../primary-components/search-box/search-box.component';
 
 declare var $:any;
 
@@ -25,6 +28,10 @@ declare var $:any;
 })
 
 export class ServicesListComponent implements OnInit {
+
+@ViewChild('filtertags') FilterTags: FilterTagsServicesComponent;
+@ViewChild('tabletemplate') tableTemplate:TableTemplateComponent;
+@ViewChild('searchbox') searchBox:SearchBoxComponent;
   private toastMessage:any;
   private subscription:any;
   errBody: any;
@@ -318,59 +325,217 @@ export class ServicesListComponent implements OnInit {
         this.serviceCall();
       }
   }
-  onFilter(event){
+
+
+  onFilter(event) {
+
+    // event=eventOBJ;
+    // console.log('event is to be made like this', event)
+    
     this.serviceList = this.backupdata;
-
+    
     for (var i = 0; i < this.tableHeader2.length; i++) {
-      var col = this.tableHeader2[i];
-      if (col.filter['type'] === 'dropdown' && col.filter['_value'] != undefined){
-        var colFilterVal = col.filter['_value'].toLowerCase().replace(' ','_');
-      }
-      else if (col.filter['type'] === 'input'){
-        var colFilterVal = col.filter['value'] ;
-      }
-
-      if (col.filter != undefined && colFilterVal != undefined) {
-        // adding ?
-        if( this.relativeUrl.indexOf('?') == -1 ){
-          this.relativeUrl += '?';
-        }
-
-        if (col.filter['type'] == 'dateRange') {
-          // code...
-
-
-        } else if( col.filter['type'] == 'dropdown' || (event.filter['type'] === 'input' && (event.keyCode === 13)) ){
-
-          // console.log("event ",event);
-          // console.log("col ",col);
-
-          var queryParamKey = 'offset=';
-          var offsetValue = 0;
-          var queryParamValue = offsetValue;
-          $(".pagination.justify-content-center li:nth-child(2)")[0].click();
-          // this.pageSelected = 1;
-
-          this.addQueryParam(queryParamKey, queryParamValue, false );
-
-          if(event.key == col.key){
-            queryParamKey = col.key + '=';
-            if(queryParamKey == "name="){
-              queryParamKey = "service=";
-            }
-            else if(queryParamKey == "lastModified="){
-              queryParamKey = "timestamp=";
-            }
-            queryParamValue = colFilterVal;
-            // console.log("queryParamKey onFilter******",queryParamKey);
-            // console.log("queryParamValue onFilter*******",queryParamValue);
-            this.addQueryParam(queryParamKey, queryParamValue, true );
-          }
-
-        }
-      }
+    // console.log('i=',i);
+    // console.log('tableheader',this.tableHeader2[i]);
+    var col = this.tableHeader2[i];
+    if (col.filter['type'] === 'dropdown' && col.filter['_value'] != undefined) {
+    var colFilterVal = col.filter['_value'].toLowerCase().replace(' ', '_');
+    if (colFilterVal != undefined) {
+    this.FilterTags.notifyServices(this.tableHeader2[i].key, colFilterVal);
     }
-  };
+    } else if (col.filter['type'] === 'input') {
+    var colFilterVal = col.filter['value'];
+    if (event.keyCode == 13 && colFilterVal != undefined) {
+    this.FilterTags.notifyServices(this.tableHeader2[i].key, colFilterVal);
+    }
+    }
+    
+    if (col.filter != undefined && colFilterVal != undefined) {
+    // adding ?
+    if (this.relativeUrl.indexOf('?') == -1) {
+    this.relativeUrl += '?';
+    }
+    
+    if (col.filter['type'] == 'dateRange') {
+    // code...
+    
+    
+    } else if (col.filter['type'] == 'dropdown' || (event.filter['type'] === 'input' && (event.keyCode === 13))) {
+    
+    // console.log("event ",event);
+    // console.log("col ",col);
+    
+    var queryParamKey = 'offset=';
+    var offsetValue = 0;
+    var queryParamValue = offsetValue;
+    $(".pagination.justify-content-center li:nth-child(2)")[0].click();
+    // this.pageSelected = 1;
+    
+    this.addQueryParam(queryParamKey, queryParamValue, false);
+    
+    if (event.key == col.key) {
+    queryParamKey = col.key + '=';
+    if (queryParamKey == "name=") {
+    queryParamKey = "service=";
+    } else if (queryParamKey == "lastModified=") {
+    queryParamKey = "timestamp=";
+    }
+    queryParamValue = colFilterVal;
+    // console.log("queryParamKey onFilter******",queryParamKey);
+    // console.log("queryParamValue onFilter*******",queryParamValue);
+    this.addQueryParam(queryParamKey, queryParamValue, true);
+    }
+    
+    }
+    }
+    }
+    }
+    
+    CancelFilters(event){
+switch(event){
+case 'name':{
+var a={
+filterType:'input',
+filterValue:'',
+key:'name',
+keyCode:13,
+label:'Name'
+};
+// var ip=document.getElementById('inputfilter').setAttribute('ng-reflect-model','');
+this.tableTemplate.resetInput('name',a);
+// ip.ng-reglect-model
+// console.log('inputfilter@(#(#*',ip);
+// ip.text='';
+this.onFilterCancel(a); 
+break;
+}
+case "domain":{
+var a={
+filterType:'input',
+filterValue:'',
+key:'domain',
+keyCode:13,
+label:'Namespace'
+};
+this.tableTemplate.resetInput('domain',a);
+
+this.onFilterCancel(a);
+break;
+}
+case "status":{
+var b={
+filterType:'dropdown',
+filterValue:'',
+key:'status',
+keyCode:undefined,
+label:'Status'
+};
+this.tableTemplate.resetInput('status',b);
+
+this.onFilterCancel(b);
+break;
+}
+case "search":{
+var c={
+keyCode:13,
+searchString:""
+}
+this.onServiceSearch(c);
+this.searchBox.clearSearchbox('');
+break; 
+}
+case "all":{
+var OBJ={
+filterType:'input',
+filterValue:'',
+key:'name',
+keyCode:13,
+label:'Name'
+};
+this.tableTemplate.resetInput('name',OBJ);
+this.onFilterCancel(OBJ); 
+OBJ.key='domain';
+OBJ.label="Namespace"; 
+this.tableTemplate.resetInput('domain',OBJ);
+this.onFilterCancel(OBJ);
+OBJ.filterType='dropdown';
+OBJ.filterValue='';
+OBJ.key='status';
+OBJ.keyCode=undefined;
+OBJ.label='Status';
+this.tableTemplate.resetInput('status',OBJ);
+this.onFilterCancel(OBJ);
+var obj={
+keyCode:13,
+searchString:""
+}
+this.onServiceSearch(obj);
+break;
+}
+}
+}
+
+
+
+onFilterCancel(event) {
+
+  for (var i = 0; i < this.tableHeader2.length; i++) {
+  // console.log('i=',i);
+  // console.log('tableheader',this.tableHeader2[i]);
+  var col = this.tableHeader2[i];
+  if (col.filter['type'] === 'dropdown' && col.filter['_value'] != undefined) {
+  var colFilterVal = event.filterValue.toLowerCase().replace(' ', '_');
+  if (colFilterVal != undefined) {
+  this.FilterTags.notifyServices(this.tableHeader2[i].key, colFilterVal);
+  }
+  } else if (col.filter['type'] === 'input') {
+  var colFilterVal = event.filterValue;
+  if (event.keyCode == 13 && colFilterVal != undefined) {
+  this.FilterTags.notifyServices(this.tableHeader2[i].key, colFilterVal);
+  }
+  }
+  
+  if (col.filter != undefined && colFilterVal != undefined) {
+  // adding ?
+  if (this.relativeUrl.indexOf('?') == -1) {
+  this.relativeUrl += '?';
+  }
+  
+  if (col.filter['type'] == 'dateRange') {
+  // code...
+  
+  
+  } else if (col.filter['type'] == 'dropdown' || (event.filterType == 'input' && (event.keyCode === 13))) {
+  
+  // console.log("event ",event);
+  // console.log("col ",col);
+  
+  var queryParamKey = 'offset=';
+  var offsetValue = 0;
+  var queryParamValue = offsetValue;
+  $(".pagination.justify-content-center li:nth-child(2)")[0].click();
+  // this.pageSelected = 1;
+  
+  this.addQueryParam(queryParamKey, queryParamValue, false);
+  
+  if (event.key == col.key) {
+  queryParamKey = col.key + '=';
+  if (queryParamKey == "name=") {
+  queryParamKey = "service=";
+  
+  } else if (queryParamKey == "lastModified=") {
+  queryParamKey = "timestamp=";
+  }
+  queryParamValue = colFilterVal;
+  this.addQueryParam(queryParamKey, queryParamValue, true);
+  }
+  
+  }
+  }
+  }
+  }
+
+
   onFilterSelected(selectedList){
     this.selectedListData = selectedList;
     // this.serviceList = this.filter.filterListFunction('type' , this.selectedListData , this.backupdata);
@@ -461,27 +626,20 @@ export class ServicesListComponent implements OnInit {
     }
   }
   onServiceSearch(searchbar){
-      // this.serviceList = this.backupdata;
-      this.searchbar = searchbar;
-      // console.log("searchbar onServiceSearch********", searchbar);
-      // this.onFilterSelected(this.selectedListData);
-      if(searchbar.keyCode == 13){
-        var queryParamKey = 'offset=';
-        $(".pagination.justify-content-center li:nth-child(2)")[0].click();
-        // this.pageSelected = 1;
-        var offsetValue = 0;
-        var queryParamValue = offsetValue;
-        this.addQueryParam(queryParamKey, queryParamValue, false );
-        queryParamKey = 'filter=';
-        queryParamValue = searchbar.searchString;
-        // console.log("queryParamKey onServiceSearch********", queryParamKey);
-        // console.log("queryParamValue onServiceSearch********", queryParamValue);
-        this.addQueryParam(queryParamKey, queryParamValue,  true);
-      }
-
-
-      // this.serviceList  = this.filter.searchFunction("any" , searchbar , this.serviceList);
-  };
+    this.searchbar = searchbar;
+    if(searchbar.keyCode == 13){
+    this.FilterTags.notifyServices("search",searchbar.searchString);
+    
+    var queryParamKey = 'offset=';
+    $(".pagination.justify-content-center li:nth-child(2)")[0].click();
+    var offsetValue = 0;
+    var queryParamValue = offsetValue;
+    this.addQueryParam(queryParamKey, queryParamValue, false );
+    queryParamKey = 'filter=';
+    var queryParamValue2 = searchbar.searchString;
+    this.addQueryParam(queryParamKey, queryParamValue2, true);
+    }
+    };
   tabChanged (i){
     this.selectedTab = i;
   };

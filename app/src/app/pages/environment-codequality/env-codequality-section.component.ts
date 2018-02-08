@@ -424,7 +424,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
   sonarProjectLink(url){
     window.open(url, '_blank');
   }
-  
+  ngAfterViewInit(){
+    this.checkcarausal();
+  }
   ngOnInit() {
     
     this.isGraphLoading=true;
