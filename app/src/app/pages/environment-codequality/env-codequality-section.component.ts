@@ -6,6 +6,7 @@ import { RequestService, MessageService } from '../../core/services/index';
 import {DataCacheService , AuthenticationService } from '../../core/services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {IonRangeSliderModule} from "ng2-ion-range-slider";
+import { setTimeout } from 'timers';
 // import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 
 
@@ -20,7 +21,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
   edit:boolean=true;
   save:boolean=false;
   minCards:boolean=false;
-  maxCards:boolean=true;
+  maxCards:boolean=false;
   filteron:boolean=false;
   filterdone:boolean=true;
   errorTime:any;
@@ -260,7 +261,10 @@ export class EnvCodequalitySectionComponent implements OnInit {
       this.noData=true;
       this.yesdata=false;
     }
-    this.checkcarausal();
+    setTimeout(() => {
+      this.checkcarausal();
+    },1000)
+    
   },
       error => {
         this.graphDataAvailable=false;
@@ -424,9 +428,12 @@ export class EnvCodequalitySectionComponent implements OnInit {
   sonarProjectLink(url){
     window.open(url, '_blank');
   }
-  ngAfterViewInit(){
+
+  onResize(event) {
     this.checkcarausal();
-  }
+}
+
+
   ngOnInit() {
     
     this.isGraphLoading=true;

@@ -110,7 +110,7 @@ export const toastMessage = {
         "error500":"Something went wrong while checking the Slack Channel!"
     },
     "retryDeploy":{
-        "success":"got triggered successfully",
+        "success":"Deployment triggered successfully for Service: ",
         "error400":"Something went wrong while triggering the deployment. Please try again",
         "error500":"Something went wrong while triggering the deployment. Please try again",
     },

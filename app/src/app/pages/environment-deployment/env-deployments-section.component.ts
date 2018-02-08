@@ -514,7 +514,8 @@ rebuild(event, id){
     (response) => {
 
       let successMessage = this.toastmessage.successMessage(response, "retryDeploy");
-      this.toast_pop('success', 'Deployment for '+this.service.name,successMessage);
+
+      this.toast_pop('success',"",successMessage+this.service.name);
       // let successMessage = this.toastmessage.successMessage(response, "retryDeploy");
       // this.toast_pop('Deployment for service: ',this.service.name+' ',successMessage);
     },
