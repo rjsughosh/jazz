@@ -129,14 +129,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
  
-
-  // model:any = {
-  //   qualityProfile:'JavaScript',
-  //   sonar:'abcdefgujkl',
-  //   lines:'480(xs)',
-  //   files:'147',
-  //   activities:'9'
-  // }
   editChanges(){
     this.edit = false;
     this.save = true;
@@ -182,8 +174,8 @@ export class EnvCodequalitySectionComponent implements OnInit {
   
   displayGraph(){
     
-    //this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
-    this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/codeq?domain=jazz&service=codeq&environment=prod&from=2017-01-01T12:00:00-0700&to=2018-01-20T09:17:26.931Z').subscribe(
+    this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
+    //this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/codeq?domain=jazz&service=codeq&environment=prod&from=2017-01-01T12:00:00-0700&to=2018-01-20T09:17:26.931Z').subscribe(
       response => {
         var res = response;
         
