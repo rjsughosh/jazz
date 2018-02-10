@@ -27,8 +27,10 @@ import {TestApiComponent} from './pages/testapi/test-api.component';
 import {Error404Component} from './pages/error404/error404.component';
 import {SharedModule} from './shared-module/shared.module';
 import {routes} from './app.route';
-import {EnvironmentModule} from './environment-module/environment.module';
-import {ServiceModule} from './service-module/service.module';
+// import {FilterTagsServicesComponent} from './secondary-components/filter-tags-services/filter-tags-services.component';
+// import {EnvironmentModule} from './environment-module/environment.module';
+// import {ServiceModule} from './service-module/service.module';
+
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import {ServiceModule} from './service-module/service.module';
     LandingComponent,
     Error404Component,
     // FooterComponent,
-    TestApiComponent
+    TestApiComponent,
+    
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -48,6 +51,7 @@ import {ServiceModule} from './service-module/service.module';
     ToasterModule,
     NgIdleKeepaliveModule.forRoot(),
     SharedModule,
+    // FilterTagsServicesComponent
   ],
   providers: [
     AuthenticationService,

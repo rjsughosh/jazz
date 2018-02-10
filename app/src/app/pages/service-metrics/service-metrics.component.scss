@@ -264,7 +264,7 @@ search-box {
 .display-widget{
     min-height: 300px;
 }
-.loading-row {
+.loading-row-metrics {
     margin-top:1.5rem;
     padding: 3rem;
     display: none;
@@ -278,10 +278,10 @@ search-box {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     border: solid 1px #eeeeee;
 }
-.loading-row .loading-circle {
+.loading-row-metrics .loading-circle {
     top: calc(50% - 2.5rem);
 }
-.loading-row .error-text {
+.loading-row-metrics .error-text {
     position: relative;
     text-align: center;
     top: 45%;

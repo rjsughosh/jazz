@@ -96,13 +96,14 @@
 
 
             
-<div class="graph-section-container">  
+<div class="graph-section-container" (window:resize)="onResize($event)">  
     
            
     
 
     <div class="graph-wrp asset-wrap">
-
+                
+            
 
             <div class="empty-row nodata with-refresh relative" *ngIf="emptydata" >
                     <div class="icon-icon-nodata"></div>
@@ -113,6 +114,12 @@
                     <div class="loading-row" [class.show]="isGraphLoading">
                     <div class="loading-circle"></div>
             </div>
+
+            <div *ngIf="!isGraphLoading">
+                <p class="graphtitle">{{graphname}}</p>
+                <p class="graphtitlefilter">( {{filtertext}} )</p>
+            </div>
+    
                 
             <div class="error-blk" *ngIf="isError && !isGraphLoading">
                     <div class="empty-row with-refresh">
@@ -131,10 +138,7 @@
                 <div class="filter-wrp">
                     <filters class="filters" [filtersList]="filtersList" (onSelected)="onFilterSelected($event)" [multiple]='false' [selectedList]="selected"></filters>
                 </div>
-                <div>
-                    <p class="graphtitle">{{graphname}}</p>
-                    <p class="graphtitlefilter">( {{filtertext}} )</p>
-                </div>
+                
                 <line-graph class="line-graph" [timeRange]='selectedTimeRange' [graphData]="graphInput" [graphDataOld]="graphInput"></line-graph>
                 <div class="graphdetailCQ" (click)="sonarProjectLink(sonar)"><span>View More Details on Sonar Project</span></div>
             </div>

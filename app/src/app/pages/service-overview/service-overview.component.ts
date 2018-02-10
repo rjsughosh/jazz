@@ -314,8 +314,8 @@ export class ServiceOverviewComponent implements OnInit {
                     this.showCancel=false;
                     this.disp_show=false;
                     this.edit_save='EDIT';
-                    let successMessage = this.toastmessage.successMessage(Response,"updateObj");
-                    this.toast_pop('success',"", "Service: "+this.service.name +" "+successMessage);
+                    let successMessage = this.toastmessage.successMessage(Response,"updateService");
+                    this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
                     this.check_empty_fields();
                 },
                 (Error)=>{
@@ -323,7 +323,7 @@ export class ServiceOverviewComponent implements OnInit {
                     this.disp_edit=false;
                     this.disp_show=true;
                     this.edit_save='SAVE';
-                    let errorMessage = this.toastmessage.errorMessage(Error,"updateObj");
+                    let errorMessage = this.toastmessage.errorMessage(Error,"updateService");
                     this.toast_pop('error', 'Oops!', errorMessage)
                     // this.toast_pop('error','Oops!', "Data cannot be updated. Service Error.");
                 });

@@ -84,10 +84,10 @@
     
     <div class="graph-section-container">
         <div *ngIf=" isGraphLoading || isDataNotAvailable || isError" class='display-widget'>
-            <div class="loading-row" [class.show]="isGraphLoading">
+            <div class="loading-row-metrics" [class.show]="isGraphLoading">
                 <div class="loading-circle"></div>
             </div>
-            <div class="loading-row" [class.show]=" !isGraphLoading && isDataNotAvailable && !isError">
+            <div class="loading-row-metrics" [class.show]=" !isGraphLoading && isDataNotAvailable && !isError">
                 <!-- <div class="error-text">Data not available</div> -->
                 <div class="empty-row nodata with-refresh relative">
                     <div class="icon-icon-nodata"></div>

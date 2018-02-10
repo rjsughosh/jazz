@@ -3,6 +3,12 @@
 @import './../services-list/services-list.component.scss';
 // @import './../../secondary-components/table-template/table-template.component.scss';
 
+.toast-title {
+    font-weight: 0!important;
+    display: inline;
+    padding-right: 2px!important;
+}
+
 .widget-cover-outer
 {
     background-color: #ffffff;

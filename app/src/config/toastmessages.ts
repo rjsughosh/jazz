@@ -109,8 +109,8 @@ export const toastMessage = {
         "error404":"Something went wrong while checking the Slack Channel!",
         "error500":"Something went wrong while checking the Slack Channel!"
     },
-    "updateObj":{
-        "success":"Deployment triggered successfully.",
+    "retryDeploy":{
+        "success":"Deployment triggered successfully for Service: ",
         "error400":"Something went wrong while triggering the deployment. Please try again",
         "error500":"Something went wrong while triggering the deployment. Please try again",
     },
@@ -134,6 +134,14 @@ export const toastMessage = {
         "error400":"Something went wrong while updating the environment details. Please try again!",
         "error404":"Something went wrong while updating the environment details. Please try again!",
         "error500":"Something went wrong while updating the environment details. Please try again!"
+        
+    },
+    "updateService":{
+        "success":"updated successfully.",
+        "error0": "Looks like we are having trouble reaching our servers. Please try later!",
+        "error400":"Something went wrong while updating the service details. Please try again!",
+        "error404":"Something went wrong while updating the service details. Please try again!",
+        "error500":"Something went wrong while updating the service details. Please try again!"
         
     }
 

@@ -513,8 +513,11 @@ rebuild(event, id){
   this.http.post('/jazz/deployments/'+id+'/re-build').subscribe(
     (response) => {
 
-      let successMessage = this.toastmessage.successMessage(response, "updateObj");
-      this.toast_pop('success', "", successMessage);
+      let successMessage = this.toastmessage.successMessage(response, "retryDeploy");
+
+      this.toast_pop('success',"",successMessage+this.service.name);
+      // let successMessage = this.toastmessage.successMessage(response, "retryDeploy");
+      // this.toast_pop('Deployment for service: ',this.service.name+' ',successMessage);
     },
     (error) => {
       let errorMessage = this.toastmessage.errorMessage(error, "updateObj");
