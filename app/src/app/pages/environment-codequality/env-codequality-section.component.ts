@@ -1,11 +1,11 @@
 import { Component, OnInit, ElementRef, Inject, Input } from '@angular/core';
 import { DayData, WeekData, MonthData, Month6Data, YearData } from './../service-metrics/data';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { ToasterService} from 'angular2-toaster';
+import { ToasterService } from 'angular2-toaster';
 import { RequestService, MessageService } from '../../core/services/index';
-import {DataCacheService , AuthenticationService } from '../../core/services/index';
+import { DataCacheService, AuthenticationService } from '../../core/services/index';
 import { Router, ActivatedRoute } from '@angular/router';
-import {IonRangeSliderModule} from "ng2-ion-range-slider";
+import { IonRangeSliderModule } from "ng2-ion-range-slider";
 import { setTimeout } from 'timers';
 // import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 
@@ -18,62 +18,62 @@ import { setTimeout } from 'timers';
 })
 export class EnvCodequalitySectionComponent implements OnInit {
   @Input() service: any = {};
-  edit:boolean=true;
-  save:boolean=false;
-  minCards:boolean=false;
-  maxCards:boolean=false;
-  filteron:boolean=false;
-  filterdone:boolean=true;
-  errorTime:any;
-  errorURL:any;
-  errorAPI:any;
-  errorRequest:any={};
-  errorResponse:any={};
-  errorUser:any;
-  env:any;
-  cqList:any=[];
-  xAxis : "";
-  yAxis : "";
-  cardIndex:any;
-  filtertext:any="past 6 months";
-  cardindex:number=0;
-  link:any=[];
-  sonar:any;
-  selectedTimeRange:string="Month";
-  payload:any={};
+  edit: boolean = true;
+  save: boolean = false;
+  minCards: boolean = false;
+  maxCards: boolean = false;
+  filteron: boolean = false;
+  filterdone: boolean = true;
+  errorTime: any;
+  errorURL: any;
+  errorAPI: any;
+  errorRequest: any = {};
+  errorResponse: any = {};
+  errorUser: any;
+  env: any;
+  cqList: any = [];
+  xAxis: "";
+  yAxis: "";
+  cardIndex: any;
+  filtertext: any = "past 6 months";
+  cardindex: number = 0;
+  link: any = [];
+  sonar: any;
+  selectedTimeRange: string = "Month";
+  payload: any = {};
   // selectedTimeRange:string="";
-  graphArray:any=[];
-    // name:any=[];
-  value:any=[];
-  date:any=[];
-  data:any=[];
-  x:any;
-  noData:boolean=false;
-  notemptydata:boolean=true;
-  emptydata:boolean=false;
-  yesdata:boolean=false;
-  isError:boolean=false;
-  graphDataAvailable:boolean=false;
-  isGraphLoading:boolean=true;
-  safeTransformX=0;
-  graphname:any;
-  sonarlink:any;
-  metricsIndex:any;
+  graphArray: any = [];
+  // name:any=[];
+  value: any = [];
+  date: any = [];
+  data: any = [];
+  x: any;
+  noData: boolean = false;
+  notemptydata: boolean = true;
+  emptydata: boolean = false;
+  yesdata: boolean = false;
+  isError: boolean = false;
+  graphDataAvailable: boolean = false;
+  isGraphLoading: boolean = true;
+  safeTransformX = 0;
+  graphname: any;
+  sonarlink: any;
+  metricsIndex: any;
   startDate = "";
   endDate = (new Date()).toISOString();
-  graphInput:Array<any>;
+  graphInput: Array<any>;
   filtersList = ['DAILY', 'WEEKLY', 'MONTHLY'];
-  name:any=[];
+  name: any = [];
   // name = ['Unrsolved Issues','Major Issues','Fixed Issues','Bugs','Vulnarebilities','Code smells'];
-  selected=['MONTHLY'];
+  selected = ['MONTHLY'];
   errBody: any;
-	parsedErrBody: any;
-	errMessage: any;
-	errorChecked:boolean=true;
-	errorInclude:any="";
-  json:any={};
-  private toastmessage:any;
-  
+  parsedErrBody: any;
+  errMessage: any;
+  errorChecked: boolean = true;
+  errorInclude: any = "";
+  json: any = {};
+  private toastmessage: any;
+
   constructor(
     private toasterService: ToasterService,
     private messageservice: MessageService,
@@ -82,74 +82,66 @@ export class EnvCodequalitySectionComponent implements OnInit {
     private cache: DataCacheService,
     private router: Router,
     private authenticationservice: AuthenticationService
-  ) {}
+  ) { }
 
 
-  public lineChartData:Array<any> = [
-    {data: [0,0,0,20,0], label: 'Major',lineTension:0},
-    {data: [0,10,10,10,0], label: 'Unresolved',lineTension:0},
-    {data: [20,20,10,20,20], label: 'Fixed',lineTension:0}
-    
+  public lineChartData: Array<any> = [
+    { data: [0, 0, 0, 20, 0], label: 'Major', lineTension: 0 },
+    { data: [0, 10, 10, 10, 0], label: 'Unresolved', lineTension: 0 },
+    { data: [20, 20, 10, 20, 20], label: 'Fixed', lineTension: 0 }
+
   ];
 
- 
-  public lineChartLabels:Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-  public lineChartOptions:any = {
-    legend: {position: 'bottom'},
-    scales : {
+
+  public lineChartLabels: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
+  public lineChartOptions: any = {
+    legend: { position: 'bottom' },
+    scales: {
       yAxes: [{
-         ticks: {
-            // steps : 2,
-            // stepValue : 10,
-            // max : 20,
-            // min : 0
-          }
-      }] 
+        ticks: {
+          // steps : 2,
+          // stepValue : 10,
+          // max : 20,
+          // min : 0
+        }
+      }]
     },
     responsive: false
   };
-  public lineChartColors:Array<any> = [
+  public lineChartColors: Array<any> = [
     { //pink
       backgroundColor: 'rgba(237,0,140,0)',
-      borderColor: 'rgba(237,0,140,1)',      
-       pointBorderColor: 'transparent',      
+      borderColor: 'rgba(237,0,140,1)',
+      pointBorderColor: 'transparent',
     },
     { //blue
       backgroundColor: 'rgba(31,166,206,0)',
-      borderColor: 'rgba(31,166,206,1)',       
-       pointBorderColor: 'transparent',       
+      borderColor: 'rgba(31,166,206,1)',
+      pointBorderColor: 'transparent',
     },
     { //green
       backgroundColor: 'rgba(92,174,1,0)',
-      borderColor: 'rgba(92,174,1,1)',       
-       pointBorderColor: 'transparent',       
+      borderColor: 'rgba(92,174,1,1)',
+      pointBorderColor: 'transparent',
     }
   ];
-  
-  public lineChartLegend:boolean = true;
-  public lineChartType:string = 'line';
- 
 
-  // model:any = {
-  //   qualityProfile:'JavaScript',
-  //   sonar:'abcdefgujkl',
-  //   lines:'480(xs)',
-  //   files:'147',
-  //   activities:'9'
-  // }
-  editChanges(){
+  public lineChartLegend: boolean = true;
+  public lineChartType: string = 'line';
+
+  editChanges() {
     this.edit = false;
     this.save = true;
   }
-  saveChanges(){
+  saveChanges() {
     this.edit = true;
     this.save = false;
   }
 
-  onFilterSelected(event){
-    this.filterdone=false;
-    this.filteron=true;
-    if(event[0] == "DAILY"){
+  onFilterSelected(event) {
+    this.filterdone = false;
+    this.filteron = true;
+    if (event[0] == "DAILY") {
       this.filtertext = "past 7 days";
       this.selectedTimeRange = "Day";
       this.selected = ['DAILY'];
@@ -158,8 +150,8 @@ export class EnvCodequalitySectionComponent implements OnInit {
       var dateString = date.toISOString();
       this.startDate = dateString;
       this.displayGraph();
-      
-    }else if(event[0] == "WEEKLY"){
+
+    } else if (event[0] == "WEEKLY") {
       this.filtertext = "past 4 weeks";
       this.selectedTimeRange = "Week";
       this.selected = ['WEEKLY'];
@@ -168,7 +160,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
       var dateString = date.toISOString();
       this.startDate = dateString;
       this.displayGraph();
-    }else{
+    } else {
       this.filtertext = "data for past 6 months";
       this.selectedTimeRange = "Month";
       this.selected = ['MONTHLY'];
@@ -177,334 +169,332 @@ export class EnvCodequalitySectionComponent implements OnInit {
       var dateString = date.toISOString();
       this.startDate = dateString;
       this.displayGraph();
-    }  
+    }
   }
-  
-  displayGraph(){
-    
-    this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
-    // this.http.get('/jazz/codeq?domain='+this.service.domain+'&service='+this.service.name+'&environment='+this.env+'&from='+this.startDate+'&to='+this.endDate+'&').subscribe(
+
+  displayGraph() {
+
+    this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment=' + this.env + '&from=' + this.startDate + '&to=' + this.endDate + '&').subscribe(
+      //this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/codeq?domain=jazz&service=codeq&environment=prod&from=2017-01-01T12:00:00-0700&to=2018-01-20T09:17:26.931Z').subscribe(
       response => {
         var res = response;
-        
-        console.log("response = ",response)
-        if(res.data == undefined || res.data == null || res.data.length == 0){
+        if (res.data == undefined || res.data == null || res.data.length == 0) {
           this.emptydata = true;
           this.notemptydata = false;
-          this.isGraphLoading=false;
-          this.graphDataAvailable=false;
-        }else{
-        this.cqList= res.data.metrics;
-        for (var i= 0 ; i < this.cqList.length ; i++){
+          this.isGraphLoading = false;
+          this.graphDataAvailable = false;
+        } else {
+          this.cqList = res.data.metrics;
+          for (var i = 0; i < this.cqList.length; i++) {
 
-          this.graphInput = this.cqList[this.cardindex];
-          this.graphname = this.name[this.cardindex];
-
-          this.cqList[i].xAxis = {
-            "label": "TIME",
-            "range": "day"
-        };
-          this.cqList[i].yAxis = {
-            "label": "ISSUES",
-            "range": "day"
-        };
-          this.cqList[i].data = this.cqList[i].values;
-           this.graphArray[i] = this.cqList[i].data;
-           if(this.graphArray[i].length != 0){
-           this.value[i] = this.graphArray[i][Math.floor((this.graphArray[i].length)-1)].value;
-           if(this.value[i] >= 1000){
-             this.value[i] = (this.value[i]/1000).toFixed(1) + "K";
-           }if(this.value[i] >= 1000000){
-            this.value[i] = (this.value[i]/1000000).toFixed(1) + "M";
-          }if(this.value[i] >= 1000000000){
-            this.value[i] = (this.value[i]/1000000000).toFixed(1) + "B";
-          }
-           this.date[i] = this.graphArray[i][Math.floor((this.graphArray[i].length)-1)].ts.slice(0,-14).split("-").reverse().join("-");
-           }else{
-             this.value[i] = "";
-            this.date[i] = "OOPS! doesn't look like there is any data available here.";
             this.graphInput = this.cqList[this.cardindex];
             this.graphname = this.name[this.cardindex];
-           }
-           this.name[i] = this.cqList[i].name.replace("-"," ").replace("-"," ");
-           this.link[i] = this.cqList[i].link;
-           this.sonar = this.link[0];
-           for( var j = 0 ; j < this.graphArray[i].length; j++ ){
-            // this.graphArray[i][j].date = this.graphArray[i][j].ts;
-            this.graphArray[i][j].date = new Date(this.graphArray[i][j].ts);
+
+            this.cqList[i].xAxis = {
+              "label": "TIME",
+              "range": "day"
+            };
+            this.cqList[i].yAxis = {
+              "label": "ISSUES",
+              "range": "day"
+            };
+            this.cqList[i].data = this.cqList[i].values;
+            this.graphArray[i] = this.cqList[i].data;
+            if (this.graphArray[i].length != 0) {
+              this.value[i] = this.graphArray[i][Math.floor((this.graphArray[i].length) - 1)].value;
+              if (this.value[i] >= 1000) {
+                this.value[i] = (this.value[i] / 1000).toFixed(1) + "K";
+              } if (this.value[i] >= 1000000) {
+                this.value[i] = (this.value[i] / 1000000).toFixed(1) + "M";
+              } if (this.value[i] >= 1000000000) {
+                this.value[i] = (this.value[i] / 1000000000).toFixed(1) + "B";
+              }
+              this.date[i] = this.graphArray[i][Math.floor((this.graphArray[i].length) - 1)].ts.slice(0, -14).split("-").reverse().join("-");
+            } else {
+              this.value[i] = "";
+              this.date[i] = "OOPS! doesn't look like there is any data available here.";
+              this.graphInput = this.cqList[this.cardindex];
+              this.graphname = this.name[this.cardindex];
+            }
+            this.name[i] = this.cqList[i].name.replace("-", " ").replace("-", " ");
+            this.link[i] = this.cqList[i].link;
+            this.sonar = this.link[0];
+            for (var j = 0; j < this.graphArray[i].length; j++) {
+              // this.graphArray[i][j].date = this.graphArray[i][j].ts;
+              this.graphArray[i][j].date = new Date(this.graphArray[i][j].ts);
+            }
           }
+
+          if (this.cqList.length != 0) {
+            this.isGraphLoading = false;
+            this.graphDataAvailable = true;
+            this.yesdata = true;
+            this.noData = false;
+          } else {
+            this.graphDataAvailable = true;
+            this.noData = true;
+            this.isGraphLoading = false;
+            this.yesdata = false;
+            // this.checkcarausal();
+          }
+
+
         }
-        
-       if(this.cqList.length != 0 ){
-          this.isGraphLoading=false;
-          this.graphDataAvailable=true;
-          this.yesdata=true;
-          this.noData=false;
-       }else{
-        this.graphDataAvailable=true;
-        this.noData=true;
-        this.isGraphLoading=false;
-        this.yesdata=false;
-        // this.checkcarausal();
-      }
-      
-      
-    }
-    this.filteron=false;
-    this.filterdone=true;
-    if(this.graphInput.values.length != 0){
-      this.graphDataAvailable=true;
-      this.noData=false;
-      this.yesdata=true;
-    }else{
-      this.graphDataAvailable=true;
-      this.noData=true;
-      this.yesdata=false;
-    }
-    setTimeout(() => {
-      this.checkcarausal();
-    },1000)
-    
-  },
+        this.filteron = false;
+        this.filterdone = true;
+        if (this.graphInput.values.length != 0) {
+          this.graphDataAvailable = true;
+          this.noData = false;
+          this.yesdata = true;
+        } else {
+          this.graphDataAvailable = true;
+          this.noData = true;
+          this.yesdata = false;
+        }
+        setTimeout(() => {
+          this.checkcarausal();
+        }, 1000)
+
+      },
       error => {
-        this.graphDataAvailable=false;
-        this.isGraphLoading=false;
+        this.graphDataAvailable = false;
+        this.isGraphLoading = false;
         this.isError = true;
         this.payload = {
-          "domain" : this.service.domain,
-          "service" : this.service.name,
-          "environment" : this.env,
-          "from" : this.startDate,
-          "to" : this.endDate
+          "domain": this.service.domain,
+          "service": this.service.name,
+          "environment": this.env,
+          "from": this.startDate,
+          "to": this.endDate
         }
         this.getTime();
-			  this.errorURL = window.location.href;
-			  this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/codeq";
-			  this.errorRequest = this.payload;
-			  this.errorUser = this.authenticationservice.getUserId();
-			  this.errorResponse = JSON.parse(error._body);
-        
-			// let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
-            // this.popToast('error', 'Oops!', errorMessage);
-		})
-	};
+        this.errorURL = window.location.href;
+        this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/codeq";
+        this.errorRequest = this.payload;
+        this.errorUser = this.authenticationservice.getUserId();
+        this.errorResponse = JSON.parse(error._body);
 
-	getTime() {
-		var now = new Date();
-		this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
-		+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-		// console.log(this.errorTime);
-	  }
+        // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
+        // this.popToast('error', 'Oops!', errorMessage);
+      })
+  };
 
-	feedbackRes:boolean=false;
-	openModal:boolean=false;
-    feedbackMsg:string='';
-    feedbackResSuccess:boolean=false;
-	feedbackResErr:boolean=false;
-	isFeedback:boolean=false;
-    toast:any;
-    model:any={
-        userFeedback : ''
-	};
-	buttonText:string='SUBMIT';
-	isLoading:boolean=false;
-	sjson:any={};
-  djson:any={};
-  // isLoading:boolean=false;
-  reportIssue(){
-    
-        this.json = {
-          "user_reported_issue" : this.model.userFeedback,
-          "API": this.errorAPI,
-          "REQUEST":this.errorRequest,
-          "RESPONSE":this.errorResponse,
-          "URL": this.errorURL,
-          "TIME OF ERROR":this.errorTime,
-          "LOGGED IN USER":this.errorUser
-      }
-      
-        this.openModal=true;
-        this.errorChecked=true;
-        this.isLoading=false;
-        this.errorInclude = JSON.stringify(this.djson);
-        this.sjson = JSON.stringify(this.json);
-      }
-    
-      openFeedbackForm(){
-        this.isFeedback=true;
-        this.model.userFeedback='';
-        this.feedbackRes=false;
-        this.feedbackResSuccess=false;
-        this.feedbackResErr=false;
-        this.isLoading = false;
-        this.buttonText='SUBMIT';
-      }
-      mailTo(){
-        location.href='mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by'+" "+ this.authenticationservice.getUserId() +'&body='+this.sjson;
-      }
-      errorIncluded(){
-      }
-     
-      submitFeedback(action){
-    
-        this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
-        if( this.errorChecked == true ){
-          this.json = {
-              "user_reported_issue" : this.model.userFeedback,
-              "API": this.errorAPI,
-              "REQUEST":this.errorRequest,
-              "RESPONSE":this.errorResponse,
-              "URL": this.errorURL,
-              "TIME OF ERROR":this.errorTime,
-              "LOGGED IN USER":this.errorUser
-          }
-        }else{
-          this.json = this.model.userFeedback ;
-        }
-        this.sjson = JSON.stringify(this.json);
-    
-        this.isLoading = true;
-    
-        if(action == 'DONE'){
-          this.openModal=false;
-          return;
-        }
-    
-        var payload={
-          "title" : "Jazz: Issue reported by "+ this.authenticationservice.getUserId(),
-          "project_id": "CAPI",
-          "priority": "P4",
-          "description": this.json,
-          "created_by": this.authenticationservice.getUserId(),
-          "issue_type" :"bug"
-        }
-        this.http.post('/platform/jira-issues', payload).subscribe(
-          response => {
-            this.buttonText='DONE';
-            // console.log(response);
-            this.isLoading = false;
-            this.model.userFeedback='';
-            var respData = response.data;
-            this.feedbackRes = true;
-            this.feedbackResSuccess= true;
-            if(respData != undefined && respData != null && respData != ""){
-              this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
-            } 
-          },
-          error => {
-            this.buttonText='DONE';
-            this.isLoading = false;
-            this.feedbackResErr = true;
-            this.feedbackRes = true;
-            this.feedbackMsg = this.toastmessage.errorMessage(error, 'jiraTicket');
-            }
-        );
-      }
-   selectedMetrics(index,gname,link){
-      this.cardindex = index;
-      // console.log("index = ", this.cardindex)
-      this.graphname = gname;
-      this.sonar = link;
-      var ele = document.getElementsByClassName('metrics-card');
-      for(var i=0;i<ele.length;i++){
-        ele[i].classList.remove('arrow_box');
-        ele[i].classList.remove('active');
-      }
-      ele[this.cardindex].className += ' arrow_box';
-      ele[this.cardindex].className += ' active';
-      this.graphInput = this.cqList[this.cardindex];
-      if(this.graphInput.values.length != 0){
-        this.graphDataAvailable=true;
-        this.noData=false;
-        this.yesdata=true;
-      }else{
-        this.graphDataAvailable=true;
-        this.noData=true;
-        this.yesdata=false;
-      }
-      this.onFilterSelected(event);
+  getTime() {
+    var now = new Date();
+    this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
+      + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
+    // console.log(this.errorTime);
   }
 
-  sonarProjectLink(url){
+  feedbackRes: boolean = false;
+  openModal: boolean = false;
+  feedbackMsg: string = '';
+  feedbackResSuccess: boolean = false;
+  feedbackResErr: boolean = false;
+  isFeedback: boolean = false;
+  toast: any;
+  model: any = {
+    userFeedback: ''
+  };
+  buttonText: string = 'SUBMIT';
+  isLoading: boolean = false;
+  sjson: any = {};
+  djson: any = {};
+  // isLoading:boolean=false;
+  reportIssue() {
+
+    this.json = {
+      "user_reported_issue": this.model.userFeedback,
+      "API": this.errorAPI,
+      "REQUEST": this.errorRequest,
+      "RESPONSE": this.errorResponse,
+      "URL": this.errorURL,
+      "TIME OF ERROR": this.errorTime,
+      "LOGGED IN USER": this.errorUser
+    }
+
+    this.openModal = true;
+    this.errorChecked = true;
+    this.isLoading = false;
+    this.errorInclude = JSON.stringify(this.djson);
+    this.sjson = JSON.stringify(this.json);
+  }
+
+  openFeedbackForm() {
+    this.isFeedback = true;
+    this.model.userFeedback = '';
+    this.feedbackRes = false;
+    this.feedbackResSuccess = false;
+    this.feedbackResErr = false;
+    this.isLoading = false;
+    this.buttonText = 'SUBMIT';
+  }
+  mailTo() {
+    location.href = 'mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by' + " " + this.authenticationservice.getUserId() + '&body=' + this.sjson;
+  }
+  errorIncluded() {
+  }
+
+  submitFeedback(action) {
+
+    this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
+    if (this.errorChecked == true) {
+      this.json = {
+        "user_reported_issue": this.model.userFeedback,
+        "API": this.errorAPI,
+        "REQUEST": this.errorRequest,
+        "RESPONSE": this.errorResponse,
+        "URL": this.errorURL,
+        "TIME OF ERROR": this.errorTime,
+        "LOGGED IN USER": this.errorUser
+      }
+    } else {
+      this.json = this.model.userFeedback;
+    }
+    this.sjson = JSON.stringify(this.json);
+
+    this.isLoading = true;
+
+    if (action == 'DONE') {
+      this.openModal = false;
+      return;
+    }
+
+    var payload = {
+      "title": "Jazz: Issue reported by " + this.authenticationservice.getUserId(),
+      "project_id": "CAPI",
+      "priority": "P4",
+      "description": this.json,
+      "created_by": this.authenticationservice.getUserId(),
+      "issue_type": "bug"
+    }
+    this.http.post('/platform/jira-issues', payload).subscribe(
+      response => {
+        this.buttonText = 'DONE';
+        // console.log(response);
+        this.isLoading = false;
+        this.model.userFeedback = '';
+        var respData = response.data;
+        this.feedbackRes = true;
+        this.feedbackResSuccess = true;
+        if (respData != undefined && respData != null && respData != "") {
+          this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
+        }
+      },
+      error => {
+        this.buttonText = 'DONE';
+        this.isLoading = false;
+        this.feedbackResErr = true;
+        this.feedbackRes = true;
+        this.feedbackMsg = this.toastmessage.errorMessage(error, 'jiraTicket');
+      }
+    );
+  }
+  selectedMetrics(index, gname, link) {
+    this.cardindex = index;
+    // console.log("index = ", this.cardindex)
+    this.graphname = gname;
+    this.sonar = link;
+    var ele = document.getElementsByClassName('metrics-card');
+    for (var i = 0; i < ele.length; i++) {
+      ele[i].classList.remove('arrow_box');
+      ele[i].classList.remove('active');
+    }
+    ele[this.cardindex].className += ' arrow_box';
+    ele[this.cardindex].className += ' active';
+    this.graphInput = this.cqList[this.cardindex];
+    if (this.graphInput.values.length != 0) {
+      this.graphDataAvailable = true;
+      this.noData = false;
+      this.yesdata = true;
+    } else {
+      this.graphDataAvailable = true;
+      this.noData = true;
+      this.yesdata = false;
+    }
+    this.onFilterSelected(event);
+  }
+
+  sonarProjectLink(url) {
     window.open(url, '_blank');
   }
 
   onResize(event) {
     this.checkcarausal();
-}
+  }
 
 
   ngOnInit() {
-    
-    this.isGraphLoading=true;
-    this.cache.set("codequality",true);
+
+    this.isGraphLoading = true;
+    this.cache.set("codequality", true);
     this.route.params.subscribe(
-		  params => {
-		  this.env = params.env;
-		});
-		if(this.env=='prd'){
-      this.env='prod';
+      params => {
+        this.env = params.env;
+      });
+    if (this.env == 'prd') {
+      this.env = 'prod';
+    }
+
+    var date = new Date();
+    date.setDate(date.getDate() - 180);
+    var dateString = date.toISOString();
+    this.startDate = dateString;
+    console.log("start date ======== ", this.startDate)
+
+    this.displayGraph();
+    // this.selectedMetrics(1,"gname","link")
+
   }
 
-  var date = new Date();
-      date.setDate(date.getDate() - 180);
-      var dateString = date.toISOString();
-      this.startDate = dateString;
-      console.log("start date ======== ", this.startDate)
-    
-  this.displayGraph();
-  // this.selectedMetrics(1,"gname","link")
- 
+  public goToAbout(hash) {
+
+    this.router.navigateByUrl('landing');
+    this.cache.set('scroll_flag', true);
+    this.cache.set('scroll_id', hash);
   }
 
-  public goToAbout(hash){
-
-      this.router.navigateByUrl('landing');
-      this.cache.set('scroll_flag',true);
-      this.cache.set('scroll_id',hash);
-      }
-
-  refreshCostData(event){
+  refreshCostData(event) {
     this.isGraphLoading = true;
     this.displayGraph();
   }
 
-  checkcarausal(){
+  checkcarausal() {
 
-        var mainEle = document.getElementsByClassName('scroll-cards-wrap')[0].clientWidth;
-       
-        var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
-        
-        if(mainEle > limit){
-          this.maxCards = true;
-        } else {
-          this.maxCards = false;
-          this.minCards = false;
-        }
- }
+    var mainEle = document.getElementsByClassName('scroll-cards-wrap')[0].clientWidth;
 
-  leftArrowClick(){
+    var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
+
+    if (mainEle > limit) {
+      this.maxCards = true;
+    } else {
+      this.maxCards = false;
+      this.minCards = false;
+    }
+  }
+
+  leftArrowClick() {
     var mainEle = document.getElementsByClassName('scroll-cards-wrap');
-    var innerWidth = (mainEle[0].clientWidth + 12)/this.cqList.length;
+    var innerWidth = (mainEle[0].clientWidth + 12) / this.cqList.length;
     this.maxCards = true;
-    if(this.safeTransformX < 0){
+    if (this.safeTransformX < 0) {
       this.minCards = true;
       this.safeTransformX = this.safeTransformX + innerWidth;
-      if(this.safeTransformX >= 0){
+      if (this.safeTransformX >= 0) {
         this.minCards = false;
       }
     }
   }
 
-  rightArrowClick(){
+  rightArrowClick() {
     var mainEle = document.getElementsByClassName('scroll-cards-wrap');
     var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
-    var innerWidth = (mainEle[0].clientWidth)/this.cqList.length;
-    this.minCards=true;
-    if(this.safeTransformX > (-mainEle[0].clientWidth+limit)){
+    var innerWidth = (mainEle[0].clientWidth) / this.cqList.length;
+    this.minCards = true;
+    if (this.safeTransformX > (-mainEle[0].clientWidth + limit)) {
       this.maxCards = true;
       this.safeTransformX = this.safeTransformX - innerWidth;
-      if(this.safeTransformX <= (-mainEle[0].clientWidth+limit)){
+      if (this.safeTransformX <= (-mainEle[0].clientWidth + limit)) {
         this.maxCards = false;
       }
     }

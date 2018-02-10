@@ -10,118 +10,118 @@ import { Component, Input, OnInit, Output, EventEmitter, NgModule } from '@angul
 import { BrowserModule } from '@angular/platform-browser';
 // import { FORM_DIRECTIVES, ControlGroup, Control, Validators, FormBuilder, Validator, } from '@angular/common';
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './service-form-data';
-import { FocusDirective} from './focus.directive';
-import {CronParserService} from '../../core/helpers';
-import { ToasterService} from 'angular2-toaster';
+import { FocusDirective } from './focus.directive';
+import { CronParserService } from '../../core/helpers';
+import { ToasterService } from 'angular2-toaster';
 import { RequestService, DataCacheService, MessageService, AuthenticationService } from "../../core/services";
 import 'rxjs/Rx';
-import {Observable} from 'rxjs/Rx';
-import {ServicesListComponent} from "../../pages/services-list/services-list.component"
+import { Observable } from 'rxjs/Rx';
+import { ServicesListComponent } from "../../pages/services-list/services-list.component"
 
 @Component({
   selector: 'create-service',
   templateUrl: './create-service.component.html',
-  providers: [RequestService,MessageService],
+  providers: [RequestService, MessageService],
   styleUrls: ['./create-service.component.scss']
 })
 
 
 export class CreateServiceComponent implements OnInit {
 
-  @Output() onClose:EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
-  typeOfService:string = "api";
-  typeOfPlatform:string = "aws";
+  typeOfService: string = "api";
+  typeOfPlatform: string = "aws";
   disablePlatform = true;
-  selected:string = "Minutes";
-  runtime:string = 'nodejs';
-  eventSchedule:string = 'fixedRate';
+  selected: string = "Minutes";
+  runtime: string = 'nodejs';
+  eventSchedule: string = 'fixedRate';
   private slackSelected: boolean = false;
   private createslackSelected: boolean = false;
   private ttlSelected: boolean = false;
   showApproversList: boolean = false;
-  approverName:string;
-  approverName2:string;
-  currentUserSlack:boolean=false;
+  approverName: string;
+  approverName2: string;
+  currentUserSlack: boolean = false;
   git_clone: boolean = false;
-  git_url:string = "";
+  git_url: string = "";
   git_private: boolean = false;
-  git_creds:any = {};
-  git_username:string = "";
-  git_pwd:string = "";
-  selApprover:any=[];
-  appIndex:any;
-  git_err:boolean=false;
-  approversList:any;
-  approversList2:any;
-  slackAvailble : boolean = false;
-  slackNotAvailble : boolean = false;
-  channelNameError : boolean = false;
+  git_creds: any = {};
+  git_username: string = "";
+  git_pwd: string = "";
+  selApprover: any = [];
+  appIndex: any;
+  git_err: boolean = false;
+  approversList: any;
+  approversList2: any;
+  slackAvailble: boolean = false;
+  slackNotAvailble: boolean = false;
+  channelNameError: boolean = false;
   showLoader: boolean = false;
-  showApproversList2:boolean = false;
+  showApproversList2: boolean = false;
   isLoading: boolean = false;
   slackChannelLoader: boolean = false;
-  serviceAvailable : boolean = false;
-  serviceNotAvailable : boolean = false;
-  serviceNameError : boolean = false;
-  isDomainDefined : boolean = false;
-  invalidttl : boolean = false;
+  serviceAvailable: boolean = false;
+  serviceNotAvailable: boolean = false;
+  serviceNameError: boolean = false;
+  isDomainDefined: boolean = false;
+  invalidttl: boolean = false;
   serviceRequested = false;
   serviceRequestFailure = false;
   serviceRequestSuccess = false;
-  vpcdisable:boolean=false;
-  serviceLink:string;
-  Currentinterval : string = 'Minutes';
-  rateExpressionIsValid : boolean = false;
-  isLoadingNewSlack:boolean=false;
-  rateExpressionError : string = '';
-  cronFieldValidity : any;
-  private headers = new Headers({'Content-Type': 'application/json'});
+  vpcdisable: boolean = false;
+  serviceLink: string;
+  Currentinterval: string = 'Minutes';
+  rateExpressionIsValid: boolean = false;
+  isLoadingNewSlack: boolean = false;
+  rateExpressionError: string = '';
+  cronFieldValidity: any;
+  private headers = new Headers({ 'Content-Type': 'application/json' });
   submitted = false;
   vpcSelected: boolean = false;
-  publicSelected: boolean=false;
-  resMessage:string='';
-  cdnConfigSelected:boolean = false;
-  focusindex:any = -1;
-  scrollList:any = '';
-  toast : any;
-  gitCloneSelected:boolean = false;
-  gitprivateSelected:boolean= false;
-//   model: any = {
-//     gitRepo: '',
-// };
-gitRepo:any= '';
-gitusername:any= '';
-gituserpwd:any= '';
-  createSlackModel:any = {
-    name:'',
-    purpose:'',
-    invites:''
+  publicSelected: boolean = false;
+  resMessage: string = '';
+  cdnConfigSelected: boolean = false;
+  focusindex: any = -1;
+  scrollList: any = '';
+  toast: any;
+  gitCloneSelected: boolean = false;
+  gitprivateSelected: boolean = false;
+  //   model: any = {
+  //     gitRepo: '',
+  // };
+  gitRepo: any = '';
+  gitusername: any = '';
+  gituserpwd: any = '';
+  createSlackModel: any = {
+    name: '',
+    purpose: '',
+    invites: ''
   };
 
 
-  model = new ServiceFormData('','','', '','','');
-  cronObj = new CronObject('0/5','*','*','*','?','*')
+  model = new ServiceFormData('', '', '', '', '', '');
+  cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
   rateExpression = new RateExpression(undefined, undefined, 'none', '5', this.selected, '');
-  eventExpression = new EventExpression("awsEventsNone",undefined,undefined,undefined);
+  eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
   private doctors = [];
-  private toastmessage:any;
+  private toastmessage: any;
   errBody: any;
-	parsedErrBody: any;
+  parsedErrBody: any;
   errMessage: any;
-  firstcharvalidation:string=""
-  invalidServiceName:boolean=false;
-  invalidServiceNameNum:boolean=false;
-  invalidDomainName:boolean=false;
-  loginUser:string = '';
-  loginUserDetail:any;
-  service:any="";
-  domain:any="";
-  reqId:any="";
-  
+  firstcharvalidation: string = ""
+  invalidServiceName: boolean = false;
+  invalidServiceNameNum: boolean = false;
+  invalidDomainName: boolean = false;
+  loginUser: string = '';
+  loginUserDetail: any;
+  service: any = "";
+  domain: any = "";
+  reqId: any = "";
 
-  constructor (
+
+  constructor(
     // private http: Http,
     private toasterService: ToasterService,
     private cronParserService: CronParserService,
@@ -159,9 +159,9 @@ gituserpwd:any= '';
     return this.eventExpression.type === 's3';
   }
 
- // function for opening and closing create service popup
-  closeCreateService(serviceRequest){
-    if(serviceRequest){
+  // function for opening and closing create service popup
+  closeCreateService(serviceRequest) {
+    if (serviceRequest) {
       this.servicelist.serviceCall();
     }
     this.cache.set("updateServiceList", true);
@@ -174,67 +174,67 @@ gituserpwd:any= '';
 
 
   selectedApprovers = [];
-  selectedApprovers2=[];
+  selectedApprovers2 = [];
 
-  rateData = ['Minutes','Hours','Days'];
+  rateData = ['Minutes', 'Hours', 'Days'];
 
   // function for changing service type
-  changeServiceType(serviceType){
+  changeServiceType(serviceType) {
     this.typeOfService = serviceType;
   }
 
   // function for changing platform type
-  changePlatformType(platformType){
-    if(!this.disablePlatform){
+  changePlatformType(platformType) {
+    if (!this.disablePlatform) {
       this.typeOfPlatform = platformType;
     }
   }
 
   // function called on runtime change(radio)
-  onSelectionChange(val){
+  onSelectionChange(val) {
     this.runtime = val;
   }
 
   // function called on event schedule change(radio)
-  onEventScheduleChange(val){
+  onEventScheduleChange(val) {
     this.rateExpression.type = val;
   }
-  onAWSEventChange(val){
+  onAWSEventChange(val) {
     this.eventExpression.type = val;
   }
-  onSelectedDr(selected){
+  onSelectedDr(selected) {
     this.rateExpression.interval = selected;
     this.generateExpression(this.rateExpression)
   }
 
-  getUserDetails(list){
+  getUserDetails(list) {
     this.loginUser = this.authenticationservice.getUserId();
-    if(list.length){
-      for(var i=0;i<list.length; i++){
-        if(list[i].userId.toLowerCase() === this.loginUser){
+    if (list.length) {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].userId.toLowerCase() === this.loginUser) {
           this.loginUserDetail = list[i];
         }
       }
     }
   }
 
-  statusFilter(item){
+  statusFilter(item) {
     this.selected = item;
   };
-  approversListRes:any;
+  approversListRes: any;
   // function to get approvers list
   public getData() {
-    
+
     this.http.get('/platform/ad/users')
-        .subscribe((res: Response) => {
+      .subscribe((res: Response) => {
         this.approversListRes = res;
-        this.approversList = this.approversListRes.data.values.slice(0,this.approversListRes.data.values.length);
-        this.approversList2= this.approversListRes.data.values.slice(0,this.approversListRes.data.values.length);
+        this.approversList = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.getUserDetails(this.approversList2);
       }, error => {
-      this.resMessage=this.toastmessage.errorMessage(error, 'aduser');
-      this.toast_pop('error', 'Oops!', this.resMessage);
-    });
+        this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
+        this.toast_pop('error', 'Oops!', this.resMessage);
+      });
   }
 
 
@@ -243,34 +243,35 @@ gituserpwd:any= '';
   public validateChannelName() {
 
     this.slackChannelLoader = true;
-    this.http.get('/platform/is-slack-channel-available?slack_channel='+this.model.slackName)
-        .subscribe(
-        (Response) => {
+    this.http.get('/platform/is-slack-channel-available?slack_channel=' + this.model.slackName)
+      .subscribe(
+      (Response) => {
         var output = Response;
         this.slackChannelLoader = false;
-        if(output.data.is_available == true){
+        if (output.data.is_available == true) {
           this.slackAvailble = true;
           this.slackNotAvailble = false;
-        } else if (output.data.is_available == false){
+        } else if (output.data.is_available == false) {
           this.slackAvailble = false;
           this.slackNotAvailble = true;
         } else {
-           this.serviceAvailable = true;
-           this.slackAvailble = false;
-           this.slackNotAvailble = false;
-        }},
-        (error) => {
-          this.slackChannelLoader = false;
-          var err = error;
-          // this.channelNameError = true;
-          this.resMessage=this.toastmessage.errorMessage(error, 'slackChannel');
-          this.toast_pop('error', 'Oops!', this.resMessage);
+          this.serviceAvailable = true;
+          this.slackAvailble = false;
+          this.slackNotAvailble = false;
         }
-    );
+      },
+      (error) => {
+        this.slackChannelLoader = false;
+        var err = error;
+        // this.channelNameError = true;
+        this.resMessage = this.toastmessage.errorMessage(error, 'slackChannel');
+        this.toast_pop('error', 'Oops!', this.resMessage);
+      }
+      );
   }
 
   // function to restore the slack channel availability when it is changed
-  onSlackChange(){
+  onSlackChange() {
     this.channelNameError = false;
     this.slackAvailble = false;
     this.slackNotAvailble = false;
@@ -283,63 +284,62 @@ gituserpwd:any= '';
     this.model.domainName = this.model.domainName.toLowerCase();
 
 
-    this.http.get('/jazz/is-service-available/?service='+this.model.serviceName+'&domain='+this.model.domainName)
-        .subscribe(
-        (Response) => {
+    this.http.get('/jazz/is-service-available/?service=' + this.model.serviceName + '&domain=' + this.model.domainName)
+      .subscribe(
+      (Response) => {
 
         var output = Response;
         this.showLoader = false;
-        if(output.data.available == true){
+        if (output.data.available == true) {
           this.serviceAvailable = true;
           this.serviceNotAvailable = false;
-        } else if (output.data.available == false){
+        } else if (output.data.available == false) {
           this.serviceAvailable = false;
           this.serviceNotAvailable = true;
         } else {
           //  this.serviceNameError = true;
-           this.serviceAvailable = false;
-           this.serviceNotAvailable = false;
+          this.serviceAvailable = false;
+          this.serviceNotAvailable = false;
         }
         this.checkdomainName();
         (error) => {
-        this.showLoader = false;
-        // this.serviceNameError = true;
-        this.serviceAvailable = false;
-        this.serviceNotAvailable = false;
-        var err = error;
-        this.checkdomainName();
+          this.showLoader = false;
+          // this.serviceNameError = true;
+          this.serviceAvailable = false;
+          this.serviceNotAvailable = false;
+          var err = error;
+          this.checkdomainName();
 
         }
       },
-      (error)=>{
+      (error) => {
         this.showLoader = false;
-        this.resMessage=this.toastmessage.errorMessage(error, 'serviceAvailability');
+        this.resMessage = this.toastmessage.errorMessage(error, 'serviceAvailability');
         this.toast_pop('error', 'Oops!', this.resMessage);
       }
-    );
+      );
   }
 
-  toast_pop(error,oops,errorMessage)
-  {
-      var tst = document.getElementById('toast-container');
+  toast_pop(error, oops, errorMessage) {
+    var tst = document.getElementById('toast-container');
 
-       tst.classList.add('toaster-anim');                            
-      this.toast = this.toasterService.pop(error,oops,errorMessage);        
-      setTimeout(() => {
-          tst.classList.remove('toaster-anim');
-        }, 3000);
-      
+    tst.classList.add('toaster-anim');
+    this.toast = this.toasterService.pop(error, oops, errorMessage);
+    setTimeout(() => {
+      tst.classList.remove('toaster-anim');
+    }, 3000);
+
   }
-  checkdomainName(){
-    if(this.model.domainName){
-        this.isDomainDefined = true;
+  checkdomainName() {
+    if (this.model.domainName) {
+      this.isDomainDefined = true;
     } else {
       this.isDomainDefined = false;
     }
   }
 
   // function to restore the service channel availability to false when it is changed
-  onServiceChange(){
+  onServiceChange() {
     this.isDomainDefined = false;
     this.serviceNameError = false;
     this.serviceAvailable = false;
@@ -347,61 +347,61 @@ gituserpwd:any= '';
   }
 
 
-    // function to create service
+  // function to create service
   public createService() {
     var approversPayload = []
     for (var i = this.selectedApprovers.length - 1; i >= 0; i--) {
-        approversPayload.push(this.selectedApprovers[i].userId);
+      approversPayload.push(this.selectedApprovers[i].userId);
     }
 
     var payload = {
-                "service_type": this.typeOfService,
-                "service_name": this.model.serviceName,
-                "approvers": approversPayload,
-                "domain": this.model.domainName,
-                "description":this.model.serviceDescription,
-            //     "git_clone":this.git_clone,
-            //     "git_url":this.git_url,
-            //     "git_private":this.git_private,
-            //     "git_creds":{
-                        // "properties":{
-            //       "git_username":this.git_username,
-            //       "git_pwd":this.git_pwd
-                        // }
-            //     }
-               
-            };
+      "service_type": this.typeOfService,
+      "service_name": this.model.serviceName,
+      "approvers": approversPayload,
+      "domain": this.model.domainName,
+      "description": this.model.serviceDescription,
+      //     "git_clone":this.git_clone,
+      //     "git_url":this.git_url,
+      //     "git_private":this.git_private,
+      //     "git_creds":{
+      // "properties":{
+      //       "git_username":this.git_username,
+      //       "git_pwd":this.git_pwd
+      // }
+      //     }
 
-            let obj = {};     
+    };
+
+    let obj = {};
 
     if (this.typeOfService == 'api') {
       payload["runtime"] = this.runtime;
       payload["require_internal_access"] = this.vpcSelected;
       payload["is_public_endpoint"] = this.publicSelected;
     }
-    else if(this.typeOfService == 'function'){
+    else if (this.typeOfService == 'function') {
       payload["runtime"] = this.runtime;
       // payload.service_type = 'lambda';
       payload["require_internal_access"] = this.vpcSelected;
-      if(this.rateExpression.type != 'none'){
+      if (this.rateExpression.type != 'none') {
         this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
         if (this.rateExpression.cronStr == 'invalid') {
-            return;
+          return;
         } else if (this.rateExpression.cronStr !== undefined) {
-            payload["rateExpression"] = this.rateExpression.cronStr;
+          payload["rateExpression"] = this.rateExpression.cronStr;
         }
       }
 
-      if(this.eventExpression.type !== "awsEventsNone") {
+      if (this.eventExpression.type !== "awsEventsNone") {
         var event = {};
         event["type"] = this.eventExpression.type;
-        if(this.eventExpression.type === "dynamodb") {
+        if (this.eventExpression.type === "dynamodb") {
           event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
           event["action"] = "PutItem";
-        } else if(this.eventExpression.type === "kinesis") {
+        } else if (this.eventExpression.type === "kinesis") {
           event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
           event["action"] = "PutRecord";
-        } else if(this.eventExpression.type === "s3") {
+        } else if (this.eventExpression.type === "s3") {
           event["source"] = this.eventExpression.S3BucketName;
           event["action"] = "S3:" + this.eventExpression.S3BucketName + ":*";
         }
@@ -409,129 +409,129 @@ gituserpwd:any= '';
         payload["events"].push(event);
       }
 
-    } else if(this.typeOfService == 'website'){
+    } else if (this.typeOfService == 'website') {
       payload["create_cloudfront_url"] = this.cdnConfigSelected;
       console.log("website");
-      
-      if(this.gitCloneSelected == true){
+
+      if (this.gitCloneSelected == true) {
         payload["git_repository"] = {};
         //payload["git_repository"]["git_url"] = this.git_url;
-         obj = {"git_https_url" : this.git_url, "git_creds" : {}};
+        obj = { "git_https_url": this.git_url, "git_creds": {} };
         // console.log("cloned")
-      
-        if(this.git_private == true){
+
+        if (this.git_private == true) {
           //payload["git_private"] = this.git_private;
           this.git_creds = {
-        
-              "git_username": this.gitusername,
-              "git_pwd": this.gituserpwd
-            
+
+            "git_username": this.gitusername,
+            "git_pwd": this.gituserpwd
+
           }
           obj["git_creds"] = this.git_creds;
-          
-          // payload["git_pwd"] = this.gitpwd;
-        
 
-          
+          // payload["git_pwd"] = this.gitpwd;
+
+
+
           // console.log("private")
-          
+
         }
         payload["git_repository"] = obj;
       }
     }
-    
-    if(this.slackSelected){
-        payload["slack_channel"] = this.model.slackName;
+
+    if (this.slackSelected) {
+      payload["slack_channel"] = this.model.slackName;
     }
-    if(this.typeOfService == 'api' && this.ttlSelected){
+    if (this.typeOfService == 'api' && this.ttlSelected) {
     }
 
     this.isLoading = true;
-    this.http.post('/jazz/create-serverless-service' , payload)
-        .subscribe(
-        (Response) => {
-          var service = payload.service_name;
-          var domain = payload.domain;
-          var reqId = Response.data.request_id;
-          localStorage.setItem('request_id'+"_"+payload.service_name+"_"+payload.domain, JSON.stringify({ service: service, domain: domain, request_id: reqId }));
-          console.log("payload ===== ",payload)
-          var output = Response;
-          // this.cache.set("request_id", Response.data.request_id);
-          // this.cache.set("request_id_name", Response.input.service_name);
-          this.serviceRequested = true;
-          this.serviceRequestSuccess = true;
-          this.serviceRequestFailure = false;
-          this.isLoading = false;
-          // this.cache.set('request_id',output.data.request_id);
-          // var index = output.data.indexOf("https://");
-          // this.serviceLink = output.data.slice(index, output.data.length);
-          this.resMessage=this.toastmessage.successMessage(Response,"createService");
-          if(output.data != undefined && typeof(output.data)=='string'){
-            this.resMessage= output.data;
-          } else if(output.data != undefined && typeof(output.data)=='object'){
-            this.resMessage = output.data.message;
-          }
-          this.selectedApprovers=[];
-          // this.toasterService.pop('success', 'Success!!', output.data.create_service.data);
-          //this.toasterService.pop('success', resMessage);
-       },
-        (error) => {
-          this.isLoading = false;
-          this.serviceRequested = true;
-          this.serviceRequestSuccess = false;
-          this.serviceRequestFailure = true;
-          console.log('', error);
-          this.errBody = error._body;
-          this.errMessage = this.toastmessage.errorMessage(error, 'createService');
-          try {
-            this.parsedErrBody = JSON.parse(this.errBody);
-            if(this.parsedErrBody.message != undefined && this.parsedErrBody.message != '' ) {
-              this.errMessage = this.parsedErrBody.message;
-            }
-          } catch(e) {
-              console.log('JSON Parse Error', e);
-            }
+    this.http.post('/jazz/create-serverless-service', payload)
+      .subscribe(
+      (Response) => {
+        var service = payload.service_name;
+        var domain = payload.domain;
+        var reqId = Response.data.request_id;
+        localStorage.setItem('request_id' + "_" + payload.service_name + "_" + payload.domain, JSON.stringify({ service: service, domain: domain, request_id: reqId }));
+        console.log("payload ===== ", payload)
+        var output = Response;
+        // this.cache.set("request_id", Response.data.request_id);
+        // this.cache.set("request_id_name", Response.input.service_name);
+        this.serviceRequested = true;
+        this.serviceRequestSuccess = true;
+        this.serviceRequestFailure = false;
+        this.isLoading = false;
+        // this.cache.set('request_id',output.data.request_id);
+        // var index = output.data.indexOf("https://");
+        // this.serviceLink = output.data.slice(index, output.data.length);
+        this.resMessage = this.toastmessage.successMessage(Response, "createService");
+        if (output.data != undefined && typeof (output.data) == 'string') {
+          this.resMessage = output.data;
+        } else if (output.data != undefined && typeof (output.data) == 'object') {
+          this.resMessage = output.data.message;
         }
+        this.selectedApprovers = [];
+        // this.toasterService.pop('success', 'Success!!', output.data.create_service.data);
+        //this.toasterService.pop('success', resMessage);
+      },
+      (error) => {
+        this.isLoading = false;
+        this.serviceRequested = true;
+        this.serviceRequestSuccess = false;
+        this.serviceRequestFailure = true;
+        console.log('', error);
+        this.errBody = error._body;
+        this.errMessage = this.toastmessage.errorMessage(error, 'createService');
+        try {
+          this.parsedErrBody = JSON.parse(this.errBody);
+          if (this.parsedErrBody.message != undefined && this.parsedErrBody.message != '') {
+            this.errMessage = this.parsedErrBody.message;
+          }
+        } catch (e) {
+          console.log('JSON Parse Error', e);
+        }
+      }
       );
   }
 
   // function to navigate from success or error screen to create service screen
-  backToCreateService(){
+  backToCreateService() {
     this.approversList.push(this.selApprover);
-    this.selectedApprovers.splice(0,1);
+    this.selectedApprovers.splice(0, 1);
     this.serviceRequested = false;
     this.serviceRequestSuccess = false;
     this.serviceRequestFailure = false;
-    }
+  }
 
 
- // function to create a service
+  // function to create a service
   onSubmit() {
-    
+
     this.submitted = true;
     this.getData();
     this.createService();
     this.typeOfService = 'api';
-    
-    setTimeout(() =>{
-    this.vpcSelected = false;
-    this.publicSelected = false;
-    this.slackSelected = false;
-    this.createslackSelected = false;
-    this.ttlSelected = false;
-    this.cdnConfigSelected = false;
-    this.gitprivateSelected = false;
-    this.gitCloneSelected = false;
-  },2000)
-  
 
-    
+    setTimeout(() => {
+      this.vpcSelected = false;
+      this.publicSelected = false;
+      this.slackSelected = false;
+      this.createslackSelected = false;
+      this.ttlSelected = false;
+      this.cdnConfigSelected = false;
+      this.gitprivateSelected = false;
+      this.gitCloneSelected = false;
+    }, 2000)
+
+
+
   }
 
 
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
-    if(!newVal){
+    if (!newVal) {
       this.showApproversList = false;
     } else {
       this.showApproversList = true;
@@ -539,7 +539,7 @@ gituserpwd:any= '';
   }
 
   onApproverChange2(newVal) {
-    if(!newVal){
+    if (!newVal) {
       this.showApproversList2 = false;
     } else {
       this.showApproversList2 = true;
@@ -550,23 +550,23 @@ gituserpwd:any= '';
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
     this.selApprover = approver;
-    let thisclass : any = this;
+    let thisclass: any = this;
     this.showApproversList = false;
     thisclass.approverName = '';
     this.selectedApprovers.push(approver);
-    for(var i = 0; i < this.approversList.length; i++){
-      if(this.approversList[i].displayName === approver.displayName){
-        this.approversList.splice(i,1);
+    for (var i = 0; i < this.approversList.length; i++) {
+      if (this.approversList[i].displayName === approver.displayName) {
+        this.approversList.splice(i, 1);
         return;
       }
     }
-    
-    
+
+
   }
 
   selectApprovers2(approver) {
 
-    let thisclass : any = this;
+    let thisclass: any = this;
     this.showApproversList2 = false;
     thisclass.approverName2 = '';
     // for (var i = 0; i < this.selectedApprovers.length; i++) {
@@ -575,10 +575,10 @@ gituserpwd:any= '';
     //     }
     // }
     this.selectedApprovers2.push(approver);
-    for(var i = 0; i < this.approversList2.length; i++){
-      if(this.approversList2[i].displayName === approver.displayName){
-        this.approversList2.splice(i,1);
-        
+    for (var i = 0; i < this.approversList2.length; i++) {
+      if (this.approversList2[i].displayName === approver.displayName) {
+        this.approversList2.splice(i, 1);
+
         return;
       }
     }
@@ -586,201 +586,194 @@ gituserpwd:any= '';
 
 
   // function for removing selected approvers
-  removeApprover(index,approver){
+  removeApprover(index, approver) {
     this.approversList.push(approver);
-     this.selectedApprovers.splice(index,1);
+    this.selectedApprovers.splice(index, 1);
   }
 
-  removeApprover2(index,approver){
+  removeApprover2(index, approver) {
     this.approversList2.push(approver);
-     this.selectedApprovers2.splice(index,1);
+    this.selectedApprovers2.splice(index, 1);
   }
 
   //function for closing dropdown on outside click//
-  closeDropdowns(){
+  closeDropdowns() {
     this.showApproversList = false;
   }
 
   // function for slack channel avalability //
-  checkSlackNameAvailability(){
-    this.createSlackModel.name=this.model.slackName;
+  checkSlackNameAvailability() {
+    this.createSlackModel.name = this.model.slackName;
     if (!this.model.slackName) {
-        return;
+      return;
     }
     this.validateChannelName();
   }
 
-  
-  
 
-  validateGIT(){
-    var giturl= this.gitRepo;
-    var lastpart=giturl.substring(giturl.length-4,giturl.length);
-    if(lastpart != '.git' && this.gitRepo != '' ) this.git_err=true;
-    else this.git_err=false;
+
+
+  validateGIT() {
+    var giturl = this.gitRepo;
+    var lastpart = giturl.substring(giturl.length - 4, giturl.length);
+    if (lastpart != '.git' && this.gitRepo != '') this.git_err = true;
+    else this.git_err = false;
   }
 
   validateName(event) {
-    
-        if(this.model.serviceName != null){
-          this.firstcharvalidation = Number(this.model.serviceName[0]).toString();
-        }
-        if(this.firstcharvalidation != "NaN" ){
-          this.invalidServiceName = true;
-        }
-    
-        if(this.model.domainName != null){
-          this.firstcharvalidation = Number(this.model.domainName[0]).toString();
-        }
-        if(this.firstcharvalidation != "NaN" ){
-          this.invalidDomainName = true;
-        }
-    
-     
-        if(this.model.serviceName!=null &&( this.model.serviceName[0] == ('-')) || (this.model.serviceName[this.model.serviceName.length - 1] === '-')){
-          this.invalidServiceName = true;
-        } 
-    
-        if(this.model.domainName!=null && (this.model.domainName[0] === '-' || this.model.domainName[this.model.domainName.length -1] === '-')){
-          this.invalidDomainName = true;
-        }
-    
-        if(this.invalidServiceName == false && this.invalidDomainName==false && this.invalidServiceNameNum==false){
-          this.serviceNameAvailability();
-        }
+
+    if (this.model.serviceName != null) {
+      this.firstcharvalidation = Number(this.model.serviceName[0]).toString();
     }
+    if (this.firstcharvalidation != "NaN") {
+      this.invalidServiceName = true;
+    }
+
+    if (this.model.domainName != null) {
+      this.firstcharvalidation = Number(this.model.domainName[0]).toString();
+    }
+    if (this.firstcharvalidation != "NaN") {
+      this.invalidDomainName = true;
+    }
+
+
+    if (this.model.serviceName != null && (this.model.serviceName[0] == ('-')) || (this.model.serviceName[this.model.serviceName.length - 1] === '-')) {
+      this.invalidServiceName = true;
+    }
+
+    if (this.model.domainName != null && (this.model.domainName[0] === '-' || this.model.domainName[this.model.domainName.length - 1] === '-')) {
+      this.invalidDomainName = true;
+    }
+
+    if (this.invalidServiceName == false && this.invalidDomainName == false && this.invalidServiceNameNum == false) {
+      this.serviceNameAvailability();
+    }
+  }
   // function for service name avalability //
-  serviceNameAvailability(){
+  serviceNameAvailability() {
     if (!this.model.serviceName || !this.model.domainName) {
-        return;
+      return;
     }
     this.validateServiceName();
   }
 
   // function ttl value
-  onTTLChange(){
-     if(this.model.ttlValue){
-        if(parseInt(this.model.ttlValue) > 3600 || parseInt(this.model.ttlValue) < 1) {
-            this.invalidttl = true;
-        } else {
-          this.invalidttl = false;
-        }
-      } else {
+  onTTLChange() {
+    if (this.model.ttlValue) {
+      if (parseInt(this.model.ttlValue) > 3600 || parseInt(this.model.ttlValue) < 1) {
         this.invalidttl = true;
+      } else {
+        this.invalidttl = false;
       }
+    } else {
+      this.invalidttl = true;
+    }
   };
 
   // function disable the submit till all entered datas are valid
-  disableForm(){
-    if(this.git_err) return true;
-    
+  disableForm() {
+    if (this.git_err) return true;
+
     if (this.selectedApprovers === undefined || this.selectedApprovers.length === 0) {
-        return true;
+      return true;
     }
     if (!this.serviceAvailable) {
-        return true;
+      return true;
     }
     if (this.slackSelected && !this.slackAvailble) {
-        return true
+      return true
     }
     if (this.ttlSelected && this.invalidttl) {
-        return true
+      return true
     }
-    if(this.rateExpression.error != undefined && this.typeOfService == 'function' && this.rateExpression.type != 'none'){
-        return true
+    if (this.rateExpression.error != undefined && this.typeOfService == 'function' && this.rateExpression.type != 'none') {
+      return true
     }
-    if(this.eventExpression.type == 'dynamodb' && this.eventExpression.dynamoTable == undefined){
-        return true
+    if (this.eventExpression.type == 'dynamodb' && this.eventExpression.dynamoTable == undefined) {
+      return true
     }
-    if(this.eventExpression.type == 'kinesis' && this.eventExpression.streamARN == undefined){
-        return true
+    if (this.eventExpression.type == 'kinesis' && this.eventExpression.streamARN == undefined) {
+      return true
     }
-    if(this.eventExpression.type == 's3' && this.eventExpression.S3BucketName == undefined){
-        return true
+    if (this.eventExpression.type == 's3' && this.eventExpression.S3BucketName == undefined) {
+      return true
     }
-    if(this.invalidServiceName || this.invalidDomainName || this.invalidServiceNameNum){
+    if (this.invalidServiceName || this.invalidDomainName || this.invalidServiceNameNum) {
       return true
     }
     // this.approverName = '';
-    if(this.approverName != ''){
+    if (this.approverName != '') {
       return true;
     }
     return false;
   }
-  gitChange(){
+  gitChange() {
 
     this.gitCloneSelected = !this.gitCloneSelected;
-    if(!this.gitCloneSelected){
-      this.git_err=false;
+    if (!this.gitCloneSelected) {
+      this.git_err = false;
     }
-   
-    
-  }
-  keypress(hash)
-  { 
-    if(this.typeOfService == 'website'){
-    var gitClone = <HTMLInputElement> document.getElementById("checkbox-gitclone");
-    
-      this.git_clone =  gitClone.checked;
-     
-      console.log("git_clone = ",this.git_clone);
-      if(this.git_clone)
-      {
-        var gitPrivate = <HTMLInputElement> document.getElementById("checkbox-gitprivate");
-      
-        this.git_private =  gitPrivate.checked;
 
-        this.git_url = "https://"+this.gitRepo;
+
+  }
+  keypress(hash) {
+    if (this.typeOfService == 'website') {
+      var gitClone = <HTMLInputElement>document.getElementById("checkbox-gitclone");
+
+      this.git_clone = gitClone.checked;
+
+      console.log("git_clone = ", this.git_clone);
+      if (this.git_clone) {
+        var gitPrivate = <HTMLInputElement>document.getElementById("checkbox-gitprivate");
+
+        this.git_private = gitPrivate.checked;
+
+        this.git_url = "https://" + this.gitRepo;
       }
     }
-    
-    if(hash.key == 'ArrowDown')
-    {
+
+    if (hash.key == 'ArrowDown') {
       this.focusindex++;
-      if(this.focusindex>0){
+      if (this.focusindex > 0) {
         var pinkElements = document.getElementsByClassName("pinkfocus")[1];
         // if(pinkElements == undefined)
         //   {
         //     this.focusindex = 0;
         //   }
-      } 
-      if(this.focusindex>2)
-      {
-          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+      }
+      if (this.focusindex > 2) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
       }
-    }  
-    else if(hash.key == 'ArrowUp')
-    {
-      
-      if(this.focusindex > -1){
-        this.focusindex--;    
-        
-        if(this.focusindex>1)
-        {
-          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' }; 
+    }
+    else if (hash.key == 'ArrowUp') {
+
+      if (this.focusindex > -1) {
+        this.focusindex--;
+
+        if (this.focusindex > 1) {
+          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
         }
       }
-      if(this.focusindex == -1) {
-         this.focusindex = -1;
-         
-         
-         }
-    }    
-    else if(hash.key == 'Enter' && this.focusindex > -1)
-    {
+      if (this.focusindex == -1) {
+        this.focusindex = -1;
+
+
+      }
+    }
+    else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
       var pinkElement;
-      var pinkElementS = document.getElementsByClassName("pinkfocus")[1];      
-    if(pinkElementS == undefined)
+      var pinkElementS = document.getElementsByClassName("pinkfocus")[1];
+      if (pinkElementS == undefined)
         pinkElement = document.getElementsByClassName('pinkfocus')[0].children;
-    else
-      pinkElement = pinkElementS.children;
-      var approverObj= {
-        displayName:pinkElement[0].attributes[2].value,
-        givenName:pinkElement[0].attributes[3].value,
-        userId:pinkElement[0].attributes[4].value,
-        userEmail:pinkElement[0].attributes[5].value
+      else
+        pinkElement = pinkElementS.children;
+      var approverObj = {
+        displayName: pinkElement[0].attributes[2].value,
+        givenName: pinkElement[0].attributes[3].value,
+        userId: pinkElement[0].attributes[4].value,
+        userEmail: pinkElement[0].attributes[5].value
       }
       this.selectApprovers(approverObj);
 
@@ -793,52 +786,45 @@ gituserpwd:any= '';
     }
   }
 
-  keypress2(hash)
-  { 
-    if(hash.key == 'ArrowDown')
-    {
-     this.focusindex++;
-     if(this.focusindex>0){
-      var pinkElements = document.getElementsByClassName("pinkfocus")[0];
-      if(pinkElements == undefined)
-        {
+  keypress2(hash) {
+    if (hash.key == 'ArrowDown') {
+      this.focusindex++;
+      if (this.focusindex > 0) {
+        var pinkElements = document.getElementsByClassName("pinkfocus")[0];
+        if (pinkElements == undefined) {
           this.focusindex = 0;
         }
-      // var id=pinkElements.children[0].innerHTML;
-    }
+        // var id=pinkElements.children[0].innerHTML;
+      }
       // console.log(this.focusindex);
-      if(this.focusindex>2)
-      {
+      if (this.focusindex > 2) {
         this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
       }
-    }  
-    else if(hash.key == 'ArrowUp')
-    {
-      if(this.focusindex > -1){
-        this.focusindex--;    
-        
-        if(this.focusindex>1)
-        {
-          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' }; 
+    }
+    else if (hash.key == 'ArrowUp') {
+      if (this.focusindex > -1) {
+        this.focusindex--;
+
+        if (this.focusindex > 1) {
+          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
         }
       }
-      if(this.focusindex == -1) {
-         this.focusindex = -1;
-         
-         
-         }
-    }    
-    else if(hash.key == 'Enter' && this.focusindex > -1)
-    {
+      if (this.focusindex == -1) {
+        this.focusindex = -1;
+
+
+      }
+    }
+    else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
       var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
-      var approverObj= {
-        displayName:pinkElement[0].attributes[2].value,
-        givenName:pinkElement[0].attributes[3].value,
-        userId:pinkElement[0].attributes[4].value,
-        userEmail:pinkElement[0].attributes[5].value
+      var approverObj = {
+        displayName: pinkElement[0].attributes[2].value,
+        givenName: pinkElement[0].attributes[3].value,
+        userId: pinkElement[0].attributes[4].value,
+        userEmail: pinkElement[0].attributes[5].value
       }
       this.selectApprovers2(approverObj);
 
@@ -851,113 +837,112 @@ gituserpwd:any= '';
     }
   }
 
-  slackFunction(){
-    if(!this.slackSelected){
-      this.createslackSelected=false;
+  slackFunction() {
+    if (!this.slackSelected) {
+      this.createslackSelected = false;
     }
   }
 
-  CrSlackFunction(){
-    
+  CrSlackFunction() {
+
   }
 
-  focusInput(event){
+  focusInput(event) {
     document.getElementById('approverName').focus();
   }
 
-  focusInput2(event){
+  focusInput2(event) {
     document.getElementById('approverName2').focus();
   }
 
-  createSlack(event){    
+  createSlack(event) {
     event.preventDefault();
-    var payload={
-      "channel_name":this.model.slackName,
-      "users":[]
+    var payload = {
+      "channel_name": this.model.slackName,
+      "users": []
     }
-    var currentuser=this.authenticationservice.getUserId();
-    for(var i=0;i<this.selectedApprovers2.length;i++) {
-      payload.users[i]={"email_id":this.selectedApprovers2[i].userEmail};
-      if(this.selectedApprovers2[i].userId.toLowerCase() == currentuser){
-        this.currentUserSlack=true;
+    var currentuser = this.authenticationservice.getUserId();
+    for (var i = 0; i < this.selectedApprovers2.length; i++) {
+      payload.users[i] = { "email_id": this.selectedApprovers2[i].userEmail };
+      if (this.selectedApprovers2[i].userId.toLowerCase() == currentuser) {
+        this.currentUserSlack = true;
       }
-      if(!this.currentUserSlack){
-        payload.users[this.selectedApprovers2.length]={"email_id":this.loginUserDetail.userEmail};
+      if (!this.currentUserSlack) {
+        payload.users[this.selectedApprovers2.length] = { "email_id": this.loginUserDetail.userEmail };
       }
-      this.isLoadingNewSlack=true;
-      this.http.post('/platform/slack-channel' , payload).subscribe(
-      (Response) => {
-        var output = Response;
-        this.resMessage=this.toastmessage.successMessage(Response,"createSlack");
-        this.isLoadingNewSlack=false;
+      this.isLoadingNewSlack = true;
+      this.http.post('/platform/slack-channel', payload).subscribe(
+        (Response) => {
+          var output = Response;
+          this.resMessage = this.toastmessage.successMessage(Response, "createSlack");
+          this.isLoadingNewSlack = false;
 
-        this.createslackSelected=false;
-        this.validateChannelName();
-          this.toast_pop('success', 'Success!!',this.resMessage);
+          this.createslackSelected = false;
+          this.validateChannelName();
+          this.toast_pop('success', 'Success!!', this.resMessage);
         },
-      (error) => {
+        (error) => {
 
-        this.isLoadingNewSlack=false;
-        this.errBody = error._body;
-        this.errMessage = this.toastmessage.errorMessage(error, 'createSlack');
-        this.toast_pop('error', 'Oops!', this.errMessage);
-        try {
-          this.parsedErrBody = JSON.parse(this.errBody);
-        } catch(e) {
+          this.isLoadingNewSlack = false;
+          this.errBody = error._body;
+          this.errMessage = this.toastmessage.errorMessage(error, 'createSlack');
+          this.toast_pop('error', 'Oops!', this.errMessage);
+          try {
+            this.parsedErrBody = JSON.parse(this.errBody);
+          } catch (e) {
             console.log('JSON Parse Error', e);
-        }
-      });
+          }
+        });
     }
   }
 
-  cancelCreateSlack(){
-    this.createslackSelected=false;
-    this.createSlackModel.name='';
-    this.createSlackModel.purpose='';
-    this.createSlackModel.invites='';
-    for(var i=0;i<this.selectedApprovers2.length;i++)
-    {
+  cancelCreateSlack() {
+    this.createslackSelected = false;
+    this.createSlackModel.name = '';
+    this.createSlackModel.purpose = '';
+    this.createSlackModel.invites = '';
+    for (var i = 0; i < this.selectedApprovers2.length; i++) {
       this.approversList2.push(this.selectedApprovers2[i]);
     }
-    this.selectedApprovers2=[];
+    this.selectedApprovers2 = [];
   }
 
   ngOnInit() {
     // this.gitRepo = "https://";
     this.getData();
-    
+
   };
 
-  publicEndpoint(){
-    if( this.publicSelected = true ){
+  publicEndpoint() {
+    if (this.publicSelected = true) {
       this.vpcSelected = false;
     }
   }
 
-  ngOnChanges(x:any) {
-    console.log('loginUserDetail:',this.loginUserDetail);
+  ngOnChanges(x: any) {
+    console.log('loginUserDetail:', this.loginUserDetail);
 
-    
+
   }
 
   // check(event){
   //   var gitClone = <HTMLInputElement> document.getElementById("checkbox-gitclone");
-  
+
   //   this.git_clone =  gitClone.checked;
-   
+
   //   console.log("git_clone = ",this.git_clone);
-   
+
   // }
 
   // checkk(event){
   //   var gitClone = <HTMLInputElement> document.getElementById("checkbox-gitclone");
-    
+
   //     this.git_clone =  gitClone.checked;
-     
+
   //     console.log("git_clone = ",this.git_clone);
-   
+
   //   var gitPrivate = <HTMLInputElement> document.getElementById("checkbox-gitprivate");
-   
+
   //   this.git_private =  gitPrivate.checked;
 
   //   this.git_url = "https://"+this.gitRepo;
@@ -967,9 +952,9 @@ gituserpwd:any= '';
   //   console.log("git_username = ", this.gitusername);
   //   console.log("git_pwd = ", this.gitpwd);
   // }
-    // cron validation related functions //
+  // cron validation related functions //
 
-  inputChanged(val){
+  inputChanged(val) {
     this.Currentinterval = val;
   }
 
@@ -984,7 +969,7 @@ gituserpwd:any= '';
 
 
 
-  generateExpression(rateExpression){
+  generateExpression(rateExpression) {
     if (this.rateExpression !== undefined) {
       this.rateExpression.error = undefined;
     }
@@ -1000,9 +985,9 @@ gituserpwd:any= '';
         this.rateExpression.error = 'Please enter a valid duration';
       } else {
         if (interval == 'Minutes') {
-          this.cronObj = new CronObject(('0/' + duration),'*','*','*','?','*');
+          this.cronObj = new CronObject(('0/' + duration), '*', '*', '*', '?', '*');
         } else if (interval == 'Hours') {
-          this.cronObj = new CronObject('0', ('0/' + duration),'*','*','?','*');
+          this.cronObj = new CronObject('0', ('0/' + duration), '*', '*', '?', '*');
         } else if (interval == 'Days') {
           this.cronObj = new CronObject('0', '0', ('1/' + duration), '*', '?', '*');
         }

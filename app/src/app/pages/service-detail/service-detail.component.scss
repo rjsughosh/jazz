@@ -152,7 +152,9 @@
     text-transform: capitalize;
 }
 
-.det-value {}
+.det-value {
+    word-break: break-word;
+}
 
 .det-value.link {
     color: #1495bb;
