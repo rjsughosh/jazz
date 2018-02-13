@@ -919,11 +919,11 @@ img:hover {
 
     width: 50vw;
     height: 40rem;
-    background-image: url("/assets/landing/Pattern-4@2x.png.png");
+    background-image: url("/assets/landing/Pattern-Header-10@3x.png.png");
     background-repeat: no-repeat;
     background-position: left top;
     position: absolute;
-    background-size: 90%;
+    background-size: 110%;
     top: 35vh;
     left: -5vw;
     transform-style: preserve-3d;
@@ -1251,7 +1251,7 @@ a:hover {
     background-image: url('/assets/images/BG4@3x.png');
     // background-image: url("/assets/landing/jpg/Release Party Image@1x.png.jpg");
     background-repeat: no-repeat;
-    background-position: -5px 200px;
+    background-position: -5px 155px;
     background-size: 115%;
 }
 .features-section{
@@ -1266,14 +1266,14 @@ a:hover {
         display: flex;
         margin-top:8rem;
         li{
-            margin:0 1rem;
+            margin:0 2rem;
             text-align: center;
-            width:25%;
+            width:21%;
             .stat-val{
                 font-weight: bold;
                 text-align: center;
                 color: #ed008c;
-                font-size: 4rem;
+                font-size: 3.5rem;
             }
             .stat-label{
                 font-size: 2rem; 
@@ -1310,17 +1310,17 @@ a:hover {
 
         display: flex;
         li{
-            margin:0 1rem;
+            margin:0 4rem;
             text-align: center;
-            width:22%;
+            width:18%;
             .stat-val{
-                font-size: 4rem;
+                font-size: 3.5rem;
                 font-weight: bold;
                 text-align: center;
                 color: #344759;
             }
             .stat-label{
-                font-size: 2rem; 
+                font-size: 2.1rem; 
                 font-weight: bold;
                 color:black;
                 text-align: center;
@@ -1328,7 +1328,7 @@ a:hover {
 
             }
             .stat-sub-label{
-                font-size: 1.5rem;
+                font-size: 1.35rem;
                 font-weight: 500;
                 text-align: center;
             }
@@ -1349,7 +1349,7 @@ a:hover {
     border-radius: 3px;
 
     h4{
-        font-size: 2.5rem;
+        font-size: 2.3rem;
             font-weight: 900;
             letter-spacing: 0.8px;
             text-align: center;
@@ -1369,37 +1369,46 @@ a:hover {
         // margin:0rem 0 0rem 7rem;
         &:last-child{
             padding-bottom:1rem;
+            padding-top:0.5rem;
         }
-        &:first-child{
-            padding-top:1rem;
-        }
-        
-        div{   
-                font-family: Lato;
-                font-size: 2rem;
-                font-weight: 900;
-                letter-spacing: 0.6px;
-                text-align:left;
-                color: #27303a;
-                                   
-        }
+
         li{
             font-size: 18px;
             margin:1rem;
             text-align: left;
             color: #27303a;
+            padding-left:1rem;
+            &:before{
+                content: "•";
+                color: #ed008c;
+                display: inline-block;
+                width: 1em;
+                margin-left: -1.3em;
+            }
+            
             div{
                 margin-right: 1rem;
             }
         }
     }
 }
+
 .list-icon{
     display: inline-block;
     width: 7px;
     height: 7px;
-    margin: 2px;
+    // margin: 2px;
     border-radius: 50%;
     background: #ed008c;
 }
 
+.list-head
+{   
+    font-family: Lato;
+    font-size: 1.9rem;
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    text-align:left;
+    color: #27303a;
+                       
+}
