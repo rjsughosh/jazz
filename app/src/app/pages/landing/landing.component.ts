@@ -104,7 +104,7 @@ export class LandingComponent implements OnInit {
         setTimeout(() => {
             this.stat_arr[j].i++;                    
             if (this.stat_arr[j].i <= this.stat_arr[j].limit) {  
-                this.stat_arr[j].value=this.stat_arr[j].i;
+                // this.stat_arr[j].value=this.stat_arr[j].i;
                 this.loop(j);            
             }      
           }, (1000/this.stat_arr[j].limit));
@@ -113,7 +113,7 @@ export class LandingComponent implements OnInit {
         setTimeout(() => {
             this.stat_arr2[j].i++;                     
             if (this.stat_arr2[j].i <= this.stat_arr2[j].limit) {  
-                this.stat_arr2[j].value=this.stat_arr2[j].i;                
+                // this.stat_arr2[j].value=this.stat_arr2[j].i;                
                 this.loop2(j);          
             }      
           }, (1000/this.stat_arr2[j].limit));
@@ -190,7 +190,7 @@ export class LandingComponent implements OnInit {
         for(var j=0;j<4;j++){
             this.stat_arr[j].limit=arr[j];
         }
-    //    this.loopMulti();
+       this.loopMulti();
 
         for(var m=0;m<arr2.length;m++){
             this.stat_arr2[m].limit=arr2[m];
