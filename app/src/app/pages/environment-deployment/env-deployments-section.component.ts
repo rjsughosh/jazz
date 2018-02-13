@@ -337,7 +337,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
       var now = new Date();
       this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
       + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-      console.log(this.errorTime);
+      // console.log(this.errorTime);
       }
   
     feedbackRes:boolean=false;
@@ -425,7 +425,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
 					this.http.post('/platform/jira-issues', payload).subscribe(
 						response => {
 							this.buttonText='DONE';
-							console.log(response);
+							// console.log(response);
 							this.isLoading = false;
 							this.model.userFeedback='';
 							var respData = response.data;
@@ -482,7 +482,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
     this.sort = new Sort(this.deployments);
     // console.log("sort : " ,  this.sort )
     this.loadingState = 'default';
-    console.log('service recieved in deployments',this.service);
+    // console.log('service recieved in deployments',this.service);
 }
 
 refreshCostData(event){ 
@@ -513,8 +513,11 @@ rebuild(event, id){
   this.http.post('/jazz/deployments/'+id+'/re-build').subscribe(
     (response) => {
 
-      let successMessage = this.toastmessage.successMessage(response, "updateObj");
-      this.toast_pop('success', "", successMessage);
+      let successMessage = this.toastmessage.successMessage(response, "retryDeploy");
+
+      this.toast_pop('success',"",successMessage+this.service.name);
+      // let successMessage = this.toastmessage.successMessage(response, "retryDeploy");
+      // this.toast_pop('Deployment for service: ',this.service.name+' ',successMessage);
     },
     (error) => {
       let errorMessage = this.toastmessage.errorMessage(error, "updateObj");

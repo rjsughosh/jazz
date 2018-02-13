@@ -77,7 +77,7 @@ export class JenkinsStatusComponent implements OnInit {
         // let successMessage = this.toastmessage.successMessage(response, "updateObj");
         let successMessage = (response.data.message).replace("."," ");
         this.toast_pop('success', "", successMessage+"successfully");
-        console.log("rebuild response = ", response);
+        // console.log("rebuild response = ", response);
       },
       (error) => {
         // console.log("error = ",JSON.parse(error._body).message)
