@@ -997,7 +997,7 @@ img:hover {
       background-image: url("/assets/landing/jpg/BG-Header@1x.png.jpg");
     background-repeat: no-repeat;
     background-position: left top;
-    background-size: 100%;
+    background-size: 110%;
     color: #fff;
     padding-bottom: 5rem;
     // height: 20rem;
@@ -1237,21 +1237,50 @@ a:hover {
   }
 }
 
+.release{
+
+}
 .statistics{
     padding-bottom: 50px;
+    background-image: url('/assets/images/BG4@3x.png');
+    // background-image: url("/assets/landing/jpg/Release Party Image@1x.png.jpg");
+    background-repeat: no-repeat;
+    background-position: -5px 200px;
+    background-size: 115%;
 }
-
+.features-section{
+   
+}
 .user-stats{
     width: 80%;
     display: block;
     margin: 50px auto;
-    border: 1px solid #000;
+    // border: 1px solid #000;
     ul{
         display: flex;
         li{
             margin:0 1rem;
             text-align: center;
             width:22%;
+            .stat-val{
+                font-weight: bold;
+                text-align: center;
+                color: #ed008c;
+                font-size: 4rem;
+            }
+            .stat-label{
+                font-size: 2rem; 
+                text-align: center;
+                font-weight: bold;
+                color:black;
+                margin-bottom: 0.6rem;
+
+            }
+            .stat-sub-label{
+                font-size: 1.5rem;
+                font-weight: 500;
+                text-align: center;
+            }
         }
     }
 }
@@ -1261,24 +1290,98 @@ a:hover {
     display: block;
     margin: 50px auto;
     
-    border: 1px solid #000;
+    // border: 1px solid #000;
     ul{
+        justify-content: center;
+        &:first-child{
+            margin:12rem 0 5rem 0;
+
+        }
+
         display: flex;
         li{
             margin:0 1rem;
             text-align: center;
-            width:32%;
+            width:22%;
+            .stat-val{
+                font-size: 4rem;
+                font-weight: bold;
+                text-align: center;
+                color: #344759;
+            }
+            .stat-label{
+                font-size: 2rem; 
+                font-weight: bold;
+                color:black;
+                text-align: center;
+                margin-bottom: 0.6rem;
+
+            }
+            .stat-sub-label{
+                font-size: 1.5rem;
+                font-weight: 500;
+                text-align: center;
+            }
         }
     }
 }
 
 .release-data-container{  
-    width: 40%;
+    text-align: center;
+    width: 50%;
     display: block;
+    color:black;
+    padding-right:2rem; 
     margin: 50px auto;
-    height: 400px;
-    background-color: #fafafa;
-    box-shadow: 0 2px 4px 0 rgba(180, 180, 211, 0.4);
+    backdrop-filter: blur(1px);
+    background-color: #f5f4f4;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     border-radius: 3px;
+
+    h4{
+        font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-align: center;
+            color: #ed008c;
+            padding:2rem 0;
+            margin:0;
+
+    }
+    ul{
+        margin:0rem 0 0rem 7rem;
+        &:last-child{
+            padding-bottom:2rem;
+
+
+        }
+        
+        div{   
+                font-family: Lato;
+                font-size: 2rem;
+                font-weight: 900;
+                letter-spacing: 0.6px;
+                text-align:left;
+                color: #27303a;
+                                   
+        }
+        li{
+            font-size: 18px;
+            margin:1rem;
+            text-align: left;
+            color: #27303a;
+            div{
+                margin-right: 1rem;
+            }
+        }
+    }
+}
+.list-icon{
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin: 2px;
+    border-radius: 50%;
+    background: #ed008c;
 }
 
