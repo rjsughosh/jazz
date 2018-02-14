@@ -235,7 +235,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
             this.noData = true;
             this.isGraphLoading = false;
             this.yesdata = false;
-            // this.checkcarausal();
           }
 
 
