@@ -172,11 +172,22 @@
                     <div class="col-lg-8 col-md-8">
                         <section class="col-lg-12  pad-left0">
                             <div class="input-field-container">
-                                <div class="input-wrapper" [ngClass]="{'unavailable' : !domainName.valid && (domainName.dirty || domainName.touched) || (domainName.valid && invalidDomainName) }">
-                                    <input name="domainName" pattern="^[A-Za-z0-9\-]+$" type="text" class="textForm" id="domainName" required placeholder="Select accounts" [(ngModel)]="model.domainName" #domainName='ngModel' (blur)="validateName($event)" (ngModelChange)="invalidDomainName=false" required>
-                                    <p class="termsConditions" *ngIf="!domainName.valid && (domainName.dirty || domainName.touched)">Namespace must contain only letters, numbers or hyphens (consecutive hyphens are not allowed)</p>
-                                    <p class="termsConditions" *ngIf="domainName.valid && invalidDomainName">Namespace should not start with number or hyphens and should not end with hyphens</p>                                    
-                                    <img *ngIf="serviceName.valid && domainName.valid && showLoader" class="input-loader" src="../assets/images/icons/loading.png">                                    
+                                <div class="selected-approvers">
+                                    <ul (click)='focusInputAccount($event)'>
+                                        <li *ngFor="let selected of selectedAccount;let i=index"   >
+                                            {{selected}}
+                                            <span (click)="removeAccount(i, selected)" class="icon-icon-close"></span>
+                                        </li>
+                                        <input (keydown)="keypressAccount($event)"  autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
+
+                                    </ul>
+                                </div>
+                                <div [hidden]="!showAccountList" class="approvers-list-wrap">
+                                    <div class="approvers-list typeShow open">
+                                        <div class="approvers-dets" *ngFor="let account of accounts | myfilter:AccountInput; let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                            <div  (click)="selectAccount(account);$event.stopPropagation();" index="{k}" [attr.account]='account'>{{account}}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </section>
