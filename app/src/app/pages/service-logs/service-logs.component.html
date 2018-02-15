@@ -7,21 +7,35 @@
     <div class="filter-wrp">
 
         <filters class="filters" [filtersList]="filtersList" [multiple]="false" [selectedList]="selected" (onSelected)="onFilterSelected($event)" [logs]='true'></filters>
+        <!-- <div class='pointer refresh icon-icon-refresh' title="Refresh" (click)='callLogsFunc()' height="19"></div> -->
+
         <div class='drp-wrp'>
-                
-            <div class="filter-icon relative">
+            <div class='pointer refresh icon-icon-refresh' title="Refresh" (click)='callLogsFunc()' height="19"></div>
+             <div class="filter-icon relative">
                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>
                 <div [class.show]='filterSelected' class="filter-wrap">
                     <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    
                     <div class="filter-inner-wrap">
                         <div class='view-label'>View by:</div>
-                        <div class="eachFilter">
+                        <div class="eachFilter slider-wrap">
                             <div><div class='hori-line'></div><b>TIME RANGE</b></div>
                             <dropdown class="dropdown-3" title="Select range" [dropdwnContent]="rangeList" [selected]="selectedTimeRange" (onSelected)="onRangeListSelected($event)"></dropdown>
                             <div class='in-logs'>
                                 <ion-range-slider #sliderElement id='sliderElement' min=1 [max]='sliderMax' [from]='sliderFrom' step=1  (onFinish)='getRange($event)' (onUpdate)="onClickFilter()"></ion-range-slider>
                             </div>
-
+                        </div>
+                        <div class="eachFilter">
+                            <div><div class='hori-line'></div>ENVIRONMENT</div>
+                            <dropdown class="dropdown-3" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="environment" (onSelected)="onEnvSelected($event)"></dropdown>            
+                        </div>
+                        
+                        <div class="eachFilter">
+                            <div><div class='hori-line'></div>ACCOUNT</div>
+                            <dropdown class="dropdown-3" [dropdwnContent]="accList" title="Select enviroment" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>            
+                        </div>
+                        <div class="eachFilter">
+                            <div><div class='hori-line'></div>REGION</div>
+                            <dropdown class="dropdown-3"  [dropdwnContent]="regList" title="Select enviroment" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>            
                         </div>
                         
                     </div>
@@ -31,7 +45,6 @@
             <img title='Collapse all' *ngIf='expandText == "Collapse all"' src='./../../../assets/images/icons/Collapse-All.svg' class='expandbtn' (click)='collapseall()'> -->
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>    
-            <dropdown [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="environment" (onSelected)="onEnvSelected($event)"></dropdown>            <div class='pointer refresh icon-icon-refresh' title="Refresh" (click)='callLogsFunc()' height="19"></div>
         </div>
     </div>
     <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>

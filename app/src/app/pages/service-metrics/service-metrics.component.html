@@ -38,29 +38,51 @@
     <!-- TODO: Remove disclaimer after techtraining -->
     <div class="disclaimer-static-data hide"><i>This data is for representational purpose only and may not be accurate</i></div>
     <div class="filter-wrp"> 
-        <dropdown class="dropdown-1" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="envSelected" (onSelected)="onEnvSelected($event)"></dropdown>            
         <div class="filter-section-right">
-            <dropdown class="dropdown-2 path" title="Select path" [class.hide]='service_api' *ngIf='serviceMetricsList.length' [dropdwnContent]="pathList" [selected]="pathSelected" (onSelected)="onPathListicSelected($event)"></dropdown>
-            <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' *ngIf='serviceMetricsList.length' [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
             <div class="filter-icon relative">
                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>
                 <div [class.show]='filterSelected' class="filter-wrap">
                     <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    
-                    <div class="filter-inner-wrap">
-                        <div class='view-label'>View by:</div>
-                        <div class="eachFilter slider-wrap">
-                            <div><div class='hori-line'></div>TIME RANGE</div>
-                            <dropdown class="dropdown-3" title="Select range" [dropdwnContent]="rangeList" [selected]="selectedTimeRange" (onSelected)="onRangeListSelected($event)"></dropdown>
-                            <ion-range-slider #sliderElement id='sliderElement'  min=1 [max]='sliderMax' [from]='sliderFrom' (onFinish)='getRange($event)' (onUpdate)="onClickFilter()"></ion-range-slider>
-                            
+                    <div class='filter-inner'>
+                        <div class="filter-inner-wrap first-child" *ngIf='serviceMetricsList.length'>
+                            <div class='view-label'>Filter by:</div>
+                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                                <div><div class='hori-line'></div>PATH</div>
+                                <dropdown class="dropdown-2 path" title="Select path" [class.hide]='service_api'  [dropdwnContent]="pathList" [selected]="pathSelected" (onSelected)="onPathListicSelected($event)"></dropdown>
+                            </div>
+                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                                <div><div class='hori-line'></div>ENVIRONMENT</div>
+                                <dropdown class="dropdown-1" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="envSelected" (onSelected)="onEnvSelected($event)"></dropdown>            
+                            </div>
+                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                                <div><div class='hori-line'></div>METHOD</div>
+                                <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' *ngIf='serviceMetricsList.length' [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
+                            </div>
+                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                                <div><div class='hori-line'></div>ACCOUNT</div>
+                                <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' [dropdwnContent]="accList" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
+                            </div>
+                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                                <div><div class='hori-line'></div>REGION</div>
+                                <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' [dropdwnContent]="regList" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>
+                            </div>
                         </div>
-                        <div class="eachFilter">
-                            <div><div class='hori-line'></div>PERIOD</div>
-                            <dropdown class="dropdown-3" title="Select period" [dropdwnContent]="periodList" [selected]="periodList[0]" (onSelected)="onPeriodSelected($event)"></dropdown>
-                        </div>
-                        <div class="eachFilter">
-                            <div><div class='hori-line'></div>STATISTICS</div>
-                            <dropdown class="dropdown-2" title="Select statistics" [dropdwnContent]="statisticList" [selected]="statisticSelected" (onSelected)="onStatisticSelected($event)"></dropdown>
+                        <div class="filter-inner-wrap">
+                            <div class='view-label'>View by:</div>
+                            <div class="eachFilter slider-wrap">
+                                <div><div class='hori-line'></div>TIME RANGE</div>
+                                <dropdown class="dropdown-3" title="Select range" [dropdwnContent]="rangeList" [selected]="selectedTimeRange" (onSelected)="onRangeListSelected($event)"></dropdown>
+                                <ion-range-slider #sliderElement id='sliderElement'  min=1 [max]='sliderMax' [from]='sliderFrom' (onFinish)='getRange($event)' (onUpdate)="onClickFilter()"></ion-range-slider>
+                                
+                            </div>
+                            <div class="eachFilter">
+                                <div><div class='hori-line'></div>PERIOD</div>
+                                <dropdown class="dropdown-3" title="Select period" [dropdwnContent]="periodList" [selected]="periodList[0]" (onSelected)="onPeriodSelected($event)"></dropdown>
+                            </div>
+                            <div class="eachFilter">
+                                <div><div class='hori-line'></div>STATISTICS</div>
+                                <dropdown class="dropdown-2" title="Select statistics" [dropdwnContent]="statisticList" [selected]="statisticSelected" (onSelected)="onStatisticSelected($event)"></dropdown>
+                            </div>
                         </div>
                     </div>
                 </div>

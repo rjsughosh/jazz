@@ -12,7 +12,7 @@ import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter
 
 // import { LineGraphComponent }  from './../../secondary-components/line-graph/line-graph.component';
 
-@Component({
+@Component({ 
   selector: 'service-metrics',
   templateUrl: './service-metrics.component.html',
   providers: [RequestService, MessageService],
@@ -68,6 +68,7 @@ export class ServiceMetricsComponent implements OnInit {
   // environmentList: Array<string> = ['prod', 'stg', 'dev'];
   envSelected:string = this.envList[0];
   // serviceTypeList : Array<string> = ['api', 'lambda', 'website'];
+
   statisticList: Array<string> = ['Average', 'Sum', 'Maximum','Minimum'];//sampleCount is been removed
   statisticSelected:string= this.statisticList[0];
   viewBox = "0 0 300 150";
@@ -92,6 +93,7 @@ export class ServiceMetricsComponent implements OnInit {
   root: any;
   pathList:Array<string>=[];
   methodList:Array<string>  = ['POST','GET','DELETE','PUT'];
+
   // typeList:Array<string>  = ["apigateway","lambda","s3"];
   // typeSelected: string=this.typeList[0];
   pathSelected:string = '';
@@ -138,12 +140,26 @@ export class ServiceMetricsComponent implements OnInit {
     this.http = request;
     this.toastmessage= messageservice;
   }
+  accList=['Acc 1','Acc 2','Acc 3'];
+	regList=['reg 1','reg 2','reg 3'];
+	
+	accSelected:string = 'Acc 1';
+  regSelected:string = 'reg 1';
+  
+   onaccSelected(event){
+    this.FilterTags.notify('filter-Account',event);
+    this.accSelected=event;
 
+   }
+	onregSelected(event){
+    this.FilterTags.notify('filter-Region',event);
+    this.regSelected=event;
+   }
   notifyByEnv(envList){
     if(envList.length>2){
       this.envList=envList;
     }
-    console.log('this.envlist----------',this.envList);
+    // console.log('this.envlist----------',this.envList);
   }
   getStartDate(filter, sliderFrom){
     var todayDate = new Date();
@@ -163,7 +179,7 @@ export class ServiceMetricsComponent implements OnInit {
         currentMonth++;
         var currentYear = new Date ((todayDate).toISOString()).getFullYear();
         var diffMonth = currentMonth - sliderFrom;
-        console.log(todayDate,todayDate.getMonth());
+        // console.log(todayDate,todayDate.getMonth());
         if(diffMonth>0){
           var resetYear = currentYear;
           var resetMonth = diffMonth;
@@ -188,7 +204,7 @@ export class ServiceMetricsComponent implements OnInit {
         var resetdate = newStartDate.toISOString();
         break;
     }
-    console.log(newStartDateString);
+    // console.log(newStartDateString);
     return resetdate;
   }
   fetchEnvlist(){
@@ -200,7 +216,7 @@ export class ServiceMetricsComponent implements OnInit {
   }
   ngOnInit() {
     this.cache.set("codequality",false)
-    console.log('metrics changes branch')
+    // console.log('metrics changes branch')
     // below hardcoding for serviceType :: hotfix for Tech Training - Aug 31.. to be removed later
 		// if(this.service.serviceType === 'function' || this.service.serviceType === 'lambda'){
 		// 	var serviceName = "custom-ad-authorizer"
@@ -245,7 +261,7 @@ export class ServiceMetricsComponent implements OnInit {
       }
     }
     else{
-      console.log("this.service.serviceType is defined as ", this.service.serviceType);
+      // console.log("this.service.serviceType is defined as ", this.service.serviceType);
     }
     this.callMetricsFunc();
   }
@@ -256,7 +272,7 @@ export class ServiceMetricsComponent implements OnInit {
     this.filterTags();
     this.fetchEnvlist();
 
-    console.log('---------------------------------------------------------aplied filter chaneged',this.filtersApplied);
+    // console.log('---------------------------------------------------------aplied filter chaneged',this.filtersApplied);
     this.pathList = ['/'+this.service.domain+'/'+this.service.name];
     this.pathSelected = this.pathList[0];
     }
@@ -343,9 +359,9 @@ export class ServiceMetricsComponent implements OnInit {
         }); // end of eachAsset.metrics
       }       // ***** uncomment
       else{
-        console.log(" *** unmatched this.service.serviceType and eachAsset.type *** ");
-        console.log("_this.service.serviceType ", _this.service.serviceType);
-        console.log(" eachAsset.type", eachAsset.type);
+        // console.log(" *** unmatched this.service.serviceType and eachAsset.type *** ");
+        // console.log("_this.service.serviceType ", _this.service.serviceType);
+        // console.log(" eachAsset.type", eachAsset.type);
       }
     }); // end of serviceMetric.assets
       if(_serviceMetricList.length > 0){
@@ -375,7 +391,7 @@ export class ServiceMetricsComponent implements OnInit {
 		this.subscription = this.http.post('/jazz/metrics', this.payload).subscribe(
     // this.http.get('https://api.myjson.com/bins/x4j5f').subscribe(
       response => {
-        console.log("response = ", response);
+        // console.log("response = ", response);
           //Bind to view
         let serviceMetrics = response.data;
         
@@ -417,7 +433,7 @@ export class ServiceMetricsComponent implements OnInit {
             this.errMessage = this.parsedErrBody.message;
           }
           } catch(e) {
-            console.log('JSON Parse Error', e);
+            // console.log('JSON Parse Error', e);
           }
 
         // Log errors if any
@@ -438,7 +454,7 @@ export class ServiceMetricsComponent implements OnInit {
 		var now = new Date();
 		this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 		+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-		console.log(this.errorTime);
+		// console.log(this.errorTime);
 	  }
 
 	feedbackRes:boolean=false;
@@ -527,7 +543,7 @@ export class ServiceMetricsComponent implements OnInit {
         this.http.post('/platform/jira-issues', payload).subscribe(
           response => {
             this.buttonText='DONE';
-            console.log(response);
+            // console.log(response);
             this.isLoading = false;
             this.model.userFeedback='';
             var respData = response.data;
@@ -674,9 +690,29 @@ export class ServiceMetricsComponent implements OnInit {
       
         break;
       }
+      case 'account':{      this.onaccSelected('Acc 1');
+      
+        break;
+      }
+      case 'region':{      this.onregSelected('reg 1');
+      
+        break;
+      }
+      case 'env':{      this.onEnvSelected('prod');
+      
+        break;
+      }
+      case 'method':{      this.onMethodListSelected('POST');
+      
+        break;
+      }
       case 'all':{ this.onRangeListSelected('Day');    
       this.onPeriodSelected('15 Minutes');
       this.onStatisticSelected('Average');
+      this.onaccSelected('Acc 1');
+      this.onregSelected('reg 1');
+      this.onEnvSelected('prod');
+      this.onMethodListSelected('POST');
         break;
       }
     }
@@ -689,6 +725,9 @@ export class ServiceMetricsComponent implements OnInit {
     this.displayMetrics();
   }
   onMethodListSelected(method){
+
+    this.FilterTags.notify('filter-Method',method);
+
     this.methodSelected=method;
     this.displayMetrics();
   }
@@ -735,6 +774,7 @@ export class ServiceMetricsComponent implements OnInit {
   }
 
   onEnvSelected(environment){
+    this.FilterTags.notify('filter-Env',environment);
     this.envSelected = environment;
     this.payload.environment = environment;
     this.callMetricsFunc();
@@ -827,7 +867,7 @@ export class ServiceMetricsComponent implements OnInit {
   selectedMetrics(index){
     this.metricsIndex=index;
     this.graphInput = this.metricsList[index];
-    console.log("graph data = ", this.graphInput);
+    // console.log("graph data = ", this.graphInput);
     var ele = document.getElementsByClassName('metrics-card');
     for(var i=0;i<ele.length;i++){
       ele[i].classList.remove('arrow_box');

@@ -205,8 +205,24 @@ export class ServiceLogsComponent implements OnInit {
 
 	// environmentList = ['dev', 'stg', 'prod'];
 	envList = ['prod','stg'];
+	accList=['Acc 1','Acc 2','Acc 3'];
+	regList=['reg 1','reg 2','reg 3'];
+	
+	accSelected:string = 'Acc 1';
+  regSelected:string = 'reg 1';
+  
+   onaccSelected(event){
+    this.FilterTags.notify('filter-Account',event);
+    this.accSelected=event;
 
+   }
+	onregSelected(event){
+    this.FilterTags.notify('filter-Region',event);
+    this.regSelected=event;
+   }
+ 
 	onEnvSelected(env){
+		this.FilterTags.notify('filter-Env',env);
 		// this.logsSearch.environment = env;
 		if(env === 'prod'){
 			env='prod'
@@ -257,7 +273,7 @@ export class ServiceLogsComponent implements OnInit {
 		this.resetPayload();
 	}
 	cancelFilter(event){
-
+		console.log('event',event);
 		switch(event){
 			case 'time-range':{this.onRangeListSelected('Day'); 
 			  break;
@@ -266,9 +282,23 @@ export class ServiceLogsComponent implements OnInit {
 			
 			  break;
 			}
-			
-			case 'all':{ this.onRangeListSelected('Day');    
-			
+			case 'account':{this.onaccSelected('Acc 1');
+		
+			break;
+			}
+			case 'region':{this.onregSelected('reg 1');
+		
+			break;
+			}
+			case 'env':{this.onEnvSelected('prod');
+		
+			break;
+			}
+				
+			case 'all':{ this.onRangeListSelected('Day'); 
+			this.onaccSelected('Acc 1');   
+			this.onregSelected('reg 1');
+			this.onEnvSelected('prod');
 			  break;
 			}
 		  }
