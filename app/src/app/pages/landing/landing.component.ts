@@ -279,9 +279,13 @@ export class LandingComponent implements OnInit {
                  this.selected_release=this.releases[0];
                 this.loadnumbers();
 
-                
-
-
+                this.selected_release.fixes=[]; 
+                this.selected_release.improvements=[];                
+               
+                this.selected_release.fixes[0] = 'Bug fixes and general improvements';
+                this.selected_release.fixes[1] = 'Bug fixes and general improvements';
+                this.selected_release.improvements[0] = 'General improvements and bug fixes';
+                this.selected_release.improvements[1] = 'General improvements and bug fixes';
             },
             (error) => {
                 console.log('error => ',error);

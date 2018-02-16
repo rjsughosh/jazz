@@ -166,16 +166,16 @@
 						</div>
 					</div>
 					<ul>
+						<div class='list-head'>Summary</div>
+						<div class='summary-p'>{{selected_release.summary}}</div>
+					</ul>
+					<ul>
 						<div class='list-head'>Fixes</div>
-						<li>{{selected_release.summary}}</li>
-						<li>{{selected_release.summary}}</li>
-						<li>{{selected_release.summary}}</li>
+						<li *ngFor='let item of selected_release.fixes'>{{item}}</li>
 					</ul>
 					<ul>
 						<div class='list-head'>Improvements</div>
-						<li>{{selected_release.summary}}</li>
-						<li>{{selected_release.summary}}</li>
-						<li>{{selected_release.summary}}</li>						
+						<li *ngFor='let item of selected_release.improvements'>{{item}}</li>
 					</ul>
 				</div>
 				

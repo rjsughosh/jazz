@@ -1383,7 +1383,7 @@ a:hover {
                 color: #ed008c;
                 display: inline-block;
                 width: 1em;
-                margin-left: -1.3em;
+                margin-left: -1.1em;
             }
             
             div{
@@ -1391,6 +1391,13 @@ a:hover {
             }
         }
     }
+}
+.summary-p{
+    text-align: left;
+    font-size: 18px;
+    margin: 1rem;
+    color: #27303a;
+    padding-left: 1rem
 }
 
 .list-icon{
