@@ -243,10 +243,17 @@ export class LandingComponent implements OnInit {
     selectRelease(i){
         this.selected_release=this.releases[i];
         this.dropShow=true;
+        // this.selected_release.fixes=[]; 
+        // this.selected_release.improvements=[];                
+        
+        // this.selected_release.fixes[0] = 'Bug fixes and general improvements';
+        // this.selected_release.fixes[1] = 'Bug fixes and general improvements';
+        // this.selected_release.improvements[0] = 'General improvements and bug fixes';
+        // this.selected_release.improvements[1] = 'General improvements and bug fixes';
 
     }
     fetchData(){
-        this.subscription = this.http.get('https://api.myjson.com/bins/1gsb0p').subscribe(
+        this.subscription = this.http.get('https://api.myjson.com/bins/198bcp').subscribe(
             (response) => {
                 console.log('response => ',response);
                 this.stat_arr2[1].limit=response.statistics[0].data.commits;
@@ -260,32 +267,20 @@ export class LandingComponent implements OnInit {
                 this.stat_arr2[3].limit=response.statistics[1].data.totalNumberOfRequestServed;
                 this.stat_arr[1].limit=response.statistics[1].data.users;
                 this.stat_arr[2].limit=response.statistics[1].data.users;
-                // alert(this.releases)
-                // console.log('releases test',this.releases)
                 this.releases = response.releases.slice(0, response.releases.length);
 
                 for(var i=0;i<this.releases.length;i++)
                 {
-                var a = this.monthNames[new Date(this.releases[i].publishTimestamp.substring(0,10)).getMonth()];
-                var b = new Date(this.releases[i].publishTimestamp.substring(0,10)).getDate();
-                console.log('day',b)
-                console.log('ts changed',this.releases[i].publishTimestamp.substring(0,10))
-                console.log('ts unchanged',this.releases[i].publishTimestamp);
-                var c = new Date(this.releases[i].publishTimestamp.substring(0,10)).getFullYear();
-                this.releases_time[i] = '' + a + ' ' + b +', ' + c;
+                var month = this.monthNames[new Date(this.releases[i].publishTimestamp.substring(0,10)).getMonth()];
+                var day = new Date(this.releases[i].publishTimestamp.substring(0,10)).getDate();
+               var year = new Date(this.releases[i].publishTimestamp.substring(0,10)).getFullYear();
+                this.releases_time[i] = '' + month + ' ' + day +', ' + year;
                 this.releases[i].publishTimestamp=this.releases_time[i]
                 }
                  this.releases_selected=this.releases[0];
                  this.selected_release=this.releases[0];
                 this.loadnumbers();
 
-                this.selected_release.fixes=[]; 
-                this.selected_release.improvements=[];                
-               
-                this.selected_release.fixes[0] = 'Bug fixes and general improvements';
-                this.selected_release.fixes[1] = 'Bug fixes and general improvements';
-                this.selected_release.improvements[0] = 'General improvements and bug fixes';
-                this.selected_release.improvements[1] = 'General improvements and bug fixes';
             },
             (error) => {
                 console.log('error => ',error);
