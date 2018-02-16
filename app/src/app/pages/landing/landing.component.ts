@@ -3,10 +3,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {AuthenticationService} from '../../core/services/index';
 import { ToasterService} from 'angular2-toaster';
 import {DataCacheService } from '../../core/services/index';
+import { HttpModule } from '@angular/http';
+import { RequestService , MessageService } from "../../core/services";
+import { release } from 'os';
+
+
 
 @Component({
     selector: 'landing',
     templateUrl: 'landing.component.html',
+    providers : [RequestService],
     styleUrls: ['landing.component.scss']
 })
 
@@ -15,8 +21,18 @@ export class LandingComponent implements OnInit {
     buttonText: string = 'GET STARTED NOW';
     goToLogin: boolean = false;
     safeTransformX: number=0;
+    releases: Array<any> = [];
+    releases_selected:any={};
+
+    monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+    private subscription:any;
+    private http:any;
+    releases_time=[];
     min: boolean=true;
     max: boolean=false;
+    dropShow:boolean = true;
+    selected_release:any={};
     json:any;
     cardActive:boolean=true;
     title = 'Create. Manage. Self-Service.';
@@ -102,21 +118,35 @@ export class LandingComponent implements OnInit {
 
     loop(j){
         setTimeout(() => {
-            this.stat_arr[j].i++;                    
+            // if(this.stat_arr[j].limit > 300)             this.stat_arr[j].i+=100;
+            if(this.stat_arr[j].limit > 1000)             this.stat_arr[j].i+=50; 
+
+            else if(this.stat_arr[j].limit > 50000)             this.stat_arr[j].i+=1000; 
+            else if(this.stat_arr[j].limit > 500000)             this.stat_arr[j].i+=100000; 
+            else if(this.stat_arr[j].limit > 700000)            this.stat_arr[j].i+=500000; 
+
+            else this.stat_arr[j].i++;                    
             if (this.stat_arr[j].i <= this.stat_arr[j].limit) {  
-                // this.stat_arr[j].value=this.stat_arr[j].i;
+                this.stat_arr[j].value=this.stat_arr[j].i;
                 this.loop(j);            
             }      
-          }, (1000/this.stat_arr[j].limit));
+          }, (2000/this.stat_arr[j].limit));
     }
     loop2(j){
         setTimeout(() => {
-            this.stat_arr2[j].i++;                     
+            // if(this.stat_arr2[j].limit > 300)             this.stat_arr2[j].i+=100;
+            if(this.stat_arr2[j].limit > 1000)             this.stat_arr2[j].i+=50;
+
+            else if(this.stat_arr2[j].limit > 50000)            this.stat_arr2[j].i+=1000; 
+            else if(this.stat_arr2[j].limit > 500000)            this.stat_arr2[j].i+=100000; 
+            else if(this.stat_arr2[j].limit > 700000)            this.stat_arr2[j].i+=500000; 
+
+            else this.stat_arr2[j].i++;                        
             if (this.stat_arr2[j].i <= this.stat_arr2[j].limit) {  
-                // this.stat_arr2[j].value=this.stat_arr2[j].i;                
+                this.stat_arr2[j].value=this.stat_arr2[j].i;                
                 this.loop2(j);          
             }      
-          }, (1000/this.stat_arr2[j].limit));
+          }, (2000/this.stat_arr2[j].limit));
     }
     stat_arr=[
         {
@@ -185,16 +215,16 @@ export class LandingComponent implements OnInit {
     ];
 
     loadnumbers(){
-        var arr=[this.num_ser_cr,this.num_users,this.num_act_usr,this.num_act_ser]
-        var arr2=[20,45,21,81,120,32];
-        for(var j=0;j<4;j++){
-            this.stat_arr[j].limit=arr[j];
-        }
+        // var arr=[this.num_ser_cr,this.num_users,this.num_act_usr,this.num_act_ser]
+        // var arr2=[20,45,21,81,120,32];
+        // for(var j=0;j<4;j++){
+        //     this.stat_arr[j].limit=arr[j];
+        // }
        this.loopMulti();
 
-        for(var m=0;m<arr2.length;m++){
-            this.stat_arr2[m].limit=arr2[m];
-        }      
+        // for(var m=0;m<arr2.length;m++){
+        //     this.stat_arr2[m].limit=arr2[m];
+        // }      
 
     }
 
@@ -205,18 +235,76 @@ export class LandingComponent implements OnInit {
 
 
     }
+    formatReleases(response){
+        for(var i=0;i<response.releases.length;i++){
+            this.releases[i].name=response.releases[i].name;
+        }
+    }
+    selectRelease(i){
+        this.selected_release=this.releases[i];
+        this.dropShow=true;
+
+    }
+    fetchData(){
+        this.subscription = this.http.get('https://api.myjson.com/bins/1gsb0p').subscribe(
+            (response) => {
+                console.log('response => ',response);
+                this.stat_arr2[1].limit=response.statistics[0].data.commits;
+                this.stat_arr2[0].limit=response.statistics[0].data.forks;
+                this.stat_arr2[2].limit=response.statistics[0].data.githubStars;
+                this.stat_arr2[4].limit=response.statistics[0].data.issues;
+                this.stat_arr2[5].limit=response.statistics[0].data.pullRequests;
+
+                this.stat_arr[3].limit=response.statistics[1].data.applications;
+                this.stat_arr[0].limit=parseInt(response.statistics[1].data.services.api)+parseInt(response.statistics[1].data.services.functions)+parseInt(response.statistics[1].data.services.websites);
+                this.stat_arr2[3].limit=response.statistics[1].data.totalNumberOfRequestServed;
+                this.stat_arr[1].limit=response.statistics[1].data.users;
+                this.stat_arr[2].limit=response.statistics[1].data.users;
+                // alert(this.releases)
+                // console.log('releases test',this.releases)
+                this.releases = response.releases.slice(0, response.releases.length);
+
+                for(var i=0;i<this.releases.length;i++)
+                {
+                var a = this.monthNames[new Date(this.releases[i].publishTimestamp.substring(0,10)).getMonth()];
+                var b = new Date(this.releases[i].publishTimestamp.substring(0,10)).getDate();
+                console.log('day',b)
+                console.log('ts changed',this.releases[i].publishTimestamp.substring(0,10))
+                console.log('ts unchanged',this.releases[i].publishTimestamp);
+                var c = new Date(this.releases[i].publishTimestamp.substring(0,10)).getFullYear();
+                this.releases_time[i] = '' + a + ' ' + b +', ' + c;
+                this.releases[i].publishTimestamp=this.releases_time[i]
+                }
+                 this.releases_selected=this.releases[0];
+                 this.selected_release=this.releases[0];
+                this.loadnumbers();
+
+                
+
+
+            },
+            (error) => {
+                console.log('error => ',error);
+                
+            });
+      
+    }
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationservice:AuthenticationService,
         private toasterservice:ToasterService,
-        private cache: DataCacheService
+        private cache: DataCacheService,
+        private request:RequestService,
+    
     ) {
-        
+        this.http = request;
+
     };
     
     ngOnInit() {
-        this.loadnumbers()
+        // this.loadnumbers();
+        this.fetchData();
         if(this.authenticationservice.isLoggedIn()){
             this.buttonText ='GO TO SERVICES' ;
         } else{

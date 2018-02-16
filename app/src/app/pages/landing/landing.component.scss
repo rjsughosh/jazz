@@ -1412,3 +1412,29 @@ a:hover {
     color: #27303a;
                        
 }
+.drop-list{
+    font-size: 1.5rem !important;
+    color:black !important;
+    // border: 1px solid grey;
+    font-weight: normal !important;
+    text-align: center;
+    min-width:555px;
+    vertical-align: middle;
+
+    padding: 1rem !important;
+    &:hover{
+        background-color: #ed008c;
+        color:white !important;
+    }
+}
+
+.release-drop-cover{
+    position: absolute;
+    z-index: 10;
+    background: #f5f4f4;
+    text-align: center;
+    margin:auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
+    border-radius:5px;
+
+}

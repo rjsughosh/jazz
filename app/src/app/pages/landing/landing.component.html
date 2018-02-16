@@ -155,18 +155,27 @@
 						<span class = "center"> Lorem ipsum dolor sit amet, consectetur efficitur, id volutpat sem ultricies. Sed et ornare libero. </span>
 				</div>
 				<div class="release-data-container">
-					<h4>Release Update - January 24, 2018 <div class='icon-icon-down'></div> </h4>
+					<div class='release-title pointer'>
+						<h4 (click)='dropShow = !dropShow'>{{selected_release.name}} - {{selected_release.publishTimestamp}}<div class='icon-icon-down'></div></h4>
+
+					</div> 
+				
+					<div class='release-drop-cover'>
+						<div class='release-drop' [class.hide]='dropShow' *ngFor='let release of releases;let i = index'>
+								<h4 class='pointer drop-list' (click)='selectRelease(i)'>{{release.name}} - {{releases_time[i]}}</h4>
+						</div>
+					</div>
 					<ul>
 						<div class='list-head'>Fixes</div>
-						<li> Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna. Ut laoreet sodales. ipsum</li>
-						<li> Lorem Mauris non tempor quam, et lacinia sapien. Mauris accumsan eros eget libero posuere vulputate. Eti.</li>
-						<li> Curabitur lobortis id lorem id bibendum. Ut id consectetur magna. Quisque volutpat augue enim, pul. ipsum</li>
+						<li>{{selected_release.summary}}</li>
+						<li>{{selected_release.summary}}</li>
+						<li>{{selected_release.summary}}</li>
 					</ul>
 					<ul>
 						<div class='list-head'>Improvements</div>
-						<li> Lorem Vestibulum rutrum quam vit.</li>
-						<li> Donec facilisis tortor ut. ipsum</li>
-						<li> In hac habitasse platea di.</li>						
+						<li>{{selected_release.summary}}</li>
+						<li>{{selected_release.summary}}</li>
+						<li>{{selected_release.summary}}</li>						
 					</ul>
 				</div>
 				
@@ -193,8 +202,8 @@
 				<ul>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr[0].value}} -->
+							<!-- NA -->
+							{{this.stat_arr[0].value}}
 						</div>
 						<div class='stat-label'>
 							Services Created
@@ -202,8 +211,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr[1].value}} -->
+							<!-- NA -->
+							{{this.stat_arr[1].value}}
 						</div>
 						<div class='stat-label'>
 							Users
@@ -211,8 +220,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr[2].value}} -->
+							<!-- NA -->
+							{{this.stat_arr[2].value}}
 						</div>
 						<div class='stat-label'>
 							Active Users
@@ -221,8 +230,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr[3].value}} -->
+							<!-- NA -->
+							{{this.stat_arr[3].value}}
 						</div>
 						<div class='stat-label'>
 							Active Services
@@ -239,8 +248,8 @@
 				<ul>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr2[0].value}} -->
+							<!-- NA -->
+							{{this.stat_arr2[0].value}}
 						</div>
 						<div class='stat-label'>
 							Github forks
@@ -248,8 +257,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr2[1].value}} -->
+							<!-- NA -->
+							{{this.stat_arr2[1].value}}
 						</div>
 						<div class='stat-label'>
 							Github commits
@@ -257,8 +266,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr2[2].value}} -->
+							<!-- NA -->
+							{{this.stat_arr2[2].value}}
 						</div>
 						<div class='stat-label'>
 							Github Stars
@@ -268,8 +277,8 @@
 				<ul>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr2[3].value}} -->
+							<!-- NA -->
+							{{this.stat_arr2[3].value}}
 						</div>
 						<div class='stat-label'>
 							Requests served
@@ -277,8 +286,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr2[4].value}} -->
+							<!-- NA -->
+							{{this.stat_arr2[4].value}}
 						</div>
 						<div class='stat-label'>
 							Issues
@@ -286,8 +295,8 @@
 					</li>
 					<li>
 						<div class='stat-val'>
-							NA
-							<!-- {{this.stat_arr2[5].value}} -->
+							<!-- NA -->
+							{{this.stat_arr2[5].value}}
 						</div>
 						<div class='stat-label'>
 							Pull requests
