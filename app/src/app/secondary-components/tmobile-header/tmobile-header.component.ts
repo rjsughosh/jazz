@@ -70,7 +70,7 @@ export class TmobileHeaderComponent implements OnInit {
     }
 
     onNavigate(){
-        window.open('https://tmobile.atlassian.net/wiki/spaces/CAPI/pages/220366803/Serverless+Cloud+APIs+-+Developer+s+Guide')
+        window.open('https://docs.jazz.corporate.t-mobile.com')
     }
 
     goToLanding(){
