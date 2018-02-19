@@ -47,7 +47,7 @@ export class LandingComponent implements OnInit {
         if(event.target.innerText === "Privacy"){
             window.open('https://www.t-mobile.com/company/website/privacypolicy.aspx');                    
         } else if(event.target.innerText === "Docs"){
-            window.open('https://tmobile.atlassian.net/wiki/spaces/CAPI/pages/220366803/Serverless+Cloud+APIs+-+Developer+s+Guide');        
+            window.open('https://docs.jazz.corporate.t-mobile.com/');        
             
         }
     }
