@@ -96,6 +96,18 @@
                     <div class="det-value" *ngIf="mincommit" >{{commitDiff}} minutes ago</div>
                     <div class="det-value" *ngIf="seccommit" >{{commitDiff}}</div>
                 </li>
+                <li>
+    
+                    <div class="det-label">Accounts</div>
+                    <div class="det-value">
+                        <!-- {{service.accounts}} -->
+                        tmo-dev-ops, tmo-int
+                    </div>
+                </li>
+                <li>
+                    <div class="det-label">Endpoints</div>
+                    <div class="det-value ">{{endpList[0].name}} , {{endpList[0].type}} : <img class='copy-arn' src="./../../../assets/images/icons/icon-link.png"/> <span class='view-all' (click)='openSidebar()'> View all</span> </div> 
+                </li>
         
             </ul>
 
@@ -115,6 +127,13 @@
                 <li>
                     <div class="det-label">Tags</div>
                     <div class="det-value" >{{services.tags || 'Services are cooler with tags'}}</div>
+                </li>
+                <li>
+                    <div class="det-label">Regions</div>
+                    <div class="det-value">
+                        <!-- {{service.regions}} -->
+                        us-west-2, us-east
+                    </div>
                 </li>
             </ul>
         </div>
@@ -140,6 +159,19 @@
                     <div class="det-value" *ngIf="mincommit" >{{commitDiff}} minutes ago</div>
                     <div class="det-value" *ngIf="seccommit" >{{commitDiff}}</div>
                 </li>
+
+                <li>
+    
+                    <div class="det-label">Accounts</div>
+                    <div class="det-value">
+                        <!-- {{service.accounts}} -->
+                        tmo-dev-ops, tmo-int
+                    </div>
+                </li>
+                <li>
+                    <div class="det-label">Endpoints</div>
+                    <div class="det-value ">{{endpList[0].name}} , {{endpList[0].type}} : <img class='copy-arn' src="./../../../assets/images/icons/icon-link.png"/> <span class='view-all' (click)='openSidebar()'> View all</span> </div> 
+                </li>
     
             
             
@@ -159,6 +191,13 @@
                 <li>
                     <div class="det-label">Tags</div>
                     <div class="det-value" >{{services.tags || 'Services are cooler with tags'}}</div>
+                </li>
+                <li>
+                    <div class="det-label">Regions</div>
+                    <div class="det-value">
+                        <!-- {{service.regions}} -->
+                        us-west-2, us-east
+                    </div>
                 </li>
             </ul>
         </div> 

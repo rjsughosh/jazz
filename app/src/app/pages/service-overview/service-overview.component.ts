@@ -26,6 +26,7 @@ export class ServiceOverviewComponent implements OnInit {
     
     @Output() onload:EventEmitter<any> = new EventEmitter<any>();
     @Output() onEnvGet:EventEmitter<any> = new EventEmitter<any>();
+    @Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
 
     flag:boolean=false;
     @Input() service: any = {};
@@ -225,7 +226,26 @@ export class ServiceOverviewComponent implements OnInit {
         //     title:'BRANCH4',
         //     stage:'dev'
         // }
-    ]
+    ];
+    endpList = [{
+        name:'tmo-dev-ops',
+        arn:'arn:test1',
+        type:'Account',
+      },
+      {
+        name:'tmo-dev-ops1',
+        arn:'arn:test2',
+        type:'region',
+      },{
+        name:'tmo-dev-ops2',
+        arn:'arn:test3',
+        type:'Account',
+      },{
+        name:'tmo-dev-ops3',
+        arn:'arn:test4',
+        type:'region',
+      }
+    ];
 
     openLink(link){
         if (link) {
@@ -249,7 +269,9 @@ export class ServiceOverviewComponent implements OnInit {
         }
       }
 
-   
+      showService(s){
+
+      }
       loadPlaceholders()
       {
           
@@ -268,6 +290,10 @@ export class ServiceOverviewComponent implements OnInit {
 
       }
 
+      openSidebar(){
+          this.open_sidebar.emit(true);
+
+      }
       onEditClick(){
           
 
@@ -524,6 +550,7 @@ export class ServiceOverviewComponent implements OnInit {
             this.tags_empty = false;
         }
     }
+ 
 
     serviceCreationStatus(){
         this.statusprogress = 20;
@@ -835,6 +862,8 @@ export class ServiceOverviewComponent implements OnInit {
 					);
 				}
                 ngOnInit() {
+                    this.service.accounts="tmo-dev-ops, tmo-int";
+                    this.service.regions="us-west-2, us-east";
                     this.createloader = true;
                     if(this.service.status == "deletion completed" || this.service.status == "deletion started"){
                         this.showcanvas = true;

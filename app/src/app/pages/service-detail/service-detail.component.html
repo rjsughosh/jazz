@@ -1,6 +1,7 @@
 <tmobile-mob-header [icon]="'notification'" [headText]="service.name" [status]="'green'"></tmobile-mob-header>
 <section class="page-container service-detail-page">
     <navigation-bar [links]="breadcrumbs"></navigation-bar>
+    
     <div class="content relative" [class.non-clickable] = 'service.status == "deletion started" || service.status == "deletion completed"'>
         <!-- <span  class="redux" *ngIf='service.status == "deletion completed" || service.status == "deletion started"'> -->
                 <!-- <span  class="redux" *ngIf='false'> -->
@@ -20,7 +21,7 @@
         <tabs [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
        
        <div *ngIf='!err_flag'> <section class="page-content" *ngIf="selectedTab == 0">
-            <service-overview (onload)='env($event)' (onEnvGet)='envList($event)' [service]="service" [isLoadingService]="isLoadingService"></service-overview>
+            <service-overview (open_sidebar)='opnSidebar($event)'(onload)='env($event)' (onEnvGet)='envList($event)' [service]="service" [isLoadingService]="isLoadingService"></service-overview>
         </section>
         <section class="page-content" *ngIf="selectedTab == 1">
             <service-access-control></service-access-control>
@@ -33,7 +34,8 @@
         </section>
         <section class="page-content" *ngIf="selectedTab == 4">
             <service-logs #logs [service]="service"></service-logs>
-        </section></div>
+        </section>
+        </div>
         <div *ngIf='err_flag' class='err-wrp'>
                 
                 <div class="empty-row with-refresh relative">
@@ -93,5 +95,9 @@
         </div>
     </div>
 </sidebar>
-
+<section class='overview-sidebar'>
+    <sidebar [show]="close" (onClose)="closeSidebar($event)">
+            <overview-sidebar (onClose)="closeSidebar($event)"></overview-sidebar>
+    </sidebar>
+</section>
 <footer></footer>

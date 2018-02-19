@@ -512,3 +512,13 @@
         height: calc(105%);
     }
 }
+
+.overview-sidebar{
+    /deep/ sidebar{
+        /deep/ .sidebar-wrp{
+            /deep/.sidebar-inr{
+                overflow-y: scroll !important;
+            }
+        }
+    }   
+}

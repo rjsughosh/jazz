@@ -15,7 +15,8 @@ export class EnvOverviewSectionComponent implements OnInit {
   
   @Output() onload:EventEmitter<any> = new EventEmitter<any>();
   @Output() envLoad:EventEmitter<any> = new EventEmitter<any>();
-  
+  @Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
+
   
   private http:any;
   private sub:any;
@@ -68,7 +69,26 @@ put_payload:any = {};
     repository:'NA',
     runtime:'NA',
     tags: 'NA'
+  };
+  endpList = [{
+    name:'tmo-dev-ops',
+    arn:'arn:test1',
+    type:'Account',
+  },
+  {
+    name:'tmo-dev-ops1',
+    arn:'arn:test2',
+    type:'region',
+  },{
+    name:'tmo-dev-ops2',
+    arn:'arn:test3',
+    type:'Account',
+  },{
+    name:'tmo-dev-ops3',
+    arn:'arn:test4',
+    type:'region',
   }
+];
   constructor(
     private request:RequestService,
     private route: ActivatedRoute,
@@ -186,7 +206,10 @@ put_payload:any = {};
             }
 
   }
+  openSidebar(){
+    this.open_sidebar.emit(true);
 
+}
    callServiceEnv() {
     if ( this.subscription ) {
       this.subscription.unsubscribe();

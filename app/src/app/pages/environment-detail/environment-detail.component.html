@@ -51,7 +51,7 @@
         
         
         <section class="page-content" *ngIf="selectedTab == 0">
-            <env-overview-section #envoverview (envLoad)='EnvLoad($event)' (onload)='env($event)' [service]="service"></env-overview-section>
+            <env-overview-section #envoverview (open_sidebar)='sidebar($event)' (envLoad)='EnvLoad($event)' (onload)='env($event)' [service]="service"></env-overview-section>
         </section>
 
         
@@ -72,6 +72,11 @@
         </section>
 </div>
 </div>
+</section>
+<section class='overview-sidebar'>
+    <sidebar [show]="close" (onClose)="closeSidebar($event)">
+            <overview-sidebar (onClose)="closeSidebar($event)"></overview-sidebar>
+    </sidebar>
 </section>
 <footer></footer>
 

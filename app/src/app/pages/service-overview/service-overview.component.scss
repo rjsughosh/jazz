@@ -15,7 +15,15 @@
       opacity: .2;
     }
 }
+.each-endp
+{
+    display: inline-block;
+}
 
+.copy-arn{
+    height: 1.5rem;
+                transform: rotate(-45deg);
+}
 .saving span {
   
     animation-name: blink;
@@ -616,6 +624,11 @@ section:focus
         }
     }
 }
+
+.view-all{
+    color:#1495c1;
+    cursor: pointer;
+}
 /deep/ .overview-value{
     font-size:1.5rem !important;
     text-transform: capitalize;
@@ -979,4 +992,14 @@ background-color: orange;
 
 .diabledbtn{
     color: grey!important;
+}
+
+.sidebar-overview{
+    height: 100vh;
+    width: 30%;
+    position: fixed;
+    right:0;
+    top:0;
+    z-index:2;
+    background: black;    
 }

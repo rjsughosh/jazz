@@ -153,7 +153,8 @@ env(event){
           }
           this.subscription = this.http.get('/jazz/services/'+id).subscribe(
             response => {
-              
+              this.service.accounts="tmo-dev-ops, tmo-int";
+                    this.service.regions="us-west-2, us-east";
                   // let service = response.data.data;
                   this.service=response.data.data;
                   if(this.service.type === "website")
@@ -164,6 +165,7 @@ env(event){
                   this.onDataFetched(this.service);
                   
                   this.envoverview.notify(this.service);
+                  
               },
               err => {
                   this.isLoadingService = false;
@@ -212,6 +214,15 @@ env(event){
             tst.classList.remove('toaster-anim');
           }, 3000);
   }
+  sidebar(event){
+    this.closeSidebar(true);
+  }
+  public closeSidebar (eve){
+    this.closed = true;
+    this.close = eve;
+}
+close:boolean=false;
+closed:boolean = false;
 
   ngOnInit()
   {

@@ -161,6 +161,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function for opening and closing create service popup
   closeCreateService(serviceRequest) {
+    alert(serviceRequest)
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }

@@ -269,6 +269,14 @@
     position: absolute;
     z-index: -100000;
 }
+.view-all{
+    color:#1495c1;
+    cursor: pointer;
+}
+.copy-arn{
+    height: 1.5rem;
+                transform: rotate(-45deg);
+}
 .testApiBtn{
     /deep/ .btnT-radial-in{
         padding:0.25rem 1rem;

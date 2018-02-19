@@ -183,6 +183,18 @@
         <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
     </li>
+    <li>
+        
+        <div class="det-label">Accounts</div>
+        <div class="det-value">
+            <!-- {{service.accounts}} -->
+            tmo-dev-ops, tmo-int
+        </div>
+    </li>
+    <li>
+        <div class="det-label">Endpoints</div>
+        <div class="det-value ">{{endpList[0].name}} , {{endpList[0].type}} : <img class='copy-arn' src="./../../../assets/images/icons/icon-link.png"/> <span class='view-all' (click)='openSidebar()'> View all</span> </div> 
+    </li>
 </ul>
 <ul class="section-right col-md-6 col-sm-12">
     <li>
@@ -205,7 +217,17 @@
         <div class="det-label">Tags</div>
         <div class="det-value" [ngClass]="{PlaceHolder:tags_empty}" >{{service.tags || 'Services are cooler with tags'}}</div>
     </li>
+    <li>
+        <div class="det-label">Regions</div>
+        <div class="det-value">
+            <!-- {{service.regions}} -->
+            us-west-2, us-east
+        </div>
+    </li>
 </ul>
+<div>
+    
+</div>
 </div>
 <div class='edit-service-overview' [class.hide]="disp_edit">
         <ul class="section-left col-md-6 col-sm-12">
@@ -231,6 +253,18 @@
                     <div class="det-label">Service Type</div>
                     <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
+                </li>
+                <li>
+        
+                    <div class="det-label">Accounts</div>
+                    <div class="det-value">
+                        <!-- {{service.accounts}} -->
+                        tmo-dev-ops, tmo-int
+                    </div>
+                </li>
+                <li>
+                    <div class="det-label">Endpoints</div>
+                    <div class="det-value ">{{endpList[0].name}} , {{endpList[0].type}} : <img class='copy-arn' src="./../../../assets/images/icons/icon-link.png"/> <span class='view-all' (click)='openSidebar()'> View all</span> </div> 
                 </li>
             </ul>
             <ul class="section-right col-md-6 col-sm-12">
@@ -260,6 +294,13 @@
                     <input [(ngModel)]="tags_temp" (ngModelChange)='updateTags()' type='text' (focus)='flag=true;' (blur)='flag=false;' class="det-value-input" placeholder="Services are cooler with tags">
                 </li>
                 <p class='email-err-msg labelfortags' *ngIf='flag' >Please enter tags seperated by commas</p>
+                <li>
+                    <div class="det-label">Regions</div>
+                    <div class="det-value">
+                        <!-- {{service.regions}} -->
+                        us-west-2, us-east
+                    </div> 
+               </li>
             </ul>
 </div>
 <div class="loading-row" [class.show]="isLoadingService">

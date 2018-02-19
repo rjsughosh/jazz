@@ -37,6 +37,8 @@ import {LoginComponent} from '../pages/login/login.component';
 import {LineGraphComponent} from '../secondary-components/line-graph/line-graph.component';
 import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import {FooterComponent} from '../secondary-components/footer/footer.component';
+import { OverviewSidebarComponent } from './../secondary-components/overview-sidebar/overview-sidebar.component';
+
 
 @NgModule({
   imports: [
@@ -78,7 +80,9 @@ import {FooterComponent} from '../secondary-components/footer/footer.component';
     JenkinsStatusComponent,
     LineGraphComponent,
     SideTileFixedComponent,
-    FooterComponent
+    FooterComponent,
+    OverviewSidebarComponent,
+
   ],
   exports: [
     BtnTmobilePrimaryComponent,
@@ -108,7 +112,9 @@ import {FooterComponent} from '../secondary-components/footer/footer.component';
     FilterTagsServicesComponent,
     FilterTagsComponent,
     SideTileFixedComponent,
-    FooterComponent
+    FooterComponent,
+    OverviewSidebarComponent,
+
   ]
 })
 export class SharedModule {
