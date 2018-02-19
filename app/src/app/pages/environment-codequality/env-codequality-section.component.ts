@@ -235,7 +235,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
             this.noData = true;
             this.isGraphLoading = false;
             this.yesdata = false;
-            // this.checkcarausal();
           }
 
 
@@ -440,7 +439,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
     date.setDate(date.getDate() - 180);
     var dateString = date.toISOString();
     this.startDate = dateString;
-    console.log("start date ======== ", this.startDate)
+    // console.log("start date ======== ", this.startDate)
 
     this.displayGraph();
     // this.selectedMetrics(1,"gname","link")

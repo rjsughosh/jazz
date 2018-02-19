@@ -123,6 +123,6 @@ public closeSidebar (eve){
     this.isServiceAvail = 'http://'+this.envSelected+'cloud-api-doc.corporate.t-mobile.com/' + this.domainName + '_' + this.serviceName +ENV +'/swagger.json'    
     this.swaggerUrl = 'http://editor.cloud-api.corporate.t-mobile.com/?url='+this.isServiceAvail;
     this.isSwaggerAvailable();
-    console.log(this.swaggerUrl);
+    // console.log(this.swaggerUrl);
   }
 }

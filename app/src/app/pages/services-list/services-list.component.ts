@@ -622,7 +622,7 @@ onFilterCancel(event) {
       */
     }
     else{
-      console.log("page not changed");
+      // console.log("page not changed");
     }
   }
   onServiceSearch(searchbar){

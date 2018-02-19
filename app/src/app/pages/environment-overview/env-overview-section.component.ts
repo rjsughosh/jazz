@@ -120,7 +120,7 @@ put_payload:any = {};
                     errMsgBody=JSON.parse(error._body);
                   }
                   catch(e){
-                    console.log('Error in parsing Json')
+                    // console.log('Error in parsing Json')
                   }
                   let errorMessage='';
                   if(errMsgBody!=undefined)
@@ -195,7 +195,7 @@ put_payload:any = {};
     this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
         (response) => {
-          console.log('response :', response);
+          // console.log('response :', response);
 
           if(response.data == (undefined || '')){
            
@@ -254,7 +254,7 @@ put_payload:any = {};
       var now = new Date();
       this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
       + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-      console.log(this.errorTime);
+      // console.log(this.errorTime);
       }
   
     feedbackRes:boolean=false;
@@ -342,7 +342,7 @@ put_payload:any = {};
 					this.http.post('/platform/jira-issues', payload).subscribe(
 						response => {
 							this.buttonText='DONE';
-							console.log(response);
+							// console.log(response);
 							this.isLoading = false;
 							this.model.userFeedback='';
 							var respData = response.data;

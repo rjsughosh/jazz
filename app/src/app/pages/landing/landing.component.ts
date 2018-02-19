@@ -47,7 +47,7 @@ export class LandingComponent implements OnInit {
         if(event.target.innerText === "Privacy"){
             window.open('https://www.t-mobile.com/company/website/privacypolicy.aspx');                    
         } else if(event.target.innerText === "Docs"){
-            window.open('https://docs.jazz.corporate.t-mobile.com');        
+            window.open('https://docs.jazz.corporate.t-mobile.com/');        
             
         }
     }

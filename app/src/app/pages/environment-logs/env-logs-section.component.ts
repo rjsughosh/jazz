@@ -313,7 +313,7 @@ export class EnvLogsSectionComponent implements OnInit {
 		this.sliderFrom = e.from;
 		this.sliderPercentFrom = e.from_percent;
 		var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-		console.log(resetdate);
+		// console.log(resetdate);
 		this.payload.start_time = resetdate;
 		this.resetPayload();
 
@@ -430,7 +430,7 @@ export class EnvLogsSectionComponent implements OnInit {
 						this.errMessage = this.parsedErrBody.message;
 					}
 				} catch (e) {
-					console.log('JSON Parse Error', e);
+					// console.log('JSON Parse Error', e);
 				}
 				this.getTime();
 				this.errorURL = window.location.href;
@@ -455,7 +455,7 @@ export class EnvLogsSectionComponent implements OnInit {
 		var now = new Date();
 		this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 			+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-		console.log(this.errorTime);
+		// console.log(this.errorTime);
 	}
 
 	ngOnChanges(x: any) {

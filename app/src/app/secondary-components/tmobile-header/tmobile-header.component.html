@@ -9,7 +9,8 @@
     <div *ngIf="type == 'landing'" class="header-section right">
         <ul class="dashboardLinks">
             <li (click)="goToAbout('features')" [class.hide] = 'noLink'> Features</li>
-            <li class="hide" (click)="goToAbout('releaseCalendars')"> Release Calendar</li>
+            <!-- <li (click)="goToAbout('releaseCalendars')"> Releases</li> -->
+            <!-- <li (click)="goToAbout('statistics')"> Stats</li> -->
             <li (click)="goToAbout('about')" [class.hide] = 'noLink'>About Us</li>
             <li [class.hide]="isLoggedIn">
                 <div class="login">
