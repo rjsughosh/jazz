@@ -33,6 +33,7 @@
 
 		</section>
 	</div>
+
 	<section id="features"  class="section features-section features relative transform-parallax">
 		<div class = "parallax-1"></div>
 		<div class = "parallax-4"></div>
@@ -138,88 +139,167 @@
 		</ul>
 
 	</section>
-	<div id="releaseCalendars" class="hide grey-section top-parallax-margin-half relative transform-parallax">
+
+	<div id="releaseCalendars" class="release grey-section top-parallax-margin-half relative transform-parallax">
 
 			<div class="pattern-parallax">
 				<div class = "parallax-6"></div>
 
 			</div>
-		<section  class="section features-section">
+			<section  class="section features-section">
 
+				<div class="section-content">
+					<h3 class="feature-title center" >ReleaseS</h3>
+				</div>
+				<div class="section-content-text">
+						<span class = "center"> Lorem ipsum dolor sit amet, consectetur efficitur, id volutpat sem ultricies. Sed et ornare libero. </span>
+				</div>
+				<div class="release-data-container">
+					<h4>Release Update - January 24, 2018 <div class='icon-icon-down'></div> </h4>
+					<ul>
+						<div class='list-head'>Fixes</div>
+						<li> Vestibulum rutrum quam vitae fringilla tincidunt. Suspendisse nec tortor urna. Ut laoreet sodales. ipsum</li>
+						<li> Lorem Mauris non tempor quam, et lacinia sapien. Mauris accumsan eros eget libero posuere vulputate. Eti.</li>
+						<li> Curabitur lobortis id lorem id bibendum. Ut id consectetur magna. Quisque volutpat augue enim, pul. ipsum</li>
+					</ul>
+					<ul>
+						<div class='list-head'>Improvements</div>
+						<li> Lorem Vestibulum rutrum quam vit.</li>
+						<li> Donec facilisis tortor ut. ipsum</li>
+						<li> In hac habitasse platea di.</li>						
+					</ul>
+				</div>
+				
+			</section>
+	</div>
+
+	<div id="statistics" class="statistics top-parallax-margin-half relative transform-parallax">
+
+		<div class="pattern-parallax">
+			<div class = "parallax-6"></div>
+		</div>
+
+		<section   class="section features-section">
+			<!-- <div class = "parallax-1"></div>
+			<div class = "parallax-4"></div>
+			<div class="landscapepadding"></div> -->
 			<div class="section-content">
-				<h3 class="feature-title center" >Release Calendar</h3>
+				<div class="feature-title center">Statistics</div>
 			</div>
 			<div class="section-content-text">
-					<span class = "center"> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
+				<span class="center sec-sub-h">Lorem ipsum dolor sit amet, cadipiscing elit, sed do eiusmod tempor incididunt ut labore</span>
 			</div>
-			<div class="center top-parallax-margin relative">
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="All"></btn-tmobile-secondary>
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Future Releases"></btn-tmobile-secondary>
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Past Releases"></btn-tmobile-secondary>
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Events"></btn-tmobile-secondary>
+			<div class="user-stats">
+				<ul>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr[0].value}} -->
+						</div>
+						<div class='stat-label'>
+							Services Created
+						</div>
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr[1].value}} -->
+						</div>
+						<div class='stat-label'>
+							Users
+						</div>
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr[2].value}} -->
+						</div>
+						<div class='stat-label'>
+							Active Users
+						</div>
+						<div class='stat-sub-label'>who interacted with the platform in the last 30 days</div>
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr[3].value}} -->
+						</div>
+						<div class='stat-label'>
+							Active Services
+						</div>
+						<div class='stat-sub-label'>with deployments in the last 30 days</div>
 
+					</li>
+					<!-- <button (click)='loopMulti()'>load</button> -->
+
+				</ul>
 			</div>
-			<div class="card-container relative">
-				<div class="shift-right icon-icon-rigtArrow"  (click)="shiftRight()" [ngClass]="min ? 'minnum':'maxnum'"></div>
-				<div class="scrollable-cards" id="scrollable-cards">
-					<div id="scroll-me" class="scroll-me" [style.transform]="'translateX('+safeTransformX+'px)'">
-						<div id="first-card">
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
 
-							</div>
+			<div class="service-stats">
+				<ul>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr2[0].value}} -->
 						</div>
-						<div>
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
-
-							</div>
+						<div class='stat-label'>
+							Github forks
 						</div>
-						<div>
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Create, deploy, manage all your API needs.</span>
-
-							</div>
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr2[1].value}} -->
 						</div>
-						<div>
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
-
-							</div>
+						<div class='stat-label'>
+							Github commits
 						</div>
-						<div>
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
-								<div class = "calendar"> May 17th, 5-7 PM</div>
-							</div>
-
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr2[2].value}} -->
 						</div>
-						<div>
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
-
-							</div>
+						<div class='stat-label'>
+							Github Stars
 						</div>
-						<div>
-							<div class ="full">
-								<h6>Hackathon</h6>
-								<span> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
-
-							</div>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr2[3].value}} -->
 						</div>
-
-					</div>
-				</div>
-				<div class="shift-left icon-icon-rigtArrow" (click)="shiftLeft()" [ngClass]="max ? 'minnum':'maxnum'"></div>
+						<div class='stat-label'>
+							Requests served
+						</div>
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr2[4].value}} -->
+						</div>
+						<div class='stat-label'>
+							Issues
+						</div>
+					</li>
+					<li>
+						<div class='stat-val'>
+							NA
+							<!-- {{this.stat_arr2[5].value}} -->
+						</div>
+						<div class='stat-label'>
+							Pull requests
+						</div>
+					</li>
+				</ul>
 			</div>
+
 		</section>
 	</div>
+
+
 	<div id="about" class="about-section relative transform-parallax">
 		<div class="pattern-parallax">
 			<div class = "parallax-7"></div>
@@ -241,6 +321,7 @@
 			</div>
 		</section>
 	</div>
+
 	<section  class="section features-section top-parallax-margin-half">
 
 		<div class="section-content section-content-small footer hide">

@@ -23,6 +23,10 @@ export class LandingComponent implements OnInit {
     subtitle = 'Our API Services system allows you to seamlessly create, deploy, and manage all you API needs.';
     override = false;
     private IDLE_TIMEOUT = 60*10; //seconds
+    num_ser_cr:number=160;
+    num_users:number=100;
+    num_act_usr:number=20;
+    num_act_ser:number=120;
 
     public getStartedNow(){
        
@@ -96,6 +100,111 @@ export class LandingComponent implements OnInit {
         }
     }
 
+    loop(j){
+        setTimeout(() => {
+            this.stat_arr[j].i++;                    
+            if (this.stat_arr[j].i <= this.stat_arr[j].limit) {  
+                // this.stat_arr[j].value=this.stat_arr[j].i;
+                this.loop(j);            
+            }      
+          }, (1000/this.stat_arr[j].limit));
+    }
+    loop2(j){
+        setTimeout(() => {
+            this.stat_arr2[j].i++;                     
+            if (this.stat_arr2[j].i <= this.stat_arr2[j].limit) {  
+                // this.stat_arr2[j].value=this.stat_arr2[j].i;                
+                this.loop2(j);          
+            }      
+          }, (1000/this.stat_arr2[j].limit));
+    }
+    stat_arr=[
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        }
+    ];
+
+    stat_arr2=[
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        },
+        {
+            j:0,
+            limit:0,
+            value:0,
+            i:0
+        }
+    ];
+
+    loadnumbers(){
+        var arr=[this.num_ser_cr,this.num_users,this.num_act_usr,this.num_act_ser]
+        var arr2=[20,45,21,81,120,32];
+        for(var j=0;j<4;j++){
+            this.stat_arr[j].limit=arr[j];
+        }
+       this.loopMulti();
+
+        for(var m=0;m<arr2.length;m++){
+            this.stat_arr2[m].limit=arr2[m];
+        }      
+
+    }
+
+    loopMulti(){
+        this.loop(0);this.loop(1);this.loop(2);this.loop(3);
+        this.loop2(0);this.loop2(1);this.loop2(2);this.loop2(3);this.loop2(4);this.loop2(5);        
+
+
+
+    }
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -107,6 +216,7 @@ export class LandingComponent implements OnInit {
     };
     
     ngOnInit() {
+        this.loadnumbers()
         if(this.authenticationservice.isLoggedIn()){
             this.buttonText ='GO TO SERVICES' ;
         } else{

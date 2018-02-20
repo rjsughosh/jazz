@@ -470,7 +470,7 @@ export class ServiceCostComponent implements OnInit {
 				  this.errMessage = this.parsedErrBody.message;
 				}
 			  } catch(e) {
-				  console.log('JSON Parse Error', e);
+				//   console.log('JSON Parse Error', e);
 			  }
 			  this.getTime();
 			  this.errorURL = window.location.href;
@@ -494,7 +494,7 @@ export class ServiceCostComponent implements OnInit {
 		var now = new Date();
 		this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 		+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-		console.log(this.errorTime);
+		// console.log(this.errorTime);
 	  }
 
 	feedbackRes:boolean=false;
@@ -581,7 +581,7 @@ export class ServiceCostComponent implements OnInit {
         this.http.post('/platform/jira-issues', payload).subscribe(
             response => {
                 this.buttonText='DONE';
-                console.log(response);
+                // console.log(response);
                 this.isLoading = false;
                 this.model.userFeedback='';
                 var respData = response.data;

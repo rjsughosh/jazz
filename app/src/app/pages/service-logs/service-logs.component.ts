@@ -390,7 +390,7 @@ export class ServiceLogsComponent implements OnInit {
 	  currentMonth++;
 	  var currentYear = new Date ((todayDate).toISOString()).getFullYear();
 	  var diffMonth = currentMonth - sliderFrom;
-	  console.log(todayDate,todayDate.getMonth());
+	//   console.log(todayDate,todayDate.getMonth());
 	  if(diffMonth>0){
 		var resetYear = currentYear;
 		var resetMonth = diffMonth;
@@ -532,7 +532,7 @@ export class ServiceLogsComponent implements OnInit {
 	var now = new Date();
 	this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 	+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-	console.log(this.errorTime);
+	// console.log(this.errorTime);
 	}
 	refreshData(event){
 		this.loadingState = 'default';
@@ -563,7 +563,7 @@ export class ServiceLogsComponent implements OnInit {
   
  	onFilterSelected(filters){
 	
-		console.log('logs is the location',filters);
+		// console.log('logs is the location',filters);
 		this.loadingState = 'loading';
 		var filter ;
 		if (filters[0]) {

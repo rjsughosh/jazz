@@ -119,7 +119,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 
       // this.subscription = this.http.get('/jazz/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
         (response) => {
-					console.log("response  = ",response);
+					// console.log("response  = ",response);
 					// console.log("response data  = ",response.data);
 					if((response.data == undefined) || (response.data.length == 0)){
             this.envResponseEmpty = true;
@@ -213,7 +213,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 			var now = new Date();
 			this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 			+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-			console.log(this.errorTime);
+			// console.log(this.errorTime);
 			}
 	
 		feedbackRes:boolean=false;
@@ -300,7 +300,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 					this.http.post('/platform/jira-issues', payload).subscribe(
 						response => {
 							this.buttonText='DONE';
-							console.log(response);
+							// console.log(response);
 							this.isLoading = false;
 							this.model.userFeedback='';
 							var respData = response.data;
@@ -321,7 +321,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 				}
 
      redirect(url){
-		 console.log("url = ",url)
+		//  console.log("url = ",url)
 		 window.open(url , '_blank');
 	 }
 	 

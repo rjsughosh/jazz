@@ -60,6 +60,9 @@ export class CreateServiceComponent implements OnInit {
   channelNameError: boolean = false;
   showLoader: boolean = false;
   showApproversList2: boolean = false;
+  showRegionList:boolean = false;
+  showAccountList:boolean = false;
+
   isLoading: boolean = false;
   slackChannelLoader: boolean = false;
   serviceAvailable: boolean = false;
@@ -119,8 +122,12 @@ export class CreateServiceComponent implements OnInit {
   service: any = "";
   domain: any = "";
   reqId: any = "";
-
-
+  accounts=['acc1','acc2','acc3','acc4','acc5','acc6','acc7','acc8','acc9','acc10','acc11','acc12','acc13'];
+  regions=['region1','region2','region3','region4','region5','region6','region7','region8','region9','region10','region11','region12','region13'];
+  selectedRegion=[];
+  regionInput:string;
+  selectedAccount=[];
+  AccountInput:string;
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
@@ -347,6 +354,28 @@ export class CreateServiceComponent implements OnInit {
     this.serviceNotAvailable = false;
   }
 
+  onRegionChange(newVal) {
+    if (!newVal) {
+      this.showRegionList = false;
+    } else {
+      this.showRegionList = true;
+    }
+  }
+  onAccountChange(newVal) {
+    if (!newVal) {
+      this.showAccountList = false;
+    } else {
+      this.showAccountList = true;
+    }
+  }
+
+  focusInputAccount(event) {
+    document.getElementById('AccountInput').focus();
+  }
+
+  focusInputRegion(event) {
+    document.getElementById('regionInput').focus();
+  }
 
   // function to create service
   public createService() {
@@ -547,7 +576,47 @@ export class CreateServiceComponent implements OnInit {
     }
   }
 
-
+selRegion:any;
+selectAccount(account){
+  this.selApprover = account;
+    let thisclass: any = this;
+    this.showAccountList = false;
+    thisclass.AccountInput = '';
+    this.selectedAccount.push(account);
+    for (var i = 0; i < this.accounts.length; i++) {
+      if (this.accounts[i] === account) {
+        this.accounts.splice(i, 1);
+        return;
+      }
+    }
+}
+removeAccount(index, account) {
+  this.accounts.push(account);
+  this.selectedAccount.splice(index, 1);
+}
+selectRegion(region){
+  this.selApprover = region;
+    let thisclass: any = this;
+    this.showRegionList = false;
+    thisclass.regionInput = '';
+    this.selectedRegion.push(region);
+    for (var i = 0; i < this.regions.length; i++) {
+      if (this.regions[i] === region) {
+        this.regions.splice(i, 1);
+        return;
+      }
+    }
+}
+removeRegion(index, region) {
+  this.regions.push(region);
+  this.selectedRegion.splice(index, 1);
+}
+keypressAccount(event){
+  
+}
+keypressRegion(event){
+  
+}
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
     this.selApprover = approver;
