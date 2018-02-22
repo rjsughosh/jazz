@@ -2,19 +2,20 @@ import { Component, OnInit, Input , OnChanges, SimpleChange, Output, EventEmitte
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService} from 'angular2-toaster';
-
-import {DataCacheService , AuthenticationService } from '../../core/services/index';
+import { DataService } from "../data-service/data.service";
+import { DataCacheService , AuthenticationService } from '../../core/services/index';
 
 @Component({
   selector: 'env-overview-section',
   templateUrl: './env-overview-section.component.html',
-  providers: [RequestService,MessageService],
+  providers: [RequestService,MessageService,DataService],
   styleUrls: ['./env-overview-section.component.scss']
 })
 export class EnvOverviewSectionComponent implements OnInit {
   
   @Output() onload:EventEmitter<any> = new EventEmitter<any>();
   @Output() envLoad:EventEmitter<any> = new EventEmitter<any>();
+  @Output() frndload:EventEmitter<any> = new EventEmitter<any>();
   
   
   private http:any;
@@ -52,6 +53,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   json:any={};
   desc_temp:any;
   toastmessage:any;
+  message:string="lalalala"
   
   
   private subscription:any;
@@ -76,7 +78,7 @@ put_payload:any = {};
     private cache: DataCacheService,
     private toasterService: ToasterService,
     private messageservice:MessageService,
-
+    private data: DataService,
 
     private authenticationservice: AuthenticationService ,
   ) {
@@ -219,6 +221,8 @@ put_payload:any = {};
             this.friendlyName = envResponse.friendly_name
             this.branchname = envResponse.physical_id;
             this.lastCommitted = envResponse.last_updated;
+            this.frndload.emit(this.friendlyName);
+
 
             this.formatLastCommit();               
             
@@ -386,7 +390,8 @@ put_payload:any = {};
   ngOnInit() {  
     if(this.service.domain != undefined)  
       this.callServiceEnv();
-   
+      this.data.currentMessage.subscribe(message => this.message = message)
+      console.log("overview message = ",this.message)
   }
 
   ngOnChanges(x:any) {

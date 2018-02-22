@@ -7,6 +7,8 @@ import { DataCacheService, AuthenticationService } from '../../core/services/ind
 import { Router, ActivatedRoute } from '@angular/router';
 import { IonRangeSliderModule } from "ng2-ion-range-slider";
 import { setTimeout } from 'timers';
+import { DataService } from "../data-service/data.service";
+
 // import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 
 
@@ -14,10 +16,11 @@ import { setTimeout } from 'timers';
   selector: 'env-codequality-section',
   templateUrl: './env-codequality-section.component.html',
   styleUrls: ['./env-codequality-section.component.scss'],
-  providers: [RequestService, MessageService],
+  providers: [RequestService, MessageService,DataService],
 })
 export class EnvCodequalitySectionComponent implements OnInit {
   @Input() service: any = {};
+  message:string;
   edit: boolean = true;
   save: boolean = false;
   minCards: boolean = false;
@@ -81,7 +84,8 @@ export class EnvCodequalitySectionComponent implements OnInit {
     private http: RequestService,
     private cache: DataCacheService,
     private router: Router,
-    private authenticationservice: AuthenticationService
+    private authenticationservice: AuthenticationService,
+    private dataS: DataService
   ) { }
 
 
@@ -443,7 +447,14 @@ export class EnvCodequalitySectionComponent implements OnInit {
 
     this.displayGraph();
     // this.selectedMetrics(1,"gname","link")
-
+    this.dataS.currentMessage.subscribe(message => this.message = message)
+    this.newMessage();
+    console.log("cq message = ",this.message)
+  }
+  
+    newMessage() {
+      this.dataS.changeMessage("fo")
+      
   }
 
   public goToAbout(hash) {

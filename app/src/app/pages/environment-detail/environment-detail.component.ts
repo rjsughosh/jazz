@@ -8,6 +8,8 @@ import { SharedService } from "../../SharedService.service";
 import { Http, Headers, Response } from '@angular/http';
 import { Output, EventEmitter } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
+import { DataService } from "../data-service/data.service";
+
 
 // import {}
 import { EnvDeploymentsSectionComponent} from './../environment-deployment/env-deployments-section.component';
@@ -17,6 +19,7 @@ import { EnvDeploymentsSectionComponent} from './../environment-deployment/env-d
 @Component({
   selector: 'environment-detail',
   templateUrl: './environment-detail.component.html',
+  providers: [RequestService,MessageService,DataService],
   styleUrls: ['./environment-detail.component.scss']
 })
 export class EnvironmentDetailComponent implements OnInit {
@@ -26,6 +29,7 @@ export class EnvironmentDetailComponent implements OnInit {
 breadcrumbs = [];
   selectedTab = 0; 
   service: any= {};
+  friendly_name: any;
   status_val:number;
   serviceId:any;
   envStatus:string;
@@ -44,6 +48,7 @@ breadcrumbs = [];
   disablingFunctionButton:boolean=true;
   disablingApiButton:boolean=true;
   nonClickable:boolean=false;
+  message:string;
 
 
   private sub: any;
@@ -55,7 +60,8 @@ breadcrumbs = [];
     private route: ActivatedRoute,
     private http: RequestService,
     private cache: DataCacheService,
-    private router: Router
+    private router: Router,
+    private data: DataService
   ) {}
 
   // Disabled other tabs
@@ -87,6 +93,23 @@ env(event){
         // this.disablingWebsiteButton=false;
     }
 }
+
+frndload(event){
+  // console.log("event maga = ", event)
+  if(event != undefined){
+    this.friendly_name = event;
+    console.log("1 emit = ",this.friendly_name )
+  }
+  this.breadcrumbs = [{
+    'name' : this.service['name'],
+    'link' : 'services/' + this.service['id']
+},
+{
+  // 'name' : this.envSelected,
+  'name' : this.friendly_name,
+  'link' : ''
+}]
+}
   processService(service){
       if (service === undefined) {
           return {};
@@ -109,14 +132,18 @@ env(event){
 
     if (service !== undefined && service !== "") {
       this.service = this.processService(service);
-     
+      if( this.friendly_name != undefined ){
+        // this.envSelected = this.friendly_name; 
+        console.log("2 onDataFetched = ",this.friendly_name )
+      }
       // Update breadcrumbs
       this.breadcrumbs = [{
           'name' : this.service['name'],
           'link' : 'services/' + this.service['id']
       },
       {
-        'name' : this.envSelected,
+        // 'name' : this.envSelected,
+        'name' : this.friendly_name,
         'link' : ''
       }]
       this.isLoadingService = false;
@@ -221,7 +248,10 @@ env(event){
         this.serviceId=id;
         this.envSelected = params['env'];
         this.fetchService(id);
-
+        this.friendly_name = this.envSelected;
+        // console.log("3 oninit = ",this.friendly_name )
+        // this.data.currentMessage.subscribe(message => this.message = message)
+        // console.log("message = ", this.message)
           
       });
       this. breadcrumbs = [
@@ -230,7 +260,8 @@ env(event){
           'link' : 'services/' + this.service['id']
         },
         {
-          'name' : this.envSelected,
+          // 'name' : this.envSelected,
+          'name' : this.friendly_name,
           'link' : ''
         }
       ];

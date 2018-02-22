@@ -16,6 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class NavigationBarComponent implements OnInit {
 
   @Input() links;
+  @Input() data;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +24,8 @@ export class NavigationBarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log("nav name = ",this.data)
+    console.log("nav link = ",this.links)
   }
 
   public goToLink(link){
