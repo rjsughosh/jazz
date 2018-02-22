@@ -205,11 +205,11 @@ export class ServiceLogsComponent implements OnInit {
 
 	// environmentList = ['dev', 'stg', 'prod'];
 	envList = ['prod','stg'];
-	accList=['Acc 1','Acc 2','Acc 3'];
-	regList=['reg 1','reg 2','reg 3'];
 	
-	accSelected:string = 'Acc 1';
-  regSelected:string = 'reg 1';
+	accList=['tmodevops','tmonpe'];
+  regList=['us-west-2', 'us-east-1'];
+	accSelected:string = 'tmodevops';
+  regSelected:string = 'us-west-2';
   
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);

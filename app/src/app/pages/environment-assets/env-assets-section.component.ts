@@ -19,11 +19,13 @@ export class EnvAssetsSectionComponent implements OnInit {
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
 
 	assetsList: any = [];
-	accList=['Acc 1','Acc 2','Acc 3'];
-	regList=['reg 1','reg 2','reg 3'];
+	
+	accList=['tmodevops','tmonpe'];
+  regList=['us-west-2', 'us-east-1'];
+	accSelected:string = 'tmodevops';
+  regSelected:string = 'us-west-2';
 	type: any = [];
-	accSelected:string = 'Acc 1';
-	regSelected:string = 'reg 1';
+	
 	length: any;
 	// image: any = [];
 	slNumber: any = [];

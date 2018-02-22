@@ -122,8 +122,8 @@ export class CreateServiceComponent implements OnInit {
   service: any = "";
   domain: any = "";
   reqId: any = "";
-  accounts=['acc1','acc2','acc3','acc4','acc5','acc6','acc7','acc8','acc9','acc10','acc11','acc12','acc13'];
-  regions=['region1','region2','region3','region4','region5','region6','region7','region8','region9','region10','region11','region12','region13'];
+  accounts=['tmodevops','tmonpe'];
+  regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
   regionInput:string;
   selectedAccount=[];
@@ -168,7 +168,6 @@ export class CreateServiceComponent implements OnInit {
 
   // function for opening and closing create service popup
   closeCreateService(serviceRequest) {
-    alert(serviceRequest)
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
@@ -353,7 +352,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceAvailable = false;
     this.serviceNotAvailable = false;
   }
-
+ 
   onRegionChange(newVal) {
     if (!newVal) {
       this.showRegionList = false;
@@ -611,11 +610,98 @@ removeRegion(index, region) {
   this.regions.push(region);
   this.selectedRegion.splice(index, 1);
 }
-keypressAccount(event){
-  
+keypressAccount(hash){
+  if (hash.key == 'ArrowDown') {
+    this.focusindex++;
+    if (this.focusindex > 0) {
+      var pinkElements = document.getElementsByClassName("pinkfocus")[0];
+      if (pinkElements == undefined) {
+        this.focusindex = 0;
+      }
+      // var id=pinkElements.children[0].innerHTML;
+    }
+    // console.log(this.focusindex);
+    if (this.focusindex > 2) {
+      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+
+    }
+  }
+  else if (hash.key == 'ArrowUp') {
+    if (this.focusindex > -1) {
+      this.focusindex--;
+
+      if (this.focusindex > 1) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+      }
+    }
+    if (this.focusindex == -1) {
+      this.focusindex = -1;
+
+
+    }
+  }
+  else if (hash.key == 'Enter' && this.focusindex > -1) {
+    event.preventDefault();
+    var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+
+    var approverObj = pinkElement[0].attributes[2].value;
+    
+    this.selectAccount(approverObj);
+
+    this.showApproversList = false;
+    this.approverName2 = '';
+    this.focusindex = -1;
+
+  } else {
+    this.focusindex = -1;
+  }
 }
-keypressRegion(event){
-  
+
+keypressRegion(hash){
+  if (hash.key == 'ArrowDown') {
+    this.focusindex++;
+    if (this.focusindex > 0) {
+      var pinkElements = document.getElementsByClassName("pinkfocus")[1];
+      if (pinkElements == undefined) {
+        this.focusindex = 0;
+      }
+      // var id=pinkElements.children[0].innerHTML;
+    }
+    // console.log(this.focusindex);
+    if (this.focusindex > 2) {
+      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+
+    }
+  }
+  else if (hash.key == 'ArrowUp') {
+    if (this.focusindex > -1) {
+      this.focusindex--;
+
+      if (this.focusindex > 1) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+      }
+    }
+    if (this.focusindex == -1) {
+      this.focusindex = -1;
+
+
+    }
+  }
+  else if (hash.key == 'Enter' && this.focusindex > -1) {
+    event.preventDefault();
+    var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+
+    var approverObj = pinkElement[0].attributes[2].value;
+    
+    this.selectRegion(approverObj);
+
+    this.showApproversList = false;
+    this.approverName2 = '';
+    this.focusindex = -1;
+
+  } else {
+    this.focusindex = -1;
+  }
 }
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
@@ -805,7 +891,7 @@ keypressRegion(event){
     if (hash.key == 'ArrowDown') {
       this.focusindex++;
       if (this.focusindex > 0) {
-        var pinkElements = document.getElementsByClassName("pinkfocus")[1];
+        var pinkElements = document.getElementsByClassName("pinkfocus")[3];
         // if(pinkElements == undefined)
         //   {
         //     this.focusindex = 0;
@@ -834,11 +920,19 @@ keypressRegion(event){
     else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
       var pinkElement;
-      var pinkElementS = document.getElementsByClassName("pinkfocus")[1];
-      if (pinkElementS == undefined)
-        pinkElement = document.getElementsByClassName('pinkfocus')[0].children;
-      else
-        pinkElement = pinkElementS.children;
+      pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
+      // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
+      // if (pinkElementS == undefined)
+      // {
+      //   var p_ele = document.getElementsByClassName('pinkfocus')[2];
+      //   if(p_ele == undefined){
+          
+      //   }
+      //   else pinkElement = document.getElementsByClassName('pinkfocus')[2].children;
+        
+      // }  
+      // else
+      //   pinkElement = pinkElementS.children;
       var approverObj = {
         displayName: pinkElement[0].attributes[2].value,
         givenName: pinkElement[0].attributes[3].value,
@@ -856,7 +950,8 @@ keypressRegion(event){
     }
   }
 
-  keypress2(hash) {
+  keypress2(hash)
+  {
     if (hash.key == 'ArrowDown') {
       this.focusindex++;
       if (this.focusindex > 0) {
@@ -888,7 +983,21 @@ keypressRegion(event){
     }
     else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
-      var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+      // console.log('hii--',document.getElementsByClassName("pinkfocus"))
+      var pinkElement;
+      pinkElement = document.getElementsByClassName("pinkfocuslack")[0].children;
+      // var pink_ele = document.getElementsByClassName("pinkfocus")[2];
+      // if(pink_ele != undefined){
+      //   alert('not undefined')
+      //   pinkElement = document.getElementsByClassName("pinkfocus")[2].children;
+        
+      // }
+      // else{
+      //   alert('undefined')
+       
+        
+
+      // }
 
       var approverObj = {
         displayName: pinkElement[0].attributes[2].value,
@@ -976,8 +1085,13 @@ keypressRegion(event){
     }
     this.selectedApprovers2 = [];
   }
+  selectAccountsRegions(){    
+    this.selectAccount('tmodevops');
+    this.selectRegion('us-west-2');
+  }
 
   ngOnInit() {
+    this.selectAccountsRegions();
     // this.gitRepo = "https://";
     this.getData();
 

@@ -1,5 +1,6 @@
 @import './../../../main-styles';
 @import './../service-detail/service-detail.component.scss';
+@import './../../secondary-components/create-service/create-service.component.scss';
 
 @keyframes blink {
 
@@ -132,6 +133,66 @@
     }
 }
 
+.popup-endp{
+    height: 0;
+    z-index: 3;
+    visibility: hidden;
+    position: absolute;
+    background:#D5D7D9;
+    padding:3px 7px;
+    border-radius:3px;
+    margin-top:1rem;
+    &::after{
+        content: "";
+
+        position: absolute;
+        top: -60%;
+        left: 29%;
+        border-width: 8px;
+        transform: rotate(180deg);
+        border-style: solid;
+        border-color: #D5D7D9 transparent transparent transparent;
+        
+    }
+   
+}
+.popup-endp::after{
+
+}
+
+.endp-cover{
+    display: inline-flex;
+    margin-right: 0.5rem;
+    background: #eee;
+    border: 1px solid #ccc;
+    // padding: 2px 7px;
+    border-radius: 4px;
+    div{
+        padding: 2px 7px;
+    }
+    div:first-child{
+        border-right: 1px solid #ccc;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        max-width: 14rem;
+    }
+    div:nth-child(2){
+        color:#ed008c;
+        cursor:pointer;
+    }
+}
+.input-copy{
+    opacity:0;
+    position: absolute;
+}
+
+.endp-visible{
+    visibility: visible;
+    transition:1s all;
+    height: auto;
+}
+
 .stage-wrp.active .overview-item {
     display: flex;
 }
@@ -220,6 +281,39 @@
     margin:0;
     text-overflow: ellipsis;
 }
+.det-value-div{
+    // width: 70%;
+    // border: none;
+    border-bottom: 1px solid #ccc;
+    // height: 20px !important;
+    margin: 0;
+    text-overflow: ellipsis;
+    min-width:24.2rem;
+}
+
+.det-value-div-right{
+    min-width: 27rem;
+}
+
+.selected-approvers{
+    border:none;
+    box-shadow: none;
+
+    li{
+        background:#ed008c;
+        color:white;
+        span{
+            color:white;
+            &:before{
+                color:white;
+            }
+        }
+    }
+    input{
+        height: 2rem;
+    }
+}
+
 .det-value-input-txtarea
 {
     width:70%;

@@ -184,7 +184,7 @@
                                 </div>
                                 <div [hidden]="!showAccountList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let account of accounts | myfilter:AccountInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let account of accounts;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectAccount(account);$event.stopPropagation();" index="{k}" [attr.account]='account'>{{account}}</div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
                                 </div>
                                 <div [hidden]="!showRegionList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let region of regions;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectRegion(region);$event.stopPropagation();" index="{k}" [attr.region]='region'>{{region}}</div>
                                         </div>
                                     </div>
@@ -345,7 +345,7 @@
                                                         </div>
                                                         <div [hidden]="!showApproversList2" class="approvers-list-wrap">
                                                             <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversList2 | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocus : i==focusindex }" [ngStyle]="scrollList" >
+                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversList2 | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
                                                                     <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
                                                                 </div>
                                                             </div>
@@ -656,7 +656,7 @@
                                 </div>
                                 <div [hidden]="!showApproversList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocus : j==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
                                         </div>
                                     </div>
