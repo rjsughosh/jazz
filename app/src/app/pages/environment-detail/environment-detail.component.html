@@ -20,7 +20,10 @@
                             <span class="path1"></span><span class="path2"></span>
                         </div>
                         <div title='{{envStatus}} '*ngIf='status_val == 2' class='icon-In-Progress inactive-icon'></div>
-                        <div title='{{envStatus}}' *ngIf='status_val > 2' class='icon-icon-inactive inactive-icon'></div>
+                        <div title='{{envStatus}}' *ngIf='status_val == 3' class='icon-icon-good inactive-icon succ'>
+                            <span class="path1"></span><span class="path2"></span>
+                        </div>
+                        <div title='{{envStatus}}' *ngIf='status_val > 3' class='icon-icon-inactive inactive-icon'></div>
 
                 </h1>
 
@@ -42,10 +45,9 @@
 
         </div> -->
        
-    <div *ngIf='status_val > 2' class="alert alert-warning" role="alert">
+    <div *ngIf='status_val > 3' class="alert alert-warning" role="alert">
             Looks like this environment is inactive, related assets might not be available during this time.
     </div>
-        
     <div class="tab-component">
         <tabs [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
         
