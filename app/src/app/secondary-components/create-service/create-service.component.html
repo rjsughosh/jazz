@@ -184,7 +184,7 @@
                                 </div>
                                 <div [hidden]="!showAccountList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let account of accounts;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let account of accounts| myfilter:AccountInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectAccount(account);$event.stopPropagation();" index="{k}" [attr.account]='account'>{{account}}</div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
                                 </div>
                                 <div [hidden]="!showRegionList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let region of regions;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectRegion(region);$event.stopPropagation();" index="{k}" [attr.region]='region'>{{region}}</div>
                                         </div>
                                     </div>
