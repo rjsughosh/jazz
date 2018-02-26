@@ -242,14 +242,16 @@
     width:70%;
     color:#1495bb !important;
     img{
-        width:25px;
-        height:25px;
-        // background-color: #ed008c;
+        width: 25px;
+        height: 25px;
         border-radius: 50%;
-        padding:3px;
+        padding: 3px;
         cursor: pointer;
-        margin:0 5px;
+        margin-left: 10px;
+        -webkit-transform: rotate(-45deg);
         transform: rotate(-45deg);
+        position: absolute;
+        bottom: -5px;
     }
 }
 .det-wrp-bottom{
