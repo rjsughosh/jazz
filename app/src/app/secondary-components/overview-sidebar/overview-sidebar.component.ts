@@ -119,7 +119,22 @@ export class OverviewSidebarComponent implements OnInit {
   },
 ];
 
-copylinkmsg:string="Copy to clipboard";
+popup(state,i){
+  if(state == 'enter'){
+    this.copyLink = "COPY LINK TO CLIPBOARD";
+    var ele = document.getElementsByClassName('new-pop');
+    console.log('edededed',ele);
+  ele[i].classList.add('endp-visible');
+  }
+  if(state == 'leave'){
+    var ele = document.getElementsByClassName('new-pop');
+    console.log('edededed',ele);
+    ele[i].classList.remove('endp-visible');
+  }
+  
+}
+
+copyLink:string="COPY LINK TO CLIPBOARD";
   constructor(
     private route: ActivatedRoute,
     private router: Router
@@ -146,13 +161,9 @@ copylinkmsg:string="Copy to clipboard";
   ngOnInit() {
   }
 
-  myFunction() {
-    setTimeout( this.resetCopyValue(), 3000);
- }
  
- resetCopyValue(){
-    this.copylinkmsg = "COPY LINK TO CLIPBOARD";
- }
+ 
+ 
  
  onServiceSearch(event){
 
@@ -166,7 +177,11 @@ copylinkmsg:string="Copy to clipboard";
     element.select();
     try {
         document.execCommand("copy");
-        this.copylinkmsg = "LINK COPIED";
+        this.copyLink = "LINK COPIED TO CLIPBOARD";
+        setTimeout(() => {
+          this.copyLink = "COPY LINK TO CLIPBOARD";
+        }, 3000);
+        
     }
     finally {
       document.getSelection().removeAllRanges;

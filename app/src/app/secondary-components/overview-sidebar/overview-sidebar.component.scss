@@ -1,7 +1,7 @@
 @import './../../../main-styles';
 @import './../../pages/services-list/services-list.component.scss';
-@import './../../pages/environment-overview/env-overview-section.component.scss';
-
+// @import './../../pages/environment-overview/env-overview-section.component.scss';
+// @import './../../pages/service-overview/service-overview.component.scss';
 .bar-cover{
    
         min-height: 100vh;
@@ -32,11 +32,59 @@
     }
 }
 
+.new-pop{
+    visibility: hidden;
+    z-index: 3;
+    position: fixed;
+    background:#D5D7D9;
+    padding:3px 7px;
+    border-radius:3px;
+    margin-top:1rem;
+    &::after{
+        content: "";
 
+        position: absolute;
+        top: -16px;
+        left: 73%;
+        border-width: 8px;
+        transform: rotate(180deg);
+        border-style: solid;
+        border-color: #D5D7D9 transparent transparent transparent;
+        
+    }
+
+}
+.endp-visible{
+    visibility: visible;
+    transition:1s all;
+}
 .table-section{
     background: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
     margin-top: 2rem;
+}
+
+.popup-endp{
+    height: 0;
+    z-index: 3;
+    position: absolute;
+    background:#D5D7D9;
+    padding:3px 7px;
+    border-radius:3px;
+    margin-top:1rem;
+    &::after{
+        content: "";
+
+        position: absolute;
+        top: -60%;
+        left: 29%;
+        border-width: 8px;
+        transform: rotate(180deg);
+        border-style: solid;
+        border-color: #D5D7D9 transparent transparent transparent;
+        
+    }
+   
 }
 
 
@@ -85,6 +133,14 @@
         }
     }
     /deep/ .table-filters-row{
+
+        /deep/.textForm,.input-wrapper
+        {
+            width:10rem !important;
+        }
+        /deep/.input-wrapper:last-child{
+            margin-left: 0 !important;
+        }
         &.open {
             height: 50px;
         }

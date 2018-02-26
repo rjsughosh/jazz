@@ -35,7 +35,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     list_env = []
     list_inactive_env = [];
-
+    copyLink:string='Copy Link';
     disp_edit:boolean= true;
     hide_email_error:boolean = true;
     hide_slack_error:boolean = true;
@@ -255,7 +255,10 @@ export class ServiceOverviewComponent implements OnInit {
         element.select();
         try {
             document.execCommand("copy");
-            // this.copylinkmsg = "LINK";
+            this.copyLink = "Link Copied";
+            setTimeout(() => {
+                this.copyLink = "Copy Link";
+              }, 3000);
         }
         finally {
             document.getSelection().removeAllRanges;
@@ -408,13 +411,13 @@ export class ServiceOverviewComponent implements OnInit {
     //                         break;
     //     }
     // }
-    popup(state){
+    popup(state,id){
         if(state == 'enter'){
-          var ele = document.getElementById('popup-endp');
+          var ele = document.getElementById(id);
         ele.classList.add('endp-visible');
         }
         if(state == 'leave'){
-          var ele = document.getElementById('popup-endp');
+          var ele = document.getElementById(id);
           ele.classList.remove('endp-visible');
         }
         
@@ -1114,6 +1117,7 @@ selectAccount(account){
     this.showAccountList = false;
     thisclass.AccountInput = '';
     this.selectedAccount.push(account);
+    this.update_payload.accounts=this.selectedAccount;
     for (var i = 0; i < this.accounts.length; i++) {
       if (this.accounts[i] === account) {
         this.accounts.splice(i, 1);
@@ -1131,6 +1135,7 @@ selectRegion(region){
     this.showRegionList = false;
     thisclass.regionInput = '';
     this.selectedRegion.push(region);
+    this.update_payload.regions=this.selectedRegion;
     for (var i = 0; i < this.regions.length; i++) {
       if (this.regions[i] === region) {
         this.regions.splice(i, 1);

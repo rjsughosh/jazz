@@ -57,6 +57,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   json:any={};
   desc_temp:any;
   toastmessage:any;
+  copyLink:string="Copy Link";
  
   
   private subscription:any;
@@ -491,6 +492,8 @@ selectAccount(account){
     this.showAccountList = false;
     thisclass.AccountInput = '';
     this.selectedAccount.push(account);
+    this.put_payload.accounts=this.selectedAccount;
+    this.friendlyChanged=true;
     for (var i = 0; i < this.accounts.length; i++) {
       if (this.accounts[i] === account) {
         this.accounts.splice(i, 1);
@@ -501,6 +504,7 @@ selectAccount(account){
 removeAccount(index, account) {
   this.accounts.push(account);
   this.selectedAccount.splice(index, 1);
+  this.friendlyChanged=true;
 }
 selectRegion(region){
   this.selApprover = region;
@@ -508,6 +512,9 @@ selectRegion(region){
     this.showRegionList = false;
     thisclass.regionInput = '';
     this.selectedRegion.push(region);
+    this.put_payload.regions=this.selectedRegion;
+    this.friendlyChanged=true;
+
     for (var i = 0; i < this.regions.length; i++) {
       if (this.regions[i] === region) {
         this.regions.splice(i, 1);
@@ -522,7 +529,11 @@ copy_link(id)
         element.select();
         try {
             document.execCommand("copy");
-            // this.copylinkmsg = "LINK";
+            this.copyLink = "Link Copied";
+            setTimeout(() => {
+              this.copyLink = "Copy Link";
+            }, 3000);
+            
         }
         finally {
             document.getSelection().removeAllRanges;
@@ -531,6 +542,7 @@ copy_link(id)
 removeRegion(index, region) {
   this.regions.push(region);
   this.selectedRegion.splice(index, 1);
+  this.friendlyChanged=true;
 }
 keypressAccount(hash){
   if (hash.key == 'ArrowDown') {

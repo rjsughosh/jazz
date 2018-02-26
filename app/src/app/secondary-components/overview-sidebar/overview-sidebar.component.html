@@ -22,32 +22,17 @@
                     {{row.type}}
                 </div>
                 <div class="column">
-                        <!-- <div class="popupcopy" (mouseover)="myFunction()" (click)='copyClipboard("copyapilinkdev")'>
-                            <span (click)='copyClipboard("copyapilinkdev")'>
-                                <span class='relative'>
-                                        <img src="./../../../assets/images/icons/icon-link.png"/>
-                                        <div class="tooltip-content" >
-                                                <span id="copyPopup">{{copylinkmsg}}</span>
-                                        </div> 
-                                </span>
-        
-                            </span>
-                               
-                                
-                        </div> -->
+                    
                         <textarea id='myid'>{{row.arn}}</textarea>
-                        <div class="popupcopy" (click)='copyClipboard("myid")'>
+                        <div class="" (click)='copyClipboard("myid")'>
                             <span >
                                 <span class='relative'>
-                                        <img src="./../../../assets/images/icons/icon-link.png"/>
-                                        <div class="tooltip-content" >
-                                                <span id="copyPopup">{{copylinkmsg}}</span>
-                                        </div> 
-                                </span>
-        
+                                        <img src="./../../../assets/images/icons/icon-link.png" (mouseleave)='popup("leave",i)' (mouseenter)='popup("enter",i)'/>
+                                        <div class='new-pop'>								
+                                            {{copyLink}}                        
+                                        </div>
+                                </span>        
                             </span>
-                            
-                            
                         </div>
                 </div>
 

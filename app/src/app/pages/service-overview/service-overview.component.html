@@ -183,20 +183,21 @@
             <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
         </li>
-        <li>
+        <li *ngIf="service.serviceType == 'function'">
             
             <div class="det-label">Accounts</div>
             <div class="det-value">
                 <!-- {{service.accounts}} -->
-                tmo-dev-ops, tmo-int
+                <!-- tmo-dev-ops, tmo-int -->
+                {{selectedAccounts || 'tmodevops' }}
             </div>
         </li>
-        <li>
+        <li *ngIf="service.serviceType == 'function'">
             <div class="det-label">Endpoints</div>
             <div class="det-value">
-                <div class='endp-cover'  (mouseleave)='popup("leave")' (mouseenter)='popup("enter")'>
+                <div class='endp-cover'  (mouseleave)='popup("leave","popup-endp")' (mouseenter)='popup("enter","popup-endp")'>
                     <div>{{endpList[0].arn}}</div>
-                    <div (click)='copy_link("input-copy")'>Copy link</div>
+                    <div (click)='copy_link("input-copy")'>{{copyLink}}</div>
                     <input id='input-copy' class='input-copy' type='text' value='{{endpList[0].arn}}'>
                 </div>
                 <span class='view-all' (click)='openSidebar()'> View all</span>
@@ -230,11 +231,13 @@
             <div class="det-label">Tags</div>
             <div class="det-value" [ngClass]="{PlaceHolder:tags_empty}" >{{service.tags || 'Services are cooler with tags'}}</div>
         </li>
-        <li>
+        <li *ngIf="service.serviceType == 'function'">
             <div class="det-label">Regions</div>
             <div class="det-value">
                 <!-- {{service.regions}} -->
-                us-west-2, us-east
+                <!-- us-west-2, us-east -->
+                {{selectedRegion || 'us-west-2' }}
+
             </div>
         </li>
     </ul>
@@ -267,7 +270,7 @@
                     <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
                 </li>
-                <li>
+                <li *ngIf="service.serviceType == 'function'">
         
                     <div class="det-label">Accounts</div>
                     <div class="det-value">
@@ -296,23 +299,23 @@
                         </div>
                     </div>
                 </li>
-                <li>
-                        <div class="det-label">Endpoints</div>
-                        <div class="det-value">
-                            <div class='endp-cover'  (mouseleave)='popup("leave")' (mouseenter)='popup("enter")'>
-                                <div>{{endpList[0].arn}}</div>
-                                <div (click)='copy_link("input-copy2")'>Copy link</div>
-                                <input id='input-copy2' class='input-copy' type='text' value='{{endpList[0].arn}}'>
-                            </div>
-                            <span class='view-all' (click)='openSidebar()'> View all</span>
-            
-                            <div id='popup-endp' class='popup-endp'>								
-                                Account: <strong>{{endpList[0].name}}</strong>, Region: <strong>{{endpList[1].name}}</strong> 
-                            </div>
-                            
-                            
+                <li *ngIf="service.serviceType == 'function'">
+                    <div class="det-label">Endpoints</div>
+                    <div class="det-value">
+                        <div class='endp-cover'  (mouseleave)='popup("leave","popup-endp2")' (mouseenter)='popup("enter","popup-endp2")'>
+                            <div>{{endpList[0].arn}}</div>
+                            <div (click)='copy_link("input-copy")'>{{copyLink}}</div>
+                            <input id='input-copy' class='input-copy' type='text' value='{{endpList[0].arn}}'>
                         </div>
-                    </li>
+                        <span class='view-all' (click)='openSidebar()'> View all</span>
+        
+                        <div id='popup-endp2' class='popup-endp'>								
+                            Account: <strong>{{endpList[0].name}}</strong>, Region: <strong>{{endpList[1].name}}</strong> 
+                        </div>
+                        
+                        
+                    </div>
+                </li>
             </ul>
             <ul class="section-right col-md-6 col-sm-12">
                 <li>
@@ -341,7 +344,7 @@
                     <input [(ngModel)]="tags_temp" (ngModelChange)='updateTags()' type='text' (focus)='flag=true;' (blur)='flag=false;' class="det-value-input" placeholder="Services are cooler with tags">
                 </li>
                 <p class='email-err-msg labelfortags' *ngIf='flag' >Please enter tags seperated by commas</p>
-                <li>
+                <li *ngIf="service.serviceType == 'function'">
                     <div class="det-label">Regions</div>
                     <div class="det-value">
                         <div class="det-value-div det-value-div-right">

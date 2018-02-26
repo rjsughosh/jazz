@@ -475,6 +475,12 @@ export class CreateServiceComponent implements OnInit {
     if (this.typeOfService == 'api' && this.ttlSelected) {
     }
 
+    if (this.typeOfService == 'function') {
+      payload["accounts"]=this.selectedAccount;
+      payload["regions"]=this.selectedRegion;
+    }
+    
+
     this.isLoading = true;
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
