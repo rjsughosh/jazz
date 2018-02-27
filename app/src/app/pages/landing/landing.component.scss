@@ -196,12 +196,6 @@ $break-mobile: 600px;
     text-align: center;
 }
 
-.sec-sub-h{
-    text-align: center;
-  color: #27303a;
-  font-size:1.8rem;
-}
-
 .feature-title {
     font-size: 2.5rem;
     font-weight: 700;
@@ -919,11 +913,11 @@ img:hover {
 
     width: 50vw;
     height: 40rem;
-    background-image: url("/assets/landing/Pattern-Header-10@3x.png.png");
+    background-image: url("/assets/landing/Pattern-4@2x.png.png");
     background-repeat: no-repeat;
     background-position: left top;
     position: absolute;
-    background-size: 110%;
+    background-size: 90%;
     top: 35vh;
     left: -5vw;
     transform-style: preserve-3d;
@@ -1000,28 +994,18 @@ img:hover {
 }
 
 .grey-section {
-      background-image: url("/assets/landing/jpg/BG-Header@1x.png.jpg");
-    background-repeat: no-repeat;
-    background-position: left top;
-    background-size: 110%;
+    height: auto;
+    // @media screen and (max-width: $break-mobile) {
+    //     height: auto;
+    // }
+    // background-color: rgba(40,48,58,1);
+    background-color:transparent;
     color: #fff;
-    padding-bottom: 5rem;
-    // height: 20rem;
-    // height: calc(100% - 3.5vh);
-    @media screen and (max-width: $break-medium) {
-        background-size: 200%;
-        // background-position: 70% 0%;
-        padding-bottom: 5rem;
-    }
-    @media screen and (max-width: $break-small) {
-        background-size: 200%;
-        // background-position: 70% 0%;
-        padding-bottom: 5rem;
-    }
+    padding-bottom: 30px;
+    margin-bottom: -2px;
     .pattern-parallax{
         position: absolute;
-        background-position: left top;
-        background-size: 100%;
+        background: #28303a;
         transform: translateZ(-0.1px);
         top: 0rem;
         right: -6rem;
@@ -1241,174 +1225,4 @@ a:hover {
   .btn-primary{
     letter-spacing: .4rem;
   }
-}
-
-.release{
-
-}
-.statistics{
-    padding-bottom: 50px;
-    background-image: url('/assets/images/BG4@3x.png');
-    // background-image: url("/assets/landing/jpg/Release Party Image@1x.png.jpg");
-    background-repeat: no-repeat;
-    background-position: -5px 155px;
-    background-size: 115%;
-}
-.features-section{
-   
-}
-.user-stats{
-    width: 80%;
-    display: block;
-    margin: 50px auto;
-    // border: 1px solid #000;
-    ul{
-        display: flex;
-        margin-top:8rem;
-        li{
-            margin:0 2rem;
-            text-align: center;
-            width:21%;
-            .stat-val{
-                font-weight: bold;
-                text-align: center;
-                color: #ed008c;
-                font-size: 3.5rem;
-            }
-            .stat-label{
-                font-size: 2rem; 
-                text-align: center;
-                font-weight: bold;
-                color:black;
-                margin-bottom: 0.6rem;
-
-            }
-            .stat-sub-label{
-                font-size: 1.5rem;
-                font-weight: 500;
-                text-align: center;
-            }
-        }
-    }
-}
-
-.service-stats{
-    width: 80%;
-    display: block;
-    margin: 50px auto;
-    
-    // border: 1px solid #000;
-    ul{
-        justify-content: center;
-        &:first-child{
-            margin:12rem 0 5rem 0;
-
-        }
-        &:last-child{
-            margin-bottom: 6rem;
-        }
-
-        display: flex;
-        li{
-            margin:0 4rem;
-            text-align: center;
-            width:18%;
-            .stat-val{
-                font-size: 3.5rem;
-                font-weight: bold;
-                text-align: center;
-                color: #344759;
-            }
-            .stat-label{
-                font-size: 2.1rem; 
-                font-weight: bold;
-                color:black;
-                text-align: center;
-                margin-bottom: 0.6rem;
-
-            }
-            .stat-sub-label{
-                font-size: 1.35rem;
-                font-weight: 500;
-                text-align: center;
-            }
-        }
-    }
-}
-
-.release-data-container{  
-    text-align: center;
-    width: 50%;
-    display: block;
-    color:black;
-    padding:2.5rem 5rem; 
-    margin: 50px auto;
-    backdrop-filter: blur(1px);
-    background-color: #f5f4f4;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    border-radius: 3px;
-
-    h4{
-        font-size: 2.3rem;
-            font-weight: 900;
-            letter-spacing: 0.8px;
-            text-align: center;
-            color: #ed008c;
-            padding:0 0 2rem 0;
-            margin:0;
-            div{
-                margin:0px 10px;
-                display:inline-block;
-                &:before{
-                font-size:1.5rem;
-                }
-            }
-
-    }
-    ul{
-        // margin:0rem 0 0rem 7rem;
-        &:last-child{
-            padding-bottom:1rem;
-            padding-top:0.5rem;
-        }
-
-        li{
-            font-size: 18px;
-            margin:1rem;
-            text-align: left;
-            color: #27303a;
-            padding-left:1rem;
-            &:before{
-                content: "•";
-                color: #ed008c;
-                display: inline-block;
-                width: 1em;
-                margin-left: -1.3em;
-            }
-            
-            div{
-                margin-right: 1rem;
-            }
-        }
-    }
-}
-
-.list-icon{
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    // margin: 2px;
-    border-radius: 50%;
-    background: #ed008c;
-}
-
-.list-head
-{   
-    font-family: Lato;
-    font-size: 1.9rem;
-    font-weight: 900;
-    letter-spacing: 0.6px;
-    text-align:left;
-    color: #27303a;
-                       
 }
