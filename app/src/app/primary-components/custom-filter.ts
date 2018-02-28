@@ -12,8 +12,12 @@ export class MyFilterPipe implements PipeTransform {
                 return items.slice(0,50);//limiting number of rows in items for performance
             else
                 return items;
-        } else if(items[0].displayName){
-            return items.filter(item => item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1);            
+        } else if(items.length > 0){
+            if(items[0].displayName){
+                console.log('items -> ',items)
+                return items.filter(item => item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+            }
+                        
         }
 
         // filter items array, items which match and return true will be kept, false will be filtered out            console.log('type--------------',typeof(items[0]));

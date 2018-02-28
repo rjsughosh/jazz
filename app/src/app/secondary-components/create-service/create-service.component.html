@@ -215,8 +215,8 @@
                                 </div>
                                 <div [hidden]="!showRegionList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
-                                            <div  (click)="selectRegion(region);$event.stopPropagation();" index="{k}" [attr.region]='region'>{{region}}</div>
+                                        <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let m = index;" (focus)=" m==focusindexR " [ngClass]="{pinkfocus : m==focusindexR }" [ngStyle]="scrollList" >
+                                            <div  (click)="selectRegion(region);$event.stopPropagation();" index="{m}" [attr.region]='region'>{{region}}</div>
                                         </div>
                                     </div>
                                 </div>

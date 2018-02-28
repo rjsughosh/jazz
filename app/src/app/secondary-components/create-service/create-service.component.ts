@@ -662,38 +662,38 @@ keypressAccount(hash){
     this.focusindex = -1;
   }
 }
-
+focusindexR:number=-1;
 keypressRegion(hash){
   if (hash.key == 'ArrowDown') {
-    this.focusindex++;
-    if (this.focusindex > 0) {
+    this.focusindexR++;
+    if (this.focusindexR > 0) {
       var pinkElements = document.getElementsByClassName("pinkfocus")[1];
       if (pinkElements == undefined) {
-        this.focusindex = 0;
+        this.focusindexR = 0;
       }
       // var id=pinkElements.children[0].innerHTML;
     }
-    // console.log(this.focusindex);
-    if (this.focusindex > 2) {
-      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+    // console.log(this.focusindexR);
+    if (this.focusindexR > 2) {
+      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindexR - 2) * 2.9) + 'rem' };
 
     }
   }
   else if (hash.key == 'ArrowUp') {
-    if (this.focusindex > -1) {
-      this.focusindex--;
+    if (this.focusindexR > -1) {
+      this.focusindexR--;
 
-      if (this.focusindex > 1) {
-        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+      if (this.focusindexR > 1) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindexR - 2) * 2.9) + 'rem' };
       }
     }
-    if (this.focusindex == -1) {
-      this.focusindex = -1;
+    if (this.focusindexR == -1) {
+      this.focusindexR = -1;
 
 
     }
   }
-  else if (hash.key == 'Enter' && this.focusindex > -1) {
+  else if (hash.key == 'Enter' && this.focusindexR > -1) {
     event.preventDefault();
     var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
@@ -703,10 +703,10 @@ keypressRegion(hash){
 
     this.showApproversList = false;
     this.approverName2 = '';
-    this.focusindex = -1;
+    this.focusindexR = -1;
 
   } else {
-    this.focusindex = -1;
+    this.focusindexR = -1;
   }
 }
   //function for selecting approvers from dropdown//
