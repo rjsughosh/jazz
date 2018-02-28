@@ -286,7 +286,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
     var now = new Date();
     this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
       + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-    // console.log(this.errorTime);
   }
 
   feedbackRes: boolean = false;
@@ -374,7 +373,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
     this.http.post('/platform/jira-issues', payload).subscribe(
       response => {
         this.buttonText = 'DONE';
-        // console.log(response);
         this.isLoading = false;
         this.model.userFeedback = '';
         var respData = response.data;
@@ -395,7 +393,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
   }
   selectedMetrics(index, gname, link) {
     this.cardindex = index;
-    // console.log("index = ", this.cardindex)
     this.graphname = gname;
     this.sonar = link;
     var ele = document.getElementsByClassName('metrics-card');
@@ -443,13 +440,11 @@ export class EnvCodequalitySectionComponent implements OnInit {
     date.setDate(date.getDate() - 180);
     var dateString = date.toISOString();
     this.startDate = dateString;
-    // console.log("start date ======== ", this.startDate)
 
     this.displayGraph();
     // this.selectedMetrics(1,"gname","link")
     this.dataS.currentMessage.subscribe(message => this.message = message)
     this.newMessage();
-    console.log("cq message = ",this.message)
   }
   
     newMessage() {
