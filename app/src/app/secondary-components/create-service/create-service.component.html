@@ -178,7 +178,7 @@
                                             {{selected}}
                                             <span (click)="removeAccount(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypressAccount($event)"  autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
+                                        <input (keydown)="keypressAccount($event)"  (blur)='AccountInput=""' autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
 
                                     </ul>
                                 </div>
@@ -209,7 +209,7 @@
                                             {{selected}}
                                             <span (click)="removeRegion(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypressRegion($event)"  autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
+                                        <input (keydown)="keypressRegion($event)" (blur)='regionInput=""' autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
 
                                     </ul>
                                 </div>
@@ -650,7 +650,7 @@
                                             {{selected.displayName}} ({{selected.userId}})
                                             <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypress($event)"  autocomplete="off" id="approverName" name="approverName" type="text" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
+                                        <input (keydown)="keypress($event)"   autocomplete="off" id="approverName" name="approverName" type="text" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
 
                                     </ul>
                                 </div>
