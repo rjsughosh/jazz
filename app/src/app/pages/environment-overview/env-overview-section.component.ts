@@ -211,9 +211,9 @@ put_payload:any = {};
             this.cache.set('currentEnv',this.environmnt);
             this.status_val = parseInt(status[this.environmnt.status]);
 
-            if(this.status_val <= 1) this.envstatus='Active';
-            else if(this.status_val == 2 )this.envstatus='In Progress';
-            else if(this.status_val > 2 )this.envstatus='Inactive';
+            if(this.status_val <= 3) this.envstatus='Active';
+            else if(this.status_val == 4 )this.envstatus='In Progress';
+            else if(this.status_val > 4 )this.envstatus='Inactive';
 
            
             
