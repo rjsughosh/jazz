@@ -178,7 +178,7 @@
                                             {{selected}}
                                             <span (click)="removeAccount(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypressAccount($event)"  (blur)='AccountInput=""' autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
+                                        <input (keydown)="keypressAccount($event)"  (blur)='blurAccount()' autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
 
                                     </ul>
                                 </div>
@@ -209,7 +209,7 @@
                                             {{selected}}
                                             <span (click)="removeRegion(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypressRegion($event)" (blur)='regionInput=""' autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
+                                        <input (keydown)="keypressRegion($event)" (blur)='blurRegion()' autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
 
                                     </ul>
                                 </div>

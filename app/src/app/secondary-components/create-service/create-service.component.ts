@@ -583,6 +583,7 @@ export class CreateServiceComponent implements OnInit {
 
 selRegion:any;
 selectAccount(account){
+
   this.selApprover = account;
     let thisclass: any = this;
     this.showAccountList = false;
@@ -647,6 +648,9 @@ keypressAccount(hash){
     }
   }
   else if (hash.key == 'Enter' && this.focusindex > -1) {
+    if(this.accounts.length == 0){
+      this.showApproversList = false;
+    }
     event.preventDefault();
     var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
@@ -709,8 +713,26 @@ keypressRegion(hash){
     this.focusindexR = -1;
   }
 }
+
+blurAccount(){
+  this.AccountInput='';
+  setTimeout(() => {
+    this.showAccountList=false;
+  }, 500);
+  
+}
+
+blurRegion(){
+  this.regionInput='';
+  setTimeout(() => {
+    this.showRegionList=false;
+  }, 500);
+  
+}
+
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
+    
     this.selApprover = approver;
     let thisclass: any = this;
     this.showApproversList = false;
@@ -1092,6 +1114,7 @@ keypressRegion(hash){
     this.selectedApprovers2 = [];
   }
   selectAccountsRegions(){    
+
     this.selectAccount('tmodevops');
     this.selectRegion('us-west-2');
   }
