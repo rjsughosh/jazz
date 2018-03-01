@@ -122,7 +122,6 @@ put_payload:any = {};
                     errMsgBody=JSON.parse(error._body);
                   }
                   catch(e){
-                    // console.log('Error in parsing Json')
                   }
                   let errorMessage='';
                   if(errMsgBody!=undefined)
@@ -162,10 +161,7 @@ put_payload:any = {};
     var lastCommit = new Date(commit);
     var now = new Date(); 
     var todays = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-            // var todays = new Date().UTC();
-            // console.log('last commit from serv---',this.lastCommitted)
-            // console.log('today-->',todays);
-            // console.log('lastcommit in date',lastCommit);
+            
             this.dayscommit = true;
             this.commitDiff = Math.floor(Math.abs((todays.getTime() - lastCommit.getTime())/(1000*60*60*24)));
             if( this.commitDiff == 0 ){
@@ -197,7 +193,6 @@ put_payload:any = {};
     this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
         (response) => {
-          // console.log('response :', response);
 
           if(response.data == (undefined || '')){
            
@@ -258,7 +253,6 @@ put_payload:any = {};
       var now = new Date();
       this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
       + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-      // console.log(this.errorTime);
       }
   
     feedbackRes:boolean=false;
@@ -346,7 +340,6 @@ put_payload:any = {};
 					this.http.post('/platform/jira-issues', payload).subscribe(
 						response => {
 							this.buttonText='DONE';
-							// console.log(response);
 							this.isLoading = false;
 							this.model.userFeedback='';
 							var respData = response.data;
@@ -391,7 +384,6 @@ put_payload:any = {};
     if(this.service.domain != undefined)  
       this.callServiceEnv();
       this.data.currentMessage.subscribe(message => this.message = message)
-      console.log("overview message = ",this.message)
   }
 
   ngOnChanges(x:any) {

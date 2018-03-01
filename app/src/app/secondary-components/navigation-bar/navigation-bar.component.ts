@@ -24,8 +24,6 @@ export class NavigationBarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("nav name = ",this.data)
-    console.log("nav link = ",this.links)
   }
 
   public goToLink(link){

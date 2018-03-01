@@ -95,10 +95,8 @@ env(event){
 }
 
 frndload(event){
-  // console.log("event maga = ", event)
   if(event != undefined){
     this.friendly_name = event;
-    console.log("1 emit = ",this.friendly_name )
   }
   this.breadcrumbs = [{
     'name' : this.service['name'],
@@ -134,7 +132,6 @@ frndload(event){
       this.service = this.processService(service);
       if( this.friendly_name != undefined ){
         // this.envSelected = this.friendly_name; 
-        console.log("2 onDataFetched = ",this.friendly_name )
       }
       // Update breadcrumbs
       this.breadcrumbs = [{
@@ -165,8 +162,6 @@ frndload(event){
       this.isLoadingService = true;
 
       let cachedData = this.cache.get(id);
-      // service=cachedData;
-      // console.log('service sending from env detail', this.service);
 
       if (cachedData) {
           this.onDataFetched(cachedData)
@@ -249,9 +244,6 @@ frndload(event){
         this.envSelected = params['env'];
         this.fetchService(id);
         this.friendly_name = this.envSelected;
-        // console.log("3 oninit = ",this.friendly_name )
-        // this.data.currentMessage.subscribe(message => this.message = message)
-        // console.log("message = ", this.message)
           
       });
       this. breadcrumbs = [
