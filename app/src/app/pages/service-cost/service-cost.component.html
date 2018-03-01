@@ -141,11 +141,11 @@
                                         <div><div class='hori-line'></div>METHOD</div>
                                         <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api'  [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
                                     </div>
-                                    <div class="eachFilter" >
+                                    <div class="eachFilter" *ngIf='service.serviceType == "function"'>
                                         <div><div class='hori-line'></div>ACCOUNT</div>
                                         <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' [dropdwnContent]="accList" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
                                     </div>
-                                    <div class="eachFilter" >
+                                    <div class="eachFilter" *ngIf='service.serviceType == "function"'>
                                         <div><div class='hori-line'></div>REGION</div>
                                         <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' [dropdwnContent]="regList" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>
                                     </div>

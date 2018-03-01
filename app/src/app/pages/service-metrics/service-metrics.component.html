@@ -44,27 +44,27 @@
                 <div [class.show]='filterSelected' class="filter-wrap">
                     <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    
                     <div class='filter-inner'>
-                        <div class="filter-inner-wrap first-child" *ngIf='serviceMetricsList.length'>
+                        <div class="filter-inner-wrap first-child">
                             <div class='view-label'>Filter by:</div>
-                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                            <div class="eachFilter" *ngIf='pathList.length'>
                                 <div><div class='hori-line'></div>PATH</div>
-                                <dropdown class="dropdown-2 path" title="Select path" [class.hide]='service_api'  [dropdwnContent]="pathList" [selected]="pathSelected" (onSelected)="onPathListicSelected($event)"></dropdown>
+                                <dropdown class="dropdown-2 path" title="Select path"  [dropdwnContent]="pathList" [selected]="pathSelected" (onSelected)="onPathListicSelected($event)"></dropdown>
                             </div>
-                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                            <div class="eachFilter" *ngIf='envList.length'>
                                 <div><div class='hori-line'></div>ENVIRONMENT</div>
                                 <dropdown class="dropdown-1" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="envSelected" (onSelected)="onEnvSelected($event)"></dropdown>            
                             </div>
-                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                            <div class="eachFilter" *ngIf='methodList.length'>
                                 <div><div class='hori-line'></div>METHOD</div>
-                                <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' *ngIf='serviceMetricsList.length' [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
+                                <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
                             </div>
-                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                            <div class="eachFilter" *ngIf='service.serviceType == "function" && regList.length'>
                                 <div><div class='hori-line'></div>ACCOUNT</div>
-                                <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' [dropdwnContent]="accList" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
+                                <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="accList" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
                             </div>
-                            <div class="eachFilter" *ngIf='serviceMetricsList.length'>
+                            <div class="eachFilter" *ngIf='service.serviceType == "function" && regList.length'>
                                 <div><div class='hori-line'></div>REGION</div>
-                                <dropdown class="dropdown-3 method" title="Select method" [class.hide]='service_api' [dropdwnContent]="regList" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>
+                                <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="regList" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>
                             </div>
                         </div>
                         <div class="filter-inner-wrap">

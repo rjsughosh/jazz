@@ -37,10 +37,10 @@
 
 
 <div class="page-section relative">
-    <div class='filtr-wrap'>
+    <div class='filtr-wrap' *ngIf='service.serviceType == "function"'>
             <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
 
-            <div class="filter-icon relative">
+            <div class="filter-icon relative" >
                     <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; "></span>
                     <div [class.show]='filterSelected' class="filter-wrap">
                         <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    
@@ -49,11 +49,11 @@
                             
                             
                             
-                            <div class="eachFilter">
+                            <div class="eachFilter" *ngIf='service.serviceType == "function"'>
                                 <div><div class='hori-line'></div>ACCOUNT</div>
                                 <dropdown class='dropdown-3'  [dropdwnContent]="accList" title="Select enviroment" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
                             </div>
-                            <div class="eachFilter">
+                            <div class="eachFilter" *ngIf='service.serviceType == "function"'>
                                 <div><div class='hori-line'></div>REGION</div>
                                 <dropdown class='dropdown-3'  [dropdwnContent]="regList" title="Select enviroment" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>
                             </div>
