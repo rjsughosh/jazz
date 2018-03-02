@@ -251,7 +251,7 @@ describe('CreateServiceComponent', () => {
         passed=true;
       }
     }
-    console.dir(contextElement);
+  
     elementText=  contextElement.nativeElement.textContent.toLowerCase()
     expect(passed).toBe(true) ;
     expect(elementText).toContain("Yes, enable caching for my API".toLowerCase()) ;
@@ -375,180 +375,12 @@ describe('CreateServiceComponent', () => {
           expect(submitButton.disabled).toBe(false);      
         });
       }));
-      it('Submit button should  not get enabled when Service name is not valid  with correct Namespace,Autoriser set ',async(()=>{
-        let serviceInput;
-        let namespaceInput;
-        let approverInput;
-        let submitButton;
-        component.changeServiceType('api');
-          fixture.autoDetectChanges();
-          component.model.serviceName = "not-true-service";
-          component.invalidServiceName =false;
-          component.model.domainName="true-domain"
-          component.invalidDomainName=false;
-          fixture.detectChanges();
-          serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-          namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-          submitButton =  fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
-  
-          serviceInput.querySelector('input').focus();
-          serviceInput.querySelector('input').blur();
-          fixture.detectChanges()
-          component.approversList = [
-            {
-              displayName:"Approver1",
-              givenName:"Approver1",
-              userId:"AP1",
-              userEmail:"ap1@moonraft.com"
-            },
-            {
-              givenName:"Approver1",
-              userId:"AP1",
-              userEmail:"ap1@moonraft.com"
-            },
-            {
-              displayName:"Approver3",
-              givenName:"Approver1",
-              userId:"AP1",
-              userEmail:"ap1@moonraft.com"
-            }
-          ];
-          //expect(component.validateServiceName).toHaveBeenCalled();
-          //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-          approverInput   =  fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
-          component.approverName = "App";
-          let temp : HTMLElement ; 
-          temp  = approverInput.querySelector('input');  
-          temp.click();
-          var event = document.createEvent('Event');
-      
-          event.initEvent('keydown',true,true);
-          temp.dispatchEvent(event);
-          component.onApproverChange(true);
-          fixture.whenStable().then(()=>{
-            approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
-            fixture.detectChanges();
-            expect(submitButton.disabled).toBe(true);      
-          });
-        }));
-        it('Submit button should get enabled for right Service,Namespace,Autoriser set ',async(()=>{
-      let serviceInput;
-      let namespaceInput;
-      let approverInput;
-      let submitButton;
-      component.changeServiceType('api');
-        fixture.autoDetectChanges();
-        component.model.serviceName = "true-service";
-        component.invalidServiceName =false;
-        component.model.domainName="true-domain"
-        component.invalidDomainName=false;
-        fixture.detectChanges();
-        serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-        namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-        submitButton =  fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
-
-        serviceInput.querySelector('input').focus();
-        serviceInput.querySelector('input').blur();
-        fixture.detectChanges()
-        component.approversList = [
-          {
-            displayName:"Approver1",
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          },
-          {
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          },
-          {
-            displayName:"Approver3",
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          }
-        ];
-        //expect(component.validateServiceName).toHaveBeenCalled();
-        //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-        approverInput   =  fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
-        component.approverName = "App";
-        let temp : HTMLElement ; 
-        temp  = approverInput.querySelector('input');  
-        temp.click();
-        var event = document.createEvent('Event');
-    
-        event.initEvent('keydown',true,true);
-        temp.dispatchEvent(event);
-        component.onApproverChange(true);
-        fixture.whenStable().then(()=>{
-          approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
-          fixture.detectChanges();
-          expect(submitButton.disabled).toBe(false);      
-        });
-      }));
-      it('Submit button should get enabled for right Service,Namespace,Autoriser set ',async(()=>{
-      let serviceInput;
-      let namespaceInput;
-      let approverInput;
-      let submitButton;
-      component.changeServiceType('api');
-        fixture.autoDetectChanges();
-        component.model.serviceName = "true-service";
-        component.invalidServiceName =false;
-        component.model.domainName="true-domain"
-        component.invalidDomainName=false;
-        fixture.detectChanges();
-        serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-        namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-        submitButton =  fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
-
-        serviceInput.querySelector('input').focus();
-        serviceInput.querySelector('input').blur();
-        fixture.detectChanges()
-        component.approversList = [
-          {
-            displayName:"Approver1",
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          },
-          {
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          },
-          {
-            displayName:"Approver3",
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          }
-        ];
-        //expect(component.validateServiceName).toHaveBeenCalled();
-        //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-        approverInput   =  fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
-        component.approverName = "App";
-        let temp : HTMLElement ; 
-        temp  = approverInput.querySelector('input');  
-        temp.click();
-        var event = document.createEvent('Event');
-    
-        event.initEvent('keydown',true,true);
-        temp.dispatchEvent(event);
-        component.onApproverChange(true);
-        fixture.whenStable().then(()=>{
-          approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
-          fixture.detectChanges();
-          expect(submitButton.disabled).toBe(false);      
-        });
-      }));
-      it('Submit button should  not get enabled for invalid Service name even with valid (Namespace,Autoriser) set ',async(()=>{
-        let serviceInput;
-        let namespaceInput;
-        let approverInput;
-        let submitButton;
-        component.changeServiceType('api');
+    it('Submit button should  not get enabled for invalid Service name even with valid (Namespace,Autoriser) set ',async(()=>{
+          let serviceInput;
+          let namespaceInput;
+          let approverInput;
+          let submitButton;
+          component.changeServiceType('api');
           fixture.autoDetectChanges();
           component.model.serviceName = "not-true-service";
           component.invalidServiceName =false;
@@ -599,7 +431,7 @@ describe('CreateServiceComponent', () => {
             expect(submitButton.disabled).toBe(true);      
           });
         }));  
-        it('Submit button should  not get enabled for invalid NameSpace even with valid (Service name,Autoriser) set ',async(()=>{
+    it('Submit button should  not get enabled for invalid NameSpace even with valid (Service name,Autoriser) set ',async(()=>{
           let serviceInput;
           let namespaceInput;
           let approverInput;
@@ -655,13 +487,6 @@ describe('CreateServiceComponent', () => {
               expect(submitButton.disabled).toBe(true);      
             });
           }));  
-
-
-
-    
-  
-    
-
 
 });
 
