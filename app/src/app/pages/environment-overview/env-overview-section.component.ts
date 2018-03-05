@@ -2,19 +2,20 @@ import { Component, OnInit, Input , OnChanges, SimpleChange, Output, EventEmitte
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService} from 'angular2-toaster';
-
-import {DataCacheService , AuthenticationService } from '../../core/services/index';
+import { DataService } from "../data-service/data.service";
+import { DataCacheService , AuthenticationService } from '../../core/services/index';
 
 @Component({
   selector: 'env-overview-section',
   templateUrl: './env-overview-section.component.html',
-  providers: [RequestService,MessageService],
+  providers: [RequestService,MessageService,DataService],
   styleUrls: ['./env-overview-section.component.scss']
 })
 export class EnvOverviewSectionComponent implements OnInit {
   
   @Output() onload:EventEmitter<any> = new EventEmitter<any>();
   @Output() envLoad:EventEmitter<any> = new EventEmitter<any>();
+  @Output() frndload:EventEmitter<any> = new EventEmitter<any>();
   
   
   private http:any;
@@ -52,6 +53,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   json:any={};
   desc_temp:any;
   toastmessage:any;
+  message:string="lalalala"
   
   
   private subscription:any;
@@ -76,7 +78,7 @@ put_payload:any = {};
     private cache: DataCacheService,
     private toasterService: ToasterService,
     private messageservice:MessageService,
-
+    private data: DataService,
 
     private authenticationservice: AuthenticationService ,
   ) {
@@ -120,7 +122,6 @@ put_payload:any = {};
                     errMsgBody=JSON.parse(error._body);
                   }
                   catch(e){
-                    // console.log('Error in parsing Json')
                   }
                   let errorMessage='';
                   if(errMsgBody!=undefined)
@@ -160,10 +161,7 @@ put_payload:any = {};
     var lastCommit = new Date(commit);
     var now = new Date(); 
     var todays = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-            // var todays = new Date().UTC();
-            // console.log('last commit from serv---',this.lastCommitted)
-            // console.log('today-->',todays);
-            // console.log('lastcommit in date',lastCommit);
+            
             this.dayscommit = true;
             this.commitDiff = Math.floor(Math.abs((todays.getTime() - lastCommit.getTime())/(1000*60*60*24)));
             if( this.commitDiff == 0 ){
@@ -195,7 +193,6 @@ put_payload:any = {};
     this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
         (response) => {
-          // console.log('response :', response);
 
           if(response.data == (undefined || '')){
            
@@ -209,9 +206,9 @@ put_payload:any = {};
             this.cache.set('currentEnv',this.environmnt);
             this.status_val = parseInt(status[this.environmnt.status]);
 
-            if(this.status_val <= 1) this.envstatus='Active';
-            else if(this.status_val == 2 )this.envstatus='In Progress';
-            else if(this.status_val > 2 )this.envstatus='Inactive';
+            if(this.status_val <= 3) this.envstatus='Active';
+            else if(this.status_val == 4 )this.envstatus='In Progress';
+            else if(this.status_val > 4 )this.envstatus='Inactive';
 
            
             
@@ -219,6 +216,8 @@ put_payload:any = {};
             this.friendlyName = envResponse.friendly_name
             this.branchname = envResponse.physical_id;
             this.lastCommitted = envResponse.last_updated;
+            this.frndload.emit(this.friendlyName);
+
 
             this.formatLastCommit();               
             
@@ -254,7 +253,6 @@ put_payload:any = {};
       var now = new Date();
       this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
       + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-      // console.log(this.errorTime);
       }
   
     feedbackRes:boolean=false;
@@ -342,7 +340,6 @@ put_payload:any = {};
 					this.http.post('/platform/jira-issues', payload).subscribe(
 						response => {
 							this.buttonText='DONE';
-							// console.log(response);
 							this.isLoading = false;
 							this.model.userFeedback='';
 							var respData = response.data;
@@ -386,7 +383,7 @@ put_payload:any = {};
   ngOnInit() {  
     if(this.service.domain != undefined)  
       this.callServiceEnv();
-   
+      this.data.currentMessage.subscribe(message => this.message = message)
   }
 
   ngOnChanges(x:any) {
@@ -422,8 +419,8 @@ export enum status {
   "deployment_completed"=0,
   "active",
   "deployment_started" ,
-  "pending_approval",
   "deployment_failed",
+  "pending_approval",
   "inactive",
   "deletion_started",
   "deletion_failed",

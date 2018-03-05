@@ -11,16 +11,16 @@
             <!-- <router-outlet></router-outlet> -->
 <tmobile-mob-header [icon]="'notification'" [headText]="service.name" [status]="'green'"></tmobile-mob-header>
 <section class="page-container">
-    <navigation-bar [links]="breadcrumbs"></navigation-bar>
+    <navigation-bar [links]="breadcrumbs" [data]="friendly_name"></navigation-bar>
     <div class="content">
         <div class="page-title-wrap hide-for-mobile">
             <div class="servie-details-container">
-                <h1 class="page-hdr bold-title relative">{{envSelected}}
-                        <div title='{{envStatus}}' *ngIf='status_val < 2' class='icon-icon-good inactive-icon succ'>
+                <h1 class="page-hdr bold-title relative">{{friendly_name}}
+                        <div title='{{envStatus}}' *ngIf='status_val < 4' class='icon-icon-good inactive-icon succ'>
                             <span class="path1"></span><span class="path2"></span>
                         </div>
-                        <div title='{{envStatus}} '*ngIf='status_val == 2' class='icon-In-Progress inactive-icon'></div>
-                        <div title='{{envStatus}}' *ngIf='status_val > 2' class='icon-icon-inactive inactive-icon'></div>
+                        <div title='{{envStatus}} '*ngIf='status_val == 4' class='icon-In-Progress inactive-icon'></div>
+                        <div title='{{envStatus}}' *ngIf='status_val > 4' class='icon-icon-inactive inactive-icon'></div>
 
                 </h1>
 
@@ -42,16 +42,15 @@
 
         </div> -->
        
-    <div *ngIf='status_val > 2' class="alert alert-warning" role="alert">
+    <div *ngIf='status_val > 4' class="alert alert-warning" role="alert">
             Looks like this environment is inactive, related assets might not be available during this time.
     </div>
-        
     <div class="tab-component">
         <tabs [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
         
         
         <section class="page-content" *ngIf="selectedTab == 0">
-            <env-overview-section #envoverview (envLoad)='EnvLoad($event)' (onload)='env($event)' [service]="service"></env-overview-section>
+            <env-overview-section #envoverview (envLoad)='EnvLoad($event)' (onload)='env($event)' (frndload)='frndload($event)' [service]="service"></env-overview-section>
         </section>
 
         
