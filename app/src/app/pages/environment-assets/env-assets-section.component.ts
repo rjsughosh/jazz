@@ -11,6 +11,14 @@ import {DataCacheService , AuthenticationService } from '../../core/services/ind
   styleUrls: ['./env-assets-section.component.scss']
 })
 export class EnvAssetsSectionComponent implements OnInit {
+
+	 state: string = 'default';
+   showPaginationtable: boolean = true;
+   currentlyActive: number = 1;
+	 totalPageNum: number = 12;
+	 offset:number = 0;
+	 offsetval:number = 0;
+
 	private env:any;
 	private http:any;
 	private subscription:any;
@@ -49,6 +57,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 	lastCommitted: any;
 	islink:boolean = false;
 	count: any = [];
+	relativeUrl:string = '/jazz/assets/search';
 
 
   @Input() service: any = {};
@@ -64,17 +73,24 @@ export class EnvAssetsSectionComponent implements OnInit {
     this.http = request;
    }
 
+
 	
 	callServiceEnvAssets() {
+		this.isLoading = true;
     if ( this.subscription ) {
       this.subscription.unsubscribe();
 		}
 				var payload = {
 				service: this.service.name,
 				domain: this.service.domain,
-				environment: this.env
+				environment: this.env,
+				
 				};
-				this.subscription = this.http.post('https://cloud-api.corporate.t-mobile.com/api/jazz/assets/search', payload).subscribe(
+				var a = String(this.offsetval);
+				if(this.offsetval > 0){
+					payload["offset"] = a;
+				}
+				this.subscription = this.http.post(this.relativeUrl, payload).subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
 
       // this.subscription = this.http.get('/jazz/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
@@ -289,7 +305,49 @@ export class EnvAssetsSectionComponent implements OnInit {
 		// this.callServiceEnvAssets() 
 		// let cachedData = this.cache.get(this.model.username);
 	}
-	
+	limitValue : number = 10;
+  prevActivePage: number = 0;
+
+	paginatePage(currentlyActivePage){
+    if(this.prevActivePage != currentlyActivePage){
+      this.prevActivePage = currentlyActivePage;
+      // this.pageSelected = currentlyActivePage;
+      this.assetsList = [];
+     
+
+			this.offsetval = (this.limitValue * (currentlyActivePage-1));
+		
+			this.callServiceEnvAssets();
+
+    }
+    else{
+      // console.log("page not changed");
+    }
+	}
+
+
+	paginatePageInTable(clickedPage){
+		switch(clickedPage){
+		 case 'prev':
+		   if(this.currentlyActive > 1)
+			 this.currentlyActive = this.currentlyActive - 1;
+		   break;
+		 case 'next':
+		   if(this.currentlyActive < this.totalPageNum)
+			 this.currentlyActive = this.currentlyActive + 1;
+		   break;
+		 case '1':
+		   this.currentlyActive = 1;
+		   break;
+		 default:
+		   if(clickedPage > 1){
+			 this.currentlyActive = clickedPage;
+		   }
+		}
+		// paginatePage()
+		this.paginatePage(this.currentlyActive);
+ }
+
 	ngOnChanges(x:any) {
     this.route.params.subscribe(
       params => {
