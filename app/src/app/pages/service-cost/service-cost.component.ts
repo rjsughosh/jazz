@@ -207,8 +207,8 @@ export class ServiceCostComponent implements OnInit {
 		// this.isGraphLoading=true;
 		
 	onEnvSelected(envt){
-		this.FilterTags.notify('filter-Env',env);
-		this.costGraphData.environment=env;
+		this.FilterTags.notify('filter-Env',envt);
+		this.costGraphData.environment=envt;
 		var env_list=this.cache.get('envList');
 		var fName = env_list.friendly_name;
 		var index = fName.indexOf(envt);
