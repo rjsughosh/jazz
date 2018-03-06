@@ -613,8 +613,6 @@ export class EnvDeploymentsSectionComponent implements OnInit {
     });
     var queryParamKey = 'limit=';
 
-    // var queryParamValue = this.limitValue;
-    // this.relativeUrl += queryParamKey + queryParamValue + '&';
     this.addQueryParam('limit=', this.limitValue, false);
 
     this.callServiceEnvdeployment();
