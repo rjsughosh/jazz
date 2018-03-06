@@ -536,11 +536,11 @@
 
 
 <div *ngIf="!ErrEnv" class="service-overview-wrap relative row" >
-    <div class='eachBranch col-md-2 col-sm-5' *ngFor='let item of Environments' (click)='stageClicked(item.logical_id)'>
+    <div class='eachBranch col-md-2 col-sm-5' *ngFor='let item of Environments'  (click)='stageClicked(item.logical_id)'>
         <div *ngIf='noSecEnv' class='empty-row'>No Environments Available</div>
         
         <div *ngIf='!noSecEnv'>   
-            <div class='stage-title2 stageDisp'>{{item.logical_id}} <span class='icon-icon-rightArrow right-arow'></span> </div>
+            <div class='stage-title2 stageDisp'>{{item.friendly_name || item.logical_id}} <span class='icon-icon-rightArrow right-arow'></span> </div>
             <div class="overview-value"  [ngSwitch]="item.status">
                     <span class='icon-icon-good' title='{{item.status}}' *ngSwitchCase='"deployment completed"'>
                             

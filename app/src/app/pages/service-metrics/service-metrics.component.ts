@@ -210,9 +210,8 @@ export class ServiceMetricsComponent implements OnInit {
   fetchEnvlist(){
     var env_list=this.cache.get('envList');
     if(env_list != undefined){
-      this.envList=env_list;
+      this.envList=env_list.friendly_name;
     }
-
   }
   ngOnInit() {
     this.cache.set("codequality",false)
@@ -773,10 +772,18 @@ export class ServiceMetricsComponent implements OnInit {
     this.callMetricsFunc();
   }
 
-  onEnvSelected(environment){
-    this.FilterTags.notify('filter-Env',environment);
-    this.envSelected = environment;
-    this.payload.environment = environment;
+  // onEnvSelected(environment){
+    
+  onEnvSelected(envt){
+    this.FilterTags.notify('filter-Env',envt);
+    this.envSelected = envt;
+    this.payload.environment = envt;
+    var env_list=this.cache.get('envList');
+		var fName = env_list.friendly_name;
+		var index = fName.indexOf(envt);
+		var env = env_list.env[index];
+    this.envSelected = envt;
+    this.payload.environment = env;
     this.callMetricsFunc();
     this.envUpdate = true;
     // this.methodSelected = this.methodList[0];

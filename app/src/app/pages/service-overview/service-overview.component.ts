@@ -108,6 +108,7 @@ export class ServiceOverviewComponent implements OnInit {
 	errorResponse:any={};
     errorUser:any;
     envList=['prod','stg'];
+    friendlist=['prod','stg'];
 	errorChecked:boolean=true;
 	errorInclude:any="";
     json:any={};
@@ -116,6 +117,8 @@ export class ServiceOverviewComponent implements OnInit {
     reqJson:any={};
     createloader:boolean=true;
     showbar:boolean=false;
+    friendly_name:any;
+    list:any={};
 
 
     constructor(
@@ -683,9 +686,19 @@ export class ServiceOverviewComponent implements OnInit {
                 else
                 {    this.Environments[j]=this.environ_arr[i];   
                     // console.log('--->><<---',this.environ_arr[i]);
-                    this.envList[k++]=this.environ_arr[i].logical_id;             
+                    this.envList[k]=this.environ_arr[i].logical_id; 
+                    if(this.environ_arr[i].friendly_name != undefined){
+                        this.friendlist[k++]=this.environ_arr[i].friendly_name;   
+                    }else{
+                        this.friendlist[k++]=this.environ_arr[i].logical_id;
+                    }
+                            
                     j++;
                     
+                }
+                this.list = {
+                    env : this.envList,
+                    friendly_name : this.friendlist
                 }
             }
 
@@ -698,8 +711,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.stgEnv.logical_id==undefined){
             this.noStg=true;
         }
-
-        this.cache.set('envList',this.envList);
+                this.cache.set('envList',this.list);
        
 
     }
@@ -739,6 +751,15 @@ export class ServiceOverviewComponent implements OnInit {
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(            
         this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
             response => {
+                // console.log("response == ", response);
+                // var spoon = response.data.environment;
+                // console.log("spoon == ", spoon[1])
+                // for(var i=0 ; i < spoon.length ; i++ ){
+                //    if(spoon[i].friendly_name != undefined){
+                //        this.friendly_name = spoon[i].friendly_name;
+                //    }
+                // }
+                // this.friendly_name = response
                 this.isenvLoading=false;
                   this.environ_arr=response.data.environment;
                   if(this.environ_arr!=undefined)    
@@ -889,7 +910,9 @@ export class ServiceOverviewComponent implements OnInit {
 							this.feedbackMsg = this.toastmessage.errorMessage(error, 'jiraTicket');
 						  }
 					);
-				}
+                }
+                frndload(event){
+                }
                 ngOnInit() {
                     this.service.accounts="tmo-dev-ops, tmo-int";
                     this.service.regions="us-west-2, us-east";

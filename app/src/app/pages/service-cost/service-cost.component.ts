@@ -201,12 +201,18 @@ export class ServiceCostComponent implements OnInit {
 		// console.log(newStartDateString);
 		return resetdate;
 	  }
-	onEnvSelected(env){
+	// onEnvSelected(env){
 		// console.log('onEnvSelected',env);
 		// this.isDataNotAvailable=false;
 		// this.isGraphLoading=true;
+		
+	onEnvSelected(envt){
 		this.FilterTags.notify('filter-Env',env);
 		this.costGraphData.environment=env;
+		var env_list=this.cache.get('envList');
+		var fName = env_list.friendly_name;
+		var index = fName.indexOf(envt);
+		var env = env_list.env[index];
 		this.env = env;
 		this.collectInputData(env);
 	}
@@ -687,7 +693,6 @@ export class ServiceCostComponent implements OnInit {
 				graphDataInterval.push(filteredData);
 				break;
 		}
-
 		this.collectInputData(graphDataInterval);
   }
   public goToAbout(hash){
@@ -700,7 +705,7 @@ export class ServiceCostComponent implements OnInit {
 	fetchEnvlist(){
 		var env_list=this.cache.get('envList');
 		if(env_list != undefined){
-		  this.environmentList=env_list;
+		  this.environmentList=env_list.friendly_name;
 		}
 	
 	  }
