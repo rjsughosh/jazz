@@ -188,7 +188,7 @@ export class ServicesListComponent implements OnInit {
     this.subscription = this.http.get(this.relativeUrl).subscribe(
       response => {
 
-        console.log("service call response",response);
+        // console.log("service call response",response);
           let services = response.data.services;
           if(!services){
             services = response.data;
@@ -626,7 +626,7 @@ onFilterCancel(event) {
     }
   }
   onServiceSearch(searchbar){
-    this.searchbar = searchbar;
+    this.searchbar = searchbar; 
     if(searchbar.keyCode == 13){
     this.FilterTags.notifyServices("search",searchbar.searchString);
     
