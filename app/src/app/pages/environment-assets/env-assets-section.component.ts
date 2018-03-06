@@ -84,11 +84,11 @@ export class EnvAssetsSectionComponent implements OnInit {
 				service: this.service.name,
 				domain: this.service.domain,
 				environment: this.env,
+				limit:10,
 				
 				};
-				var a = String(this.offsetval);
 				if(this.offsetval > 0){
-					payload["offset"] = a;
+					payload["offset"] = this.offsetval;
 				}
 				this.subscription = this.http.post(this.relativeUrl, payload).subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
@@ -105,9 +105,11 @@ export class EnvAssetsSectionComponent implements OnInit {
 					{
 					this.envResponseEmpty = false;
 					this.isLoading = false;
+						
 					this.envResponseTrue = true;
 					this.length = response.data.length;
 					this.assetsList = response.data;
+					
 					for(var i=0; i < this.length ; i++){
 						this.type[i] = response.data[i].type;
 						

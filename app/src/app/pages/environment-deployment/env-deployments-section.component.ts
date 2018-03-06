@@ -22,7 +22,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
   envObj:any;
   disableRetry:boolean = false;
   paginationSelected: Boolean = true;
-	totalPagesTable: number = 1;
+	totalPagesTable: number = 7;
 	prevActivePage: number = 1;
   limitValue : number = 10;
 	offsetValue:number = 0;
@@ -285,6 +285,17 @@ export class EnvDeploymentsSectionComponent implements OnInit {
           this.envResponseEmpty = true;
           this.isLoading = false;
 					}else{
+
+
+          var pageCount = response.data.count;
+          
+          if(pageCount){
+            this.totalPagesTable = Math.ceil(pageCount/this.limitValue);
+          }
+          else{
+            this.totalPagesTable = 0;
+          }
+
           this.envResponseEmpty = false;
           this.isLoading = false;
           this.envResponseTrue = true;
@@ -457,7 +468,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
       }
 
   ngOnInit() {
-
+    
   }
 
   paginatePage(currentlyActivePage){
@@ -600,6 +611,12 @@ export class EnvDeploymentsSectionComponent implements OnInit {
 				this.env = "prod";
       }
     });
+    var queryParamKey = 'limit=';
+
+    // var queryParamValue = this.limitValue;
+    // this.relativeUrl += queryParamKey + queryParamValue + '&';
+    this.addQueryParam('limit=', this.limitValue, false);
+
     this.callServiceEnvdeployment();
     this.sort = new Sort(this.deployments);
     // console.log("sort : " ,  this.sort )

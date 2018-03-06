@@ -10,6 +10,14 @@
     padding: 1rem 1.6rem 0.35rem 1.6rem;
     min-height: 50vh;
 }
+.oneasset{
+    min-height: 0;
+    .asset-wrp{
+        border-bottom: none;
+
+    }
+
+}
 .table-pagination{
     position: relative;
 }

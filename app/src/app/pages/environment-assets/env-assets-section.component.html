@@ -36,7 +36,7 @@
 </div>
 
 <div class='full-page'>
-    <div class="page-section-assets relative">
+    <div class="page-section-assets relative" [class.oneasset]='length == 1'>
         <!-- <div class="mask-wrap"></div> -->
         <div *ngIf="envResponseTrue">
         <div class="asset-wrp" *ngFor="let asset of assetsList ; let i = index">
@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <div *ngIf='!envResponseError && !envResponseEmpty' class="table-pagination assets-pag" [class.show]="showPaginationtable && state !='loading' && state != 'empty' && state != 'error' && totalPageNum > 0">
+    <div *ngIf='!envResponseError && !envResponseEmpty && length > 10'  class="table-pagination assets-pag" [class.show]="showPaginationtable && state !='loading' && state != 'empty' && state != 'error' && totalPageNum > 0">
         <nav class="pagination-nav" aria-label="Page navigation table">
             <ul class="pagination justify-content-center">
                 <li class="page-item" (click)="paginatePageInTable('prev')" [class.disable]="currentlyActive == 1">
