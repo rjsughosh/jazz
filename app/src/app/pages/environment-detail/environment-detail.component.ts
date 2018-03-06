@@ -79,7 +79,7 @@ EnvLoad(event){
   this.environment_obj=event.environment[0];
   this.envStatus=this.environment_obj.status.replace("_"," ")
   this.status_val = parseInt(status[this.environment_obj.status]); 
-    if(this.status_val < 2)
+    if((this.status_val < 2) || (this.status_val == 4) )
     {
       this.disablingApiButton=false;
     }
@@ -280,8 +280,8 @@ export enum status {
   "deployment_completed"=0,
   "active",
   "deployment_started" ,
-  "deployment_failed",
   "pending_approval",
+  "deployment_failed",
   "inactive",
   "deletion_started",
   "deletion_failed",

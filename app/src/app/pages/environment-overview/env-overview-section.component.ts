@@ -247,9 +247,14 @@ popup(state){
             this.cache.set('currentEnv',this.environmnt);
             this.status_val = parseInt(status[this.environmnt.status]);
 
-            if(this.status_val <= 3) this.envstatus='Active';
-            else if(this.status_val == 4 )this.envstatus='In Progress';
-            else if(this.status_val > 4 )this.envstatus='Inactive';
+            var deployment_status = ["deployment_completed","active","deployment_started" ,"pending_approval","deployment_failed","inactive","deletion_started","deletion_failed","archived"]
+
+            this.envstatus = deployment_status[this.status_val].replace("_"," ");
+
+            // if(this.status_val <= 3) this.envstatus='Active';
+            // else if(this.status_val == 4 )this.envstatus='In Progress';
+            // else if(this.status_val > 4 )this.envstatus='Inactive';
+            
 
            
             
@@ -639,8 +644,8 @@ export enum status {
   "deployment_completed"=0,
   "active",
   "deployment_started" ,
-  "deployment_failed",
   "pending_approval",
+  "deployment_failed",
   "inactive",
   "deletion_started",
   "deletion_failed",
