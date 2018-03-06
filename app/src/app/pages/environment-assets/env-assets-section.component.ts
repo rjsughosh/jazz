@@ -97,17 +97,35 @@ export class EnvAssetsSectionComponent implements OnInit {
         (response) => {
 					// console.log("response  = ",response);
 					// console.log("response data  = ",response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
 					if((response.data == undefined) || (response.data.length == 0)){
             this.envResponseEmpty = true;
 						this.isLoading = false;
 					}
 					else
 					{
+						var pageCount = response.data.length;
+
+          
+          if(pageCount){
+            this.totalPageNum = Math.ceil(pageCount/this.limitValue);
+          }
+          else{
+            this.totalPageNum = 0;
+          }
 					this.envResponseEmpty = false;
 					this.isLoading = false;
 						
 					this.envResponseTrue = true;
+					// console.log('response.data ',response.data );
 					this.length = response.data.length;
+					// console.log('length ',this.length );
+
+					// this.length = 21;
 					this.assetsList = response.data;
 					
 					for(var i=0; i < this.length ; i++){
@@ -139,8 +157,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 						}else{
 						this.arn[i] = response.data[i].provider_id;
 						}
-	 
-	
+
 						this.lastCommitted = response.data[i].timestamp;
 						var commit = this.lastCommitted.substring(0,19);
 						var lastCommit = new Date(commit);						
