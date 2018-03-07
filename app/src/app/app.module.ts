@@ -11,7 +11,7 @@ import {ChartsModule} from 'ng2-charts';
 
 import {ToasterModule} from 'angular2-toaster';
 import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
-
+import {environment} from '../environments/environment';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthenticationService, RouteGuard, DataCacheService, RequestService, MessageService} from './core/services';
 import {SharedService} from './SharedService.service';
@@ -30,7 +30,14 @@ import {routes} from './app.route';
 // import {FilterTagsServicesComponent} from './secondary-components/filter-tags-services/filter-tags-services.component';
 // import {EnvironmentModule} from './environment-module/environment.module';
 // import {ServiceModule} from './service-module/service.module';
-
+let environmentval = environment.envName;
+let loadedModule;
+if(environmentval == "oss"){
+    loadedModule = require('./pages/login/login.component')
+    
+}else{
+  loadedModule = require('./pages/login/login.component')
+}
 
 
 @NgModule({
