@@ -1,4 +1,6 @@
 @import './../../../main-styles';
+@import './../../pages/service-cost/service-cost.component.scss';
+
 .page-section {
     padding: 1rem 1.6rem;
 }
@@ -221,5 +223,7 @@
     }
 }
 
-
+.filtr-wrap{
+    min-height: 32px;
+}
 

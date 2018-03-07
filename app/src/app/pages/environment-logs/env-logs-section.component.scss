@@ -1,5 +1,6 @@
-// Filter css changed according to design
 @import './../../../main-styles';
+@import './../service-logs/service-logs.component.scss';
+
 .section-top {
     padding: 10px 5px;
 }
@@ -14,52 +15,55 @@
     
 }
 
-.filter-wrp {
-    display: flex;
-    align-items: center;
-}
-.filter-wrap{
-    display: none;
-    position: absolute;
-    top: 0;
-    background-color: #ddd;
-    width: 250px;
-    right: 0;
-    padding: 1rem;
-    font-size: 1rem;
-    color:#000;
-    border-radius: 5px;
-    z-index: $zindex-dropdown;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-    .filter-inner-wrap{
-        padding:1rem;
-    }
-    .icon-icon-filter-unselected{
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-    .eachFilter{
-        border-bottom: 1px solid #aaa;
-        padding-bottom: 2rem;
-        font-weight: 500;
-        div{
-            line-height: 2.5rem;
-        }
-        &:last-child{
-            border-bottom:none;
-            padding:0;
-        }
-    }
-    .dropdown-3 
-    /deep/ .dropdown{
-        margin-bottom: 1rem;
-    }
-}
-.filter-wrap.show{
-    height: auto;
-}
+
+
+// .filter-wrp {
+//     display: flex;
+//     align-items: center;
+// }
+// .filter-wrap{
+//     display: none;
+//     position: absolute;
+//     top: 0;
+//     background-color: #ddd;
+//     width: 250px;
+//     right: 0;
+//     padding: 1rem;
+//     font-size: 1rem;
+//     color:#000;
+//     border-radius: 5px;
+//     z-index: $zindex-dropdown;
+//     transition: all 0.3s ease-in-out;
+//     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+//     .filter-inner-wrap{
+//         padding:1rem;
+//     }
+//     .icon-icon-filter-unselected{
+//         position: absolute;
+//         right: 0;
+//         top: 0;
+//     }
+//     .eachFilter{
+//         border-bottom: 1px solid #aaa;
+//         padding-bottom: 2rem;
+//         font-weight: 500;
+//         div{
+//             line-height: 2.5rem;
+//             font-weight: bold;
+//         }
+//         &:last-child{
+//             border-bottom:none;
+//             padding:0;
+//         }
+//     }
+//     .dropdown-3 
+//     /deep/ .dropdown{
+//         margin-bottom: 1rem;
+//     }
+// }
+// .filter-wrap.show{
+//     height: auto;
+// }
 
 .refresh{
     margin-left:0.5rem;
@@ -78,7 +82,7 @@
     dropdown {
         display: block;
         margin-left: auto;
-        float: right;
+        // float: right;
         height: 32px;
         width:17rem;
         .dropdown-btn{
@@ -140,9 +144,7 @@
 .filter-icon {
     margin-left: 25px;
 }
-.in-logs{
-    margin-top:5rem;
-}
+
 search-box {
     display: inline-block;
     margin-left: auto;

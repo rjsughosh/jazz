@@ -346,7 +346,7 @@ search-box {
     position: absolute;
     top: 0;
     background-color: #ddd;
-    width: 250px;
+    // width: 250px;
     right: 0;
     padding: 1rem 1rem 0.5rem 1rem;
     font-size: 1rem;
@@ -355,9 +355,16 @@ search-box {
     z-index: $zindex-dropdown;
     transition: all 0.3s ease-in-out;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    /deep/.dropdown-btn{
+        width:156px;
+    }
+    /deep/.dropdown-menu{
+        width:155px;
+    }
     
     .filter-inner-wrap{
         padding:1rem 1rem 0 1rem;
+        
         
     }
     .icon-icon-filter-unselected{
@@ -390,7 +397,9 @@ search-box {
 .view-label{
    color:#666;
 }
-
+.first-child{
+    margin-right: 2rem;
+}
 .hori-line{
     display: inline-block;
     height: 2px;
@@ -602,6 +611,9 @@ search-box {
     top: 2px!important;
 }
 
-
+.filter-inner{
+    display: flex;
+    
+}
 
 

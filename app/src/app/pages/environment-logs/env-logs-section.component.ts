@@ -190,7 +190,20 @@ export class EnvLogsSectionComponent implements OnInit {
 
 
 
-
+	accList=['tmodevops','tmonpe'];
+	regList=['us-west-2', 'us-east-1'];
+	  accSelected:string = 'tmodevops';
+	regSelected:string = 'us-west-2';
+	
+	 onaccSelected(event){
+	//   this.FilterTags.notify('filter-Account',event);
+	  this.accSelected=event;
+  
+	 }
+	  onregSelected(event){
+	//   this.FilterTags.notify('filter-Region',event);
+	  this.regSelected=event;
+	 }
 	expandall() {
 		for (var i = 0; i < this.logs.length; i++) {
 			var rowData = this.logs[i];

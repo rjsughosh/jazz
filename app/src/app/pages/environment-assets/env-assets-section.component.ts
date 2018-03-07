@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input , ViewChild } from '@angular/core';
 import { RequestService } from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import {DataCacheService , AuthenticationService } from '../../core/services/index';
+import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
+
 
 @Component({
   selector: 'env-assets-section',
@@ -14,8 +16,16 @@ export class EnvAssetsSectionComponent implements OnInit {
 	private env:any;
 	private http:any;
 	private subscription:any;
+	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
+
 	assetsList: any = [];
+	
+	accList=['tmodevops','tmonpe'];
+  regList=['us-west-2', 'us-east-1'];
+	accSelected:string = 'tmodevops';
+  regSelected:string = 'us-west-2';
 	type: any = [];
+	
 	length: any;
 	// image: any = [];
 	slNumber: any = [];
@@ -64,7 +74,39 @@ export class EnvAssetsSectionComponent implements OnInit {
     this.http = request;
    }
 
+ 
+  
+   onaccSelected(event){
+    this.FilterTags.notify('filter-Account',event);
+    this.accSelected=event;
+
+   }
+	onregSelected(event){
+    this.FilterTags.notify('filter-Region',event);
+    this.regSelected=event;
+   }
+
+   cancelFilter(event){
+	console.log('event',event);
+	switch(event){
+		
+		case 'account':{this.onaccSelected('Acc 1');
 	
+		break;
+		}
+		case 'region':{this.onregSelected('reg 1');
+	
+		break;
+		}
+		
+			
+		case 'all':{ 
+		this.onaccSelected('Acc 1');   
+		this.onregSelected('reg 1');
+		  break;
+		}
+	  }
+}
 	callServiceEnvAssets() {
     if ( this.subscription ) {
       this.subscription.unsubscribe();

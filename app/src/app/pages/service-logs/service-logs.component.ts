@@ -205,8 +205,27 @@ export class ServiceLogsComponent implements OnInit {
 
 	// environmentList = ['dev', 'stg', 'prod'];
 	envList = ['prod','stg'];
+	
+	accList=['tmodevops','tmonpe'];
+  regList=['us-west-2', 'us-east-1'];
+	accSelected:string = 'tmodevops';
+  regSelected:string = 'us-west-2';
+  
+   onaccSelected(event){
+    this.FilterTags.notify('filter-Account',event);
+    this.accSelected=event;
+
+   }
+	onregSelected(event){
+    this.FilterTags.notify('filter-Region',event);
+    this.regSelected=event;
+   }
+ 
+	// onEnvSelected(env){
 
 	onEnvSelected(envt){
+		this.FilterTags.notify('filter-Env',envt);
+
 		// this.logsSearch.environment = env;
 		if(env === 'prod'){
 			env='prod'
@@ -261,7 +280,7 @@ export class ServiceLogsComponent implements OnInit {
 		this.resetPayload();
 	}
 	cancelFilter(event){
-
+		console.log('event',event);
 		switch(event){
 			case 'time-range':{this.onRangeListSelected('Day'); 
 			  break;
@@ -270,9 +289,23 @@ export class ServiceLogsComponent implements OnInit {
 			
 			  break;
 			}
-			
-			case 'all':{ this.onRangeListSelected('Day');    
-			
+			case 'account':{this.onaccSelected('Acc 1');
+		
+			break;
+			}
+			case 'region':{this.onregSelected('reg 1');
+		
+			break;
+			}
+			case 'env':{this.onEnvSelected('prod');
+		
+			break;
+			}
+				
+			case 'all':{ this.onRangeListSelected('Day'); 
+			this.onaccSelected('Acc 1');   
+			this.onregSelected('reg 1');
+			this.onEnvSelected('prod');
 			  break;
 			}
 		  }

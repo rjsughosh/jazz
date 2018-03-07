@@ -1,10 +1,13 @@
-import { Component, OnInit, ElementRef ,EventEmitter, Output, Inject, Input} from '@angular/core';
+import { Component, OnInit, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { ToasterService} from 'angular2-toaster';
 import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
 import { RequestService, MessageService , AuthenticationService } from '../../core/services/index';
 import { Router } from '@angular/router';
 import {DataCacheService } from '../../core/services/index';
+import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
+import {IonRangeSliderModule} from "ng2-ion-range-slider"
+
 
 
 @Component({
@@ -16,6 +19,9 @@ import {DataCacheService } from '../../core/services/index';
 export class ServiceCostComponent implements OnInit {
 
 	@Input() service: any = {};
+	@ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
+
+	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
 	 private subscription:any;
 
 	cost = {
@@ -42,6 +48,20 @@ export class ServiceCostComponent implements OnInit {
 		}
 	}
 
+	methodList:Array<string>  = ['POST','GET','DELETE','PUT'];
+	methodSelected:string = this.methodList[0];
+	timerangeSelected:any;
+	selectedTimeRange:any = 'Day';
+	statisticSelected:any = 'Average';
+	rangeList: Array<string> = ['Day', 'Week', 'Month', 'Year'];
+	periodList: Array<string> = ['15 Minutes','1 Hour','6 Hours','1 Day','7 Days','30 Days'];
+  
+	statisticList: Array<string> = ['Average', 'Sum', 'Maximum','Minimum'];
+
+	slider:any;
+	sliderFrom = 1;
+	sliderPercentFrom;
+	sliderMax:number = 7;
 	today = new Date();
 	yesterday = this.today.setDate(this.today.getDate()-1);
 
@@ -68,6 +88,7 @@ export class ServiceCostComponent implements OnInit {
 	filterSelected: boolean = false;
 	private http:any;
 	serviceCostList=[];
+
 	env =this.environmentList[0];
 	interval:any;
 	start_date:any;
@@ -115,12 +136,79 @@ export class ServiceCostComponent implements OnInit {
 		this.http = request;
 		this.toastmessage=messageservice;
 	}
+
+	accList=['tmodevops','tmonpe'];
+  regList=['us-west-2', 'us-east-1'];
+	accSelected:string = 'tmodevops';
+  regSelected:string = 'us-west-2';
+  
+   onaccSelected(event){
+    this.FilterTags.notify('filter-Account',event);
+    this.accSelected=event;
+
+   }
+	onregSelected(event){
+    this.FilterTags.notify('filter-Region',event);
+    this.regSelected=event;
+   }
 	ngOnChanges(x:any){
 		this.fetchEnvlist();
 
 	}
+	getStartDate(filter, sliderFrom){
+		var todayDate = new Date();
+		switch(filter){
+		  case "Day":
+			this.sliderMax = 7;
+			var resetdate = new Date(todayDate.setDate(todayDate.getDate()-sliderFrom)).toISOString();
+			break;
+		  case "Week":
+			this.sliderMax = 5;
+			var  resetdate = new Date(todayDate.setDate(todayDate.getDate()-(sliderFrom*7))).toISOString();
+			break;
+		  case "Month":
+			this.sliderMax = 12;
+			var currentMonth = new Date ((todayDate).toISOString()).getMonth();
+			var currentDay = new Date((todayDate).toISOString()).getDate();
+			currentMonth++;
+			var currentYear = new Date ((todayDate).toISOString()).getFullYear();
+			var diffMonth = currentMonth - sliderFrom;
+			// console.log(todayDate,todayDate.getMonth());
+			if(diffMonth>0){
+			  var resetYear = currentYear;
+			  var resetMonth = diffMonth;
+			} else if(diffMonth===0){
+			  var resetYear = currentYear-1;
+			  var resetMonth = 12;
+			} else if(diffMonth<0){
+			  var resetYear = currentYear - 1;
+			  // var resetMonth = sliderFrom - currentMonth;
+			  var resetMonth = 12 + diffMonth;
+			}
+			if(currentDay==31)currentDay=30;
+			var newStartDateString = resetYear + "-" + resetMonth + "-" + currentDay + " 00:00:00"
+			var newStartDate = new Date(newStartDateString);
+			var resetdate = newStartDate.toISOString();
+			break;
+		  case "Year":
+			this.sliderMax = 6;
+			var currentYear = new Date((todayDate).toISOString()).getFullYear();
+			var newStartDateString = (currentYear - sliderFrom).toString() + "/" + "1" + "/" + "1";
+			var newStartDate = new Date(newStartDateString);
+			var resetdate = newStartDate.toISOString();
+			break;
+		}
+		// console.log(newStartDateString);
+		return resetdate;
+	  }
+	// onEnvSelected(env){
+		// console.log('onEnvSelected',env);
+		// this.isDataNotAvailable=false;
+		// this.isGraphLoading=true;
+		
 	onEnvSelected(envt){
-
+		this.FilterTags.notify('filter-Env',envt);
+		this.costGraphData.environment=envt;
 		var env_list=this.cache.get('envList');
 		var fName = env_list.friendly_name;
 		var index = fName.indexOf(envt);
@@ -132,7 +220,107 @@ export class ServiceCostComponent implements OnInit {
 	onRowClicked(row){
 		// console.log('onRowClicked',row);
 	}
+	cancelFilter(event){
+		switch(event){
+		  case 'time-range':{this.onRangeListSelected('Day'); 
+			break;
+		  }
+		  case 'time-range-slider':{this.getRangefunc(1);
+		  
+			break;
+		  }
+		  case 'period':{ this.onPeriodSelected('15 Minutes');
+			break;
+		  }
+		  case 'statistic':{      this.onStatisticSelected('Average');
+		  
+			break;
+		  }
+		  case 'account':{      this.onaccSelected('Acc 1');
+		  
+			break;
+		  }
+		  case 'region':{      this.onregSelected('reg 1');
+		  
+			break;
+		  }
+		  case 'env':{      this.onEnvSelected('prod');
+		  
+			break;
+		  }
+		  case 'method':{      this.onMethodListSelected('POST');
+		  
+			break;
+		  }
+		  case 'all':{ this.onRangeListSelected('Day');    
+		  this.onPeriodSelected('15 Minutes');
+		  this.onStatisticSelected('Average');
+		  this.onaccSelected('Acc 1');
+		  this.onregSelected('reg 1');
+		  this.onEnvSelected('prod');
+		  this.onMethodListSelected('POST');
+			break;
+		  }
+		}
+	   
+		// this.getRange(1);
+	
+	  }
+	  onMethodListSelected(method){
 
+		this.FilterTags.notify('filter-Method',method);
+	
+		this.methodSelected=method;
+	  }
+	
+	  onPeriodSelected(period){
+		// console.log('#$@#$$@#@#$#$',this.FilterTags);;
+		this.FilterTags.notify('filter-Period',period);
+		// this.cache.set('filter-Period',period);
+	  }
+	
+	  sendDefaults(range){
+		switch(range){
+			case 'Day':{     this.FilterTags.notify('filter-Period','15 Minutes')
+				break;
+			}
+			case 'Week':{   this.FilterTags.notify('filter-Period','1 Hour')
+				break;
+			}
+			case 'Month':{ 
+			   this.FilterTags.notify('filter-Period','6 Hours')
+				break;
+			}
+			case 'Year':{   this.FilterTags.notify('filter-Period','7 Days')
+				break;
+			}
+		}
+	} 
+	  onRangeListSelected(range){
+		this.FilterTags.notify('filter-TimeRange',range);
+		this.sendDefaults(range);
+		
+		// this.cache.set('filter-TimeRange',range);
+		this.timerangeSelected=range;
+		this.sliderFrom =1;
+		this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);
+		
+		var resetdate = this.getStartDate(range, this.sliderFrom);
+		this.selectedTimeRange = range;
+	  }
+	
+	  
+	
+	  onStatisticSelected(statistics){
+		// this.payload.statistics = statistics;
+		this.FilterTags.notify('filter-Statistic',statistics);
+		
+		// this.cache.set('filter-Statistic',statistics);
+		this.statisticSelected = statistics;
+	  }
+	
+	 
+	
   onServiceSearch(searchString){
   	// console.log("onServiceSearch", searchString)
     this.costTableData.body  = this.filter.searchFunction("any" , searchString);
@@ -149,7 +337,39 @@ export class ServiceCostComponent implements OnInit {
 		tst.classList.remove('toaster-anim');
 	  }, 7000);
   }
-
+  getRangefunc(e){
+    
+    this.FilterTags.notify('filter-TimeRangeSlider',e);
+    
+    this.sliderFrom=1;
+    this.sliderPercentFrom=1;
+    var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
+    
+    
+  }
+  getRange(e){
+    this.FilterTags.notify('filter-TimeRangeSlider',e.from);
+    
+    this.sliderFrom =e.from;
+    this.sliderPercentFrom=e.from_percent;
+    var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
+	
+}
+  onClickFilter(){
+    
+    //ng2-ion-range-slider
+      
+    var slider = document.getElementById('sliderElement');
+    
+    slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
+    slider.getElementsByClassName('irs-bar-edge')[0].setAttribute('style',' background: none;background-color: #ed008c;border-bottom-left-radius:10px;border-top-left-radius:10px;width: 10px;');
+    slider.getElementsByClassName('irs-single')[0].setAttribute('style',' background: none;background-color: #ed008c;left:'+this.sliderPercentFrom+'%');
+    slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
+    slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
+    slider.getElementsByClassName('irs-max')[0].setAttribute('style','background: none');
+    slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
+    
+  }
   processServiceList(serviceCost,serviceInput){
 	if (serviceCost === undefined || serviceCost.cost.length === undefined) {
 		return [];

@@ -16,11 +16,11 @@
         <div class="page-title-wrap hide-for-mobile">
             <div class="servie-details-container">
                 <h1 class="page-hdr bold-title relative">{{friendly_name}}
-                        <div title='{{envStatus}}' *ngIf='status_val < 4' class='icon-icon-good inactive-icon succ'>
+                        <div title='{{envStatus}}' *ngIf='status_val < 3' class='icon-icon-good inactive-icon succ'>
                             <span class="path1"></span><span class="path2"></span>
                         </div>
-                        <div title='{{envStatus}} '*ngIf='status_val == 4' class='icon-In-Progress inactive-icon'></div>
-                        <div title='{{envStatus}}' *ngIf='status_val > 4' class='icon-icon-inactive inactive-icon'></div>
+                        <div title='{{envStatus}} '*ngIf='status_val == 3' class='icon-In-Progress inactive-icon'></div>
+                        <div title='{{envStatus}}' *ngIf='status_val > 3' class='icon-icon-inactive inactive-icon'></div>
 
                 </h1>
 
@@ -50,7 +50,7 @@
         
         
         <section class="page-content" *ngIf="selectedTab == 0">
-            <env-overview-section #envoverview (envLoad)='EnvLoad($event)' (onload)='env($event)' (frndload)='frndload($event)' [service]="service"></env-overview-section>
+            <env-overview-section #envoverview (open_sidebar)='sidebar($event)' (frndload)='frndload($event)' (envLoad)='EnvLoad($event)' (onload)='env($event)' [service]="service"></env-overview-section>
         </section>
 
         
@@ -71,6 +71,11 @@
         </section>
 </div>
 </div>
+</section>
+<section class='overview-sidebar'>
+    <sidebar [show]="close" (onClose)="closeSidebar($event)">
+            <overview-sidebar (onClose)="closeSidebar($event)"></overview-sidebar>
+    </sidebar>
 </section>
 <footer></footer>
 

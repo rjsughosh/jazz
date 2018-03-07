@@ -163,6 +163,68 @@
                 </div>
     
             </section>
+            <section class="each-step-wrap accounts" *ngIf="typeOfService == 'function'">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                        <p class="step-title">Accounts</p>
+                        <p class="step-details">To which accounts should we deploy your service to?</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8">
+                        <section class="col-lg-12  pad-left0">
+                            <div class="input-field-container">
+                                <div class="selected-approvers">
+                                    <ul (click)='focusInputAccount($event)'>
+                                        <li *ngFor="let selected of selectedAccount;let i=index"   >
+                                            {{selected}}
+                                            <span (click)="removeAccount(i, selected)" class="icon-icon-close"></span>
+                                        </li>
+                                        <input (keydown)="keypressAccount($event)"  (blur)='blurAccount()' autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
+
+                                    </ul>
+                                </div>
+                                <div [hidden]="!showAccountList" class="approvers-list-wrap">
+                                    <div class="approvers-list typeShow open">
+                                        <div class="approvers-dets" *ngFor="let account of accounts| myfilter:AccountInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                            <div  (click)="selectAccount(account);$event.stopPropagation();" index="{k}" [attr.account]='account'>{{account}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+            <section class="each-step-wrap regions" *ngIf="typeOfService == 'function'">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                        <p class="step-title">Regions</p>
+                        <p class="step-details">To which regions should we deploy your service to?</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8">
+                        <section class="col-lg-12  pad-left0">
+                            <div class="input-field-container">
+                                <div class="selected-approvers">
+                                    <ul (click)='focusInputRegion($event)'>
+                                        <li *ngFor="let selected of selectedRegion;let i=index"   >
+                                            {{selected}}
+                                            <span (click)="removeRegion(i, selected)" class="icon-icon-close"></span>
+                                        </li>
+                                        <input (keydown)="keypressRegion($event)" (blur)='blurRegion()' autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
+
+                                    </ul>
+                                </div>
+                                <div [hidden]="!showRegionList" class="approvers-list-wrap">
+                                    <div class="approvers-list typeShow open">
+                                        <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let m = index;" (focus)=" m==focusindexR " [ngClass]="{pinkfocus : m==focusindexR }" [ngStyle]="scrollList" >
+                                            <div  (click)="selectRegion(region);$event.stopPropagation();" index="{m}" [attr.region]='region'>{{region}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
             <section class="each-step-wrap service-description">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
@@ -283,7 +345,7 @@
                                                         </div>
                                                         <div [hidden]="!showApproversList2" class="approvers-list-wrap">
                                                             <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversList2 | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocus : i==focusindex }" [ngStyle]="scrollList" >
+                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversList2 | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
                                                                     <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
                                                                 </div>
                                                             </div>
@@ -588,13 +650,13 @@
                                             {{selected.displayName}} ({{selected.userId}})
                                             <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypress($event)"  autocomplete="off" id="approverName" name="approverName" type="text" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
+                                        <input (keydown)="keypress($event)"   autocomplete="off" id="approverName" name="approverName" type="text" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
 
                                     </ul>
                                 </div>
                                 <div [hidden]="!showApproversList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocus : j==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
                                         </div>
                                     </div>

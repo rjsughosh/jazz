@@ -79,7 +79,7 @@ EnvLoad(event){
   this.environment_obj=event.environment[0];
   this.envStatus=this.environment_obj.status.replace("_"," ")
   this.status_val = parseInt(status[this.environment_obj.status]); 
-    if(this.status_val < 2)
+    if((this.status_val < 2) || (this.status_val == 4) )
     {
       this.disablingApiButton=false;
     }
@@ -175,7 +175,8 @@ frndload(event){
           }
           this.subscription = this.http.get('/jazz/services/'+id).subscribe(
             response => {
-              
+              this.service.accounts="tmo-dev-ops, tmo-int";
+                    this.service.regions="us-west-2, us-east";
                   // let service = response.data.data;
                   this.service=response.data.data;
                   if(this.service.type === "website")
@@ -186,6 +187,7 @@ frndload(event){
                   this.onDataFetched(this.service);
                   
                   this.envoverview.notify(this.service);
+                  
               },
               err => {
                   this.isLoadingService = false;
@@ -234,6 +236,15 @@ frndload(event){
             tst.classList.remove('toaster-anim');
           }, 3000);
   }
+  sidebar(event){
+    this.closeSidebar(true);
+  }
+  public closeSidebar (eve){
+    this.closed = true;
+    this.close = eve;
+}
+close:boolean=false;
+closed:boolean = false;
 
   ngOnInit()
   {
@@ -269,8 +280,8 @@ export enum status {
   "deployment_completed"=0,
   "active",
   "deployment_started" ,
-  "deployment_failed",
   "pending_approval",
+  "deployment_failed",
   "inactive",
   "deletion_started",
   "deletion_failed",
