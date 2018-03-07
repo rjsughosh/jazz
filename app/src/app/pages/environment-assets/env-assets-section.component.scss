@@ -9,6 +9,10 @@
 .page-section-assets {
     padding: 1rem 1.6rem 0.35rem 1.6rem;
     min-height: 50vh;
+@import './../../pages/service-cost/service-cost.component.scss';
+
+.page-section {
+    padding: 1rem 1.6rem;
 }
 .oneasset{
     min-height: 0;
@@ -233,7 +237,7 @@
         border: 1px solid #ed008c !important;
     }
 }
-
+}
 .includeError{
     display: inline-block;
     float: left;
@@ -305,4 +309,7 @@ a.page-link.icon.right {
 }
 
 
+.filtr-wrap{
+    min-height: 32px;
+}
 

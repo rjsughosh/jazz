@@ -28,16 +28,43 @@ export class FilterTagsComponent implements OnInit {
         {
             key:'Statistics',
             value:'Average'
-        }];
+        },
+        {
+            key:'Account',
+            value:'Acc 1'
+        },
+        {
+            key:'Region',
+            value:'reg 1'
+        },
+        {
+            key:'Environment',
+            value:'prod'
+        },
+        {
+            key:'Method',
+            value:'POST'
+        }
+    ];
         filter_TimeRange:any;
         filter_TimeRangeSlider:any;
         filter_Period:any;
         filter_Statistic:any;
+        filter_Account:any;
+        filter_Region:any;
+        filter_Env:any;
+        filter_Method:any;
+        
 
         filter_TimeRange_default:any = 'Day';
         filter_TimeRangeSlider_default:any= 1;
         filter_Period_default:any = '15 Minutes';
         filter_Statistic_default:any= 'Average';
+        filter_Account_default:any='Acc 1';
+        filter_Region_default:any='reg 1';
+        filter_Env_default:any='prod';
+        filter_Method_default:any='POST';
+
 
     constructor(private cache: DataCacheService){
 
@@ -61,6 +88,7 @@ export class FilterTagsComponent implements OnInit {
     }
 
     notify(key,value){
+        console.log('key='+key,'  value='+value)
         this.setDefaults();
         
         
@@ -79,6 +107,22 @@ export class FilterTagsComponent implements OnInit {
             }
             case 'filter-Statistic':{
                 this.filterTags[3].value=this.filter_TimeRange=value;                
+                break;
+            }
+            case 'filter-Account':{
+                this.filterTags[4].value=this.filter_Account=value;                
+                break;
+            }
+            case 'filter-Region':{
+                this.filterTags[5].value=this.filter_Region=value;                
+                break;
+            }
+            case 'filter-Env':{
+                this.filterTags[6].value=this.filter_Env=value;                
+                break;
+            }
+            case 'filter-Method':{
+                this.filterTags[7].value=this.filter_Method=value;                
                 break;
             }
         }
@@ -101,7 +145,6 @@ export class FilterTagsComponent implements OnInit {
         }
     }
     notifyServices(key){
-        alert('notified bitches'+key);
     }
     clearall(value){
         this.OnCancel.emit(value);

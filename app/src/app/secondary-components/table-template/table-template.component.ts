@@ -21,7 +21,7 @@ export class TableTemplateComponent implements OnInit {
 
   @Input() state: string = 'default';
   @Input() showPaginationtable: boolean = true;
-  @Input() currentlyActive: number = 1;
+  @Input() currentlyActive: number = 1; 
   @Input() totalPageNum: number = 12;
   @Output() onFilter:EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() refreshData:EventEmitter<boolean> = new EventEmitter<boolean>();

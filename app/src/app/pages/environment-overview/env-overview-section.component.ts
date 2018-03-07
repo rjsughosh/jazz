@@ -2,19 +2,27 @@ import { Component, OnInit, Input , OnChanges, SimpleChange, Output, EventEmitte
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService} from 'angular2-toaster';
-
-import {DataCacheService , AuthenticationService } from '../../core/services/index';
+import { DataService } from "../data-service/data.service";
+import { DataCacheService , AuthenticationService } from '../../core/services/index';
 
 @Component({
   selector: 'env-overview-section',
   templateUrl: './env-overview-section.component.html',
-  providers: [RequestService,MessageService],
+  providers: [RequestService,MessageService,DataService],
   styleUrls: ['./env-overview-section.component.scss']
 })
 export class EnvOverviewSectionComponent implements OnInit {
   
   @Output() onload:EventEmitter<any> = new EventEmitter<any>();
   @Output() envLoad:EventEmitter<any> = new EventEmitter<any>();
+  @Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
+
+  accounts=['tmodevops','tmonpe'];
+  regions=['us-west-2', 'us-east-1'];
+  selectedRegions=['us-west-2'];
+  selectedAccounts=['tmodevops'];
+
+  @Output() frndload:EventEmitter<any> = new EventEmitter<any>();
   
   
   private http:any;
@@ -52,6 +60,9 @@ export class EnvOverviewSectionComponent implements OnInit {
   json:any={};
   desc_temp:any;
   toastmessage:any;
+  copyLink:string="Copy Link";
+ 
+  message:string="lalalala"
   
   
   private subscription:any;
@@ -59,7 +70,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   @Input() service: any = {};
   
   temp_description:string;
-put_payload:any = {};
+  put_payload:any = {};
   services = {
     description:'NA', 
     lastcommit:'NA',
@@ -68,7 +79,26 @@ put_payload:any = {};
     repository:'NA',
     runtime:'NA',
     tags: 'NA'
+  };
+  endpList = [{
+    name:'tmo-dev-ops',
+    arn:'arn:aws:lambda:us-east-1:1:192837283062537',
+    type:'Account',
+  },
+  {
+    name:'us-east-2',
+    arn:'arn:test2',
+    type:'region',
+  },{
+    name:'tmo-dev-ops2',
+    arn:'arn:test3',
+    type:'Account',
+  },{
+    name:'tmo-dev-ops3',
+    arn:'arn:test4',
+    type:'region',
   }
+];
   constructor(
     private request:RequestService,
     private route: ActivatedRoute,
@@ -76,7 +106,7 @@ put_payload:any = {};
     private cache: DataCacheService,
     private toasterService: ToasterService,
     private messageservice:MessageService,
-
+    private data: DataService,
 
     private authenticationservice: AuthenticationService ,
   ) {
@@ -89,7 +119,17 @@ put_payload:any = {};
   disableEditBtn(){
 
   }
-
+popup(state){
+  if(state == 'enter'){
+    var ele = document.getElementById('popup-endp');
+  ele.classList.add('endp-visible');
+  }
+  if(state == 'leave'){
+    var ele = document.getElementById('popup-endp');
+    ele.classList.remove('endp-visible');
+  }
+  
+}
   onEditClick(){
     
     this.tempFriendlyName=this.friendlyName;
@@ -120,7 +160,6 @@ put_payload:any = {};
                     errMsgBody=JSON.parse(error._body);
                   }
                   catch(e){
-                    // console.log('Error in parsing Json')
                   }
                   let errorMessage='';
                   if(errMsgBody!=undefined)
@@ -160,10 +199,7 @@ put_payload:any = {};
     var lastCommit = new Date(commit);
     var now = new Date(); 
     var todays = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-            // var todays = new Date().UTC();
-            // console.log('last commit from serv---',this.lastCommitted)
-            // console.log('today-->',todays);
-            // console.log('lastcommit in date',lastCommit);
+            
             this.dayscommit = true;
             this.commitDiff = Math.floor(Math.abs((todays.getTime() - lastCommit.getTime())/(1000*60*60*24)));
             if( this.commitDiff == 0 ){
@@ -186,7 +222,10 @@ put_payload:any = {};
             }
 
   }
+  openSidebar(){
+    this.open_sidebar.emit(true);
 
+}
    callServiceEnv() {
     if ( this.subscription ) {
       this.subscription.unsubscribe();
@@ -195,7 +234,6 @@ put_payload:any = {};
     this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
         (response) => {
-          // console.log('response :', response);
 
           if(response.data == (undefined || '')){
            
@@ -209,9 +247,14 @@ put_payload:any = {};
             this.cache.set('currentEnv',this.environmnt);
             this.status_val = parseInt(status[this.environmnt.status]);
 
-            if(this.status_val <= 1) this.envstatus='Active';
-            else if(this.status_val == 2 )this.envstatus='In Progress';
-            else if(this.status_val > 2 )this.envstatus='Inactive';
+            var deployment_status = ["deployment_completed","active","deployment_started" ,"pending_approval","deployment_failed","inactive","deletion_started","deletion_failed","archived"]
+
+            this.envstatus = deployment_status[this.status_val].replace("_"," ");
+
+            // if(this.status_val <= 3) this.envstatus='Active';
+            // else if(this.status_val == 4 )this.envstatus='In Progress';
+            // else if(this.status_val > 4 )this.envstatus='Inactive';
+            
 
            
             
@@ -219,6 +262,8 @@ put_payload:any = {};
             this.friendlyName = envResponse.friendly_name
             this.branchname = envResponse.physical_id;
             this.lastCommitted = envResponse.last_updated;
+            this.frndload.emit(this.friendlyName);
+
 
             this.formatLastCommit();               
             
@@ -254,7 +299,6 @@ put_payload:any = {};
       var now = new Date();
       this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
       + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-      // console.log(this.errorTime);
       }
   
     feedbackRes:boolean=false;
@@ -342,7 +386,6 @@ put_payload:any = {};
 					this.http.post('/platform/jira-issues', payload).subscribe(
 						response => {
 							this.buttonText='DONE';
-							// console.log(response);
 							this.isLoading = false;
 							this.model.userFeedback='';
 							var respData = response.data;
@@ -386,7 +429,7 @@ put_payload:any = {};
   ngOnInit() {  
     if(this.service.domain != undefined)  
       this.callServiceEnv();
-   
+      this.data.currentMessage.subscribe(message => this.message = message)
   }
 
   ngOnChanges(x:any) {
@@ -415,6 +458,185 @@ public goToAbout(hash){
 	this.router.navigateByUrl('landing');
 	this.cache.set('scroll_flag',true);
 	this.cache.set('scroll_id',hash);
+}
+
+focusindex:number;
+    showRegionList:boolean;
+    showAccountList:boolean;
+    selectedAccount=[];
+    selectedRegion=[];
+    scrollList:any;
+    onRegionChange(newVal) {
+        if (!newVal) {
+          this.showRegionList = false;
+        } else {
+          this.showRegionList = true;
+        }
+      }
+      onAccountChange(newVal) {
+        if (!newVal) {
+          this.showAccountList = false;
+        } else {
+          this.showAccountList = true;
+        }
+      }
+    
+      focusInputAccount(event) {
+        document.getElementById('AccountInput').focus();
+      }
+    
+      focusInputRegion(event) {
+        document.getElementById('regionInput').focus();
+      }
+
+      selRegion:any;
+      selApprover:any;
+selectAccount(account){
+  this.selApprover = account;
+    let thisclass: any = this;
+    this.showAccountList = false;
+    thisclass.AccountInput = '';
+    this.selectedAccount.push(account);
+    this.put_payload.accounts=this.selectedAccount;
+    this.friendlyChanged=true;
+    for (var i = 0; i < this.accounts.length; i++) {
+      if (this.accounts[i] === account) {
+        this.accounts.splice(i, 1);
+        return;
+      }
+    }
+}
+removeAccount(index, account) {
+  this.accounts.push(account);
+  this.selectedAccount.splice(index, 1);
+  this.friendlyChanged=true;
+}
+selectRegion(region){
+  this.selApprover = region;
+    let thisclass: any = this;
+    this.showRegionList = false;
+    thisclass.regionInput = '';
+    this.selectedRegion.push(region);
+    this.put_payload.regions=this.selectedRegion;
+    this.friendlyChanged=true;
+
+    for (var i = 0; i < this.regions.length; i++) {
+      if (this.regions[i] === region) {
+        this.regions.splice(i, 1);
+        return;
+      }
+    }
+}
+copy_link(id)
+    {  
+        var element = null; // Should be <textarea> or <input>
+        element = document.getElementById(id);
+        element.select();
+        try {
+            document.execCommand("copy");
+            this.copyLink = "Link Copied";
+            setTimeout(() => {
+              this.copyLink = "Copy Link";
+            }, 3000);
+            
+        }
+        finally {
+            document.getSelection().removeAllRanges;
+        }
+    }
+removeRegion(index, region) {
+  this.regions.push(region);
+  this.selectedRegion.splice(index, 1);
+  this.friendlyChanged=true;
+}
+keypressAccount(hash){
+  if (hash.key == 'ArrowDown') {
+    this.focusindex++;
+    if (this.focusindex > 0) {
+      var pinkElements = document.getElementsByClassName("pinkfocus")[0];
+      if (pinkElements == undefined) {
+        this.focusindex = 0;
+      }
+      // var id=pinkElements.children[0].innerHTML;
+    }
+    // console.log(this.focusindex);
+    if (this.focusindex > 2) {
+      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+
+    }
+  }
+  else if (hash.key == 'ArrowUp') {
+    if (this.focusindex > -1) {
+      this.focusindex--;
+
+      if (this.focusindex > 1) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+      }
+    }
+    if (this.focusindex == -1) {
+      this.focusindex = -1;
+
+
+    }
+  }
+  else if (hash.key == 'Enter' && this.focusindex > -1) {
+    event.preventDefault();
+    var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+
+    var approverObj = pinkElement[0].attributes[2].value;
+    
+    this.selectAccount(approverObj);
+
+    this.focusindex = -1;
+
+  } else {
+    this.focusindex = -1;
+  }
+}
+
+keypressRegion(hash){
+    if (hash.key == 'ArrowDown') {
+        this.focusindex++;
+        if (this.focusindex > 0) {
+          var pinkElements = document.getElementsByClassName("pinkfocus2")[0];
+          if (pinkElements == undefined) {
+            this.focusindex = 0;
+          }
+          // var id=pinkElements.children[0].innerHTML;
+        }
+        // console.log(this.focusindex);
+        if (this.focusindex > 2) {
+          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+    
+        }
+      }
+      else if (hash.key == 'ArrowUp') {
+        if (this.focusindex > -1) {
+          this.focusindex--;
+    
+          if (this.focusindex > 1) {
+            this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+          }
+        }
+        if (this.focusindex == -1) {
+          this.focusindex = -1;
+    
+    
+        }
+      }
+      else if (hash.key == 'Enter' && this.focusindex > -1) {
+        event.preventDefault();
+        var pinkElement = document.getElementsByClassName("pinkfocus2")[0].children;
+    
+        var approverObj = pinkElement[0].attributes[2].value;
+        
+        this.selectRegion(approverObj);
+    
+        this.focusindex = -1;
+    
+      } else {
+        this.focusindex = -1;
+      }
 }
 }
 

@@ -12,7 +12,7 @@ import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter
 
 // import { LineGraphComponent }  from './../../secondary-components/line-graph/line-graph.component';
 
-@Component({
+@Component({ 
   selector: 'service-metrics',
   templateUrl: './service-metrics.component.html',
   providers: [RequestService, MessageService],
@@ -68,6 +68,7 @@ export class ServiceMetricsComponent implements OnInit {
   // environmentList: Array<string> = ['prod', 'stg', 'dev'];
   envSelected:string = this.envList[0];
   // serviceTypeList : Array<string> = ['api', 'lambda', 'website'];
+
   statisticList: Array<string> = ['Average', 'Sum', 'Maximum','Minimum'];//sampleCount is been removed
   statisticSelected:string= this.statisticList[0];
   viewBox = "0 0 300 150";
@@ -92,6 +93,7 @@ export class ServiceMetricsComponent implements OnInit {
   root: any;
   pathList:Array<string>=[];
   methodList:Array<string>  = ['POST','GET','DELETE','PUT'];
+
   // typeList:Array<string>  = ["apigateway","lambda","s3"];
   // typeSelected: string=this.typeList[0];
   pathSelected:string = '';
@@ -138,7 +140,21 @@ export class ServiceMetricsComponent implements OnInit {
     this.http = request;
     this.toastmessage= messageservice;
   }
+ 
+	accList=['tmodevops','tmonpe'];
+  regList=['us-west-2', 'us-east-1'];
+	accSelected:string = 'tmodevops';
+  regSelected:string = 'us-west-2';
+  
+   onaccSelected(event){
+    this.FilterTags.notify('filter-Account',event);
+    this.accSelected=event;
 
+   }
+	onregSelected(event){
+    this.FilterTags.notify('filter-Region',event);
+    this.regSelected=event;
+   }
   notifyByEnv(envList){
     if(envList.length>2){
       this.envList=envList;
@@ -194,9 +210,8 @@ export class ServiceMetricsComponent implements OnInit {
   fetchEnvlist(){
     var env_list=this.cache.get('envList');
     if(env_list != undefined){
-      this.envList=env_list;
+      this.envList=env_list.friendly_name;
     }
-
   }
   ngOnInit() {
     this.cache.set("codequality",false)
@@ -674,9 +689,29 @@ export class ServiceMetricsComponent implements OnInit {
       
         break;
       }
+      case 'account':{      this.onaccSelected('Acc 1');
+      
+        break;
+      }
+      case 'region':{      this.onregSelected('reg 1');
+      
+        break;
+      }
+      case 'env':{      this.onEnvSelected('prod');
+      
+        break;
+      }
+      case 'method':{      this.onMethodListSelected('POST');
+      
+        break;
+      }
       case 'all':{ this.onRangeListSelected('Day');    
       this.onPeriodSelected('15 Minutes');
       this.onStatisticSelected('Average');
+      this.onaccSelected('Acc 1');
+      this.onregSelected('reg 1');
+      this.onEnvSelected('prod');
+      this.onMethodListSelected('POST');
         break;
       }
     }
@@ -689,6 +724,9 @@ export class ServiceMetricsComponent implements OnInit {
     this.displayMetrics();
   }
   onMethodListSelected(method){
+
+    this.FilterTags.notify('filter-Method',method);
+
     this.methodSelected=method;
     this.displayMetrics();
   }
@@ -734,9 +772,18 @@ export class ServiceMetricsComponent implements OnInit {
     this.callMetricsFunc();
   }
 
-  onEnvSelected(environment){
-    this.envSelected = environment;
-    this.payload.environment = environment;
+  // onEnvSelected(environment){
+    
+  onEnvSelected(envt){
+    this.FilterTags.notify('filter-Env',envt);
+    this.envSelected = envt;
+    this.payload.environment = envt;
+    var env_list=this.cache.get('envList');
+		var fName = env_list.friendly_name;
+		var index = fName.indexOf(envt);
+		var env = env_list.env[index];
+    this.envSelected = envt;
+    this.payload.environment = env;
     this.callMetricsFunc();
     this.envUpdate = true;
     // this.methodSelected = this.methodList[0];

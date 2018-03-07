@@ -8,6 +8,8 @@ import { SharedService } from "../../SharedService.service";
 import { Http, Headers, Response } from '@angular/http';
 import { Output, EventEmitter } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
+import { DataService } from "../data-service/data.service";
+
 
 // import {}
 import { EnvDeploymentsSectionComponent} from './../environment-deployment/env-deployments-section.component';
@@ -17,6 +19,7 @@ import { EnvDeploymentsSectionComponent} from './../environment-deployment/env-d
 @Component({
   selector: 'environment-detail',
   templateUrl: './environment-detail.component.html',
+  providers: [RequestService,MessageService,DataService],
   styleUrls: ['./environment-detail.component.scss']
 })
 export class EnvironmentDetailComponent implements OnInit {
@@ -26,6 +29,7 @@ export class EnvironmentDetailComponent implements OnInit {
 breadcrumbs = [];
   selectedTab = 0; 
   service: any= {};
+  friendly_name: any;
   status_val:number;
   serviceId:any;
   envStatus:string;
@@ -44,6 +48,7 @@ breadcrumbs = [];
   disablingFunctionButton:boolean=true;
   disablingApiButton:boolean=true;
   nonClickable:boolean=false;
+  message:string;
 
 
   private sub: any;
@@ -55,7 +60,8 @@ breadcrumbs = [];
     private route: ActivatedRoute,
     private http: RequestService,
     private cache: DataCacheService,
-    private router: Router
+    private router: Router,
+    private data: DataService
   ) {}
 
   // Disabled other tabs
@@ -73,7 +79,7 @@ EnvLoad(event){
   this.environment_obj=event.environment[0];
   this.envStatus=this.environment_obj.status.replace("_"," ")
   this.status_val = parseInt(status[this.environment_obj.status]); 
-    if(this.status_val < 2)
+    if((this.status_val < 2) || (this.status_val == 4) )
     {
       this.disablingApiButton=false;
     }
@@ -86,6 +92,21 @@ env(event){
     if(this.endpoint_env != undefined ){
         // this.disablingWebsiteButton=false;
     }
+}
+
+frndload(event){
+  if(event != undefined){
+    this.friendly_name = event;
+  }
+  this.breadcrumbs = [{
+    'name' : this.service['name'],
+    'link' : 'services/' + this.service['id']
+},
+{
+  // 'name' : this.envSelected,
+  'name' : this.friendly_name,
+  'link' : ''
+}]
 }
   processService(service){
       if (service === undefined) {
@@ -109,14 +130,17 @@ env(event){
 
     if (service !== undefined && service !== "") {
       this.service = this.processService(service);
-     
+      if( this.friendly_name != undefined ){
+        // this.envSelected = this.friendly_name; 
+      }
       // Update breadcrumbs
       this.breadcrumbs = [{
           'name' : this.service['name'],
           'link' : 'services/' + this.service['id']
       },
       {
-        'name' : this.envSelected,
+        // 'name' : this.envSelected,
+        'name' : this.friendly_name,
         'link' : ''
       }]
       this.isLoadingService = false;
@@ -138,8 +162,6 @@ env(event){
       this.isLoadingService = true;
 
       let cachedData = this.cache.get(id);
-      // service=cachedData;
-      // console.log('service sending from env detail', this.service);
 
       if (cachedData) {
           this.onDataFetched(cachedData)
@@ -153,7 +175,8 @@ env(event){
           }
           this.subscription = this.http.get('/jazz/services/'+id).subscribe(
             response => {
-              
+              this.service.accounts="tmo-dev-ops, tmo-int";
+                    this.service.regions="us-west-2, us-east";
                   // let service = response.data.data;
                   this.service=response.data.data;
                   if(this.service.type === "website")
@@ -164,6 +187,7 @@ env(event){
                   this.onDataFetched(this.service);
                   
                   this.envoverview.notify(this.service);
+                  
               },
               err => {
                   this.isLoadingService = false;
@@ -212,6 +236,15 @@ env(event){
             tst.classList.remove('toaster-anim');
           }, 3000);
   }
+  sidebar(event){
+    this.closeSidebar(true);
+  }
+  public closeSidebar (eve){
+    this.closed = true;
+    this.close = eve;
+}
+close:boolean=false;
+closed:boolean = false;
 
   ngOnInit()
   {
@@ -221,7 +254,7 @@ env(event){
         this.serviceId=id;
         this.envSelected = params['env'];
         this.fetchService(id);
-
+        this.friendly_name = this.envSelected;
           
       });
       this. breadcrumbs = [
@@ -230,7 +263,8 @@ env(event){
           'link' : 'services/' + this.service['id']
         },
         {
-          'name' : this.envSelected,
+          // 'name' : this.envSelected,
+          'name' : this.friendly_name,
           'link' : ''
         }
       ];

@@ -60,6 +60,9 @@ export class CreateServiceComponent implements OnInit {
   channelNameError: boolean = false;
   showLoader: boolean = false;
   showApproversList2: boolean = false;
+  showRegionList:boolean = false;
+  showAccountList:boolean = false;
+
   isLoading: boolean = false;
   slackChannelLoader: boolean = false;
   serviceAvailable: boolean = false;
@@ -119,8 +122,12 @@ export class CreateServiceComponent implements OnInit {
   service: any = "";
   domain: any = "";
   reqId: any = "";
-
-
+  accounts=['tmodevops','tmonpe'];
+  regions=['us-west-2', 'us-east-1'];
+  selectedRegion=[];
+  regionInput:string;
+  selectedAccount=[];
+  AccountInput:string;
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
@@ -345,7 +352,29 @@ export class CreateServiceComponent implements OnInit {
     this.serviceAvailable = false;
     this.serviceNotAvailable = false;
   }
+ 
+  onRegionChange(newVal) {
+    if (!newVal) {
+      this.showRegionList = false;
+    } else {
+      this.showRegionList = true;
+    }
+  }
+  onAccountChange(newVal) {
+    if (!newVal) {
+      this.showAccountList = false;
+    } else {
+      this.showAccountList = true;
+    }
+  }
 
+  focusInputAccount(event) {
+    document.getElementById('AccountInput').focus();
+  }
+
+  focusInputRegion(event) {
+    document.getElementById('regionInput').focus();
+  }
 
   // function to create service
   public createService() {
@@ -445,6 +474,12 @@ export class CreateServiceComponent implements OnInit {
     }
     if (this.typeOfService == 'api' && this.ttlSelected) {
     }
+
+    if (this.typeOfService == 'function') {
+      payload["accounts"]=this.selectedAccount;
+      payload["regions"]=this.selectedRegion;
+    }
+    
 
     this.isLoading = true;
     this.http.post('/jazz/create-serverless-service', payload)
@@ -546,9 +581,158 @@ export class CreateServiceComponent implements OnInit {
     }
   }
 
+selRegion:any;
+selectAccount(account){
+
+  this.selApprover = account;
+    let thisclass: any = this;
+    this.showAccountList = false;
+    thisclass.AccountInput = '';
+    this.selectedAccount.push(account);
+    for (var i = 0; i < this.accounts.length; i++) {
+      if (this.accounts[i] === account) {
+        this.accounts.splice(i, 1);
+        return;
+      }
+    }
+}
+removeAccount(index, account) {
+  this.accounts.push(account);
+  this.selectedAccount.splice(index, 1);
+}
+selectRegion(region){
+  this.selApprover = region;
+    let thisclass: any = this;
+    this.showRegionList = false;
+    thisclass.regionInput = '';
+    this.selectedRegion.push(region);
+    for (var i = 0; i < this.regions.length; i++) {
+      if (this.regions[i] === region) {
+        this.regions.splice(i, 1);
+        return;
+      }
+    }
+}
+removeRegion(index, region) {
+  this.regions.push(region);
+  this.selectedRegion.splice(index, 1);
+}
+keypressAccount(hash){
+  if (hash.key == 'ArrowDown') {
+    this.focusindex++;
+    if (this.focusindex > 0) {
+      var pinkElements = document.getElementsByClassName("pinkfocus")[0];
+      if (pinkElements == undefined) {
+        this.focusindex = 0;
+      }
+      // var id=pinkElements.children[0].innerHTML;
+    }
+    // console.log(this.focusindex);
+    if (this.focusindex > 2) {
+      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+
+    }
+  }
+  else if (hash.key == 'ArrowUp') {
+    if (this.focusindex > -1) {
+      this.focusindex--;
+
+      if (this.focusindex > 1) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+      }
+    }
+    if (this.focusindex == -1) {
+      this.focusindex = -1;
+
+
+    }
+  }
+  else if (hash.key == 'Enter' && this.focusindex > -1) {
+    if(this.accounts.length == 0){
+      this.showApproversList = false;
+    }
+    event.preventDefault();
+    var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+
+    var approverObj = pinkElement[0].attributes[2].value;
+    
+    this.selectAccount(approverObj);
+
+    this.showApproversList = false;
+    this.approverName2 = '';
+    this.focusindex = -1;
+
+  } else {
+    this.focusindex = -1;
+  }
+}
+focusindexR:number=-1;
+keypressRegion(hash){
+  if (hash.key == 'ArrowDown') {
+    this.focusindexR++;
+    if (this.focusindexR > 0) {
+      var pinkElements = document.getElementsByClassName("pinkfocus")[1];
+      if (pinkElements == undefined) {
+        this.focusindexR = 0;
+      }
+      // var id=pinkElements.children[0].innerHTML;
+    }
+    // console.log(this.focusindexR);
+    if (this.focusindexR > 2) {
+      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindexR - 2) * 2.9) + 'rem' };
+
+    }
+  }
+  else if (hash.key == 'ArrowUp') {
+    if (this.focusindexR > -1) {
+      this.focusindexR--;
+
+      if (this.focusindexR > 1) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindexR - 2) * 2.9) + 'rem' };
+      }
+    }
+    if (this.focusindexR == -1) {
+      this.focusindexR = -1;
+
+
+    }
+  }
+  else if (hash.key == 'Enter' && this.focusindexR > -1) {
+    event.preventDefault();
+    var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+
+    var approverObj = pinkElement[0].attributes[2].value;
+    
+    this.selectRegion(approverObj);
+
+    this.showApproversList = false;
+    this.approverName2 = '';
+    this.focusindexR = -1;
+
+  } else {
+    this.focusindexR = -1;
+  }
+}
+
+blurAccount(){
+  this.AccountInput='';
+  setTimeout(() => {
+    this.showAccountList=false;
+  }, 500);
+  
+}
+
+blurRegion(){
+  this.regionInput='';
+  setTimeout(() => {
+    this.showRegionList=false;
+  }, 500);
+  
+}
 
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
+    
     this.selApprover = approver;
     let thisclass: any = this;
     this.showApproversList = false;
@@ -735,7 +919,7 @@ export class CreateServiceComponent implements OnInit {
     if (hash.key == 'ArrowDown') {
       this.focusindex++;
       if (this.focusindex > 0) {
-        var pinkElements = document.getElementsByClassName("pinkfocus")[1];
+        var pinkElements = document.getElementsByClassName("pinkfocus")[3];
         // if(pinkElements == undefined)
         //   {
         //     this.focusindex = 0;
@@ -764,11 +948,19 @@ export class CreateServiceComponent implements OnInit {
     else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
       var pinkElement;
-      var pinkElementS = document.getElementsByClassName("pinkfocus")[1];
-      if (pinkElementS == undefined)
-        pinkElement = document.getElementsByClassName('pinkfocus')[0].children;
-      else
-        pinkElement = pinkElementS.children;
+      pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
+      // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
+      // if (pinkElementS == undefined)
+      // {
+      //   var p_ele = document.getElementsByClassName('pinkfocus')[2];
+      //   if(p_ele == undefined){
+          
+      //   }
+      //   else pinkElement = document.getElementsByClassName('pinkfocus')[2].children;
+        
+      // }  
+      // else
+      //   pinkElement = pinkElementS.children;
       var approverObj = {
         displayName: pinkElement[0].attributes[2].value,
         givenName: pinkElement[0].attributes[3].value,
@@ -786,7 +978,8 @@ export class CreateServiceComponent implements OnInit {
     }
   }
 
-  keypress2(hash) {
+  keypress2(hash)
+  {
     if (hash.key == 'ArrowDown') {
       this.focusindex++;
       if (this.focusindex > 0) {
@@ -818,7 +1011,21 @@ export class CreateServiceComponent implements OnInit {
     }
     else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
-      var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
+      // console.log('hii--',document.getElementsByClassName("pinkfocus"))
+      var pinkElement;
+      pinkElement = document.getElementsByClassName("pinkfocuslack")[0].children;
+      // var pink_ele = document.getElementsByClassName("pinkfocus")[2];
+      // if(pink_ele != undefined){
+      //   alert('not undefined')
+      //   pinkElement = document.getElementsByClassName("pinkfocus")[2].children;
+        
+      // }
+      // else{
+      //   alert('undefined')
+       
+        
+
+      // }
 
       var approverObj = {
         displayName: pinkElement[0].attributes[2].value,
@@ -906,8 +1113,14 @@ export class CreateServiceComponent implements OnInit {
     }
     this.selectedApprovers2 = [];
   }
+  selectAccountsRegions(){    
+
+    this.selectAccount('tmodevops');
+    this.selectRegion('us-west-2');
+  }
 
   ngOnInit() {
+    this.selectAccountsRegions();
     // this.gitRepo = "https://";
     this.getData();
 

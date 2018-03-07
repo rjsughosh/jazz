@@ -626,7 +626,7 @@ onFilterCancel(event) {
     }
   }
   onServiceSearch(searchbar){
-    this.searchbar = searchbar;
+    this.searchbar = searchbar; 
     if(searchbar.keyCode == 13){
     this.FilterTags.notifyServices("search",searchbar.searchString);
     

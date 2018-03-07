@@ -115,7 +115,7 @@
        </div>
     </div>
     <div class="column retry">
-       <btn-tmobile-primary [disablePrimaryBtn]="disableRetry" newclass='retry-btn' text='RETRY' (click)="rebuild($event,id[i])"></btn-tmobile-primary>
+       <btn-tmobile-primary [disablePrimaryBtn]='status[i] != "successful" && status[i] != "failed"' newclass='retry-btn' text='RETRY' (click)="rebuild($event,id[i])"></btn-tmobile-primary>
     </div>
  </div>
  </table-template>

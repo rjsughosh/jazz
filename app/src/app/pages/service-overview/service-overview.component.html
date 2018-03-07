@@ -160,52 +160,90 @@
   <!-- [style.borders]="edit_save=='SAVE'? 'none':'1px solid'"  -->
 </div><br>
 <div class='show-service-overview' [class.hide]="disp_show">
-<ul class="section-left col-md-6 col-sm-12">
-    <li>
-        <div class="det-label">Status</div>
-        <div class="det-value">{{service.status}}</div>
-     </li>
-    <li>
-        <div class="det-label">Description</div>
-        <div class="det-value wrap" [ngClass]="{PlaceHolder:description_empty}">{{service.description || 'Give me the details for your service'}}</div>
-    </li>
-    <li>
-        <div class="det-label decap">Approver(s)</div>
-        <div class="det-value" [ngClass]="{PlaceHolder:approvers_empty}"  >{{service.approvers || 'NA'}}</div>
-    </li>
+    <ul class="section-left col-md-6 col-sm-12">
+        <li>
+            <div class="det-label">Status</div>
+            <div class="det-value">{{service.status}}</div>
+        </li>
+        <li>
+            <div class="det-label">Description</div>
+            <div class="det-value wrap" [ngClass]="{PlaceHolder:description_empty}">{{service.description || 'Give me the details for your service'}}</div>
+        </li>
+        <li>
+            <div class="det-label decap">Approver(s)</div>
+            <div class="det-value" [ngClass]="{PlaceHolder:approvers_empty}"  >{{service.approvers || 'NA'}}</div>
+        </li>
 
-    <li>
-        <div class="det-label">Namespace</div>
-        <div class="det-value">{{service.domain || 'Link a domain'}}</div>
-    </li>
-    <li>
-        <div class="det-label">Service Type</div>
-        <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
+        <li>
+            <div class="det-label">Namespace</div>
+            <div class="det-value">{{service.domain || 'Link a domain'}}</div>
+        </li>
+        <li>
+            <div class="det-label">Service Type</div>
+            <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
-    </li>
-</ul>
-<ul class="section-right col-md-6 col-sm-12">
-    <li>
-        <div class="det-label">Email</div>
-        <div class="det-value" [class.link]='!email_empty' [ngClass]="{PlaceHolder:email_empty}" >{{service.email || 'Stay connected with an email'}}</div>
-    </li>
-    <li>
-        <div class="det-label">Slack Channel</div>
-        <div class="det-value" [class.link]='!slackChannel_empty' [ngClass]="{PlaceHolder:slackChannel_empty}"  (click)="slack_link()">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
-    </li>
-    <li>
-        <div class="det-label">Repository</div>
-        <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
-    </li>
-    <li *ngIf="service.serviceType != 'website' ">
-        <div class="det-label">Runtime</div>
-        <div class="det-value" [class.PlaceHolder]="runtime_empty" >{{service.runtime}}</div>
-    </li>
-    <li>
-        <div class="det-label">Tags</div>
-        <div class="det-value" [ngClass]="{PlaceHolder:tags_empty}" >{{service.tags || 'Services are cooler with tags'}}</div>
-    </li>
-</ul>
+        </li>
+        <li *ngIf="service.serviceType == 'function'">
+            
+            <div class="det-label">Accounts</div>
+            <div class="det-value">
+                <!-- {{service.accounts}} -->
+                <!-- tmo-dev-ops, tmo-int -->
+                {{selectedAccounts || 'tmodevops' }}
+            </div>
+        </li>
+        <li *ngIf="service.serviceType == 'function'">
+            <div class="det-label">Endpoints</div>
+            <div class="det-value">
+                <div class='endp-cover'  (mouseleave)='popup("leave","popup-endp")' (mouseenter)='popup("enter","popup-endp")'>
+                    <div>{{endpList[0].arn}}</div>
+                    <div (click)='copy_link("input-copy")'>{{copyLink}}</div>
+                    <input id='input-copy' class='input-copy' type='text' value='{{endpList[0].arn}}'>
+                </div>
+                <span class='view-all' (click)='openSidebar()'> View all</span>
+
+                <div id='popup-endp' class='popup-endp'>								
+                    Account: <strong>{{endpList[0].name}}</strong>, Region: <strong>{{endpList[1].name}}</strong> 
+                </div>
+                
+                
+            </div>
+        </li>
+    </ul>
+    <ul class="section-right col-md-6 col-sm-12">
+        <li>
+            <div class="det-label">Email</div>
+            <div class="det-value" [class.link]='!email_empty' [ngClass]="{PlaceHolder:email_empty}" >{{service.email || 'Stay connected with an email'}}</div>
+        </li>
+        <li>
+            <div class="det-label">Slack Channel</div>
+            <div class="det-value" [class.link]='!slackChannel_empty' [ngClass]="{PlaceHolder:slackChannel_empty}"  (click)="slack_link()">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
+        </li>
+        <li>
+            <div class="det-label">Repository</div>
+            <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
+        </li>
+        <li *ngIf="service.serviceType != 'website' ">
+            <div class="det-label">Runtime</div>
+            <div class="det-value" [class.PlaceHolder]="runtime_empty" >{{service.runtime}}</div>
+        </li>
+        <li>
+            <div class="det-label">Tags</div>
+            <div class="det-value" [ngClass]="{PlaceHolder:tags_empty}" >{{service.tags || 'Services are cooler with tags'}}</div>
+        </li>
+        <li *ngIf="service.serviceType == 'function'">
+            <div class="det-label">Regions</div>
+            <div class="det-value">
+                <!-- {{service.regions}} -->
+                <!-- us-west-2, us-east -->
+                {{selectedRegion || 'us-west-2' }}
+
+            </div>
+        </li>
+    </ul>
+<div>
+    
+</div>
 </div>
 <div class='edit-service-overview' [class.hide]="disp_edit">
         <ul class="section-left col-md-6 col-sm-12">
@@ -231,6 +269,52 @@
                     <div class="det-label">Service Type</div>
                     <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
+                </li>
+                <li *ngIf="service.serviceType == 'function'">
+        
+                    <div class="det-label">Accounts</div>
+                    <div class="det-value">
+                        <div class="det-value-div">
+                            <section class="">
+                                <div class="input-field-container">
+                                    <div class="selected-approvers">
+                                        <ul (click)='focusInputAccount($event)'>
+                                            <li *ngFor="let selected of selectedAccount;let i=index"   >
+                                                {{selected}}
+                                                <span (click)="removeAccount(i, selected)" class="icon-icon-close"></span>
+                                            </li>
+                                            <input (keydown)="keypressAccount($event)"  autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
+    
+                                        </ul>
+                                    </div>
+                                    <div [hidden]="!showAccountList" class="approvers-list-wrap">
+                                        <div class="approvers-list typeShow open">
+                                            <div class="approvers-dets" *ngFor="let account of accounts | myfilter:AccountInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
+                                                <div  (click)="selectAccount(account);$event.stopPropagation();" index="{k}" [attr.account]='account'>{{account}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </li>
+                <li *ngIf="service.serviceType == 'function'">
+                    <div class="det-label">Endpoints</div>
+                    <div class="det-value">
+                        <div class='endp-cover'  (mouseleave)='popup("leave","popup-endp2")' (mouseenter)='popup("enter","popup-endp2")'>
+                            <div>{{endpList[0].arn}}</div>
+                            <div (click)='copy_link("input-copy")'>{{copyLink}}</div>
+                            <input id='input-copy' class='input-copy' type='text' value='{{endpList[0].arn}}'>
+                        </div>
+                        <span class='view-all' (click)='openSidebar()'> View all</span>
+        
+                        <div id='popup-endp2' class='popup-endp'>								
+                            Account: <strong>{{endpList[0].name}}</strong>, Region: <strong>{{endpList[1].name}}</strong> 
+                        </div>
+                        
+                        
+                    </div>
                 </li>
             </ul>
             <ul class="section-right col-md-6 col-sm-12">
@@ -260,6 +344,34 @@
                     <input [(ngModel)]="tags_temp" (ngModelChange)='updateTags()' type='text' (focus)='flag=true;' (blur)='flag=false;' class="det-value-input" placeholder="Services are cooler with tags">
                 </li>
                 <p class='email-err-msg labelfortags' *ngIf='flag' >Please enter tags seperated by commas</p>
+                <li *ngIf="service.serviceType == 'function'">
+                    <div class="det-label">Regions</div>
+                    <div class="det-value">
+                        <div class="det-value-div det-value-div-right">
+                            <section class="">
+                                <div class="input-field-container">
+                                    <div class="selected-approvers">
+                                        <ul (click)='focusInputRegion($event)'>
+                                            <li *ngFor="let selected of selectedRegion;let i=index"   >
+                                                {{selected}}
+                                                <span (click)="removeRegion(i, selected)" class="icon-icon-close"></span>
+                                            </li>
+                                            <input (keydown)="keypressRegion($event)"  autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
+    
+                                        </ul>
+                                    </div>
+                                    <div [hidden]="!showRegionList" class="approvers-list-wrap">
+                                        <div class="approvers-list typeShow open">
+                                            <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus2 : k==focusindex }" [ngStyle]="scrollList" >
+                                                <div  (click)="selectRegion(region);$event.stopPropagation();" index="{k}" [attr.region]='region'>{{region}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div> 
+               </li>
             </ul>
 </div>
 <div class="loading-row-edit" [class.show]="isLoadingService">
@@ -424,11 +536,11 @@
 
 
 <div *ngIf="!ErrEnv" class="service-overview-wrap relative row" >
-    <div class='eachBranch col-md-2 col-sm-5' *ngFor='let item of Environments' (click)='stageClicked(item.logical_id)'>
+    <div class='eachBranch col-md-2 col-sm-5' *ngFor='let item of Environments'  (click)='stageClicked(item.logical_id)'>
         <div *ngIf='noSecEnv' class='empty-row'>No Environments Available</div>
         
         <div *ngIf='!noSecEnv'>   
-            <div class='stage-title2 stageDisp'>{{item.logical_id}} <span class='icon-icon-rightArrow right-arow'></span> </div>
+            <div class='stage-title2 stageDisp'>{{item.friendly_name || item.logical_id}} <span class='icon-icon-rightArrow right-arow'></span> </div>
             <div class="overview-value"  [ngSwitch]="item.status">
                     <span class='icon-icon-good' title='{{item.status}}' *ngSwitchCase='"deployment completed"'>
                             

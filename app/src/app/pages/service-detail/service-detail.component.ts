@@ -98,6 +98,16 @@ export class ServiceDetailComponent implements OnInit {
         }
     };
 
+    opnSidebar(event){
+        this.closeSidebar(true);
+    }
+
+    public closeSidebar (eve){
+        this.closed = true;
+        this.close = eve;
+    }
+    close:boolean=false;
+    closed:boolean = false;
     processService(service){
         if (service === undefined) {
             return {};

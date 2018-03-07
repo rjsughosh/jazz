@@ -1,4 +1,6 @@
-
+.row{
+    padding:0 1rem;
+}
 .eachTag{
     display: inline-block;
     padding:0.2rem 1rem;
@@ -9,8 +11,9 @@
     // text-transform:capitalize;
     border-radius:1.5rem;
     margin-right: 1rem;
+    margin-bottom:1rem; 
     &:first-child{
-        margin-left: 1.8rem;
+        // margin-left: 1.8rem;
     }
     &:hover{
         border:1px solid #ed008c;
