@@ -270,6 +270,7 @@ export class ServiceMetricsComponent implements OnInit {
         this.selectedTimeRange = event.value;
         this.payload.start_time = resetdate;
         this.callMetricsFunc();
+        this.adv_filters.setSlider(this.sliderMax);
         break;
       }
       case 'environment':{

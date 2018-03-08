@@ -56,6 +56,8 @@ export class AdvancedFiltersComponent implements OnInit {
     envSelected:string=this.envList[0];
   
     getRange(e){
+        console.log('getrange e ==> ',e)
+        this.sliderPercentFrom=e.from_percent;
         // this.FilterTags.notify('filter-TimeRangeSlider',e.from);
         this.selectFilter["key"]='slider';
         this.selectFilter["value"]=e;
@@ -79,10 +81,18 @@ export class AdvancedFiltersComponent implements OnInit {
         this.periodList=event;
         this.periodSelected=this.periodList[0];
     }
+    setSlider(event){
+        console.log('slidermax, ',event)
+        this.sliderMax=event;
+        this.sliderFrom=1;
+        this.sliderPercentFrom=0;
+
+
+    }
     onRangeListSelected(range){
        
         this.sliderFrom =1;
-    
+        this.sliderPercentFrom=0;
         this.selectedTimeRange = range;
         this.selectFilter["key"]='range';
         this.selectFilter["value"]=range;

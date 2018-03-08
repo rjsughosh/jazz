@@ -123,7 +123,7 @@
             </div>
         </div> -->
 
-        <div class="filter-wrp"> 
+        <div class="filter-wrp hide"> 
                 <div class="filter-section-right">
                     <div class="filter-icon relative">
                         <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>
@@ -173,7 +173,9 @@
                 </div>
                 <!-- <search-box (onChange)="onServiceSearch($event)"></search-box> -->
                
-            </div>
+        </div>
+        <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters>
+
         <div class="graph-wrp">
              <div class="loading-row-cost" [class.show]="isGraphLoading">
                 <div class="loading-circle"></div>

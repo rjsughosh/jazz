@@ -23,11 +23,12 @@ import {AmountComponent} from '../primary-components/amount/amount.component';
 import {BarGraphComponent} from '../secondary-components/bar-graph/bar-graph.component';
 import { EnvironmentModule } from '../environment-module/environment.module';
 import {environment} from '../../environments/environment';
+import {CreateServiceComponent} from '../secondary-components/create-service/create-service.component';//*
 let environmentval = environment.envName;
 let loadedModule;
-if(environmentval == "oss")
-  loadedModule =require('./service.module.oss')
-//* Filters
+// if(environmentval == "oss")
+//   loadedModule =require('./service.module.oss')
+// //* Filters
 
 
 
@@ -53,7 +54,8 @@ if(environmentval == "oss")
     ServiceMetricsComponent,
     ServiceLogsComponent,
     ServiceOverviewComponent,
-    loadedModule.CreateServiceComponent,
+    //loadedModule.CreateServiceComponent,
+    CreateServiceComponent,
     ServiceDetailComponent,
     ServicesListComponent,
     ServicesComponent,

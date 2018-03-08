@@ -7,6 +7,8 @@ import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { AuthenticationService } from '../../core/services/index';
 import {DataCacheService } from '../../core/services/index';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+
 
 
 
@@ -28,7 +30,37 @@ export class ServiceLogsComponent implements OnInit {
 
 	@Input() service: any = {};
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
-	
+	@ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+
+	advanced_filter_input:any = {
+		time_range:{
+			show:true,
+		},
+		slider:{
+			show:true,
+		},
+		period:{
+			show:false,
+		},
+		statistics:{
+			show:false,
+		},
+		path:{
+			show:false,
+		},
+		environment:{
+			show:false,
+		},
+		method:{
+			show:false,
+		},
+		account:{
+			show:true,
+		},
+		region:{
+			show:true,
+		}
+	}
 	payload:any={};
 	private http:any;
 	root: any;
@@ -239,6 +271,55 @@ export class ServiceLogsComponent implements OnInit {
 		this.resetPayload();
 	}
 
+	onFilterSelect(event){
+		// alert('key: '+event.key+'  value: '+event.value);
+		switch(event.key){
+		  case 'slider':{
+			this.getRange(event.value);
+			break;
+		  }
+		  
+		  case 'range':{
+			this.sendDefaults(event.value);
+			this.FilterTags.notifyLogs('filter-TimeRange',event.value);		
+			this.sliderFrom =1;
+			this.FilterTags.notifyLogs('filter-TimeRangeSlider',this.sliderFrom);
+			
+			var resetdate = this.getStartDate(event.value, this.sliderFrom);
+			// this.resetPeriodList(range);
+			this.selectedTimeRange = event.value;
+			this.payload.start_time = resetdate;
+			this.resetPayload();
+			// this.FilterTags.notify('filter-TimeRange',event.value);
+			// this.sendDefaults(event.value); 
+			// this.timerangeSelected=event.value;
+			// this.sliderFrom =1;
+			// this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);        
+			// var resetdate = this.getStartDate(event.value, this.sliderFrom);
+			// this.resetPeriodList(event.value);
+			// this.selectedTimeRange = event.value;
+			// this.payload.start_time = resetdate;
+			// this.callMetricsFunc();
+			this.adv_filters.setSlider(this.sliderMax);
+			break;
+		  }
+		  
+		  case 'account':{
+			  this.FilterTags.notify('filter-Account',event.value);
+			this.accSelected=event.value;
+			break;
+		  }
+		  case 'region':{ 
+			this.FilterTags.notify('filter-Region',event.value);
+			this.regSelected=event.value;
+			break;
+				
+		  }
+	
+	   
+		}
+		
+	  }
 	onClickFilter(){
 		
 		//ng2-ion-range-slider

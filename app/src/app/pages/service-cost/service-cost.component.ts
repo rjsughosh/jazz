@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import {DataCacheService } from '../../core/services/index';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
 import {IonRangeSliderModule} from "ng2-ion-range-slider"
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+
 
 
 
@@ -22,8 +24,38 @@ export class ServiceCostComponent implements OnInit {
 	@ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
 
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
-	 private subscription:any;
+	@ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
 
+	 private subscription:any;
+	 advanced_filter_input:any = {
+    time_range:{
+        show:true,
+    },
+    slider:{
+        show:true,
+    },
+    period:{
+        show:true,
+    },
+    statistics:{
+        show:true,
+    },
+    path:{
+        show:false,
+    },
+    environment:{
+        show:true,
+    },
+    method:{
+        show:true,
+    },
+    account:{
+        show:true,
+    },
+    region:{
+        show:true,
+    }
+}
 	cost = {
 		perYear: {
 			value: '0.00',
@@ -141,7 +173,79 @@ export class ServiceCostComponent implements OnInit {
   regList=['us-west-2', 'us-east-1'];
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
-  
+	
+	onFilterSelect(event){
+    // alert('key: '+event.key+'  value: '+event.value);
+    switch(event.key){
+      case 'slider':{
+        this.getRange(event.value);
+        break;
+      }
+      case 'period':{
+						// console.log('#$@#$$@#@#$#$',this.FilterTags);;
+				this.FilterTags.notify('filter-Period',event.value);
+				// this.cache.set('filter-Period',period);
+						break;
+      }
+      case 'range':{
+        this.FilterTags.notify('filter-TimeRange',event.value);
+		this.sendDefaults(event.value);
+		
+		// this.cache.set('filter-TimeRange',range);
+		this.timerangeSelected=event.value;
+		this.sliderFrom =1;
+		this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);
+		
+		var resetdate = this.getStartDate(event.value, this.sliderFrom);
+		this.selectedTimeRange = event.value;
+        break;
+      }
+      case 'environment':{
+				var envt = event.value;
+				this.FilterTags.notify('filter-Env',envt);
+				this.costGraphData.environment=envt;
+				var env_list=this.cache.get('envList');
+				var fName = env_list.friendly_name;
+				var index = fName.indexOf(envt);
+				var env = env_list.env[index];
+				this.env = env;
+				this.collectInputData(env);
+        break;
+      }
+      case 'statistics':{
+			 // this.payload.statistics = statistics;
+			 var statistics = event.value;
+				this.FilterTags.notify('filter-Statistic',statistics);
+		
+				// this.cache.set('filter-Statistic',statistics);
+				this.statisticSelected = statistics;
+        break;
+
+      }
+      case 'method':{
+				var method=event.value;
+				this.FilterTags.notify('filter-Method',method);
+	
+				this.methodSelected=method;
+				break;
+      }
+     
+      case 'account':{
+				this.FilterTags.notify('filter-Account',event.value);
+				this.accSelected=event.value;
+        break;
+      }
+      case 'region':{ 
+        this.FilterTags.notify('filter-Region',event.value);
+        this.regSelected=event.value;
+        break;
+            
+      }
+
+   
+    }
+    
+  }
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
