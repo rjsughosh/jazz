@@ -35,6 +35,36 @@ export class ServiceMetricsComponent implements OnInit {
   public from:any;
   public step:any;
   
+  advanced_filter_input:any = {
+    time_range:{
+        show:true,
+    },
+    slider:{
+        show:true,
+    },
+    period:{
+        show:true,
+    },
+    statistics:{
+        show:true,
+    },
+    path:{
+        show:true,
+    },
+    environment:{
+        show:true,
+    },
+    method:{
+        show:true,
+    },
+    account:{
+        show:true,
+    },
+    region:{
+        show:true,
+    }
+}
+
   envList:any=['prod','stg'];
 
 
@@ -212,6 +242,10 @@ export class ServiceMetricsComponent implements OnInit {
     if(env_list != undefined){
       this.envList=env_list.friendly_name;
     }
+  }
+  onFilterSelect(event){
+    alert('key: '+event.key+'  value: '+event.value);
+    
   }
   ngOnInit() {
     this.cache.set("codequality",false)
