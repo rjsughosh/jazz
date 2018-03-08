@@ -4,8 +4,8 @@ import {ServiceAccessControlComponent} from '../pages/service-access-control/ser
 import {ServiceCostComponent} from '../pages/service-cost/service-cost.component';
 import {ServiceMetricsComponent} from '../pages/service-metrics/service-metrics.component';
 import {ServiceLogsComponent} from '../pages/service-logs/service-logs.component';
-import {ServiceOverviewComponent} from '../pages/service-overview/service-overview.component';
-import {CreateServiceComponent} from '../secondary-components/create-service/create-service.component';
+import {ServiceOverviewComponent} from '../pages/service-overview/service-overview.component';//*
+
 import {ServicesComponent} from '../pages/services/services.component';
 import {PopoverModule} from 'ng2-popover';
 import {ChartsModule} from 'ng2-charts';
@@ -18,11 +18,16 @@ import {routes} from './service.route';
 import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {ServicesListComponent} from '../pages/services-list/services-list.component';
-import {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';
+import {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';//*
 import {AmountComponent} from '../primary-components/amount/amount.component';
 import {BarGraphComponent} from '../secondary-components/bar-graph/bar-graph.component';
 import { EnvironmentModule } from '../environment-module/environment.module';
-
+import {environment} from '../../environments/environment';
+let environmentval = environment.envName;
+let loadedModule;
+if(environmentval == "oss")
+  loadedModule =require('./service.module.oss')
+//* Filters
 
 
 
@@ -48,7 +53,7 @@ import { EnvironmentModule } from '../environment-module/environment.module';
     ServiceMetricsComponent,
     ServiceLogsComponent,
     ServiceOverviewComponent,
-    CreateServiceComponent,
+    loadedModule.CreateServiceComponent,
     ServiceDetailComponent,
     ServicesListComponent,
     ServicesComponent,
