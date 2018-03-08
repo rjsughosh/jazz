@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
 import {DataCacheService } from '../../core/services/index';
+import {IonRangeSliderModule} from "ng2-ion-range-slider"
+
 @Component({
   selector: 'advanced-filters',
   templateUrl: './advanced-filters.component.html',
@@ -13,11 +15,16 @@ export class AdvancedFiltersComponent implements OnInit {
     }
     @Input() advanced_filter_input:any = {};
     @Input() service: any = {};
+    @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
+
     
     @Output() onFilterSelect:EventEmitter<any> = new EventEmitter<any>();
 
 
-    sliderPercentFrom:number;
+    slider:any;
+    sliderFrom = 1;
+    sliderPercentFrom;
+    sliderMax:number = 7;
 
 
     filterSelected:boolean;
@@ -48,78 +55,65 @@ export class AdvancedFiltersComponent implements OnInit {
     envList:any=['prod','stg'];
     envSelected:string=this.envList[0];
   
+    getRange(e){
+        // this.FilterTags.notify('filter-TimeRangeSlider',e.from);
+        this.selectFilter["key"]='slider';
+        this.selectFilter["value"]=e;
+        this.onFilterSelect.emit(this.selectFilter);
 
+        // this.sliderFrom =e.from;
+        // this.sliderPercentFrom=e.from_percent;
+        // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
+        // // this.payload.start_time = resetdate;
+        // this.callMetricsFunc();
+    }
+      
     onPeriodSelected(period){
         this.periodSelected=period;
         this.selectFilter["key"]='period';
         this.selectFilter["value"]=period;
         this.onFilterSelect.emit(this.selectFilter);
-        // console.log('#$@#$$@#@#$#$',this.FilterTags);;
-        // this.FilterTags.notify('filter-Period',period);
-        // this.cache.set('filter-Period',period);
-        // this.payload.interval = this.periodListSeconds[this.periodList.indexOf(period)];
-        // this.callMetricsFunc();
+        
     }
     resetPeriodList(event){
         this.periodList=event;
+        this.periodSelected=this.periodList[0];
     }
     onRangeListSelected(range){
-        // this.FilterTags.notify('filter-TimeRange',range);
-        // this.sendDefaults(range);
-        
-        // // this.cache.set('filter-TimeRange',range);
-        // this.timerangeSelected=range;
-        // this.sliderFrom =1;
-        // this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);
-        
-        // var resetdate = this.getStartDate(range, this.sliderFrom);
-        // this.resetPeriodList(range);
+       
+        this.sliderFrom =1;
+    
         this.selectedTimeRange = range;
         this.selectFilter["key"]='range';
         this.selectFilter["value"]=range;
         this.onFilterSelect.emit(this.selectFilter);
-        // this.payload.start_time = resetdate;
-        // this.callMetricsFunc();
+        
     }
     onEnvSelected(envt){
-        // this.FilterTags.notify('filter-Env',envt);
         this.envSelected = envt;
         this.selectFilter["key"]='environment';
         this.selectFilter["value"]=envt;
         this.onFilterSelect.emit(this.selectFilter);
-        // this.payload.environment = envt;
-        // var env_list=this.cache.get('envList');
-        //     var fName = env_list.friendly_name;
-        //     var index = fName.indexOf(envt);
-        //     var env = env_list.env[index];
-        // this.envSelected = envt;
-        // this.payload.environment = env;
-        // this.callMetricsFunc();
-        // this.envUpdate = true;
-        // this.methodSelected = this.methodList[0];
+        
     }
     onStatisticSelected(statistics){
-    // this.payload.statistics = statistics;
-    // this.FilterTags.notify('filter-Statistic',statistics);
-    
-    // this.cache.set('filter-Statistic',statistics);
+   
     this.statisticSelected = statistics;
     this.selectFilter["key"]='statistics';
     this.selectFilter["value"]=statistics;
     this.onFilterSelect.emit(this.selectFilter);
-    // this.payload.statistics = statistics;
-    // this.callMetricsFunc();
+   
     }
 
     onMethodListSelected(method){
 
-        // this.FilterTags.notify('filter-Method',method);
+       
 
         this.methodSelected=method;
         this.selectFilter["key"]='method';
         this.selectFilter["value"]=method;
         this.onFilterSelect.emit(this.selectFilter);
-        // this.displayMetrics();
+        
     }
     
     onPathListicSelected(path){
@@ -127,10 +121,8 @@ export class AdvancedFiltersComponent implements OnInit {
         this.selectFilter["key"]='path';
         this.selectFilter["value"]=path;
         this.onFilterSelect.emit(this.selectFilter);
-        // this.displayMetrics();
     }
    onaccSelected(event){
-    // this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
     this.selectFilter["key"]='account';
     this.selectFilter["value"]=event;
@@ -139,7 +131,6 @@ export class AdvancedFiltersComponent implements OnInit {
    }
 
 	onregSelected(event){
-    // this.FilterTags.notify('filter-Region',event);
     this.regSelected=event;
     this.selectFilter["key"]='region';
     this.selectFilter["value"]=event;
@@ -148,7 +139,6 @@ export class AdvancedFiltersComponent implements OnInit {
 
    onClickFilter(){
     
-    //ng2-ion-range-slider
       
     var slider = document.getElementById('sliderElement');
     
@@ -167,11 +157,7 @@ export class AdvancedFiltersComponent implements OnInit {
         
     }
     ngOnChanges(x:any){
-        // this.filterTags();
-        // this.fetchEnvlist();
-    
-        // // console.log('---------------------------------------------------------aplied filter chaneged',this.filtersApplied);
-        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
+       this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
         }
 }

@@ -249,6 +249,10 @@ export class ServiceMetricsComponent implements OnInit {
   onFilterSelect(event){
     // alert('key: '+event.key+'  value: '+event.value);
     switch(event.key){
+      case 'slider':{
+        this.getRange(event.value);
+        break;
+      }
       case 'period':{
         this.FilterTags.notify('filter-Period',event.value);
         this.payload.interval = this.periodListSeconds[this.periodList.indexOf(event.value)];
