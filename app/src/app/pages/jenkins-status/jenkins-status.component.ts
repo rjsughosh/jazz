@@ -3,8 +3,8 @@ import { RequestService , MessageService , AuthenticationService } from "../../c
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import {DataCacheService } from '../../core/services/index';
-import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
-import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
+import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
+import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
 import { ToasterService } from 'angular2-toaster';
 
 @Component({

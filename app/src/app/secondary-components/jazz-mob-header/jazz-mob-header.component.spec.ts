@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TmobileMobHeaderComponent } from './tmobile-mob-header.component';
+import { JazzMobHeaderComponent } from './jazz-mob-header.component';
 
-describe('TmobileMobHeaderComponent', () => {
-  let component: TmobileMobHeaderComponent;
-  let fixture: ComponentFixture<TmobileMobHeaderComponent>;
+describe('JazzMobHeaderComponent', () => {
+  let component: JazzMobHeaderComponent;
+  let fixture: ComponentFixture<JazzMobHeaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TmobileMobHeaderComponent ]
+      declarations: [ JazzMobHeaderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TmobileMobHeaderComponent);
+    fixture = TestBed.createComponent(JazzMobHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

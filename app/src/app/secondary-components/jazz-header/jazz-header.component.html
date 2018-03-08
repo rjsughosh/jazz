@@ -1,8 +1,8 @@
 <div class="override-url-wrap" *ngIf="override">
     <div class="override-text">Loading services from URL: {{overridingUrl}}</div>
-    <btn-tmobile-primary text="STOP" (click)="closeOverride()"></btn-tmobile-primary>
+    <btn-jazz-primary text="STOP" (click)="closeOverride()"></btn-jazz-primary>
  </div>
-<header class="tmobile-header">
+<header class="jazz-header">
     <div class="header-section left logo-wrp">
         <img (click)="goToLanding()" src="assets/images/icons/Jazz_Logo.svg">
     </div>
@@ -12,7 +12,7 @@
             <li (click)="goToAbout('about')" [class.hide] = 'noLink'>About Us</li>
             <li [class.hide]="isLoggedIn">
                 <div class="login">
-                    <btn-tmobile-primary newclass="login" text="LOGIN" (click)="toggleLoginPanel()"></btn-tmobile-primary>
+                    <btn-jazz-primary newclass="login" text="LOGIN" (click)="toggleLoginPanel()"></btn-jazz-primary>
                 </div>
             </li>
             <li [class.hide]="!isLoggedIn">
@@ -113,11 +113,11 @@
                 <div class="hide feedbackResErr" [class.show]="feedbackResErr"> Oops! {{feedbackMsg}}
                     <span> or <a (click)="mailTo()"> contact us</a> via email.</span>
                 </div>
-                <!-- <btn-tmobile-primary text="DONE" class="feedback-submit" [disablePrimaryBtn]="!model.userFeedback" (click)='isFeedback = !isFeedback;'></btn-tmobile-primary> -->
+                <!-- <btn-jazz-primary text="DONE" class="feedback-submit" [disablePrimaryBtn]="!model.userFeedback" (click)='isFeedback = !isFeedback;'></btn-jazz-primary> -->
             </div>
             <div class='feedback-btn-wrap'>
                 <a (click)='isFeedback = !isFeedback;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-                <btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+                <btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
             </div>
         <!-- </div> -->
         

@@ -26,7 +26,7 @@
 				<div class="cb-status-dets">Include error details</div>
 			</div>
 			<a (click)='openModal = !openModal;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-			<btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+			<btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
 		</div>
 	</div>
 </div>
@@ -59,10 +59,10 @@
 <div class="service-details row relative">
 	<div *ngIf='envResponseTrue'>
 		<div  class='edit-service-overview-btn'>
-			<!-- <btn-tmobile-secondary class='btn-edit-overview' *ngIf='showCancel'  text='CANCEL' (click)='onCancelClick()' ></btn-tmobile-secondary> -->
+			<!-- <btn-jazz-secondary class='btn-edit-overview' *ngIf='showCancel'  text='CANCEL' (click)='onCancelClick()' ></btn-jazz-secondary> -->
 			<a  *ngIf='showCancel'  (click)='onCancelClick()'>CANCEL</a>
-			<btn-tmobile-secondary [disablebtn]='(status_val > 4) || (status_val == 3) || branchname == "master"' class='btn-edit-overview'  *ngIf="editBtn" text='EDIT' [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableEditBtn()'></btn-tmobile-secondary>
-			<btn-tmobile-secondary  class='btn-edit-overview' *ngIf='saveBtn' text='SAVE' [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onSaveClick()' [disablebtn]='disableEditBtn()'></btn-tmobile-secondary>
+			<btn-jazz-secondary [disablebtn]='(status_val > 4) || (status_val == 3) || branchname == "master"' class='btn-edit-overview'  *ngIf="editBtn" text='EDIT' [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableEditBtn()'></btn-jazz-secondary>
+			<btn-jazz-secondary  class='btn-edit-overview' *ngIf='saveBtn' text='SAVE' [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onSaveClick()' [disablebtn]='disableEditBtn()'></btn-jazz-secondary>
 			<!-- [style.borders]="edit_save=='SAVE'? 'none':'1px solid'"  -->
 		</div>
 		<br>

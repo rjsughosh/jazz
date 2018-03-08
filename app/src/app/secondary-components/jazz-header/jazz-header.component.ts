@@ -10,12 +10,12 @@ import { AuthenticationService, MessageService, RequestService } from '../../cor
 import { ToasterService} from 'angular2-toaster';
 
 @Component({
-    selector: 'tmobile-header',
-    templateUrl: './tmobile-header.component.html',
+    selector: 'jazz-header',
+    templateUrl: './jazz-header.component.html',
     providers:[MessageService],
-    styleUrls: ['./tmobile-header.component.scss']
+    styleUrls: ['./jazz-header.component.scss']
 })
-export class TmobileHeaderComponent implements OnInit {
+export class JazzHeaderComponent implements OnInit {
 
     @Input() type: string = 'default';
     @Input() closed: boolean;

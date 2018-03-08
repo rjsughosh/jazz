@@ -1,5 +1,5 @@
 <div class="landing-hdr-wrp" >
-	<tmobile-header type="landing" (loginClick) = "onLoginClicked($event)" [override]="override" [closed]="closed"></tmobile-header>
+	<jazz-header type="landing" (loginClick) = "onLoginClicked($event)" [override]="override" [closed]="closed"></jazz-header>
 </div>
 <main class="landing-main-wrp" [style.overflow-y]="goToLogin ? 'hidden':'auto'">
 	<div id="landing" class="header-section">
@@ -15,7 +15,7 @@
 				<div class = "center"> Jazz lets you seamlessly build, deploy and manage cloud native applications using serverless technology.</div>
 			</div>
 			<div class = "center top-parallax-margin landing-action-btn-wrap">
-				<btn-tmobile-primary newclass="buttonPadding" text="{{buttonText}}" (click)="getStartedNow()"></btn-tmobile-primary>
+				<btn-jazz-primary newclass="buttonPadding" text="{{buttonText}}" (click)="getStartedNow()"></btn-jazz-primary>
 			</div>
 			<div class = "parallax-0"></div>
 			<!--<div class = "parallax-1"></div>-->
@@ -153,10 +153,10 @@
 					<span class = "center"> Our API Service system allows you to seamlessly create, deploy, manage all your API needs.</span>
 			</div>
 			<div class="center top-parallax-margin relative">
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="All"></btn-tmobile-secondary>
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Future Releases"></btn-tmobile-secondary>
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Past Releases"></btn-tmobile-secondary>
-				<btn-tmobile-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Events"></btn-tmobile-secondary>
+				<btn-jazz-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="All"></btn-jazz-secondary>
+				<btn-jazz-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Future Releases"></btn-jazz-secondary>
+				<btn-jazz-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Past Releases"></btn-jazz-secondary>
+				<btn-jazz-secondary newclass="buttonPadding buttonPaddinghover nolandscape" text="Events"></btn-jazz-secondary>
 
 			</div>
 			<div class="card-container relative">
@@ -235,8 +235,8 @@
 			</div>
 			<div class="section-content actions">
 				<span class = "center">
-					<btn-tmobile-secondary newclass="buttonPadding buttonAbout" (click)='sendmail()' text="E-MAIL US"></btn-tmobile-secondary>
-					<btn-tmobile-secondary text="SLACK" clickLink="https://t-mo.slack.com/messages/serverless/" newclass="slackIcon buttonPadding buttonAbout"></btn-tmobile-secondary>
+					<btn-jazz-secondary newclass="buttonPadding buttonAbout" (click)='sendmail()' text="E-MAIL US"></btn-jazz-secondary>
+					<btn-jazz-secondary text="SLACK" clickLink="https://t-mo.slack.com/messages/serverless/" newclass="slackIcon buttonPadding buttonAbout"></btn-jazz-secondary>
 				</span>
 			</div>
 		</section>
