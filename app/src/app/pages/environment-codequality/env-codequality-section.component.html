@@ -18,7 +18,7 @@
                 <div class="hide feedbackResErr" [class.show]="feedbackResErr"> Oops! {{feedbackMsg}}
                     <span> or <a (click)="mailTo()"> contact us</a> via email.</span>
                 </div>
-            </div>
+            </div> 
             <div class='feedback-btn-wrap'>
                 <div class="slack-checkbox custom-cb includeError" [class.invisible]="isLoading || feedbackRes">
                         <input type="checkbox" (click)="errorIncluded()"  id="checkbox-slack" [checked]="errorInclude">
