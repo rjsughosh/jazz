@@ -60,7 +60,9 @@ export class AdvancedFiltersComponent implements OnInit {
         // this.payload.interval = this.periodListSeconds[this.periodList.indexOf(period)];
         // this.callMetricsFunc();
     }
-
+    resetPeriodList(event){
+        this.periodList=event;
+    }
     onRangeListSelected(range){
         // this.FilterTags.notify('filter-TimeRange',range);
         // this.sendDefaults(range);

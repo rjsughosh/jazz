@@ -7,6 +7,7 @@ import {DataCacheService } from '../../core/services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {IonRangeSliderModule} from "ng2-ion-range-slider"
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
 
 
 
@@ -24,6 +25,8 @@ export class ServiceMetricsComponent implements OnInit {
 
   @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
   @ViewChild('filtertags') FilterTags: FilterTagsComponent;
+  @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+
   
   
 
@@ -244,7 +247,80 @@ export class ServiceMetricsComponent implements OnInit {
     }
   }
   onFilterSelect(event){
-    alert('key: '+event.key+'  value: '+event.value);
+    // alert('key: '+event.key+'  value: '+event.value);
+    switch(event.key){
+      case 'period':{
+        this.FilterTags.notify('filter-Period',event.value);
+        this.payload.interval = this.periodListSeconds[this.periodList.indexOf(event.value)];
+        this.callMetricsFunc();
+        break;
+      }
+      case 'range':{
+        this.FilterTags.notify('filter-TimeRange',event.value);
+        this.sendDefaults(event.value); 
+        this.timerangeSelected=event.value;
+        this.sliderFrom =1;
+        this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);        
+        var resetdate = this.getStartDate(event.value, this.sliderFrom);
+        this.resetPeriodList(event.value);
+        this.selectedTimeRange = event.value;
+        this.payload.start_time = resetdate;
+        this.callMetricsFunc();
+        break;
+      }
+      case 'environment':{
+        var envt = event.value;
+        this.FilterTags.notify('filter-Env',envt);
+        this.envSelected = envt;
+        this.payload.environment = envt;
+        var env_list=this.cache.get('envList');
+        var fName = env_list.friendly_name;
+        var index = fName.indexOf(envt);
+        var env = env_list.env[index];
+        this.envSelected = envt;
+        this.payload.environment = env;
+        this.callMetricsFunc();
+        this.envUpdate = true;
+        break;
+      }
+      case 'statistics':{
+        var statistics=event.value;
+        // this.payload.statistics = statistics;
+        this.FilterTags.notify('filter-Statistic',statistics);
+        
+        // this.cache.set('filter-Statistic',statistics);
+        this.statisticSelected = statistics;
+        this.payload.statistics = statistics;
+        this.callMetricsFunc();
+        break;
+
+      }
+      case 'method':{
+        var method=event.value;
+        this.FilterTags.notify('filter-Method',method);
+
+        this.methodSelected=method;
+        this.displayMetrics();
+      }
+      case 'path':{
+        this.pathSelected=event.value;
+        this.displayMetrics();
+        break;
+      }
+      case 'account':{
+          this.FilterTags.notify('filter-Account',event.value);
+        this.accSelected=event.value;
+        break;
+      }
+      case 'region':{ 
+        this.FilterTags.notify('filter-Region',event.value);
+        this.regSelected=event.value;
+        break;
+            
+      }
+
+   
+    }
     
   }
   ngOnInit() {
@@ -709,43 +785,44 @@ export class ServiceMetricsComponent implements OnInit {
   
   cancelFilter(event){
     switch(event){
-      case 'time-range':{this.onRangeListSelected('Day'); 
+      case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
         break;
       }
-      case 'time-range-slider':{this.getRangefunc(1);
+      case 'time-range-slider':{
+        // this.adv_filters.getRangefunc(1);
       
         break;
       }
-      case 'period':{ this.onPeriodSelected('15 Minutes');
+      case 'period':{ this.adv_filters.onPeriodSelected('15 Minutes');
         break;
       }
-      case 'statistic':{      this.onStatisticSelected('Average');
+      case 'statistic':{      this.adv_filters.onStatisticSelected('Average');
       
         break;
       }
-      case 'account':{      this.onaccSelected('Acc 1');
+      case 'account':{      this.adv_filters.onaccSelected('Acc 1');
       
         break;
       }
-      case 'region':{      this.onregSelected('reg 1');
+      case 'region':{      this.adv_filters.onregSelected('reg 1');
       
         break;
       }
-      case 'env':{      this.onEnvSelected('prod');
+      case 'env':{      this.adv_filters.onEnvSelected('prod');
       
         break;
       }
-      case 'method':{      this.onMethodListSelected('POST');
+      case 'method':{      this.adv_filters.onMethodListSelected('POST');
       
         break;
       }
-      case 'all':{ this.onRangeListSelected('Day');    
-      this.onPeriodSelected('15 Minutes');
-      this.onStatisticSelected('Average');
-      this.onaccSelected('Acc 1');
-      this.onregSelected('reg 1');
-      this.onEnvSelected('prod');
-      this.onMethodListSelected('POST');
+      case 'all':{ this.adv_filters.onRangeListSelected('Day');    
+      this.adv_filters.onPeriodSelected('15 Minutes');
+      this.adv_filters.onStatisticSelected('Average');
+      this.adv_filters.onaccSelected('Acc 1');
+      this.adv_filters.onregSelected('reg 1');
+      this.adv_filters.onEnvSelected('prod');
+      this.adv_filters.onMethodListSelected('POST');
         break;
       }
     }
@@ -855,6 +932,7 @@ export class ServiceMetricsComponent implements OnInit {
     if(this.payload != undefined && this.payload.interval != undefined){
       this.payload.interval = this.periodListSeconds[this.periodList.indexOf(this.periodList[0])];
     }
+    this.adv_filters.resetPeriodList(this.periodList);
   }
   public goToAbout(hash){
     this.router.navigateByUrl('landing');
