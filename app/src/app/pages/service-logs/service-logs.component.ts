@@ -61,6 +61,7 @@ export class ServiceLogsComponent implements OnInit {
 			show:true,
 		}
 	}
+	fromlogs:boolean = true;
 	payload:any={};
 	private http:any;
 	root: any;
@@ -363,30 +364,30 @@ export class ServiceLogsComponent implements OnInit {
 	cancelFilter(event){
 		console.log('event',event);
 		switch(event){
-			case 'time-range':{this.onRangeListSelected('Day'); 
+			case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
 			  break;
 			}
-			case 'time-range-slider':{this.getRangefunc(1);
+			case 'time-range-slider':{this.adv_filters.getRange(1);
 			
 			  break;
 			}
-			case 'account':{this.onaccSelected('Acc 1');
+			case 'account':{this.adv_filters.onaccSelected('Acc 1');
 		
 			break;
 			}
-			case 'region':{this.onregSelected('reg 1');
+			case 'region':{this.adv_filters.onregSelected('reg 1');
 		
 			break;
 			}
-			case 'env':{this.onEnvSelected('prod');
+			case 'env':{this.adv_filters.onEnvSelected('prod');
 		
 			break;
 			}
 				
-			case 'all':{ this.onRangeListSelected('Day'); 
-			this.onaccSelected('Acc 1');   
-			this.onregSelected('reg 1');
-			this.onEnvSelected('prod');
+			case 'all':{ this.adv_filters.onRangeListSelected('Day'); 
+			this.adv_filters.onaccSelected('Acc 1');   
+			this.adv_filters.onregSelected('reg 1');
+			this.adv_filters.onEnvSelected('prod');
 			  break;
 			}
 		  }

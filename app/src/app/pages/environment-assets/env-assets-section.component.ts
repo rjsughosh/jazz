@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import {DataCacheService , AuthenticationService } from '../../core/services/index';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+
 
 
 @Component({
@@ -17,6 +19,39 @@ export class EnvAssetsSectionComponent implements OnInit {
 	private http:any;
 	private subscription:any;
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
+	@ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	fromassets:boolean = true;
+
+
+	advanced_filter_input:any = {
+		time_range:{
+			show:false,
+		},
+		slider:{
+			show:false,
+		},
+		period:{
+			show:false,
+		},
+		statistics:{
+			show:false,
+		},
+		path:{
+			show:false,
+		},
+		environment:{
+			show:false,
+		},
+		method:{
+			show:false,
+		},
+		account:{
+			show:true,
+		},
+		region:{
+			show:true,
+		}
+	}
 
 	assetsList: any = [];
 	
@@ -85,6 +120,28 @@ export class EnvAssetsSectionComponent implements OnInit {
     this.FilterTags.notify('filter-Region',event);
     this.regSelected=event;
    }
+
+   onFilterSelect(event){
+	// alert('key: '+event.key+'  value: '+event.value);
+	switch(event.key){
+	  
+	  
+	  case 'account':{
+		  this.FilterTags.notify('filter-Account',event.value);
+		this.accSelected=event.value;
+		break;
+	  }
+	  case 'region':{ 
+		this.FilterTags.notify('filter-Region',event.value);
+		this.regSelected=event.value;
+		break;
+			
+	  }
+
+   
+	}
+	
+}
 
    cancelFilter(event){
 	console.log('event',event);

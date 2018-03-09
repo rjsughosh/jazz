@@ -11,7 +11,7 @@
 
         <div class='drp-wrp'>
             <div class='pointer refresh icon-icon-refresh' title="Refresh" (click)='callLogsFunc()' height="19"></div>
-            <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters>
+            <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [logs]='fromlogs' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters>
  
             <div class="filter-icon relative hide">
                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>

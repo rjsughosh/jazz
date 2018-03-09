@@ -1,2 +1,7 @@
 @import './../../../main-styles';
 @import './../../pages/service-metrics/service-metrics.component.scss';
+.no-border-no-padding{
+    border:none !important;
+    padding-bottom:0 !important;
+
+}

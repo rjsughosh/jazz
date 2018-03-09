@@ -12,8 +12,9 @@
         <div class='drp-wrp'>
         <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
         <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
-                
-        <div class="filter-icon relative">
+        <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [logs]='fromlogs' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters>
+        
+        <div class="filter-icon relative hide">
             <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>
             <div [class.show]='filterSelected' class="filter-wrap">
                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    
@@ -44,6 +45,9 @@
         </div>
 
     </div>
+
+    <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
+
     <table-template class="table-container env-logs" [message]="errMessage" [state]="loadingState" (refreshData)="callLogsFunc()" [type]="'accordian'" [header]="tableHeader"  (onFilter)="onFilter($event)" (onSort)="onSort($event)" [showPaginationtable]="paginationSelected"  (paginatePage)="paginatePage($event)" [totalPageNum]="totalPagesTable" >
                 <div class="table-row-wrp" *ngFor="let row of logs; let i = index" [class.expanded]="row.expanded">
             <div class="table-row" (click)="onRowClicked(row, i)">
