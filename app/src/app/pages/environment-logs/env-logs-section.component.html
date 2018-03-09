@@ -19,7 +19,7 @@
                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    
                 <div class="filter-inner-wrap">
                     <div class='view-label'>View by:</div>
-                    <div class="eachFilter"> 
+                    <div class="eachFilter no-border-no-padding"> 
                         <div><div class='hori-line'></div>TIME RANGE</div>
                         <dropdown class="dropdown-3" title="Select enviroment" [dropdwnContent]="rangeList" [selected]="selectedTimeRange" (onSelected)="onRangeListSelected($event)"></dropdown>
                         <div class='in-logs'>
@@ -27,11 +27,11 @@
                         </div>
 
                     </div>
-                    <div class="eachFilter" *ngIf='service.serviceType == "function"'>
+                    <div class="eachFilter hide" *ngIf='service.serviceType == "function"'>
                         <div><div class='hori-line'></div>ACCOUNT</div>
                         <dropdown class="dropdown-3" [dropdwnContent]="accList" title="Select enviroment" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>            
                     </div>
-                    <div class="eachFilter" *ngIf='service.serviceType == "function"'>
+                    <div class="eachFilter hide" *ngIf='service.serviceType == "function"'>
                         <div><div class='hori-line'></div>REGION</div>
                         <dropdown class="dropdown-3"  [dropdwnContent]="regList" title="Select enviroment" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>            
                     </div>

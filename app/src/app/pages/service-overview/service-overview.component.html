@@ -183,7 +183,7 @@
             <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
         </li>
-        <li *ngIf="service.serviceType == 'function'">
+        <li class='hide' *ngIf="service.serviceType == 'function'">
             
             <div class="det-label">Accounts</div>
             <div class="det-value">
@@ -192,7 +192,7 @@
                 {{selectedAccounts || 'tmodevops' }}
             </div>
         </li>
-        <li *ngIf="service.serviceType == 'function'">
+        <li class='hide' *ngIf="service.serviceType == 'function'">
             <div class="det-label">Endpoints</div>
             <div class="det-value">
                 <div class='endp-cover'  (mouseleave)='popup("leave","popup-endp")' (mouseenter)='popup("enter","popup-endp")'>
@@ -231,7 +231,7 @@
             <div class="det-label">Tags</div>
             <div class="det-value" [ngClass]="{PlaceHolder:tags_empty}" >{{service.tags || 'Services are cooler with tags'}}</div>
         </li>
-        <li *ngIf="service.serviceType == 'function'">
+        <li class='hide' *ngIf="service.serviceType == 'function'">
             <div class="det-label">Regions</div>
             <div class="det-value">
                 <!-- {{service.regions}} -->
@@ -270,7 +270,7 @@
                     <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
 
                 </li>
-                <li *ngIf="service.serviceType == 'function'">
+                <li class='hide' *ngIf="service.serviceType == 'function'">
         
                     <div class="det-label">Accounts</div>
                     <div class="det-value">
@@ -299,7 +299,7 @@
                         </div>
                     </div>
                 </li>
-                <li *ngIf="service.serviceType == 'function'">
+                <li class='hide' *ngIf="service.serviceType == 'function'">
                     <div class="det-label">Endpoints</div>
                     <div class="det-value">
                         <div class='endp-cover'  (mouseleave)='popup("leave","popup-endp2")' (mouseenter)='popup("enter","popup-endp2")'>
@@ -344,7 +344,7 @@
                     <input [(ngModel)]="tags_temp" (ngModelChange)='updateTags()' type='text' (focus)='flag=true;' (blur)='flag=false;' class="det-value-input" placeholder="Services are cooler with tags">
                 </li>
                 <p class='email-err-msg labelfortags' *ngIf='flag' >Please enter tags seperated by commas</p>
-                <li *ngIf="service.serviceType == 'function'">
+                <li class='hide' *ngIf="service.serviceType == 'function'">
                     <div class="det-label">Regions</div>
                     <div class="det-value">
                         <div class="det-value-div det-value-div-right">

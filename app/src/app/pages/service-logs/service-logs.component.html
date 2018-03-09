@@ -24,16 +24,16 @@
                                 <ion-range-slider #sliderElement id='sliderElement' min=1 [max]='sliderMax' [from]='sliderFrom' step=1  (onFinish)='getRange($event)' (onUpdate)="onClickFilter()"></ion-range-slider>
                             </div>
                         </div>
-                        <div class="eachFilter">
+                        <div class="eachFilter no-border-no-padding">
                             <div><div class='hori-line'></div>ENVIRONMENT</div>
                             <dropdown class="dropdown-3" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="environment" (onSelected)="onEnvSelected($event)"></dropdown>            
                         </div>
                         
-                        <div class="eachFilter" *ngIf='service.serviceType == "function"'>
+                        <div class="eachFilter hide" *ngIf='service.serviceType == "function"'>
                             <div><div class='hori-line'></div>ACCOUNT</div>
                             <dropdown class="dropdown-3" [dropdwnContent]="accList" title="Select enviroment" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>            
                         </div>
-                        <div class="eachFilter" *ngIf='service.serviceType == "function"'>
+                        <div class="eachFilter hide" *ngIf='service.serviceType == "function"'>
                             <div><div class='hori-line'></div>REGION</div>
                             <dropdown class="dropdown-3"  [dropdwnContent]="regList" title="Select enviroment" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>            
                         </div>

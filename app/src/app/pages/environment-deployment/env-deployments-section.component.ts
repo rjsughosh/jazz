@@ -22,7 +22,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
   envObj:any;
   disableRetry:boolean = false;
   paginationSelected: Boolean = true;
-	totalPagesTable: number = 1;
+	totalPagesTable: number = 7;
 	prevActivePage: number = 1;
   limitValue : number = 10;
 	offsetValue:number = 0;
@@ -50,6 +50,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
   deployment_id:any=[];
   length:any;
   status_val:number;
+  relativeUrl:string='/jazz/deployments'
   status: any =[];
   buildNo:any =[];
   backupLogs:any=[];
@@ -269,16 +270,32 @@ export class EnvDeploymentsSectionComponent implements OnInit {
 
   callServiceEnvdeployment() {
     this.loadingState = 'loading';
+    this.isLoading = true;
     if ( this.subscription ) {
       this.subscription.unsubscribe();
     }
-    this.subscription = this.http.get('/jazz/deployments?domain=' + this.service.domain + '&service=' + this.service.name + '&environment=' + this.env ).subscribe(
+    this.addQueryParam('domain=', this.service.domain, false);
+    this.addQueryParam('service=', this.service.name, false);
+    this.addQueryParam('environment=', this.env, false);
+
+    this.subscription = this.http.get(this.relativeUrl).subscribe(
       (response) => {
 
         if((response.data == undefined) || (response.data.length == 0) || (response.data.deployments.length == 0 ) ){
           this.envResponseEmpty = true;
           this.isLoading = false;
 					}else{
+
+
+          var pageCount = response.data.count;
+          
+          if(pageCount){
+            this.totalPagesTable = Math.ceil(pageCount/this.limitValue);
+          }
+          else{
+            this.totalPagesTable = 0;
+          }
+
           this.envResponseEmpty = false;
           this.isLoading = false;
           this.envResponseTrue = true;
@@ -451,17 +468,133 @@ export class EnvDeploymentsSectionComponent implements OnInit {
       }
 
   ngOnInit() {
-
+    
   }
 
   paginatePage(currentlyActivePage){
-		if(this.prevActivePage != currentlyActivePage){
-        this.prevActivePage = currentlyActivePage;
-        this.deployments=[];
-        this.offsetValue = (this.limitValue * (currentlyActivePage-1));
+    if(this.prevActivePage != currentlyActivePage){
+      this.prevActivePage = currentlyActivePage;
+      // this.pageSelected = currentlyActivePage;
+      this.deployments = [];
+      // this.backupdata = [];
+      //this.fetchServices();  /** call fetch services
+
+      // var queryParamKey = 'limit=';
+      // var queryParamValue = this.limitValue;
+      // this.addQueryParam(queryParamKey, queryParamValue, false );
+
+
+      var queryParamKey = 'offset=';
+      // console.log("this.limitValue",this.limitValue);
+      // console.log("currentlyActivePage",currentlyActivePage);
+      // console.log("this.limitValue * currentlyActivePage ",this.limitValue * currentlyActivePage);
+
+      var offsetValue = (this.limitValue * (currentlyActivePage-1));
+
+      // console.log("offsetValue paginatePage ******",offsetValue);
+
+      var queryParamValue = offsetValue;
+      this.addQueryParam(queryParamKey, queryParamValue, true );
+      /*
+      * Required:- we need the total number of records from the api, which will be equal to totalPagesTable.
+      * We should be able to pass start number, size/number of records on each page to the api, where,
+      * start = (size * currentlyActivePage) + 1
+      */
+    }
+    else{
+      // console.log("page not changed");
+    }
+	}
+	addQueryParam(queryParamKey, queryParamValue, makeCall){
+    // console.log("queryParamKey ", queryParamKey);
+    // console.log("queryParamValue ", queryParamValue);
+
+    if( this.relativeUrl.indexOf('?') == -1 ){
+        this.relativeUrl += '?';
+      }
+
+      if( this.relativeUrl.indexOf(queryParamKey ) == -1 && queryParamValue.toString() != '' && queryParamValue.toString().length > 0  ){
+        this.relativeUrl += queryParamKey + queryParamValue + '&';
+        // this.serviceCall();
+      }
+      else{
+
+        var array = this.formKeyValuePairFrmUrl();
+        var arrayWithNewValues = this.replaceIfKeyExists(array, queryParamKey, queryParamValue);
+        var newrelateUrl = this.formStringFrmObj(arrayWithNewValues);
+        this.relativeUrl = this.relativeUrl.split("?")[0] + "?" + newrelateUrl;
+
+      }
+
+      if(makeCall){
+        // console.log("relativeUrl"+this.relativeUrl);
         this.callServiceEnvdeployment();
       }
-	  }
+	}
+	formStringFrmObj(array){
+    var string= "";
+    array.forEach(function(param) {
+      if(param.value != undefined && param.value.toString() != ""){
+        string = string + param.key + "=" + param.value + "&"
+      }
+    });
+    // console.log("formStringFrmObj ", string);
+    return string;
+  }
+	replaceIfKeyExists(array, newkey, newvalue){
+    array.forEach(function(param) {
+      if((param.key + "=") == newkey){
+        param.value = newvalue;
+      }
+		});
+		return array;
+  }
+		
+	formKeyValuePairFrmUrl(){
+    var queryParameters = this.relativeUrl.split("?")[1];
+    var eachParam = queryParameters.split("&");
+    var array = [];
+
+    eachParam.forEach(function(param) {
+      var key = param.split("=")[0];
+      var val = param.split("=")[1];
+      if(key != ""){ // to add key only if has value
+        array.push({"key":key, "value":val});
+      }
+      if(val == undefined || val.toString() == ""){
+        var index = array.indexOf(param);
+        if(index > -1){
+          array.splice(array.indexOf(param),1); // to remove the key if value is empty
+        }
+      }
+    });
+    // console.log("formKeyValuePairFrmUrl ", array);
+    return array;
+  }
+  currentlyActive:number=1;
+  totalPageNum: number = 12;
+
+	paginatePageInTable(clickedPage){
+		switch(clickedPage){
+		 case 'prev':
+		   if(this.currentlyActive > 1)
+			 this.currentlyActive = this.currentlyActive - 1;
+		   break;
+		 case 'next':
+		   if(this.currentlyActive < this.totalPageNum)
+			 this.currentlyActive = this.currentlyActive + 1;
+		   break;
+		 case '1':
+		   this.currentlyActive = 1;
+		   break;
+		 default:
+		   if(clickedPage > 1){
+			 this.currentlyActive = clickedPage;
+		   }
+		}
+		// paginatePage()
+		this.paginatePage(this.currentlyActive);
+ }
 
   ngOnChanges(x:any) {
     this.envObj = this.cache.get('currentEnv');
@@ -478,6 +611,10 @@ export class EnvDeploymentsSectionComponent implements OnInit {
 				this.env = "prod";
       }
     });
+    var queryParamKey = 'limit=';
+
+    this.addQueryParam('limit=', this.limitValue, false);
+
     this.callServiceEnvdeployment();
     this.sort = new Sort(this.deployments);
     // console.log("sort : " ,  this.sort )
