@@ -14,6 +14,11 @@ html.tmobile {
     font-family: Lato !important;
 }
 
+.no-border-no-padding{
+  border:none !important;
+  padding-bottom:0 !important;
+}
+
 @font-face {
     font-family: Lato;
     src: url(/assets/fonts/lato/Lato-Thin.ttf);

@@ -13,6 +13,14 @@ import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter
   styleUrls: ['./env-assets-section.component.scss']
 })
 export class EnvAssetsSectionComponent implements OnInit {
+
+	 state: string = 'default';
+   showPaginationtable: boolean = true;
+   currentlyActive: number = 1;
+	 totalPageNum: number = 12;
+	 offset:number = 0;
+	 offsetval:number = 0;
+
 	private env:any;
 	private http:any;
 	private subscription:any;
@@ -59,6 +67,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 	lastCommitted: any;
 	islink:boolean = false;
 	count: any = [];
+	relativeUrl:string = '/jazz/assets/search';
 
 
   @Input() service: any = {};
@@ -73,6 +82,7 @@ export class EnvAssetsSectionComponent implements OnInit {
   ) {
     this.http = request;
    }
+
 
  
   
@@ -108,32 +118,58 @@ export class EnvAssetsSectionComponent implements OnInit {
 	  }
 }
 	callServiceEnvAssets() {
+		this.isLoading = true;
     if ( this.subscription ) {
       this.subscription.unsubscribe();
 		}
 				var payload = {
 				service: this.service.name,
 				domain: this.service.domain,
-				environment: this.env
+				environment: this.env,
+				limit:10,
+				
 				};
-				this.subscription = this.http.post('https://cloud-api.corporate.t-mobile.com/api/jazz/assets/search', payload).subscribe(
+				if(this.offsetval > 0){
+					payload["offset"] = this.offsetval;
+				}
+				this.subscription = this.http.post(this.relativeUrl, payload).subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
 
       // this.subscription = this.http.get('/jazz/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
         (response) => {
 					// console.log("response  = ",response);
 					// console.log("response data  = ",response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
+					// response.data.push.apply(response.data,response.data);
 					if((response.data == undefined) || (response.data.length == 0)){
             this.envResponseEmpty = true;
 						this.isLoading = false;
 					}
 					else
 					{
+						var pageCount = response.data.length;
+
+          
+          if(pageCount){
+            this.totalPageNum = Math.ceil(pageCount/this.limitValue);
+          }
+          else{
+            this.totalPageNum = 0;
+          }
 					this.envResponseEmpty = false;
 					this.isLoading = false;
+						
 					this.envResponseTrue = true;
+					// console.log('response.data ',response.data );
 					this.length = response.data.length;
+					// console.log('length ',this.length );
+
+					// this.length = 21;
 					this.assetsList = response.data;
+					
 					for(var i=0; i < this.length ; i++){
 						this.type[i] = response.data[i].type;
 						
@@ -163,8 +199,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 						}else{
 						this.arn[i] = response.data[i].provider_id;
 						}
-	 
-	
+
 						this.lastCommitted = response.data[i].timestamp;
 						var commit = this.lastCommitted.substring(0,19);
 						var lastCommit = new Date(commit);						
@@ -331,7 +366,49 @@ export class EnvAssetsSectionComponent implements OnInit {
 		// this.callServiceEnvAssets() 
 		// let cachedData = this.cache.get(this.model.username);
 	}
-	
+	limitValue : number = 10;
+  prevActivePage: number = 0;
+
+	paginatePage(currentlyActivePage){
+    if(this.prevActivePage != currentlyActivePage){
+      this.prevActivePage = currentlyActivePage;
+      // this.pageSelected = currentlyActivePage;
+      this.assetsList = [];
+     
+
+			this.offsetval = (this.limitValue * (currentlyActivePage-1));
+		
+			this.callServiceEnvAssets();
+
+    }
+    else{
+      // console.log("page not changed");
+    }
+	}
+
+
+	paginatePageInTable(clickedPage){
+		switch(clickedPage){
+		 case 'prev':
+		   if(this.currentlyActive > 1)
+			 this.currentlyActive = this.currentlyActive - 1;
+		   break;
+		 case 'next':
+		   if(this.currentlyActive < this.totalPageNum)
+			 this.currentlyActive = this.currentlyActive + 1;
+		   break;
+		 case '1':
+		   this.currentlyActive = 1;
+		   break;
+		 default:
+		   if(clickedPage > 1){
+			 this.currentlyActive = clickedPage;
+		   }
+		}
+		// paginatePage()
+		this.paginatePage(this.currentlyActive);
+ }
+
 	ngOnChanges(x:any) {
     this.route.params.subscribe(
       params => {
