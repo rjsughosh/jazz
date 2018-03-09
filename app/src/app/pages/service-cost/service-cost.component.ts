@@ -326,43 +326,43 @@ export class ServiceCostComponent implements OnInit {
 	}
 	cancelFilter(event){
 		switch(event){
-		  case 'time-range':{this.onRangeListSelected('Day'); 
+		  case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
 			break;
 		  }
 		  case 'time-range-slider':{this.getRangefunc(1);
 		  
 			break;
 		  }
-		  case 'period':{ this.onPeriodSelected('15 Minutes');
+		  case 'period':{ this.adv_filters.onPeriodSelected('15 Minutes');
 			break;
 		  }
-		  case 'statistic':{      this.onStatisticSelected('Average');
+		  case 'statistic':{      this.adv_filters.onStatisticSelected('Average');
 		  
 			break;
 		  }
-		  case 'account':{      this.onaccSelected('Acc 1');
+		  case 'account':{      this.adv_filters.onaccSelected('Acc 1');
 		  
 			break;
 		  }
-		  case 'region':{      this.onregSelected('reg 1');
+		  case 'region':{      this.adv_filters.onregSelected('reg 1');
 		  
 			break;
 		  }
-		  case 'env':{      this.onEnvSelected('prod');
+		  case 'env':{      this.adv_filters.onEnvSelected('prod');
 		  
 			break;
 		  }
-		  case 'method':{      this.onMethodListSelected('POST');
+		  case 'method':{      this.adv_filters.onMethodListSelected('POST');
 		  
 			break;
 		  }
-		  case 'all':{ this.onRangeListSelected('Day');    
-		  this.onPeriodSelected('15 Minutes');
-		  this.onStatisticSelected('Average');
-		  this.onaccSelected('Acc 1');
-		  this.onregSelected('reg 1');
-		  this.onEnvSelected('prod');
-		  this.onMethodListSelected('POST');
+		  case 'all':{ this.adv_filters.onRangeListSelected('Day');    
+		  this.adv_filters.onPeriodSelected('15 Minutes');
+		  this.adv_filters.onStatisticSelected('Average');
+		  this.adv_filters.onaccSelected('Acc 1');
+		  this.adv_filters.onregSelected('reg 1');
+		  this.adv_filters.onEnvSelected('prod');
+		  this.adv_filters.onMethodListSelected('POST');
 			break;
 		  }
 		}
