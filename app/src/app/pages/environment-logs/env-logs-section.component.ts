@@ -1,9 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,ViewChild } from '@angular/core';
 import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
+import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from 'angular2-toaster';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+
 
 import { RequestService, MessageService, DataCacheService, AuthenticationService } from '../../core/services/index';
 
@@ -15,6 +18,39 @@ import { RequestService, MessageService, DataCacheService, AuthenticationService
 })
 export class EnvLogsSectionComponent implements OnInit {
 	private http: any;
+	@ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
+
+	advanced_filter_input:any = {
+		time_range:{
+			show:true,
+		},
+		slider:{
+			show:true,
+		},
+		period:{
+			show:false,
+		},
+		statistics:{
+			show:false,
+		},
+		path:{
+			show:false,
+		},
+		environment:{
+			show:false,
+		},
+		method:{
+			show:false,
+		},
+		account:{
+			show:true,
+		},
+		region:{
+			show:true,
+		}
+	}
+	fromlogs:boolean = true;
 	private subscription: any;
 	limitValue: number = 20;
 	offsetValue: number = 0;
@@ -341,6 +377,23 @@ export class EnvLogsSectionComponent implements OnInit {
 		this.resetPayload();
 
 	}
+	sendDefaults(range){
+		switch(range){
+			case 'Day':{     this.FilterTags.notify('filter-Period','15 Minutes')
+				break;
+			}
+			case 'Week':{   this.FilterTags.notify('filter-Period','1 Hour')
+				break;
+			}
+			case 'Month':{ 
+			   this.FilterTags.notify('filter-Period','6 Hours')
+				break;
+			}
+			case 'Year':{   this.FilterTags.notify('filter-Period','7 Days')
+				break;
+			}
+		}
+	}
 
 	getStartDate(filter, sliderFrom) {
 		var todayDate = new Date();
@@ -463,7 +516,86 @@ export class EnvLogsSectionComponent implements OnInit {
 
 			})
 	};
-
+	cancelFilter(event){
+		console.log('event',event);
+		switch(event){
+			case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
+			  break;
+			}
+			case 'time-range-slider':{this.adv_filters.getRange(1);
+			
+			  break;
+			}
+			case 'account':{this.adv_filters.onaccSelected('Acc 1');
+		
+			break;
+			}
+			case 'region':{this.adv_filters.onregSelected('reg 1');
+		
+			break;
+			}
+			case 'env':{this.adv_filters.onEnvSelected('prod');
+		
+			break;
+			}
+				
+			case 'all':{ this.adv_filters.onRangeListSelected('Day'); 
+			this.adv_filters.onaccSelected('Acc 1');   
+			this.adv_filters.onregSelected('reg 1');
+			this.adv_filters.onEnvSelected('prod');
+			  break;
+			}
+		  }
+	}
+	onFilterSelect(event){
+		// alert('key: '+event.key+'  value: '+event.value);
+		switch(event.key){
+		  case 'slider':{
+			this.getRange(event.value);
+			break;
+		  }
+		  
+		  case 'range':{
+			this.sendDefaults(event.value);
+			this.FilterTags.notifyLogs('filter-TimeRange',event.value);		
+			this.sliderFrom =1;
+			this.FilterTags.notifyLogs('filter-TimeRangeSlider',this.sliderFrom);
+			
+			var resetdate = this.getStartDate(event.value, this.sliderFrom);
+			// this.resetPeriodList(range);
+			this.selectedTimeRange = event.value;
+			this.payload.start_time = resetdate;
+			this.resetPayload();
+			// this.FilterTags.notify('filter-TimeRange',event.value);
+			// this.sendDefaults(event.value); 
+			// this.timerangeSelected=event.value;
+			// this.sliderFrom =1;
+			// this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);        
+			// var resetdate = this.getStartDate(event.value, this.sliderFrom);
+			// this.resetPeriodList(event.value);
+			// this.selectedTimeRange = event.value;
+			// this.payload.start_time = resetdate;
+			// this.callMetricsFunc();
+			this.adv_filters.setSlider(this.sliderMax);
+			break;
+		  }
+		  
+		  case 'account':{
+			  this.FilterTags.notify('filter-Account',event.value);
+			this.accSelected=event.value;
+			break;
+		  }
+		  case 'region':{ 
+			this.FilterTags.notify('filter-Region',event.value);
+			this.regSelected=event.value;
+			break;
+				
+		  }
+	
+	   
+		}
+		
+	}
 	getTime() {
 		var now = new Date();
 		this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
