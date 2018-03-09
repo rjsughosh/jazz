@@ -154,13 +154,23 @@ export class AdvancedFiltersComponent implements OnInit {
     
       
     var slider = document.getElementById('sliderElement');
+    console.log('slider  -=->',slider);
     if(slider != null || slider != undefined){
+        // alert('1')
         slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
+        
+        // alert('2')
         slider.getElementsByClassName('irs-bar-edge')[0].setAttribute('style',' background: none;background-color: #ed008c;border-bottom-left-radius:10px;border-top-left-radius:10px;width: 10px;');
+        // alert('3')
         slider.getElementsByClassName('irs-single')[0].setAttribute('style',' background: none;background-color: #ed008c;left:'+this.sliderPercentFrom+'%');
+        // alert('4')
         slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
+        // alert('5')
         slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
+        // alert('6')
+        slider.getElementsByClassName('irs-slider single')[0].classList.add('newone')
         slider.getElementsByClassName('irs-max')[0].setAttribute('style','background: none');
+        // alert('7')
         slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
     }
     

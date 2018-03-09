@@ -94,6 +94,7 @@ export class ServiceCostComponent implements OnInit {
 	sliderFrom = 1;
 	sliderPercentFrom;
 	sliderMax:number = 7;
+	
 	today = new Date();
 	yesterday = this.today.setDate(this.today.getDate()-1);
 
@@ -188,14 +189,14 @@ export class ServiceCostComponent implements OnInit {
 						break;
       }
       case 'range':{
+
         this.FilterTags.notify('filter-TimeRange',event.value);
 		this.sendDefaults(event.value);
 		
 		// this.cache.set('filter-TimeRange',range);
 		this.timerangeSelected=event.value;
 		this.sliderFrom =1;
-		this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);
-		
+		this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);		
 		var resetdate = this.getStartDate(event.value, this.sliderFrom);
 		this.selectedTimeRange = event.value;
         break;
@@ -254,7 +255,10 @@ export class ServiceCostComponent implements OnInit {
 	onregSelected(event){
     this.FilterTags.notify('filter-Region',event);
     this.regSelected=event;
-   }
+	 }
+	 
+	 
+
 	ngOnChanges(x:any){
 		this.fetchEnvlist();
 
