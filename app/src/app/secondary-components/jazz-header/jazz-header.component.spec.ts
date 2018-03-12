@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TmobileHeaderComponent } from './tmobile-header.component';
+import { JazzHeaderComponent } from './jazz-header.component';
 
-describe('TmobileHeaderComponent', () => {
-  let component: TmobileHeaderComponent;
-  let fixture: ComponentFixture<TmobileHeaderComponent>;
+describe('JazzHeaderComponent', () => {
+  let component: JazzHeaderComponent;
+  let fixture: ComponentFixture<JazzHeaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TmobileHeaderComponent ]
+      declarations: [ JazzHeaderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TmobileHeaderComponent);
+    fixture = TestBed.createComponent(JazzHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

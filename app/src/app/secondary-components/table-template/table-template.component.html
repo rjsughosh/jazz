@@ -29,7 +29,7 @@
 				<div class="cb-status-dets">Include error details</div>
 			</div>
 			<a (click)='openModal = !openModal;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-			<btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+			<btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
 		</div>
 	</div>
 </div>

@@ -1,4 +1,4 @@
-<tmobile-mob-header (backClick)='closeCreateService(serviceRequestSuccess)' class='show-for-mobile' [icon]="'notification'" [headText]="'Create a Service'" [status]="'none'"></tmobile-mob-header>
+<jazz-mob-header (backClick)='closeCreateService(serviceRequestSuccess)' class='show-for-mobile' [icon]="'notification'" [headText]="'Create a Service'" [status]="'none'"></jazz-mob-header>
 <div class="create-service-wrap" (click)="closeDropdowns()" [ngClass]="isLoading ? 'body-fix':'body-auto'">
     <section class="each-step-wrap create-service-header hide-for-mobile">
         <h4 class="bold-title">
@@ -163,7 +163,7 @@
                 </div>
     
             </section>
-            <section class="each-step-wrap accounts" *ngIf="typeOfService == 'function'">
+            <section class="each-step-wrap accounts hide" *ngIf="typeOfService == 'function'">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <p class="step-title">Accounts</p>
@@ -194,7 +194,7 @@
                     </div>
                 </div>
             </section>
-            <section class="each-step-wrap regions" *ngIf="typeOfService == 'function'">
+            <section class="each-step-wrap regions hide" *ngIf="typeOfService == 'function'">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <p class="step-title">Regions</p>
@@ -357,7 +357,7 @@
                                             <!-- <input name="slackInvite" type="text" class="textForm slackForm" [(ngModel)]="createSlackModel.invites"> -->
                                             <div class='createSlackbtns'>
                                                 <a (click)='cancelCreateSlack()'>CANCEL</a>
-                                                <btn-tmobile-primary [disablePrimaryBtn]='(createSlackModelname.valid && (createSlackModelname.dirty || createSlackModelname.touched)) || !createSlackModel.name || selectedApprovers2.length==0' class='createSlackbtn' text='CREATE' (click)='createSlack($event)'></btn-tmobile-primary>
+                                                <btn-jazz-primary [disablePrimaryBtn]='(createSlackModelname.valid && (createSlackModelname.dirty || createSlackModelname.touched)) || !createSlackModel.name || selectedApprovers2.length==0' class='createSlackbtn' text='CREATE' (click)='createSlack($event)'></btn-jazz-primary>
                                             </div>
                                         </div>
                                     </div>
@@ -684,7 +684,7 @@
                     
                 </section>
             <section class="footer-btn">
-                <btn-tmobile-primary text="DONE" newclass="back-btn" (click)="closeCreateService(serviceRequestSuccess)"></btn-tmobile-primary>
+                <btn-jazz-primary text="DONE" newclass="back-btn" (click)="closeCreateService(serviceRequestSuccess)"></btn-jazz-primary>
             </section>
         </section>
         <section class="error-screen" *ngIf='serviceRequestFailure'>
@@ -697,7 +697,7 @@
                 <p class="refer">If the issue persists, please contact us </p>
             </section>
             <section class="footer-btn">
-                <btn-tmobile-primary text="BACK" newclass="back-btn" (click)="backToCreateService()"></btn-tmobile-primary>
+                <btn-jazz-primary text="BACK" newclass="back-btn" (click)="backToCreateService()"></btn-jazz-primary>
             </section>
         </section>
     </div>

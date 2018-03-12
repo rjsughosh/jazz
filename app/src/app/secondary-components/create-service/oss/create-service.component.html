@@ -4,7 +4,9 @@
         <h4 class="bold-title">
             Create a Service
         </h4>
-        <img (click)="closeCreateService(serviceRequestSuccess)" src="../assets/images/icons/icon-close@3x.png">
+        <!-- <img (click)="closeCreateService(serviceRequestSuccess)" src="../assets/images/icons/icon-close@3x.png"> -->
+        <div (click)="closeCreateService(serviceRequestSuccess)" class="icon-icon-close"></div>
+
     </section>
     <div *ngIf='!serviceRequested' class="pad-for-mobile">
         <section class="each-step-wrap type-of-service">
@@ -21,7 +23,7 @@
                     </section>
                     <section class="col-lg-3 col-md-3 col-sm-4 col-xs-4  pad-left0 service-box-section">
                         <div tabindex="0" class="service-box" [ngClass]="{'service-box-selected': typeOfService == 'function'}" (keyup.enter)="changeServiceType('function')" (click)="changeServiceType('function')">
-                            <div class="icon-icon-lambda" [ngClass]="{'selected': typeOfService == 'function'}"></div>
+                            <div class="icon-icon-function" [ngClass]="{'selected': typeOfService == 'function'}"></div>
                             <p>LAMBDA</p>
                         </div>
                     </section>
@@ -42,35 +44,21 @@
                 <div class="col-lg-8 col-md-8">
                     <section class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pad-left0 service-box-section">
                         <div tabindex="0" class="service-box" [ngClass]="{'service-box-selected': typeOfPlatform == 'aws'}" (click)="changePlatformType('aws')">
-                            <div class="icon-logo-aws">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                                <span class="path3"></span>
-                                <span class="path4"></span>
-                                <span class="path5"></span>
-                                <span class="path6"></span>
-                                <span class="path7"></span>
-                            </div>
+                                <div class="icon-icon-AWS">
+                                        <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span class="path31"></span><span class="path32"></span><span class="path33"></span>
+                                </div>
                             <p>AWS</p>
                         </div>
                     </section>
                     <section class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pad-left0 service-box-section">
                         <div tabindex="-1" class="service-box disabled-box" [ngClass]="{'service-box-selected': typeOfPlatform == 'azure'}" (click)="changePlatformType('azure')">
-                            <div class="icon-logo-azure">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </div>
+                            <div class="icon-icon-azure"></div>
                             <p>Azure</p>
                         </div>
                     </section>
                     <section class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pad-left0 service-box-section">
                         <div tabindex="-1" class="service-box disabled-box" [ngClass]="{'service-box-selected': typeOfPlatform == 'gcloud'}" (click)="changePlatformType('gcloud')">
-                            <div class="icon-logo-googleCloud">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                                <span class="path3"></span>
-                                <span class="path4"></span>
-                            </div>
+                            <div class="icon-icon-googlecloud"></div>
                             <p>Google Cloud</p>
                         </div>
                     </section>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TmobileTableComponent } from './tmobile-table.component';
+import { JazzTableComponent } from './jazz-table.component';
 
-describe('TmobileTableComponent', () => {
-  let component: TmobileTableComponent;
-  let fixture: ComponentFixture<TmobileTableComponent>;
+describe('JazzTableComponent', () => {
+  let component: JazzTableComponent;
+  let fixture: ComponentFixture<JazzTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TmobileTableComponent ]
+      declarations: [ JazzTableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TmobileTableComponent);
+    fixture = TestBed.createComponent(JazzTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,6 @@
 <!-- TODO: Remove disclaimer after techtraining -->
 <!-- <div class="disclaimer-static-data"><i>This data is for representational purpose only and may not be accurate</i></div> -->
-<div class='feedback-overlay' *ngIf="openModal">
+<div class='feedback-overlay cq' *ngIf="openModal">
     <div class='feedback-wrap relative'>
         <div class='feedback-hdr relative'>Report an issue</div>
         <div class="separator-row"></div>
@@ -18,7 +18,7 @@
                 <div class="hide feedbackResErr" [class.show]="feedbackResErr"> Oops! {{feedbackMsg}}
                     <span> or <a (click)="mailTo()"> contact us</a> via email.</span>
                 </div>
-            </div>
+            </div> 
             <div class='feedback-btn-wrap'>
                 <div class="slack-checkbox custom-cb includeError" [class.invisible]="isLoading || feedbackRes">
                         <input type="checkbox" (click)="errorIncluded()"  id="checkbox-slack" [checked]="errorInclude">
@@ -26,7 +26,7 @@
                         <div class="cb-status-dets">Include error details</div>
                     </div>
                 <a (click)='openModal = !openModal;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-                <btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+                <btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
             </div> 
     </div>    
 </div>
