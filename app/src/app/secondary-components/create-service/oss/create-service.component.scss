@@ -1,8 +1,6 @@
 @import './../../../../main-styles';
 .create-service-wrap {
     background-color: white;
-    //width:70vw;
-    //min-width: 83rem;
     max-width: 980px;
     width: 100vw;
     padding: 0 3.5rem;
@@ -10,19 +8,6 @@
     overflow: auto;
     @media(max-width: 853px) {
         padding: 0 1.5rem;
-    }
-}
-.loading-row {
-    display: none;
-    z-index:5;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    background: #f3f3f3;
-    .loading-circle {
-        top: calc(50% - 1.5rem);
     }
 }
 
@@ -47,12 +32,9 @@
     }
     .service-box:focus{
         outline: none !important;
+
         border-color:#ed008c;
 
-    }
-    .service-box:hover{
-        border-color:#ed008c;
-        
     }
 }
 .type-of-platform, .type-of-service{
@@ -71,16 +53,12 @@
     &.disabled-box:focus{
       border-color: #cccccc !important;
     }
-    &.disabled-box:hover{
-        border-color: #cccccc !important;
-      }
 }
 
 .service-box img {
     height: 3.33rem;
     width: 88%;
     max-width: 70px;
-    /*width: 40px;*/
 }
 
 .service-box p {
@@ -102,31 +80,27 @@
 
 .service-box {
     .icon-icon-api,
-    .icon-icon-function,
+    .icon-icon-lambda,
     .icon-icon-web,
-    .icon-icon-AWS,
-    .icon-icon-azure,
-    .icon-icon-googlecloud,
-    .icon-icon-ccp{
+    .icon-logo-aws,
+    .icon-logo-azure,
+    .icon-logo-googleCloud,
+    .icon-logo-docker{
         font-size: 40px;
         color: #ccc;
-        span{
-            font-size: 40px;
-            color: #ccc;
-        }
     }
     &.service-box-selected {
         .icon-icon-api,
-        .icon-icon-function,
+        .icon-icon-lambda,
         .icon-icon-web {
             color: #ed008c;
         }
     }
 }
-.service-box .icon-icon-AWS,
-.service-box .icon-icon-azure,
-.service-box .icon-icon-googlecloud,
-.service-box .icon-icon-ccp{
+.service-box .icon-logo-aws,
+.service-box .icon-logo-azure,
+.service-box .icon-logo-googleCloud,
+.service-box .icon-logo-docker{
     position: relative;
     span{
         position: absolute;
@@ -135,9 +109,9 @@
         position: relative;
     }
 }
-.service-box .icon-icon-azure,
-.service-box .icon-icon-googlecloud,
-.service-box .icon-icon-ccp{
+.service-box .icon-logo-azure,
+.service-box .icon-logo-googleCloud,
+.service-box .icon-logo-docker{
     span:before{
         color: #ccc !important;
     }
@@ -187,12 +161,7 @@
 }
 
 .custom-cb input[type=checkbox] {
-    // visibility: hidden;
     opacity: 0;
-    width: 1.5rem;
-    // &:focus{
-    //     outline-color: #aaaaaa;//border color need to be changed
-    // }
 }
 
 .custom-cb input[type=checkbox]:checked + label {
@@ -248,7 +217,6 @@
 }
 
 .input-field-container {
-    /*margin-top: 20px;*/
     position: relative;
 }
 
@@ -264,7 +232,6 @@
 }
 .arrow_box {
 	position: relative;
-	// background: #f3f3f3;
 }
 .arrow_box:after {
 	bottom: 100%;
@@ -276,7 +243,7 @@
 	position: absolute;
 	pointer-events: none;
 	border-color: rgba(243, 243, 243, 0);
-	border-bottom-color: #f3f3f3;
+	border-bottom-color: lightgray;
 	border-width: 25px;
 	margin-left: -20px;
 }
@@ -390,22 +357,27 @@
 .disable-event {
     pointer-events: none;
     input[type="radio"] + label {
+        opacity: 0.3;
+    }
+    input[type="checkbox"] + label + div {
         color: #ddd;
+        border-color: #ddd;
+    }
+    /deep/input[type="checkbox"] label{
+                border-color: #dddd;
+
     }
 }
 
 .learn-more {
     margin-bottom: 0;
     font-size: 1rem;
-    a {
-        // margin-left: 5px;
-    }
 }
 
 .event-schedule-fields, .aws-event-fields .row{
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
-    background-color: #f3f3f3;
+    background-color: lightgray;
     margin-left: 15px;
 }
 
@@ -462,12 +434,11 @@
         &:hover {
             border: 1px solid #ed0295;
         }
-        .icon-icon-close {
+        img {
             position: absolute;
             width: 10px;
             top: 8px;
             right: 10px;
-            color:#ed008c;
         }
     }
     input {
@@ -540,10 +511,10 @@
         margin: 0;
         padding: 1.25rem 0;
     }
-
     .success-text {
         font-weight: 900;
         font-size: 2rem;
+        color: #5cae01;
     }
     section {
         padding: 1.25rem 0;
@@ -620,13 +591,12 @@
 
 .create-service-header {
     position: relative;
-    .icon-icon-close {
+    img {
         position: absolute;
         top: 2rem;
         right: 0;
         width: 1.25rem;
         cursor: pointer;
-        color: #ed008c;
     }
 }
 
@@ -640,11 +610,6 @@
 }
 
 .btn[disabled] {
-    // border-radius: 30px;
-    // padding: 10px 16px;
-    // background-color: #ed008c;
-    // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-    // border: none;
     opacity: .5;
 }
 
@@ -753,24 +718,6 @@ p.learn-more {
     background-color: #ed008c;
     color: #fff;
 }
-.pinkfocuslack
-{
-    background-color: #ed008c;
-    color: #fff;
-}
-.pinkfocususers
-{
-    background-color: #ed008c;
-    color: #fff;
-}
-.pinkfocus2
-{
-    background-color: #ed008c;
-    color: #fff;
-}
-// /deep/ .sidebar-inr{
-//         overflow-y: hidden;
-//     }
 .each-step-wrap{
     /deep/ input[type="radio"] + label{
         margin-left:-15px;
@@ -780,97 +727,7 @@ p.learn-more {
     padding-right:0;
 }
 
-.CreateSlackWindow{
-    // height: 380px;
-    width: 100%;
-    background-color: #f3f3f3;
-    padding: 24px;
-    margin-top:1rem;
-    a{
-        cursor: pointer;
-        font-size: 1rem;
-        color:#fc2f98;
-        font-weight:bold;
-    }
-
-    /deep/ .createSlackbtn{
-        .btnT-radial-in{
-            padding:0.5rem 1rem;
-            margin-left:1rem;
-        }
-        
-    }
-
-    .createSlackbtns{
-        margin-top:2rem;
-        text-align: right;
-    }
-    label{
-        margin:0;
-    }
-    
-}
-
-.slackForm{
-    margin-top: 6px;
-}
-
-.slack_arrow .arrow_box:after{
-    left:42.5%;
-    top:-3.2rem;
-    
-}
-
-.create-slack
-{
-    display:flex;
-    margin-top:0.5rem;
-    
-    span{
-        
-        font-weight:bold;
-        padding-right: 0.5rem;
-        label{
-            margin-top:0.25rem;
-        }
-
-    }
-    
-}
-.whit{
-    background:white;
-}
-.magen{
-    color:#ed008c;
-}
-
-.static-value{
-    position: absolute;
-    left: 25px;
-    color: #787878;
-    line-height: 40px;
-}
-
-#giturl{
-    padding-left:55px;
-}
-
-.git-error{
-    font-size:1rem;
-    color:#d0021b;
-    margin:-0.5rem 0 1rem 0;
-    padding:0;
-}
-.ip-err{
-    border:1px solid #d0021b;
-
-}
-
-.disableCb{
-    cursor: not-allowed!important;
-    border: 1px solid #999!important;
-}
-
-.grey{
-    color: #999!important;
+.disble{
+    border-color: #ddd !important;   
+    opacity: 0.5 !important; 
 }
