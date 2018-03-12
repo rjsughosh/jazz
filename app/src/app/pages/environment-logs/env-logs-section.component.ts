@@ -361,12 +361,26 @@ export class EnvLogsSectionComponent implements OnInit {
 	getRange(e) {
 		this.sliderFrom = e.from;
 		this.sliderPercentFrom = e.from_percent;
+		this.FilterTags.notifyLogs('filter-TimeRangeSlider',this.sliderFrom);
+
 		var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
 		// console.log(resetdate);
 		this.payload.start_time = resetdate;
 		this.resetPayload();
 
+		
+
 	}
+	getRangefunc(e){
+    
+		this.FilterTags.notify('filter-TimeRangeSlider',e);
+		
+		this.sliderFrom=1;
+		this.sliderPercentFrom=1;
+		var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
+		this.callLogsFunc();
+		
+	  }
 
 	onRangeListSelected(range) {
 		this.sliderFrom = 1;
@@ -522,7 +536,8 @@ export class EnvLogsSectionComponent implements OnInit {
 			case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
 			  break;
 			}
-			case 'time-range-slider':{this.adv_filters.getRange(1);
+			case 'time-range-slider':{
+				this.getRangefunc(1);
 			
 			  break;
 			}

@@ -367,7 +367,7 @@ export class ServiceLogsComponent implements OnInit {
 			case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
 			  break;
 			}
-			case 'time-range-slider':{this.getRange(1);
+			case 'time-range-slider':{this.getRangefunc(1);
 			
 			  break;
 			}

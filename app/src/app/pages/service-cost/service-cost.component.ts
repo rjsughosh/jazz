@@ -453,7 +453,7 @@ export class ServiceCostComponent implements OnInit {
     this.sliderPercentFrom=1;
     var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
     
-    
+    this.refreshCostData('');
   }
   getRange(e){
     this.FilterTags.notify('filter-TimeRangeSlider',e.from);
@@ -466,7 +466,7 @@ export class ServiceCostComponent implements OnInit {
   onClickFilter(){
     
     //ng2-ion-range-slider
-      
+      alert('sda')
     var slider = document.getElementById('sliderElement');
     
     slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')

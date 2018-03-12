@@ -479,4 +479,21 @@ dropdown{
 .slider-wrap{
     padding-bottom: 1.5rem;
 
+    /deep/ion-range-slider{
+       /deep/ .irs{
+            /deep/.irs-slider .single{
+                width: 20px !important ;
+                top: 20px!important ;
+                height: 20px!important ;
+                border-radius: 50%!important ;
+                cursor:pointer!important ;
+                background: none!important ;
+                 background-color: #fff!important ;
+                
+                }
+        }
+            
+        }
+
 }
+

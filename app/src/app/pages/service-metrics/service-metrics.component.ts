@@ -794,7 +794,7 @@ export class ServiceMetricsComponent implements OnInit {
         break;
       }
       case 'time-range-slider':{
-        // this.adv_filters.getRangefunc(1);
+        this.getRangefunc(1);
       
         break;
       }
