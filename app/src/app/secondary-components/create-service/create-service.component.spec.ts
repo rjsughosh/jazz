@@ -488,6 +488,39 @@ describe('CreateServiceComponent', () => {
             });
           }));  
 
+          
+    // TEST CASE UT005 - STARTED 
+    it('Clone field is not present for API & Function',()=>{
+      component.changeServiceType('api');
+      fixture.detectChanges();
+      let cloneapi = fixture.debugElement.query(By.css('#checkbox-gitclone'));
+      component.changeServiceType('function');
+      fixture.detectChanges();
+      let clonefunction = fixture.debugElement.query(By.css('#checkbox-gitclone'));
+      expect(cloneapi).toBeNull ;
+      expect(clonefunction).toBeNull ;
+    });
+    it('CDN field is not present for API & Function',()=>{
+      component.changeServiceType('api');
+      fixture.detectChanges();
+      let cdnapi = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
+      component.changeServiceType('function');
+      fixture.detectChanges();
+      let cdnfunction = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
+      expect(cdnapi).toBeNull ;
+      expect(cdnfunction).toBeNull ;
+    });
+    it('CDN field is not present for API & Function',()=>{
+      component.changeServiceType('api');
+      fixture.detectChanges();
+      let cdnapi = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
+      component.changeServiceType('function');
+      fixture.detectChanges();
+      let cdnfunction = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
+      expect(cdnapi).toBeNull ;
+      expect(cdnfunction).toBeNull ;
+    });
+
 });
 
 
