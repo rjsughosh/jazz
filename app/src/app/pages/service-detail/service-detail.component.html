@@ -1,4 +1,4 @@
-<tmobile-mob-header [icon]="'notification'" [headText]="service.name" [status]="'green'"></tmobile-mob-header>
+<jazz-mob-header [icon]="'notification'" [headText]="service.name" [status]="'green'"></jazz-mob-header>
 <section class="page-container service-detail-page">
     <navigation-bar [links]="breadcrumbs"></navigation-bar>
     
@@ -13,7 +13,7 @@
         <div class="page-title-wrap hide-for-mobile">
             <h1 class="page-hdr bold-title">{{service.name}}</h1>
             <span class="page-sub-title"><span class="service-type">{{service.serviceType}}</span><span *ngIf="service.runtime"> - {{service.runtime}}</span></span>
-            <btn-tmobile-secondary class="delete-service-btn" text="DELETE SERVICE" [disablebtn]="!canDelete" (click)="deleteService(true)"></btn-tmobile-secondary>
+            <btn-jazz-secondary class="delete-service-btn" text="DELETE SERVICE" [disablebtn]="!canDelete" (click)="deleteService(true)"></btn-jazz-secondary>
         </div>
         <!-- <div class="page-status-row hide-for-mobile">
             <div class="page-status" [ngClass]="service.status"><span>Status</span></div>
@@ -65,7 +65,7 @@
                     <input name="serviceName" type="text" class="textForm" placeholder="Service Name" id="service-name-search" [(ngModel)]="ServiceName" (ngModelChange)="onServiceNameChange()">
                 </div>
                 <div class="footer-btns" [class.invisible]="isLoading">
-                    <btn-tmobile-primary text="DELETE" (click)="deleteServiveInit()" newclass="delete-btn" [disablePrimaryBtn]="disblebtn"></btn-tmobile-primary>
+                    <btn-jazz-primary text="DELETE" (click)="deleteServiveInit()" newclass="delete-btn" [disablePrimaryBtn]="disblebtn"></btn-jazz-primary>
                     <a (click)="hideDeletePopup()">CANCEL</a>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                     <div class="ctc-us">"{{service.name}}" {{successMessage}}</div>
                 </div>
                 <div class="footer-btns" [class.invisible]="isLoading">
-                        <btn-tmobile-primary text="DONE" (click)="backtoservice()" newclass="delete-btn"></btn-tmobile-primary>
+                        <btn-jazz-primary text="DONE" (click)="backtoservice()" newclass="delete-btn"></btn-jazz-primary>
                        
                 </div>
         </div>
@@ -89,7 +89,7 @@
                         <br><div class='ctc-us'>If the problem persists, <a (click)='goToAbout("about")'> contact us</a>.</div>
                 </div>
                 <div class="footer-btns" [class.invisible]="isLoading">
-                        <btn-tmobile-primary text=" DONE" (click)="backtoservice()" newclass="delete-btn"></btn-tmobile-primary>
+                        <btn-jazz-primary text=" DONE" (click)="backtoservice()" newclass="delete-btn"></btn-jazz-primary>
                        
                 </div>
         </div>

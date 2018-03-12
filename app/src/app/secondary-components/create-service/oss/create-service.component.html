@@ -1,17 +1,18 @@
-<tmobile-mob-header (backClick)='closeCreateService(serviceRequestSuccess)' class='show-for-mobile' [icon]="'notification'" [headText]="'Create a Service'" [status]="'none'"></tmobile-mob-header>
+<jazz-mob-header (backClick)='closeCreateService(serviceRequestSuccess)' class='show-for-mobile' [icon]="'notification'" [headText]="'Create a Service'" [status]="'none'"></jazz-mob-header>
 <div class="create-service-wrap" (click)="closeDropdowns()" [ngClass]="isLoading ? 'body-fix':'body-auto'">
     <section class="each-step-wrap create-service-header hide-for-mobile">
         <h4 class="bold-title">
             Create a Service
         </h4>
+        <!-- <img (click)="closeCreateService(serviceRequestSuccess)" src="../assets/images/icons/icon-close@3x.png"> -->
         <div (click)="closeCreateService(serviceRequestSuccess)" class="icon-icon-close"></div>
+
     </section>
     <div *ngIf='!serviceRequested' class="pad-for-mobile">
         <section class="each-step-wrap type-of-service">
             <div class="row">
                 <div class="col-lg-4 col-md-4">
-                    <p class="step-title">This is OSS specific placeholder Component <span>*</span></p>
-                    <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
+                    <p class="step-title">Choose the type of service you want to create<span>*</span></p>
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <section class="col-lg-3 col-md-3 col-sm-4 col-xs-4  pad-left0 service-box-section">
@@ -23,7 +24,7 @@
                     <section class="col-lg-3 col-md-3 col-sm-4 col-xs-4  pad-left0 service-box-section">
                         <div tabindex="0" class="service-box" [ngClass]="{'service-box-selected': typeOfService == 'function'}" (keyup.enter)="changeServiceType('function')" (click)="changeServiceType('function')">
                             <div class="icon-icon-function" [ngClass]="{'selected': typeOfService == 'function'}"></div>
-                            <p>FUNCTION</p>
+                            <p>LAMBDA</p>
                         </div>
                     </section>
                     <section class="col-lg-3 col-md-3 col-sm-4 col-xs-4 pad-left0 service-box-section">
@@ -39,14 +40,13 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <p class="step-title">Choose what platform you would like to use<span>*</span></p>
-                    <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <section class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pad-left0 service-box-section">
                         <div tabindex="0" class="service-box" [ngClass]="{'service-box-selected': typeOfPlatform == 'aws'}" (click)="changePlatformType('aws')">
-                            <div class="icon-icon-AWS">
-                                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span class="path31"></span><span class="path32"></span><span class="path33"></span>
-                            </div>
+                                <div class="icon-icon-AWS">
+                                        <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span class="path31"></span><span class="path32"></span><span class="path33"></span>
+                                </div>
                             <p>AWS</p>
                         </div>
                     </section>
@@ -62,12 +62,6 @@
                             <p>Google Cloud</p>
                         </div>
                     </section>
-                    <section class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pad-left0 service-box-section hide">
-                        <div class="service-box disabled-box" [ngClass]="{'service-box-selected': typeOfPlatform == 'ccp'}" (click)="changePlatformType('ccp')">
-                            <div class="icon-icon-ccp"></div>
-                            <p>CCP</p>
-                        </div>
-                    </section>
                 </div>
             </div>
         </section>
@@ -75,7 +69,6 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <p class="step-title">Choose your runtime<span>*</span></p>
-                    <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <div class="input-field-container">
@@ -132,9 +125,7 @@
                                     <p class="termsConditions" *ngIf="serviceName.valid && serviceAvailable && isDomainDefined && !invalidServiceName && !invalidDomainName">Service name in the specified namespace is available!</p>
                                     <p class="termsConditions" *ngIf="serviceName.valid && serviceNotAvailable && !isDomainDefined">Service name is not available. Please try another service name</p>
                                     <p class="termsConditions" *ngIf="serviceName.valid && serviceNotAvailable && isDomainDefined">Service name in the specified namespace is not available. Please try another combination of namespace & service name.</p>
-                                    <!-- <p class="termsConditions" *ngIf="serviceName.valid && serviceNameError">Error in validating Slack Channel name. Please try again or contact administrator.</p> -->
-                                    <p class="termsConditions" *ngIf="serviceName.valid && invalidServiceName">Service name should not start with number or hyphens and should not end with hyphens</p>
-                                    <p class="termsConditions" *ngIf="serviceName.valid && invalidServiceNameNum">Service name should not start a number</p>                                                                        
+                                    <p class="termsConditions" *ngIf="serviceName.valid && invalidServiceName">Service name should not start or end with hyphens</p>                                                                        
                                     <img *ngIf="serviceName.valid && showLoader" class="input-loader" src="../assets/images/icons/loading.png">
                                 </div>
                             </div>
@@ -146,7 +137,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <p class="step-title">Namespace<span>*</span></p>
-                        <p class="step-details">Namespace provides easier abstraction to implement similar security & access control on your services.</p>
+                        <p class="step-details">Namespaces provide easier abstraction to implement similar security & access control on your APIs.</p>
                     </div>
                     <div class="col-lg-8 col-md-8">
                         <section class="col-lg-12  pad-left0">
@@ -154,71 +145,8 @@
                                 <div class="input-wrapper" [ngClass]="{'unavailable' : !domainName.valid && (domainName.dirty || domainName.touched) || (domainName.valid && invalidDomainName) }">
                                     <input name="domainName" pattern="^[A-Za-z0-9\-]+$" type="text" class="textForm" id="domainName" required placeholder="Enter namespace" [(ngModel)]="model.domainName" #domainName='ngModel' (blur)="validateName($event)" (ngModelChange)="invalidDomainName=false" required>
                                     <p class="termsConditions" *ngIf="!domainName.valid && (domainName.dirty || domainName.touched)">Namespace must contain only letters, numbers or hyphens (consecutive hyphens are not allowed)</p>
-                                    <p class="termsConditions" *ngIf="domainName.valid && invalidDomainName">Namespace should not start with number or hyphens and should not end with hyphens</p>                                    
+                                    <p class="termsConditions" *ngIf="domainName.valid && invalidDomainName">Namespace should not start or end with hyphens</p>                                    
                                     <img *ngIf="serviceName.valid && domainName.valid && showLoader" class="input-loader" src="../assets/images/icons/loading.png">                                    
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-    
-            </section>
-            <section class="each-step-wrap accounts" *ngIf="typeOfService == 'function'">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <p class="step-title">Accounts</p>
-                        <p class="step-details">To which accounts should we deploy your service to?</p>
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <section class="col-lg-12  pad-left0">
-                            <div class="input-field-container">
-                                <div class="selected-approvers">
-                                    <ul (click)='focusInputAccount($event)'>
-                                        <li *ngFor="let selected of selectedAccount;let i=index"   >
-                                            {{selected}}
-                                            <span (click)="removeAccount(i, selected)" class="icon-icon-close"></span>
-                                        </li>
-                                        <input (keydown)="keypressAccount($event)"  (blur)='blurAccount()' autocomplete="off" id="AccountInput" name="AccountInput" type="text" class="textForm" [(ngModel)]="AccountInput" (ngModelChange)="onAccountChange($event)">
-
-                                    </ul>
-                                </div>
-                                <div [hidden]="!showAccountList" class="approvers-list-wrap">
-                                    <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let account of accounts| myfilter:AccountInput;let k = index;" (focus)=" k==focusindex " [ngClass]="{pinkfocus : k==focusindex }" [ngStyle]="scrollList" >
-                                            <div  (click)="selectAccount(account);$event.stopPropagation();" index="{k}" [attr.account]='account'>{{account}}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </section>
-            <section class="each-step-wrap regions" *ngIf="typeOfService == 'function'">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <p class="step-title">Regions</p>
-                        <p class="step-details">To which regions should we deploy your service to?</p>
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <section class="col-lg-12  pad-left0">
-                            <div class="input-field-container">
-                                <div class="selected-approvers">
-                                    <ul (click)='focusInputRegion($event)'>
-                                        <li *ngFor="let selected of selectedRegion;let i=index"   >
-                                            {{selected}}
-                                            <span (click)="removeRegion(i, selected)" class="icon-icon-close"></span>
-                                        </li>
-                                        <input (keydown)="keypressRegion($event)" (blur)='blurRegion()' autocomplete="off" id="regionInput" name="regionInput" type="text" class="textForm" [(ngModel)]="regionInput" (ngModelChange)="onRegionChange($event)">
-
-                                    </ul>
-                                </div>
-                                <div [hidden]="!showRegionList" class="approvers-list-wrap">
-                                    <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let region of regions | myfilter:regionInput;let m = index;" (focus)=" m==focusindexR " [ngClass]="{pinkfocus : m==focusindexR }" [ngStyle]="scrollList" >
-                                            <div  (click)="selectRegion(region);$event.stopPropagation();" index="{m}" [attr.region]='region'>{{region}}</div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -235,131 +163,35 @@
                         <section class="col-lg-12  pad-left0">
                             <div class="input-field-container">
                                 <div class="input-wrapper">
-                                    <textarea rows="2" cols="50" name="serviceDescription" type="text" class="textForm" placeholder="Service description" id="serviceDescription" [(ngModel)]="model.serviceDescription"  #serviceDescription='ngModel'></textarea>
+                                    <textarea rows="2" cols="50" name="serviceDescription" type="text" class="textForm" placeholder="Service Description" id="serviceDescription" [(ngModel)]="model.serviceDescription"  #serviceDescription='ngModel'></textarea>
                                 </div>
                             </div>
                         </section>
                     </div>
                 </div>
             </section>
-            <section class="each-step-wrap Internal-access" *ngIf="typeOfService == 'api'">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <p class="step-title grey">Accessibility</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <section class="col-lg-12  pad-left0">
-                            <div class="input-field-container">
-                                <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" [disabled]="true" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
-                                    <label for="checkbox-public" class="disableCb"></label>
-                                    <div class="cb-status-dets grey">The API should be publicly accessible</div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </section>
-
-            <section class="each-step-wrap Internal-access" *ngIf="typeOfService == 'api'">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <p class="step-title">Access Restrictions</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <section class="col-lg-12  pad-left0">
-                            <div class="input-field-container">
-                                <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" id="checkbox-vpc" [disabled]="publicSelected" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected && !publicSelected" (change)="vpcSelected = !vpcSelected">
-                                    <label for="checkbox-vpc" [class.disableCb]="publicSelected"></label>
-                                    <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </section>
-
             <section class="each-step-wrap slack-channel-integration">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <p class="step-title">Slack Channel Integration</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
                     </div>
                     <div class="col-lg-8 col-md-8">
                         <section class="col-lg-12  pad-left0">
                             <div class="input-field-container">
-                                <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" (click)='slackFunction()' id="checkbox-slack" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="slackSelected" (change)="slackSelected = !slackSelected">
-                                    <label for="checkbox-slack"></label>
+                                <div class="slack-checkbox custom-cb disable-event">
+                                    <input type="checkbox" id="checkbox-slack" class="ng-untouched ng-valid ng-dirty ng-valid-parse" disabled aria-invalid="false" [checked]="slackSelected" (change)="slackSelected = !slackSelected">
+                                    <label for="checkbox-slack" class="disble"></label>
                                     <div class="cb-status-dets"> Do you want us to notify you through #Slack?</div>
                                 </div>
                                 <div *ngIf="slackSelected == true">
-                                    <div class="input-wrapper slack_arrow" [ngClass]="{'available': slackAvailble , 'unavailable': channelNameError || !channelname.valid && (channelname.dirty || channelname.touched)}">
+                                    <div class="input-wrapper" [ngClass]="{'available': slackAvailble, 'unavailable': slackNotAvailble|| channelNameError || !channelname.valid && (channelname.dirty || channelname.touched)}">
                                         <input name="channelname" id="channelname" type="text" class="textForm" pattern="^[A-Za-z0-9\-_]+$" required placeholder="Enter Slack Channel name" #channelname='ngModel' [(ngModel)]="model.slackName" (blur)="checkSlackNameAvailability()" (ngModelChange)="onSlackChange($event)">
                                         <img class="input-loader ng-hide">
                                         <p class="termsConditions" *ngIf="!channelname.valid && (channelname.dirty || channelname.touched)">Slack channel must contain only letters, numbers, hyphens and underscores.</p>
                                         <p class="termsConditions" *ngIf="channelname.valid && slackAvailble">Slack channel is available.</p>
-                                        <!-- <p class="termsConditions" *ngIf="channelname.valid && slackNotAvailble">Slack channel is not available. Please provide a valid slack channel.</p> -->
+                                        <p class="termsConditions" *ngIf="channelname.valid && slackNotAvailble">Slack channel is not available. Please provide a valid slack channel.</p>
                                         <p class="termsConditions" *ngIf="channelname.valid && channelNameError">Error in validating Slack Channel name. Please try again or contact administrator.</p>
-                                        <div class='create-slack' *ngIf="channelname.valid && slackNotAvailble">
-                                            <p class="termsConditions" >This channel doesn’t exist.  <span class='magen'>Create channel</span></p>
-                                            <span class="slack-checkbox custom-cb">
-                                                <input type="checkbox"  id="checkbox-slack2" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="createslackSelected" (change)="createslackSelected = !createslackSelected" >
-                                                <label for="checkbox-slack2"></label>
-                                            </span>
-                                        </div>
-                                        
                                         <img *ngIf="channelname.valid && slackChannelLoader" class="input-loader" src="../assets/images/icons/loading.png">
-                                        <div class="CreateSlackWindow termsConditions arrow_box" *ngIf="channelname.valid && slackNotAvailble && createslackSelected">
-                                            
-                                            <p>This channel will be public. Anyone on your team can view and join this channel.</p>
-                                            <label for="slackName">Name<span class='magen'>*</span></label>
-                                            <input name="slackName" pattern="^[a-z]" type="text" class="textForm slackForm" required placeholder="#name" [(ngModel)]="model.slackName" #createSlackModelname='ngModel' (blur)='checkSlackNameAvailability()'>
-                                            <p class="slackForm">Names must be lowercase,  with no spaces,  and unique.</p>
-                                            
-                                            <label for="slackPurpose">Purpose (optional)</label>
-                                            <input name="slackPurpose"  type="text" class="textForm slackForm"   [(ngModel)]="createSlackModel.purpose">
-                                            <p class="slackForm">What’s this channel about?</p>
-                                            
-                                            <div class="" id='slackInvite'>
-                                                <div class="loading-row" [class.show]="isLoadingNewSlack">
-                                                    <div class="loading-circle"></div>
-                                                </div>
-                                                <section class="pad-left0">
-                                                    <div class="input-field-container">
-                                                        
-                                                        <label for="slackInvite">Send invites to<span class='magen'>*</span></label>
-                                                        
-                                                        <div class="selected-approvers whit  slackForm">
-                                                            <ul (click)='focusInput2($event)'>
-                                                                <li *ngFor="let selected of selectedApprovers2;let i=index" >
-                                                                    {{selected.displayName}} ({{selected.userId}})
-                                                                    <span (click)="removeApprover2(i, selected)" class="icon-icon-close"></span>
-                                                                </li>
-                                                                <input (keydown)="keypress2($event);" autocomplete="off" id="approverName2" name="approverName2" type="text" class="textForm" [(ngModel)]="approverName2" (ngModelChange)="onApproverChange2($event)">
-                        
-                                                            </ul>
-                                                        </div>
-                                                        <div [hidden]="!showApproversList2" class="approvers-list-wrap">
-                                                            <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversList2 | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
-                                                                    <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </section>
-                                            </div>                                         
-                                                                                      
-                                            <!-- <input name="slackInvite" type="text" class="textForm slackForm" [(ngModel)]="createSlackModel.invites"> -->
-                                            <div class='createSlackbtns'>
-                                                <a (click)='cancelCreateSlack()'>CANCEL</a>
-                                                <btn-tmobile-primary [disablePrimaryBtn]='(createSlackModelname.valid && (createSlackModelname.dirty || createSlackModelname.touched)) || !createSlackModel.name || selectedApprovers2.length==0' class='createSlackbtn' text='CREATE' (click)='createSlack($event)'></btn-tmobile-primary>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -370,16 +202,15 @@
             <section class="each-step-wrap cache-ttl-integration" *ngIf="typeOfService == 'api'">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
-                        <p class="step-title grey">Cache Time-to-Live (TTL)</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
+                        <p class="step-title">Cache Time-to-Live (TTL)</p>
                     </div>
                     <div class="col-lg-8 col-md-8">
                         <section class="col-lg-12  pad-left0">
                             <div class="input-field-container">
-                                <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" [disabled]="true" id="checkbox-ttl" [checked]="ttlSelected" (change)="ttlSelected = !ttlSelected" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false">
-                                    <label for="checkbox-ttl" class="disableCb"></label>
-                                    <div class="cb-status-dets grey"> Yes, enable caching for my API.</div>
+                                <div class="slack-checkbox custom-cb disable-event">
+                                    <input disabled type="checkbox" id="checkbox-ttl" [checked]="ttlSelected" (change)="ttlSelected = !ttlSelected" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false">
+                                    <label for="checkbox-ttl" class="disble"></label>
+                                    <div class="cb-status-dets"> Yes, enable caching for my API.</div>
                                 </div>
                                 <div *ngIf="ttlSelected == true">
                                     <div class="input-wrapper" [ngClass]="{'unavailable': invalidttl}">
@@ -397,7 +228,6 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <p class="step-title">Event Schedule</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
                     </div>
                     <div class="col-lg-8 col-md-8">
                         <div class="input-field-container event-schedule-radio row zero-margin">
@@ -469,15 +299,15 @@
                                     </div>
                                     <div class="col-lg-5">
                                         <div class="input-wrapper">
-                                            <dropdown [dropdwnContent]="rateData" title="Select interval" [selected]="rateExpression.interval" [statusFilter]="statusFilter" (onSelected)="onSelectedDr($event)"></dropdown>
+                                            <dropdown [dropdwnContent]="rateData" [selected]="rateExpression.interval" [statusFilter]="statusFilter" (onSelected)="onSelectedDr($event)"></dropdown>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-error" *ngIf="rateExpression.error != undefined">
+                            <div class="form-error" *ngIf="rateExpression.error != undefined && rateExpression.type != 'none'">
                                 {{rateExpression.error}}
                             </div>
-                            <p *ngIf="rateExpression.type != 'none'" class="learn-more"><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Learn more</a> about CloudWatch Event schedules</p>
+                            <p *ngIf="rateExpression.type != 'none'" class="learn-more"><a target="_blank" href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Learn more</a> about CloudWatch Event schedules</p>
                         </div>
                     </div>
                 </div>
@@ -492,26 +322,26 @@
                     <div class="col-lg-8 col-md-8">
                         <div class="input-field-container event-schedule-radio row zero-margin">
                             <section class="col-lg-3 col-md-3  pad-left0">
-                                <div class="radio-container">
+                                <div class="radio-container disable-event">
                                     <input type="radio" name="AWSEvents" id="awsEventsNone" [value]="awsEventsNone" [checked]="eventExpression.type == 'awsEventsNone'" (click)="onAWSEventChange('awsEventsNone')">
                                     <label for="awsEventsNone"><span></span><span class="background"></span>None</label>
                                 </div>
                             </section>
                             <section class="col-lg-3 col-md-3  pad-left0">
-                                <div class="radio-container">
-                                    <input type="radio" name="AWSEvents" id="dynamodb" [value]="dynamodb" [checked]="eventExpression.type == 'dynamodb'" (click)="onAWSEventChange('dynamodb')">
+                                <div class="radio-container disable-event">
+                                    <input disabled type="radio" name="AWSEvents" id="dynamodb" [value]="dynamodb" [checked]="eventExpression.type == 'dynamodb'" (click)="onAWSEventChange('dynamodb')">
                                     <label for="dynamodb"><span></span><span class="background"></span>DynamoDB</label>
                                 </div>
                             </section>
                             <section class="col-lg-3 col-md-3  pad-left0">
-                                <div class="radio-container">
-                                    <input type="radio" name="AWSEvents" id="kinesis" [value]="kinesis" [checked]="eventExpression.type == 'kinesis'" (click)="onAWSEventChange('kinesis')">
+                                <div class="radio-container disable-event">
+                                    <input disabled type="radio" name="AWSEvents" id="kinesis" [value]="kinesis" [checked]="eventExpression.type == 'kinesis'" (click)="onAWSEventChange('kinesis')">
                                     <label for="kinesis"><span></span><span class="background"></span>Kinesis</label>
                                 </div>
                             </section>
                             <section class="col-lg-3 col-md-3  pad-left0">
-                                <div class="radio-container">
-                                    <input type="radio" name="AWSEvents" id="s3" [value]="s3" [checked]="eventExpression.type == 's3'" (click)="onAWSEventChange('s3')">
+                                <div class="radio-container disable-event">
+                                    <input disabled type="radio" name="AWSEvents" id="s3" [value]="s3" [checked]="eventExpression.type == 's3'" (click)="onAWSEventChange('s3')">
                                     <label for="s3"><span></span><span class="background"></span>S3</label>
                                 </div>
                             </section>
@@ -576,90 +406,15 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <p class="step-title">CDN configuration</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
+                        <p class="step-details hide">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p>
                     </div>
                     <div class="col-lg-8 col-md-8">
                         <section class="col-lg-12  pad-left0">
                             <div class="input-field-container">
-                                <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" id="checkbox-cdnconfig" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="cdnConfigSelected" (change)="cdnConfigSelected = !cdnConfigSelected">
-                                    <label for="checkbox-cdnconfig"></label>
+                                <div class="slack-checkbox custom-cb disable-event">
+                                    <input disabled type="checkbox" id="checkbox-cdnconfig" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="true" (change)="cdnConfigSelected = !cdnConfigSelected"><!--[checked]="cdnConfigSelected" -->
+                                    <label for="checkbox-cdnconfig" class="disble"></label>
                                     <div class="cb-status-dets">Do you need CDN configured for your website?</div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </section>
-
-            <section class="each-step-wrap cloudfront-url" *ngIf="typeOfService == 'website'">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <p class="step-title">Clone Repository from Git</p>
-                        <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
-                    </div>
-
-                    <div class="col-lg-8 col-md-8">
-                        <section class="col-lg-12  pad-left0">
-
-                            <div class="input-field-container">
-                                <div class="slack-checkbox custom-cb">
-                                    <input  type="checkbox" id="checkbox-gitclone" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="gitCloneSelected" (change)="gitChange()">
-                                    <label for="checkbox-gitclone"></label>
-                                    <div class="cb-status-dets">Do you need clone your code from Git?</div>
-                                </div>
-                            </div>
-
-                            <div *ngIf="gitCloneSelected == true">
-                                <label for="giturl" class="static-value">https://</label>
-                                <input name="gitUrl"  id="giturl" type="text" class="textForm" required   [(ngModel)]="gitRepo" (blur)='validateGIT()' placeholder="Enter Git repository url" [class.ip-err]="git_err">
-                                <p *ngIf='git_err' class='git-error'>Invalid Git Url</p>
-                                <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" id="checkbox-gitprivate" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="gitprivateSelected" (change)="gitprivateSelected = !gitprivateSelected">
-                                    <label for="checkbox-gitprivate"></label>
-                                    <div class="cb-status-dets">Is this a private repository?</div>
-                                </div>
-                                <div *ngIf="gitprivateSelected == true">
-                                    <input name="gitUsername" id="gitusername" type="text" class="textForm" placeholder="Enter Git username" required [(ngModel)]="gitusername">
-                                    <input name="gitUserpwd" id="gituserpwd" type="password" class="textForm" placeholder="Enter Git password" required [(ngModel)]="gituserpwd">
-                                </div>
-                                
-                            </div>
-
-                        </section>
-                    </div>
-                </div>
-            </section>
-
-            <section class="each-step-wrap approvers">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <p class="step-title">Approvers<span>*</span></p>                     
-                        
-                        <p class="step-details">User(s) who are required to approve code changes, deployment activities etc. They should be part of CORP AD Domain.</p>
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <section class="col-lg-12  pad-left0">
-                            <div class="input-field-container">
-                                <p class="step-title">
-                                    Users
-                                </p>
-                                <div class="selected-approvers">
-                                    <ul (click)='focusInput($event)'>
-                                        <li *ngFor="let selected of selectedApprovers;let i=index"   >
-                                            {{selected.displayName}} ({{selected.userId}})
-                                            <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
-                                        </li>
-                                        <input (keydown)="keypress($event)"   autocomplete="off" id="approverName" name="approverName" type="text" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
-
-                                    </ul>
-                                </div>
-                                <div [hidden]="!showApproversList" class="approvers-list-wrap">
-                                    <div class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
-                                            <div  (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -674,30 +429,28 @@
     </div>
     <div *ngIf='serviceRequested'>
         <section class="success-screen" *ngIf='serviceRequestSuccess'>
-            <div class="icon-icon-server-success success-text-color"></div>
-            <p class="success-text success-text-color">SUCCESS!</p>
+            <img src="../assets/images/create-success.png">
+            <p class="success-text">SUCCESS!</p>
             <section >
-                    <p class="refer">{{resMessage}}</p>
+                    <p class="refer">{{resMessage}}<a (click)="closeCreateService(serviceRequestSuccess)">here</a>.</p>
                 </section>
                 <section >
-                    <p class="refer">You can find more details on next steps <a target="_blank" href="https://tmobile.atlassian.net/wiki/spaces/CAPI/pages/218171156/Getting+Started+with+Service+Development+using+Jazz">here</a>.</p>
-                    
+                    <p class="refer">You can find more details on next steps <a  target="_blank" href="https://github.com/tmobile/jazz/wiki">here</a>.</p>
+
                 </section>
             <section class="footer-btn">
-                <btn-tmobile-primary text="DONE" newclass="back-btn" (click)="closeCreateService(serviceRequestSuccess)"></btn-tmobile-primary>
+                <btn-jazz-primary text="DONE" newclass="back-btn" (click)="closeCreateService(serviceRequestSuccess)"></btn-jazz-primary>
             </section>
         </section>
         <section class="error-screen" *ngIf='serviceRequestFailure'>
-            <div class="icon-icon-server-error">
-                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span>
-            </div>
+            <img src="../assets/images/refresh.png">
             <p class="error-text">Oops!</p>
             <section>
                 <p class="refer">{{errMessage}}</p>
                 <p class="refer">If the issue persists, please contact us </p>
             </section>
             <section class="footer-btn">
-                <btn-tmobile-primary text="BACK" newclass="back-btn" (click)="backToCreateService()"></btn-tmobile-primary>
+                <btn-jazz-primary text="BACK" newclass="back-btn" (click)="backToCreateService()"></btn-jazz-primary>
             </section>
         </section>
     </div>

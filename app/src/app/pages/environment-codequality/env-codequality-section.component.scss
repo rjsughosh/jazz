@@ -486,11 +486,13 @@ span{
     margin-top: 35px;
 }
 
-/deep/.loading-row{
-    border: none!important;
-    box-shadow: none!important;
-    padding: 15rem 2rem!important;
- }
+.cq{
+    /deep/.loading-row{
+        border: none!important;
+        box-shadow: none!important;
+        padding: 15rem 2rem!important;
+     }
+}
 
 /deep/.line-graph{
     position: relative;

@@ -9,7 +9,7 @@ import { IonRangeSliderModule } from "ng2-ion-range-slider";
 import { setTimeout } from 'timers';
 import { DataService } from "../data-service/data.service";
 
-// import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
+// import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
 
 
 @Component({

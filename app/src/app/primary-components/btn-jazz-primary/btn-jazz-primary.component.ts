@@ -9,12 +9,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'btn-tmobile-primary',
-    templateUrl: 'btn-tmobile-primary.component.html',
-    styleUrls: ['btn-tmobile-primary.component.scss']
+    selector: 'btn-jazz-primary',
+    templateUrl: 'btn-jazz-primary.component.html',
+    styleUrls: ['btn-jazz-primary.component.scss']
 })
 
-export class BtnTmobilePrimaryComponent implements OnInit {
+export class BtnJazzPrimaryComponent implements OnInit {
 
     // Inputs supplied from the parent (custom attribute values)
     @Input() text: string = 'DEFAULT TEXT';

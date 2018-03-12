@@ -3,7 +3,7 @@ import {DataCacheService , AuthenticationService , RequestService } from '../../
 import { Router, ActivatedRoute } from '@angular/router';
 import { ViewChild } from '@angular/core/src/metadata/di';
 import {DropdownComponent} from './../../primary-components/dropdown/dropdown.component';
-// import { Sort } from './tmobile-table-sort';
+// import { Sort } from './jazz-table-sort';
 
 @Component({
   selector: 'table-template',

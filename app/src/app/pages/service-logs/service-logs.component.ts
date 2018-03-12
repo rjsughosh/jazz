@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Inject, Input, Pipe, PipeTransform } from '@angular/core';
-import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
-import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
+import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
+import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
 import { ToasterService} from 'angular2-toaster';
 import { RequestService, MessageService } from '../../core/services/index';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';

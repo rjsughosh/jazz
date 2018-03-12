@@ -6,17 +6,17 @@
 
 import { Component, OnInit, Input, ElementRef, Renderer, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Sort } from './tmobile-table-sort';
-import { Filter } from './tmobile-filter';
+import { Sort } from './jazz-table-sort';
+import { Filter } from './jazz-filter';
 declare var $:any;
 
 @Component({
-    selector: 'tmobile-table',
-    templateUrl: './tmobile-table.component.html',
-    styleUrls: ['./tmobile-table.component.scss']
+    selector: 'jazz-table',
+    templateUrl: './jazz-table.component.html',
+    styleUrls: ['./jazz-table.component.scss']
 })
 
-export class TmobileTableComponent implements OnInit {
+export class JazzTableComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,

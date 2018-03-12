@@ -28,7 +28,7 @@
                         <div class="cb-status-dets">Include error details</div>
                     </div>
                 <a (click)='openModal = !openModal;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-                <btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+                <btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
             </div> 
     </div>    
 </div>
@@ -55,15 +55,15 @@
                                 <div><div class='hori-line'></div>ENVIRONMENT</div>
                                 <dropdown class="dropdown-1" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="envSelected" (onSelected)="onEnvSelected($event)"></dropdown>            
                             </div>
-                            <div class="eachFilter" *ngIf='methodList.length'>
+                            <div class="eachFilter no-border-no-padding" *ngIf='methodList.length'>
                                 <div><div class='hori-line'></div>METHOD</div>
                                 <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
                             </div>
-                            <div class="eachFilter" *ngIf='service.serviceType == "function" && regList.length'>
+                            <div class="eachFilter hide" *ngIf='service.serviceType == "function" && regList.length'>
                                 <div><div class='hori-line'></div>ACCOUNT</div>
                                 <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="accList" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
                             </div>
-                            <div class="eachFilter" *ngIf='service.serviceType == "function" && regList.length'>
+                            <div class="eachFilter hide" *ngIf='service.serviceType == "function" && regList.length'>
                                 <div><div class='hori-line'></div>REGION</div>
                                 <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="regList" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>
                             </div>

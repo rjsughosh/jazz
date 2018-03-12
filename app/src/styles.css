@@ -1,17 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
-html.tmobile {
+html.jazz {
     font-size: 12px;
     height: 100%;
     width: 100%;
 }
 
-.tmobile body {
+.jazz body {
     margin: 0;
     font-size: 14px;
     height: 100%;
     width: 100%;
     font-family: Lato !important;
+}
+
+.no-border-no-padding{
+  border:none !important;
+  padding-bottom:0 !important;
 }
 
 @font-face {

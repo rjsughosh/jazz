@@ -6,8 +6,8 @@
 
 import { Component, OnInit, EventEmitter, Output, ViewChild} from '@angular/core';
 import { ToasterService} from 'angular2-toaster';
-import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
-import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
+import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
+import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
 import { SharedService } from "../../SharedService.service";
 import { RequestService, DataCacheService, MessageService ,AuthenticationService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
