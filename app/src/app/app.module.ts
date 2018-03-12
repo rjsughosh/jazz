@@ -20,6 +20,7 @@ import {DropdownModule} from 'ng2-dropdown';
 import {PopoverModule} from 'ng2-popover';
 import {AppComponent} from './app.component';
 import {ConfigService, ConfigLoader} from './app.config';
+import {AdvancedFilterService} from './advanced-filter.service';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {LandingComponent} from './pages/landing/landing.component';
 import {TestApiComponent} from './pages/testapi/test-api.component';
@@ -65,6 +66,7 @@ if(environmentval == "oss"){
     CronParserService,
     SharedService,
     RouteGuard,
+    AdvancedFilterService,
     DataCacheService,
     RequestService,
     MessageService,
