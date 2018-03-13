@@ -11,14 +11,14 @@
                             <div><div class='hori-line'></div>PATH</div>
                             <dropdown class="dropdown-2 path" title="Select path"  [dropdwnContent]="pathList" [selected]="pathSelected" (onSelected)="onPathListicSelected($event)"></dropdown>
                         </div>
-                        <!-- <div class="eachFilter" *ngIf='advanced_filter_input.environment.show'>
+                        <div class="eachFilter" *ngIf='advanced_filter_input.environment.show'>
                             <div><div class='hori-line'></div>ENVIRONMENT</div>
                             <dropdown class="dropdown-1"  [dropdwnContent]="envList" title="Select enviroment" [selected]="envSelected" (onSelected)="onEnvSelected($event)"></dropdown>            
-                        </div> -->
-                        <!-- <div class="eachFilter no-border-no-padding" *ngIf='advanced_filter_input.method.show'>
+                        </div>
+                        <div class="eachFilter no-border-no-padding" *ngIf='advanced_filter_input.method.show'>
                             <div><div class='hori-line'></div>METHOD</div>
                             <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="methodList" [selected]="methodSelected" (onSelected)="onMethodListSelected($event)"></dropdown>
-                        </div> -->
+                        </div>
                         <div class="eachFilter hide" *ngIf='advanced_filter_input.account.show'>
                             <div><div class='hori-line'></div>ACCOUNT</div>
                             <dropdown class="dropdown-3 method" title="Select method" [dropdwnContent]="accList" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>
