@@ -24,8 +24,8 @@ export class ServiceCostComponent implements OnInit {
 
 	@Input() service: any = {};
 	@ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
 	
-	@ViewChild('AdvFilters') advfilters: AdvFilters;
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
 	// @ViewChild('advanced_filters') advanced_filters: advanced_filter;
 	componentFactoryResolver:ComponentFactoryResolver;
@@ -192,9 +192,9 @@ export class ServiceCostComponent implements OnInit {
 		// filterServ.setRootViewContainerRef(viewContainerRef);
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		console.log(this.advfilters);
+		console.log(this.advFilters);
 		// this.advfilters.clearView();
-		let viewContainerRef = this.advfilters.viewContainer;
+		let viewContainerRef = this.advFilters.viewContainerRef;
 		console.log(viewContainerRef);
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
