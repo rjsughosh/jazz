@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { ToasterService} from 'angular2-toaster';
 import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
 import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
@@ -9,23 +9,26 @@ import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter
 import {IonRangeSliderModule} from "ng2-ion-range-slider"
 import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
 import {AdvancedFilterService} from './../../advanced-filter.service';
-
+import {AdvFilters} from './../../adv-filter.directive';
 
 
 @Component({
-  selector: 'service-cost',
+	selector: 'service-cost',
+	
   templateUrl: './service-cost.component.html',
-  providers: [RequestService, MessageService, AdvancedFilterService],
-  styleUrls: ['./service-cost.component.scss']
+	providers: [RequestService, MessageService, AdvancedFilterService],
+	
+	styleUrls: ['./service-cost.component.scss']
 })
 export class ServiceCostComponent implements OnInit {
 
 	@Input() service: any = {};
 	@ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
-
+	
+	@ViewChild('AdvFilters') advfilters: AdvFilters;
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
-	// @ViewChild('adv_filters') adv_filters: advanced_filter;
-
+	// @ViewChild('advanced_filters') advanced_filters: advanced_filter;
+	componentFactoryResolver:ComponentFactoryResolver;
 	 private subscription:any;
 	 advanced_filter_input:any = {
     time_range:{
@@ -161,23 +164,42 @@ export class ServiceCostComponent implements OnInit {
 
 
 
-	constructor( @Inject(ElementRef) elementRef: ElementRef, private advancedFilters: AdvancedFilterService , private cache: DataCacheService , private authenticationservice: AuthenticationService , private request: RequestService, private messageservice: MessageService, private toasterService: ToasterService,private router: Router) {
+	constructor( @Inject(ElementRef) elementRef: ElementRef, @Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService , private cache: DataCacheService , private authenticationservice: AuthenticationService , private request: RequestService, private messageservice: MessageService, private toasterService: ToasterService,private router: Router) {
 
 		var el:HTMLElement = elementRef.nativeElement;
     	this.root = el;
 		this.toasterService = toasterService;
 		this.http = request;
 		this.toastmessage=messageservice;
+		
+		this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},3000);
+		
 	}
 
 	accList=['tmodevops','tmonpe'];
   regList=['us-west-2', 'us-east-1'];
 	accSelected:string = 'tmodevops';
 	regSelected:string = 'us-west-2';
-	advanced_filter:any;
+	 
 	
-	getFilter(){
-		this.advanced_filter = this.advancedFilters.getFilterInternal();
+	getFilter(filterServ){
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		console.log(this.advfilters);
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advfilters.viewContainer;
+		console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		
+
 	}
 	onFilterSelect(event){
     // alert('key: '+event.key+'  value: '+event.value);
@@ -333,47 +355,47 @@ export class ServiceCostComponent implements OnInit {
 		// console.log('onRowClicked',row);
 	}
 	cancelFilter(event){
-		switch(event){
-		  case 'time-range':{this.advanced_filter.onRangeListSelected('Day'); 
-			break;
-		  }
-		  case 'time-range-slider':{this.getRangefunc(1);
+		// switch(event){
+		//   case 'time-range':{this.advanced_filters.onRangeListSelected('Day'); 
+		// 	break;
+		//   }
+		//   case 'time-range-slider':{this.getRangefunc(1);
 		  
-			break;
-		  }
-		  case 'period':{ this.advanced_filter.onPeriodSelected('15 Minutes');
-			break;
-		  }
-		  case 'statistic':{      this.advanced_filter.onStatisticSelected('Average');
+		// 	break;
+		//   }
+		//   case 'period':{ this.advanced_filters.onPeriodSelected('15 Minutes');
+		// 	break;
+		//   }
+		//   case 'statistic':{      this.advanced_filters.onStatisticSelected('Average');
 		  
-			break;
-		  }
-		  case 'account':{      this.advanced_filter.onaccSelected('Acc 1');
+		// 	break;
+		//   }
+		//   case 'account':{      this.advanced_filters.onaccSelected('Acc 1');
 		  
-			break;
-		  }
-		  case 'region':{      this.advanced_filter.onregSelected('reg 1');
+		// 	break;
+		//   }
+		//   case 'region':{      this.advanced_filters.onregSelected('reg 1');
 		  
-			break;
-		  }
-		  case 'env':{      this.advanced_filter.onEnvSelected('prod');
+		// 	break;
+		//   }
+		//   case 'env':{      this.advanced_filters.onEnvSelected('prod');
 		  
-			break;
-		  }
-		  case 'method':{      this.advanced_filter.onMethodListSelected('POST');
+		// 	break;
+		//   }
+		//   case 'method':{      this.advanced_filters.onMethodListSelected('POST');
 		  
-			break;
-		  }
-		  case 'all':{ this.advanced_filter.onRangeListSelected('Day');    
-		  this.advanced_filter.onPeriodSelected('15 Minutes');
-		  this.advanced_filter.onStatisticSelected('Average');
-		  this.advanced_filter.onaccSelected('Acc 1');
-		  this.advanced_filter.onregSelected('reg 1');
-		  this.advanced_filter.onEnvSelected('prod');
-		  this.advanced_filter.onMethodListSelected('POST');
-			break;
-		  }
-		}
+		// 	break;
+		//   }
+		//   case 'all':{ this.advanced_filters.onRangeListSelected('Day');    
+		//   this.advanced_filters.onPeriodSelected('15 Minutes');
+		//   this.advanced_filters.onStatisticSelected('Average');
+		//   this.advanced_filters.onaccSelected('Acc 1');
+		//   this.advanced_filters.onregSelected('reg 1');
+		//   this.advanced_filters.onEnvSelected('prod');
+		//   this.advanced_filters.onMethodListSelected('POST');
+		// 	break;
+		//   }
+		// }
 	   
 		// this.getRange(1);
 	

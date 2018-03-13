@@ -174,7 +174,8 @@
                 <!-- <search-box (onChange)="onServiceSearch($event)"></search-box> -->
                
         </div>
-        <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters>
+        <!-- (onFilterSelect)='onFilterSelect($event)' -->
+        <ng-container advfilters></ng-container>
 
         <div class="graph-wrp">
              <div class="loading-row-cost" [class.show]="isGraphLoading">

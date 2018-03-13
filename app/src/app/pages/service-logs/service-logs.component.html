@@ -4,7 +4,7 @@
     <div>Meanwhile you can access logs <a (click)="navigateTo($event)">here</a></div>
 </div>
 <div class="row page-section section-top"> 
-    <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [logs]='fromlogs' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters>
+    <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [logs]='fromlogs' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
     <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
 
     <div class="filter-wrp">

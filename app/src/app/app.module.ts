@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 
-import {APP_INITIALIZER} from '@angular/core';
+import {APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 
 import {MomentModule} from 'angular2-moment';
 import {DatePickerModule} from './primary-components/daterange-picker/ng2-datepicker';
@@ -31,6 +31,7 @@ import {routes} from './app.route';
 // import {FilterTagsServicesComponent} from './secondary-components/filter-tags-services/filter-tags-services.component';
 // import {EnvironmentModule} from './environment-module/environment.module';
 // import {ServiceModule} from './service-module/service.module';
+
 let environmentval = environment.envName;
 let loadedModule;
 if(environmentval == "oss"){
@@ -47,7 +48,8 @@ if(environmentval == "oss"){
     LandingComponent,
     Error404Component,
     // FooterComponent,
-    TestApiComponent,
+    TestApiComponent
+   
     
   ],
   imports: [
@@ -66,7 +68,7 @@ if(environmentval == "oss"){
     CronParserService,
     SharedService,
     RouteGuard,
-    AdvancedFilterService,
+    
     DataCacheService,
     RequestService,
     MessageService,
@@ -78,7 +80,10 @@ if(environmentval == "oss"){
       multi: true
     }
   ],
+  
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap: [AppComponent]
+  
 })
 
 export class AppModule {

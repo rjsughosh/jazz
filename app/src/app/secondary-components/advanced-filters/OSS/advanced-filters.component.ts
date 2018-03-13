@@ -1,5 +1,5 @@
 import { Component,ViewContainerRef, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
-import {DataCacheService } from '../../core/services/index';
+import {DataCacheService } from '../../../core/services/index';
 import {IonRangeSliderModule} from "ng2-ion-range-slider"
 
 @Component({
@@ -7,7 +7,7 @@ import {IonRangeSliderModule} from "ng2-ion-range-slider"
   templateUrl: './advanced-filters.component.html',
   styleUrls: ['./advanced-filters.component.scss']
 })
-export class AdvancedFiltersComponent implements OnInit {
+export class AdvancedFiltersComponentOSS implements OnInit {
    
 
     constructor(public viewContainerRef: ViewContainerRef) { }

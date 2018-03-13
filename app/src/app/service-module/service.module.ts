@@ -13,6 +13,11 @@ import * as InternalModules from './service.module.imports.internal'
 import * as CommonServiceComponents from './service.module.declarations.common';
 import * as OssComponents from './service.module.declarations.oss';
 import * as InternalComponents from './service.module.declarations.internal';
+import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+
+import { AdvFilters }            from '../adv-filter.directive';
+import {AdvancedFilterService} from '../advanced-filter.service';
 // End 
 import { Symbol } from 'rxjs';
 
@@ -57,6 +62,7 @@ for(let i in specificComponents){
     //SharedModule,
     
   ],
+  providers:[AdvancedFilterService],
   declarations: [
     //ServiceAccessControlComponent,
     //ServiceCostComponent,
@@ -67,8 +73,12 @@ for(let i in specificComponents){
     //ServicesComponent,
     //AmountComponent,
     //BarGraphComponent
-    ...declarationsArray
-  ]
+    ...declarationsArray,
+    AdvFilters,
+    AdvancedFiltersComponentOSS,
+    AdvancedFiltersComponent
+  ],
+  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
 })
 export class ServiceModule {
 }
