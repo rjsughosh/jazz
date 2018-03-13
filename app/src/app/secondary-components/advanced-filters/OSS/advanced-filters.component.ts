@@ -11,6 +11,7 @@ export class AdvancedFiltersComponentOSS implements OnInit {
    
 
     constructor(public viewContainerRef: ViewContainerRef) { }
+    data:any;
     @Input() advanced_filter_input:any = {};
     @Input() logs:boolean = false;
     @Input() assets:boolean = false;
@@ -185,7 +186,9 @@ export class AdvancedFiltersComponentOSS implements OnInit {
 
    
     ngOnInit(){
-        
+        console.log(this.data);
+        this.advanced_filter_input = this.data.advanced_filter_input;
+        this.service = this.data.service;
     }
     ngOnChanges(x:any){
        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
