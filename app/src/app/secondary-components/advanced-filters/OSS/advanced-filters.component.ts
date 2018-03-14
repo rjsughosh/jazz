@@ -123,11 +123,11 @@ export class AdvancedFiltersComponentOSS implements OnInit {
         this.methodSelected=method;
         this.selectFilter["key"]='method';
         this.selectFilter["value"]=method;
-        alert('before emit')
+        // alert('before emit')
 console.log('filter emitter has',this.onFilterSelect)
        
         this.onFilterSelect.emit(this.selectFilter);
-        alert('after emit')
+        // alert('after emit')
         
     }
     

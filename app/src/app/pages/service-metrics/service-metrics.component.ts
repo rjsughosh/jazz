@@ -204,7 +204,7 @@ export class ServiceMetricsComponent implements OnInit {
 		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
 		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
 		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
-			alert("1");
+			// alert("1");
 			comp.onFilterSelect(event);
 		});
 

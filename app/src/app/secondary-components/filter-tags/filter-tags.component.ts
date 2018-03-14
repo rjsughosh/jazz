@@ -122,7 +122,7 @@ export class FilterTagsComponent implements OnInit {
                 break;
             }
             case 'filter-Method':{
-                alert('in method case')
+                // alert('in method case')
                 this.filterTags[7].value=this.filter_Method=value;                
                 break;
             }

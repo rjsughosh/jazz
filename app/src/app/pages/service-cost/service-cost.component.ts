@@ -211,7 +211,7 @@ export class ServiceCostComponent implements OnInit {
     // alert('key: '+event.key+'  value: '+event.value);
     switch(event.key){
       case 'slider':{
-        this.getRange(event.value);
+        this.getRangefunc(event.value);
         break;
       }
       case 'period':{
@@ -256,12 +256,15 @@ export class ServiceCostComponent implements OnInit {
 
       }
       case 'method':{
-				alert('eneterd -> cost -> method')
+				// alert('eneterd -> cost -> method')
+				if(event.value == undefined){
+					this.FilterTags.notify('filter-Method',event);
+				}
 				var method=event.value;
-				alert('notifying tags')
+				// alert('notifying tags')
 				console.log('event is this',event);
 				this.FilterTags.notify('filter-Method',method);
-	alert('notified tags');
+	// alert('notified tags');
 				this.methodSelected=method;
 				break;
       }
@@ -393,7 +396,7 @@ export class ServiceCostComponent implements OnInit {
 			break;
 		  }
 		  case 'method':{      
-				alert('cancelling method')
+				// alert('cancelling method')
 				console.log('instace is this',this.instance_yes);
 				this.instance_yes.onMethodListSelected('POST');
 		  
@@ -505,7 +508,7 @@ export class ServiceCostComponent implements OnInit {
   onClickFilter(){
     
     //ng2-ion-range-slider
-      alert('sda')
+      // alert('sda')
     var slider = document.getElementById('sliderElement');
     
     slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
