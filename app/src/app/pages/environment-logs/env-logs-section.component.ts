@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,ViewChild } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 // import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
 // import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
@@ -12,6 +12,8 @@ import {AdvancedFiltersComponent} from './../../secondary-components/advanced-fi
 
 
 import { RequestService, MessageService, DataCacheService, AuthenticationService } from '../../core/services/index';
+import {AdvancedFilterService} from './../../advanced-filter.service';
+import {AdvFilters} from './../../adv-filter.directive';
 
 @Component({
 	selector: 'env-logs-section',
@@ -21,8 +23,10 @@ import { RequestService, MessageService, DataCacheService, AuthenticationService
 })
 export class EnvLogsSectionComponent implements OnInit {
 	private http: any;
-	@ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	// @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
+	componentFactoryResolver:ComponentFactoryResolver;
 
 	advanced_filter_input:any = {
 		time_range:{
@@ -234,6 +238,28 @@ export class EnvLogsSectionComponent implements OnInit {
 	  accSelected:string = 'tmodevops';
 	regSelected:string = 'us-west-2';
 	
+	getFilter(filterServ){
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		console.log(this.advFilters);
+		var comp = this;
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advFilters.viewContainerRef;
+		console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+			alert("1");
+			comp.onFilterSelect(event);
+		});
+
+	}
+
 	 onaccSelected(event){
 	//   this.FilterTags.notify('filter-Account',event);
 	  this.accSelected=event;
@@ -468,10 +494,16 @@ export class EnvLogsSectionComponent implements OnInit {
 		private router: Router,
 		private cache: DataCacheService,
 		private authenticationservice: AuthenticationService,
+		@Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService ,
 		private toasterService: ToasterService, private messageservice: MessageService) {
 		this.toasterService = toasterService;
 		this.http = request;
 		this.toastmessage = messageservice;
+		this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},5000);
 	}
 
 
@@ -535,35 +567,35 @@ export class EnvLogsSectionComponent implements OnInit {
 	};
 	cancelFilter(event){
 		console.log('event',event);
-		switch(event){
-			case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
-			  break;
-			}
-			case 'time-range-slider':{
-				this.getRangefunc(1);
+		// switch(event){
+		// 	case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
+		// 	  break;
+		// 	}
+		// 	case 'time-range-slider':{
+		// 		this.getRangefunc(1);
 			
-			  break;
-			}
-			case 'account':{this.adv_filters.onaccSelected('Acc 1');
+		// 	  break;
+		// 	}
+		// 	case 'account':{this.adv_filters.onaccSelected('Acc 1');
 		
-			break;
-			}
-			case 'region':{this.adv_filters.onregSelected('reg 1');
+		// 	break;
+		// 	}
+		// 	case 'region':{this.adv_filters.onregSelected('reg 1');
 		
-			break;
-			}
-			case 'env':{this.adv_filters.onEnvSelected('prod');
+		// 	break;
+		// 	}
+		// 	case 'env':{this.adv_filters.onEnvSelected('prod');
 		
-			break;
-			}
+		// 	break;
+		// 	}
 				
-			case 'all':{ this.adv_filters.onRangeListSelected('Day'); 
-			this.adv_filters.onaccSelected('Acc 1');   
-			this.adv_filters.onregSelected('reg 1');
-			this.adv_filters.onEnvSelected('prod');
-			  break;
-			}
-		  }
+		// 	case 'all':{ this.adv_filters.onRangeListSelected('Day'); 
+		// 	this.adv_filters.onaccSelected('Acc 1');   
+		// 	this.adv_filters.onregSelected('reg 1');
+		// 	this.adv_filters.onEnvSelected('prod');
+		// 	  break;
+		// 	}
+		// }
 	}
 	onFilterSelect(event){
 		// alert('key: '+event.key+'  value: '+event.value);
@@ -594,7 +626,7 @@ export class EnvLogsSectionComponent implements OnInit {
 			// this.selectedTimeRange = event.value;
 			// this.payload.start_time = resetdate;
 			// this.callMetricsFunc();
-			this.adv_filters.setSlider(this.sliderMax);
+			// this.adv_filters.setSlider(this.sliderMax);
 			break;
 		  }
 		  

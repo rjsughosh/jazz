@@ -40,7 +40,9 @@
             <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
 
             <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [assets]='fromassets' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
-            
+            <div>
+                <template adv-filters></template>
+            </div>
             <div class='filtr-wrap ' *ngIf='service.serviceType == "function"'>
                     <!-- <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags> -->
         

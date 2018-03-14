@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef, Inject, Input } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { DayData, WeekData, MonthData, Month6Data, YearData } from './data';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
 import { ToasterService} from 'angular2-toaster';
 import { RequestService, MessageService , AuthenticationService } from '../../core/services/index';
 import {DataCacheService } from '../../core/services/index';
@@ -8,6 +8,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {IonRangeSliderModule} from "ng2-ion-range-slider"
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
 import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+import {AdvancedFilterService} from './../../advanced-filter.service';
+import {AdvFilters} from './../../adv-filter.directive';
 
 
 
@@ -16,7 +18,7 @@ import {AdvancedFiltersComponent} from './../../secondary-components/advanced-fi
 @Component({ 
   selector: 'service-metrics',
   templateUrl: './service-metrics.component.html',
-  providers: [RequestService, MessageService],
+  providers: [RequestService, MessageService,AdvancedFilterService],
   styleUrls: ['./service-metrics.component.scss']
 })
 export class ServiceMetricsComponent implements OnInit {
@@ -25,9 +27,10 @@ export class ServiceMetricsComponent implements OnInit {
 
   @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
   @ViewChild('filtertags') FilterTags: FilterTagsComponent;
-  @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+  // @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
+  componentFactoryResolver:ComponentFactoryResolver;
 
-  
   
 
 	// public lineGraph: LineGraphComponent;
@@ -164,7 +167,7 @@ export class ServiceMetricsComponent implements OnInit {
 	json:any={};
 
 
-  constructor(@Inject(ElementRef) elementRef: ElementRef, private authenticationservice: AuthenticationService , private cache: DataCacheService,private router:Router, private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
+  constructor(@Inject(ElementRef) elementRef: ElementRef, @Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService , private authenticationservice: AuthenticationService , private cache: DataCacheService,private router:Router, private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
     var el:HTMLElement = elementRef.nativeElement;
     this.root = el;
     this.graphs = DayData;
@@ -172,6 +175,12 @@ export class ServiceMetricsComponent implements OnInit {
     this.toasterService = toasterService;
     this.http = request;
     this.toastmessage= messageservice;
+    this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},3000);
+		
   }
  
 	accList=['tmodevops','tmonpe'];
@@ -179,6 +188,27 @@ export class ServiceMetricsComponent implements OnInit {
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
   
+  getFilter(filterServ){
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		console.log(this.advFilters);
+		var comp = this;
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advFilters.viewContainerRef;
+		console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+			alert("1");
+			comp.onFilterSelect(event);
+		});
+
+	}
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
@@ -270,7 +300,7 @@ export class ServiceMetricsComponent implements OnInit {
         this.selectedTimeRange = event.value;
         this.payload.start_time = resetdate;
         this.callMetricsFunc();
-        this.adv_filters.setSlider(this.sliderMax);
+        // this.adv_filters.setSlider(this.sliderMax);
         break;
       }
       case 'environment':{
@@ -789,48 +819,48 @@ export class ServiceMetricsComponent implements OnInit {
   }
   
   cancelFilter(event){
-    switch(event){
-      case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
-        break;
-      }
-      case 'time-range-slider':{
-        this.getRangefunc(1);
+    // switch(event){
+    //   case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
+    //     break;
+    //   }
+    //   case 'time-range-slider':{
+    //     this.getRangefunc(1);
       
-        break;
-      }
-      case 'period':{ this.adv_filters.onPeriodSelected('15 Minutes');
-        break;
-      }
-      case 'statistic':{      this.adv_filters.onStatisticSelected('Average');
+    //     break;
+    //   }
+    //   case 'period':{ this.adv_filters.onPeriodSelected('15 Minutes');
+    //     break;
+    //   }
+    //   case 'statistic':{      this.adv_filters.onStatisticSelected('Average');
       
-        break;
-      }
-      case 'account':{      this.adv_filters.onaccSelected('Acc 1');
+    //     break;
+    //   }
+    //   case 'account':{      this.adv_filters.onaccSelected('Acc 1');
       
-        break;
-      }
-      case 'region':{      this.adv_filters.onregSelected('reg 1');
+    //     break;
+    //   }
+    //   case 'region':{      this.adv_filters.onregSelected('reg 1');
       
-        break;
-      }
-      case 'env':{      this.adv_filters.onEnvSelected('prod');
+    //     break;
+    //   }
+    //   case 'env':{      this.adv_filters.onEnvSelected('prod');
       
-        break;
-      }
-      case 'method':{      this.adv_filters.onMethodListSelected('POST');
+    //     break;
+    //   }
+    //   case 'method':{      this.adv_filters.onMethodListSelected('POST');
       
-        break;
-      }
-      case 'all':{ this.adv_filters.onRangeListSelected('Day');    
-      this.adv_filters.onPeriodSelected('15 Minutes');
-      this.adv_filters.onStatisticSelected('Average');
-      this.adv_filters.onaccSelected('Acc 1');
-      this.adv_filters.onregSelected('reg 1');
-      this.adv_filters.onEnvSelected('prod');
-      this.adv_filters.onMethodListSelected('POST');
-        break;
-      }
-    }
+    //     break;
+    //   }
+    //   case 'all':{ this.adv_filters.onRangeListSelected('Day');    
+    //   this.adv_filters.onPeriodSelected('15 Minutes');
+    //   this.adv_filters.onStatisticSelected('Average');
+    //   this.adv_filters.onaccSelected('Acc 1');
+    //   this.adv_filters.onregSelected('reg 1');
+    //   this.adv_filters.onEnvSelected('prod');
+    //   this.adv_filters.onMethodListSelected('POST');
+    //     break;
+    //   }
+    // }
    
     // this.getRange(1);
 
@@ -937,7 +967,7 @@ export class ServiceMetricsComponent implements OnInit {
     if(this.payload != undefined && this.payload.interval != undefined){
       this.payload.interval = this.periodListSeconds[this.periodList.indexOf(this.periodList[0])];
     }
-    this.adv_filters.resetPeriodList(this.periodList);
+    // this.adv_filters.resetPeriodList(this.periodList);
   }
   public goToAbout(hash){
     this.router.navigateByUrl('landing');

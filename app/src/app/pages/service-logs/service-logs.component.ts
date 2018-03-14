@@ -1,13 +1,15 @@
-import { Component, OnInit, ElementRef, Inject, Input, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
 import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
 import { ToasterService} from 'angular2-toaster';
 import { RequestService, MessageService } from '../../core/services/index';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
 import { AuthenticationService } from '../../core/services/index';
 import {DataCacheService } from '../../core/services/index';
 import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+import {AdvancedFilterService} from './../../advanced-filter.service';
+import {AdvFilters} from './../../adv-filter.directive';
 
 
 
@@ -20,18 +22,26 @@ import {AdvancedFiltersComponent} from './../../secondary-components/advanced-fi
 export class ServiceLogsComponent implements OnInit {
 
 	
-	constructor(@Inject(ElementRef) elementRef: ElementRef,private cache: DataCacheService, private authenticationservice: AuthenticationService , private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
+	constructor(@Inject(ElementRef) elementRef: ElementRef, @Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService ,private cache: DataCacheService, private authenticationservice: AuthenticationService , private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
 		var el:HTMLElement = elementRef.nativeElement;
 		this.root = el;
 		this.toasterService = toasterService;
 		this.http = request;
 		this.toastmessage= messageservice;
+		this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},3000);
+		
 	}
 
 	@Input() service: any = {};
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
-	@ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
-
+	// @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
+	componentFactoryResolver:ComponentFactoryResolver;
+  
 	advanced_filter_input:any = {
 		time_range:{
 			show:true,
@@ -244,6 +254,28 @@ export class ServiceLogsComponent implements OnInit {
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
   
+	getFilter(filterServ){
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		console.log(this.advFilters);
+		var comp = this;
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advFilters.viewContainerRef;
+		console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+			alert("1");
+			comp.onFilterSelect(event);
+		});
+
+	}
+
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
@@ -301,7 +333,7 @@ export class ServiceLogsComponent implements OnInit {
 			// this.selectedTimeRange = event.value;
 			// this.payload.start_time = resetdate;
 			// this.callMetricsFunc();
-			this.adv_filters.setSlider(this.sliderMax);
+			// this.adv_filters.setSlider(this.sliderMax);
 			break;
 		  }
 		  
@@ -363,34 +395,35 @@ export class ServiceLogsComponent implements OnInit {
 	}
 	cancelFilter(event){
 		console.log('event',event);
-		switch(event){
-			case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
-			  break;
-			}
-			case 'time-range-slider':{this.getRangefunc(1);
+		// switch(event){
+		// 	case 'time-range':{
+		// 		this.adv_filters.onRangeListSelected('Day'); 
+		// 	  break;
+		// 	}
+		// 	case 'time-range-slider':{this.getRangefunc(1);
 			
-			  break;
-			}
-			case 'account':{this.adv_filters.onaccSelected('Acc 1');
+		// 	  break;
+		// 	}
+		// 	case 'account':{this.adv_filters.onaccSelected('Acc 1');
 		
-			break;
-			}
-			case 'region':{this.adv_filters.onregSelected('reg 1');
+		// 	break;
+		// 	}
+		// 	case 'region':{this.adv_filters.onregSelected('reg 1');
 		
-			break;
-			}
-			case 'env':{this.adv_filters.onEnvSelected('prod');
+		// 	break;
+		// 	}
+		// 	case 'env':{this.adv_filters.onEnvSelected('prod');
 		
-			break;
-			}
+		// 	break;
+		// 	}
 				
-			case 'all':{ this.adv_filters.onRangeListSelected('Day'); 
-			this.adv_filters.onaccSelected('Acc 1');   
-			this.adv_filters.onregSelected('reg 1');
-			this.adv_filters.onEnvSelected('prod');
-			  break;
-			}
-		  }
+		// 	case 'all':{ this.adv_filters.onRangeListSelected('Day'); 
+		// 	this.adv_filters.onaccSelected('Acc 1');   
+		// 	this.adv_filters.onregSelected('reg 1');
+		// 	this.adv_filters.onEnvSelected('prod');
+		// 	  break;
+		// 	}
+		// }
 	}
 
 	sendDefaults(range){
