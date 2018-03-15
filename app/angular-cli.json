@@ -32,7 +32,8 @@
         "environments": {
             "dev": "environments/environment.ts",
             "prod": "environments/environment.prod.ts",
-            "oss": "environments/environment.oss.ts"
+            "oss": "environments/environment.oss.ts",
+            "ossprod": "environments/environment.ossprod.ts"
         }
     }],
     "e2e": {
