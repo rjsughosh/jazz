@@ -6,10 +6,10 @@
 
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RequestService, MessageService } from '../../core/services/index';
+import { RequestService, MessageService } from '../../../core/services/index';
 import { ToasterService} from 'angular2-toaster';
 import {DOCUMENT} from "@angular/platform-browser";
-import { ConfigService } from '../../app.config';
+import { ConfigService } from '../../../app.config';
 
  
 @Component({
@@ -64,7 +64,7 @@ export class ServiceOverviewComponent implements OnInit {
     ) {
         this.http = request;
         this.toastmessage = messageservice;
-        this.api_doc_name = configService.getConfiguration().api_doc_name;
+       // this.api_doc_name = configService.getConfiguration().api_doc_name;
     }
 
     email_temp:string;

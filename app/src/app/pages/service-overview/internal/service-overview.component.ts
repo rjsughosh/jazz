@@ -6,12 +6,12 @@
 
 import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RequestService, DataCacheService, MessageService , AuthenticationService } from '../../core/services/index';
+import { RequestService, DataCacheService, MessageService , AuthenticationService } from '../../../core/services/index';
 import { ToasterService} from 'angular2-toaster';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceDetailComponent } from '../service-detail/service-detail.component'
+import { ServiceDetailComponent } from '../../service-detail/internal/service-detail.component'
 // import  $  from 'jquery';
 declare var $:any;
 

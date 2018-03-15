@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 import {ServicesListComponent} from '../pages/services-list/services-list.component';
-import {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';
+import {ServiceDetailComponent} from '../pages/service-detail/internal/service-detail.component';
 import {ServicesComponent} from '../pages/services/services.component';
 import {EnvironmentModule} from '../environment-module/environment.module'
 import {RouteGuard} from '../core/services';
