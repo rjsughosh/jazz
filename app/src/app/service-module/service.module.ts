@@ -45,6 +45,9 @@ for(let i in CommonServiceComponents){
 for(let i in specificComponents){
  declarationsArray.push(specificComponents[i]);
 }
+console.log('imports  ',importsArray)
+console.log('dec  ',declarationsArray)
+
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
@@ -81,4 +84,7 @@ for(let i in specificComponents){
   entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
 })
 export class ServiceModule {
+  constructor(){
+    console.log('imports  ',importsArray)
+  }
 }

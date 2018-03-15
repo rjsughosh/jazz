@@ -7,4 +7,4 @@ export {ServiceLogsComponent} from '../pages/service-logs/service-logs.component
 export {ServiceMetricsComponent} from '../pages/service-metrics/service-metrics.component';
 export {ServiceCostComponent} from '../pages/service-cost/service-cost.component';
 export {ServiceAccessControlComponent} from '../pages/service-access-control/service-access-control.component';
-export {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';//*
+// export {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';//*
