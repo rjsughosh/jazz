@@ -1,12 +1,12 @@
-import {  ComponentFixture,  inject } from '@angular/core/testing';
+import { ComponentFixture, inject } from '@angular/core/testing';
 // import { Http, Headers, Response, RequestOptions } from '@angular/http';
- import {NO_ERRORS_SCHEMA, Component, Input, OnInit, Output, EventEmitter, NgModule } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Component, Input, OnInit, Output, EventEmitter, NgModule } from '@angular/core';
 
 
- import { ServiceFormData, RateExpression, CronObject, EventExpression } from './service-form-data';
- import { FocusDirective} from './focus.directive';
+import { ServiceFormData, RateExpression, CronObject, EventExpression } from './service-form-data';
+import { FocusDirective } from './focus.directive';
 
- import { ToasterService} from 'angular2-toaster';
+import { ToasterService } from 'angular2-toaster';
 
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
@@ -27,7 +27,7 @@ import { BtnTmobileSecondaryComponent } from '../../primary-components/btn-tmobi
 import { LandingComponent } from '../../pages/landing/landing.component';
 import { CronParserService } from '../../core/helpers';
 import { SharedService } from "../../SharedService.service";
-import { ConfigService, ConfigLoader } from '../../app.config';
+import { ConfigService,  ConfigLoader } from '../../app.config';
 import { ServicesComponent } from '../../pages/services/services.component';
 import { TmobileTableComponent } from '../../secondary-components/tmobile-table/tmobile-table.component';
 import { SideTileFixedComponent } from '../../secondary-components/side-tile-fixed/side-tile-fixed.component';
@@ -85,15 +85,15 @@ import { Router } from '@angular/router';
 import { ServiceList } from 'app/pages/services-list/service-list';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-class MockAuthService  {
+class MockAuthService {
   // constructor(private http: Http, private configService: MockConfigService,  private router:Router){
   //   super(http, configService, router);
   // }
-  
+
   isAuthenticated() {
     return 'Mocked';
   }
-  getToken(){
+  getToken() {
 
   }
 }
@@ -102,8 +102,8 @@ class MockRouter {
   navigate = jasmine.createSpy('navigate');
 }
 class MockConfigService extends ConfigService {
-  getConfiguration(){
-    return {"baseurl" : "https://cloud-api.corporate.t-mobile.com/api"}
+  getConfiguration() {
+    return { "baseurl": "https://cloud-api.corporate.t-mobile.com/api" }
   }
 
 }
@@ -121,36 +121,36 @@ describe('CreateServiceComponent', () => {
   let componentService: AuthenticationService;
   let testBedRequestService: RequestService;
   let router: MockRouter;
-  let testBedConfigService:ConfigService;
-  let componentConfigService : ConfigService;
-  let de:      DebugElement;
+  let testBedConfigService: ConfigService;
+  let componentConfigService: ConfigService;
+  let de: DebugElement;
   beforeEach(async(() => {
     TestBed.overrideComponent(
       LoginComponent,
-      {set: {providers: [{provide: AuthenticationService, useClass: MockAuthService}]}}
-  );
+      { set: { providers: [{ provide: AuthenticationService, useClass: MockAuthService }] } }
+    );
     TestBed.configureTestingModule({
       declarations: [CreateServiceComponent, MyFilterPipe, ServicesListComponent],
-      imports:[FormsModule, ReactiveFormsModule, BrowserModule,DropdownModule,PopoverModule,HttpModule,DatePickerModule ],
+      imports: [FormsModule, ReactiveFormsModule, BrowserModule, DropdownModule, PopoverModule, HttpModule, DatePickerModule],
       providers: [
-        ToasterService,CronParserService , DataCacheService, 
-        {provide:Router, useClass : MockRouter},
-        {provide:ConfigService, useClass : MockConfigService},
-        {provide:RequestService, useClass : RequestServiceMock},
-        {provide:AuthenticationService, useClass : MockAuthService},SharedService
-        ,MessageService,  ServicesListComponent],
-        schemas: [NO_ERRORS_SCHEMA]
+        ToasterService, CronParserService, DataCacheService,
+        { provide: Router, useClass: MockRouter },
+        { provide: ConfigService, useClass: MockConfigService },
+        { provide: RequestService, useClass: RequestServiceMock },
+        { provide: AuthenticationService, useClass: MockAuthService }, SharedService
+        , MessageService, ServicesListComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     router = new MockRouter();
     // authenticationservice = new AuthService();
-    
+
     fixture = TestBed.createComponent(CreateServiceComponent);
     component = fixture.componentInstance;
-    element=fixture.nativeElement;
+    element = fixture.nativeElement;
     fixture.detectChanges();
     testBedConfigService = TestBed.get(ConfigService);
     testBedService = TestBed.get(AuthenticationService);
@@ -158,15 +158,15 @@ describe('CreateServiceComponent', () => {
     componentService = fixture.debugElement.injector.get(AuthenticationService);
     componentConfigService = fixture.debugElement.injector.get(ConfigService);
     testBedRequestService = TestBed.get(RequestService);
-    let spy = spyOn(component, "validateServiceName").and.callFake(()=>{
-      if(component.model.domainName==="true-domain"&& component.model.serviceName === "true-service"){
+    let spy = spyOn(component, "validateServiceName").and.callFake(() => {
+      if (component.model.domainName === "true-domain" && component.model.serviceName === "true-service") {
         component.serviceAvailable = true;
         component.serviceNotAvailable = false;
-        component.isDomainDefined =false; 
+        component.isDomainDefined = false;
       }
-      }
+    }
     );
-    let spy2 = spyOn(component, "toast_pop").and.callFake(()=>{});
+    let spy2 = spyOn(component, "toast_pop").and.callFake(() => { });
 
   });
 
@@ -174,352 +174,486 @@ describe('CreateServiceComponent', () => {
     expect(component).toBeTruthy();
     // expect("true").toBe("true");
   });
-  it('Should be same service with injector',() =>{
-    inject([AuthenticationService],(injectService: AuthenticationService) => {
+  it('Should be same service with injector', () => {
+    inject([AuthenticationService], (injectService: AuthenticationService) => {
       expect(injectService).toBe(testBedService);
     })
   });
-  it('TestServiceNameValidity',() =>{
+  it('TestServiceNameValidity', () => {
     de = fixture.debugElement.query(By.css('h1'));
   });
 
 
-// TEST CASE UT001
-  it('API should show Specific Field Runtime',()=>{
+  // TEST CASE UT001
+  it('API should show Specific Field Runtime', () => {
     component.changeServiceType('api');
     fixture.detectChanges();
-    let contextElement:DebugElement;
-    let elementText :String;
+    let contextElement: DebugElement;
+    let elementText: String;
     let passed = false;
     let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.run-time'));
-    for (let i=0;i<elementList.length;i++) {
-      if(elementList[i].nativeElement.textContent.toLowerCase().search('Choose your runtime'.toLowerCase())!=-1){
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Choose your runtime'.toLowerCase()) != -1) {
         contextElement = elementList[i];
-        passed=true;
+        passed = true;
       }
     }
-    elementText=  contextElement.nativeElement.textContent.toLowerCase()
-    expect(passed).toBe(true) ;
-    expect(elementText).toContain("NodeJs".toLowerCase()) ;
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain("NodeJs".toLowerCase());
     expect(elementText).toContain("Java".toLocaleLowerCase());
     expect(elementText).toContain("Python".toLocaleLowerCase());
   });
-  it('API should show Specific Field Accessiblity ',()=>{
+  it('API should show Specific Field Accessiblity ', () => {
     component.changeServiceType('api');
     fixture.detectChanges();
-    let contextElement:DebugElement;
-    let elementText :String;
+    let contextElement: DebugElement;
+    let elementText: String;
     let passed = false;
     let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.Internal-access'));
-    for (let i=0;i<elementList.length;i++) {
-      if(elementList[i].nativeElement.textContent.toLowerCase().search('Accessibility'.toLowerCase())!=-1){
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Accessibility'.toLowerCase()) != -1) {
         contextElement = elementList[i];
-        passed=true;
+        passed = true;
       }
     }
-    elementText=  contextElement.nativeElement.textContent.toLowerCase()
-    expect(passed).toBe(true) ;
-    expect(elementText).toContain("The API should be publicly accessible".toLowerCase()) ;
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain("The API should be publicly accessible".toLowerCase());
   });
-  it('API should show Specific Field Access Restriction ',()=>{
+  it('API should show Specific Field Access Restriction ', () => {
     component.changeServiceType('api');
     fixture.detectChanges();
-    let contextElement:DebugElement;
-    let elementText :String;
+    let contextElement: DebugElement;
+    let elementText: String;
     let passed = false;
     let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.Internal-access'));
-    for (let i=0;i<elementList.length;i++) {
-      if(elementList[i].nativeElement.textContent.toLowerCase().search('Access Restriction'.toLowerCase())!=-1){
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Access Restriction'.toLowerCase()) != -1) {
         contextElement = elementList[i];
-        passed=true;
+        passed = true;
       }
     }
-    elementText=  contextElement.nativeElement.textContent.toLowerCase()
-    expect(passed).toBe(true) ;
-    expect(elementText).toContain('Does your service require access to internal T-Mobile network and resources?'.toLowerCase()) ;
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain('Does your service require access to internal T-Mobile network and resources?'.toLowerCase());
   });
-  it('API should show Specific Field Cache Time To Live',()=>{
+  it('API should show Specific Field Cache Time To Live', () => {
     component.changeServiceType('api');
     fixture.detectChanges();
-    let contextElement:DebugElement;
-    let elementText :String;
+    let contextElement: DebugElement;
+    let elementText: String;
     let passed = false;
     let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.cache-ttl-integration'));
-    for (let i=0;i<elementList.length;i++) {
-      if(elementList[i].nativeElement.textContent.toLowerCase().search('Cache Time-to-Live'.toLowerCase())!=-1){
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Cache Time-to-Live'.toLowerCase()) != -1) {
         contextElement = elementList[i];
-        passed=true;
+        passed = true;
       }
     }
-  
-    elementText=  contextElement.nativeElement.textContent.toLowerCase()
-    expect(passed).toBe(true) ;
-    expect(elementText).toContain("Yes, enable caching for my API".toLowerCase()) ;
+
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain("Yes, enable caching for my API".toLowerCase());
   });
-// TEST CASE UT001 - COMPLETED 
+  // TEST CASE UT001 - COMPLETED 
 
 
 
-  it('API Specific Field runtime should not be present in website',()=>{
+  it('API Specific Field runtime should not be present in website', () => {
     component.changeServiceType('website');
     fixture.detectChanges();
     let runtime = fixture.debugElement.query(By.css('.each-step-wrap.run-time'));
-    expect(runtime).toBeNull ;
+    expect(runtime).toBeNull;
   });
-  it('API Specific Field accesiblity should not be present in website',()=>{
+  it('API Specific Field accesiblity should not be present in website', () => {
     component.changeServiceType('website');
     fixture.detectChanges();
     let accessiblity = fixture.debugElement.query(By.css('.each-step-wrap.Internal-access'));
-    expect(accessiblity).toBeNull ;
+    expect(accessiblity).toBeNull;
   });
-  
+
 
   // TEST CASE UT003 - START
- it('ValidateNameService should be called for valid (Servicename - Namespace) pair when the user navigates out of Namespace input ',async(()=>{
-  let serviceInput;
-  let namespaceInput;
-  component.changeServiceType('api');
-    fixture.autoDetectChanges();
-    component.model.serviceName = "true-service";
-    component.invalidServiceName =false;
-    component.model.domainName="true-domain"
-    component.invalidDomainName=false;
-    //fixture.detectChanges();
-    serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-    namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-    namespaceInput.focus();
-    namespaceInput.blur();
-    fixture.whenStable().then(()=>{
-      fixture.detectChanges()
-      expect(component.validateServiceName).toHaveBeenCalled();
-      expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-        
-    })
-    
-  }));
-  it('ValidateNameService should be called for valid (Servicename - Namespace) pair when the user navigates out of Service name input ',async(()=>{
+  it('ValidateNameService should be called for valid (Servicename - Namespace) pair when the user navigates out of Namespace input ', async(() => {
     let serviceInput;
     let namespaceInput;
     component.changeServiceType('api');
-      fixture.autoDetectChanges();
-      component.model.serviceName = "true-service";
-      component.invalidServiceName =false;
-      component.model.domainName="true-domain"
-      component.invalidDomainName=false;
-      fixture.detectChanges();
-      serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-      namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-      serviceInput.querySelector('input').focus();
-      serviceInput.querySelector('input').blur();
-      fixture.detectChanges();
-      fixture.whenStable().then(()=>{
-        fixture.detectChanges()
-        expect(component.validateServiceName).toHaveBeenCalled();
-        expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-          
-      })
-    }));
-    it('Submit button should get enabled for right Service,Namespace,Autoriser set ',async(()=>{
-      let serviceInput;
-      let namespaceInput;
-      let approverInput;
-      let submitButton;
-      component.changeServiceType('api');
-        fixture.autoDetectChanges();
-        component.model.serviceName = "true-service";
-        component.invalidServiceName =false;
-        component.model.domainName="true-domain"
-        component.invalidDomainName=false;
-        fixture.detectChanges();
-        serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-        namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-        submitButton =  fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
+    fixture.autoDetectChanges();
+    component.model.serviceName = "true-service";
+    component.invalidServiceName = false;
+    component.model.domainName = "true-domain"
+    component.invalidDomainName = false;
+    //fixture.detectChanges();
+    serviceInput = fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
+    namespaceInput = fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
+    namespaceInput.focus();
+    namespaceInput.blur();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges()
+      expect(component.validateServiceName).toHaveBeenCalled();
+      expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
 
-        serviceInput.querySelector('input').focus();
-        serviceInput.querySelector('input').blur();
-        fixture.detectChanges()
-        component.approversList = [
-          {
-            displayName:"Approver1",
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          },
-          {
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          },
-          {
-            displayName:"Approver3",
-            givenName:"Approver1",
-            userId:"AP1",
-            userEmail:"ap1@moonraft.com"
-          }
-        ];
-        //expect(component.validateServiceName).toHaveBeenCalled();
-        //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-        approverInput   =  fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
-        component.approverName = "App";
-        let temp : HTMLElement ; 
-        temp  = approverInput.querySelector('input');  
-        temp.click();
-        var event = document.createEvent('Event');
+    })
+
+  }));
+  it('ValidateNameService should be called for valid (Servicename - Namespace) pair when the user navigates out of Service name input ', async(() => {
+    let serviceInput;
+    let namespaceInput;
+    component.changeServiceType('api');
+    fixture.autoDetectChanges();
+    component.model.serviceName = "true-service";
+    component.invalidServiceName = false;
+    component.model.domainName = "true-domain"
+    component.invalidDomainName = false;
+    fixture.detectChanges();
+    serviceInput = fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
+    namespaceInput = fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
+    serviceInput.querySelector('input').focus();
+    serviceInput.querySelector('input').blur();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges()
+      expect(component.validateServiceName).toHaveBeenCalled();
+      expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
+
+    })
+  }));
+  it('Submit button should get enabled for right Service,Namespace,Autoriser set ', async(() => {
+    let serviceInput;
+    let namespaceInput;
+    let approverInput;
+    let submitButton;
+    component.changeServiceType('api');
+    fixture.autoDetectChanges();
+    component.model.serviceName = "true-service";
+    component.invalidServiceName = false;
+    component.model.domainName = "true-domain"
+    component.invalidDomainName = false;
+    fixture.detectChanges();
+    serviceInput = fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
+    namespaceInput = fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
+    submitButton = fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
+
+    serviceInput.querySelector('input').focus();
+    serviceInput.querySelector('input').blur();
+    fixture.detectChanges()
+    component.approversList = [
+      {
+        displayName: "Approver1",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        displayName: "Approver3",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      }
+    ];
+    //expect(component.validateServiceName).toHaveBeenCalled();
+    //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
+    approverInput = fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
+    component.approverName = "App";
+    let temp: HTMLElement;
+    temp = approverInput.querySelector('input');
+    temp.click();
+    var event = document.createEvent('Event');
+
+    event.initEvent('keydown', true, true);
+    temp.dispatchEvent(event);
+    component.onApproverChange(true);
+    fixture.whenStable().then(() => {
+      approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
+      fixture.detectChanges();
+      expect(submitButton.disabled).toBe(false);
+    });
+  }));
+  it('Submit button should  not get enabled for invalid Service name even with valid (Namespace,Autoriser) set ', async(() => {
+    let serviceInput;
+    let namespaceInput;
+    let approverInput;
+    let submitButton;
+    component.changeServiceType('api');
+    fixture.autoDetectChanges();
+    component.model.serviceName = "not-true-service";
+    component.invalidServiceName = false;
+    component.model.domainName = "true-domain"
+    component.invalidDomainName = false;
+    fixture.detectChanges();
+    serviceInput = fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
+    namespaceInput = fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
+    submitButton = fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
+
+    serviceInput.querySelector('input').focus();
+    serviceInput.querySelector('input').blur();
+    fixture.detectChanges()
+    component.approversList = [
+      {
+        displayName: "Approver1",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        displayName: "Approver3",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      }
+    ];
+    //expect(component.validateServiceName).toHaveBeenCalled();
+    //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
+    approverInput = fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
+    component.approverName = "App";
+    let temp: HTMLElement;
+    temp = approverInput.querySelector('input');
+    temp.click();
+    var event = document.createEvent('Event');
+
+    event.initEvent('keydown', true, true);
+    temp.dispatchEvent(event);
+    component.onApproverChange(true);
+    fixture.whenStable().then(() => {
+      approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
+      fixture.detectChanges();
+      expect(submitButton.disabled).toBe(true);
+    });
+  }));
+  it('Submit button should  not get enabled for invalid NameSpace even with valid (Service name,Autoriser) set ', async(() => {
+    let serviceInput;
+    let namespaceInput;
+    let approverInput;
+    let submitButton;
+    component.changeServiceType('api');
+    fixture.autoDetectChanges();
+    component.model.serviceName = "true-service";
+    component.invalidServiceName = false;
+    component.model.domainName = "not-true-domain"
+    component.invalidDomainName = false;
+    fixture.detectChanges();
+    serviceInput = fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
+    namespaceInput = fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
+    submitButton = fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
+
+    serviceInput.querySelector('input').focus();
+    serviceInput.querySelector('input').blur();
+    fixture.detectChanges()
+    component.approversList = [
+      {
+        displayName: "Approver1",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        displayName: "Approver3",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      }
+    ];
+    //expect(component.validateServiceName).toHaveBeenCalled();
+    //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
+    approverInput = fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
+    component.approverName = "App";
+    let temp: HTMLElement;
+    temp = approverInput.querySelector('input');
+    temp.click();
+    var event = document.createEvent('Event');
+
+    event.initEvent('keydown', true, true);
+    temp.dispatchEvent(event);
+    component.onApproverChange(true);
+    fixture.whenStable().then(() => {
+      approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
+      fixture.detectChanges();
+      expect(submitButton.disabled).toBe(true);
+    });
+  }));
+  // TEST CASES FOR LAMBDA FUNCTIONS 
+
+  it('Lambda Function section should show Specific Field Runtime', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.run-time'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Choose your runtime'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain("NodeJs".toLowerCase());
+    expect(elementText).toContain("Java".toLocaleLowerCase());
+    expect(elementText).toContain("Python".toLocaleLowerCase());
+
+  });
+  it('Lambda Function section should show Specific Field Event Shedule', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Event Schedule'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain("None".toLowerCase());
+    expect(elementText).toContain("Fixed Rate of".toLocaleLowerCase());
+    expect(elementText).toContain("Cron Expression".toLocaleLowerCase());
+
+  });
+  it('Lambda Function section should show Specific Field AWS Events', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('AWS Events'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).toContain("None".toLowerCase());
+    expect(elementText).toContain("DynamoDB".toLocaleLowerCase());
+    expect(elementText).toContain("Kinesis".toLocaleLowerCase());
+    expect(elementText).toContain("s3".toLocaleLowerCase());
+
+  })
+  it('User should be able to choose none from The subsection on Event schedule ', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    spyOn(component, "onEventScheduleChange");
+
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('None'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    contextElement.query(By.css('input')).nativeElement.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(component.onEventScheduleChange).toHaveBeenCalled();
+    });
+    expect(contextElement).not.toBeNull();
+  });
+
+
+  it('User should be able to choose fixed rate  from The subsection on Event schedule ', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    let temp;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Fixed Rate of'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    temp = contextElement.query(By.css('#fixedRate')).nativeElement;
+    temp.click();
+    fixture.detectChanges();
     
-        event.initEvent('keydown',true,true);
-        temp.dispatchEvent(event);
-        component.onApproverChange(true);
-        fixture.whenStable().then(()=>{
-          approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
-          fixture.detectChanges();
-          expect(submitButton.disabled).toBe(false);      
-        });
-      }));
-    it('Submit button should  not get enabled for invalid Service name even with valid (Namespace,Autoriser) set ',async(()=>{
-          let serviceInput;
-          let namespaceInput;
-          let approverInput;
-          let submitButton;
-          component.changeServiceType('api');
-          fixture.autoDetectChanges();
-          component.model.serviceName = "not-true-service";
-          component.invalidServiceName =false;
-          component.model.domainName="true-domain"
-          component.invalidDomainName=false;
-          fixture.detectChanges();
-          serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-          namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-          submitButton =  fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
+    var event = document.createEvent('Event');
+    event.initEvent('input', true, true);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      temp = contextElement.query(By.css('.event-schedule-fields .rateField input')).nativeElement;
+      expect(temp).not.toBeUndefined;
+     // component.rateExpression.duration = '';
+    });
+  });
+
+it('User should be able to choose cron Expression   from The subsection on Event schedule ', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    let temp;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Cron Expression'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    temp = contextElement.query(By.css('#cron')).nativeElement;
+    temp.click();
+    fixture.detectChanges();
+     fixture.whenStable().then(() => {
+      temp = contextElement.query(By.css('.event-schedule-fields .rate-field input')).nativeElement;
+      expect(temp).not.toBeUndefined;
+     // component.rateExpression.duration = '';
+    });
+  });
   
-          serviceInput.querySelector('input').focus();
-          serviceInput.querySelector('input').blur();
-          fixture.detectChanges()
-          component.approversList = [
-            {
-              displayName:"Approver1",
-              givenName:"Approver1",
-              userId:"AP1",
-              userEmail:"ap1@moonraft.com"
-            },
-            {
-              givenName:"Approver1",
-              userId:"AP1",
-              userEmail:"ap1@moonraft.com"
-            },
-            {
-              displayName:"Approver3",
-              givenName:"Approver1",
-              userId:"AP1",
-              userEmail:"ap1@moonraft.com"
-            }
-          ];
-          //expect(component.validateServiceName).toHaveBeenCalled();
-          //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-          approverInput   =  fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
-          component.approverName = "App";
-          let temp : HTMLElement ; 
-          temp  = approverInput.querySelector('input');  
-          temp.click();
-          var event = document.createEvent('Event');
-      
-          event.initEvent('keydown',true,true);
-          temp.dispatchEvent(event);
-          component.onApproverChange(true);
-          fixture.whenStable().then(()=>{
-            approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
-            fixture.detectChanges();
-            expect(submitButton.disabled).toBe(true);      
-          });
-        }));  
-    it('Submit button should  not get enabled for invalid NameSpace even with valid (Service name,Autoriser) set ',async(()=>{
-          let serviceInput;
-          let namespaceInput;
-          let approverInput;
-          let submitButton;
-          component.changeServiceType('api');
-            fixture.autoDetectChanges();
-            component.model.serviceName = "true-service";
-            component.invalidServiceName =false;
-            component.model.domainName="not-true-domain"
-            component.invalidDomainName=false;
-            fixture.detectChanges();
-            serviceInput   =  fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
-            namespaceInput =  fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
-            submitButton =  fixture.debugElement.query(By.css('.submit-form button')).nativeElement;
-    
-            serviceInput.querySelector('input').focus();
-            serviceInput.querySelector('input').blur();
-            fixture.detectChanges()
-            component.approversList = [
-              {
-                displayName:"Approver1",
-                givenName:"Approver1",
-                userId:"AP1",
-                userEmail:"ap1@moonraft.com"
-              },
-              {
-                givenName:"Approver1",
-                userId:"AP1",
-                userEmail:"ap1@moonraft.com"
-              },
-              {
-                displayName:"Approver3",
-                givenName:"Approver1",
-                userId:"AP1",
-                userEmail:"ap1@moonraft.com"
-              }
-            ];
-            //expect(component.validateServiceName).toHaveBeenCalled();
-            //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
-            approverInput   =  fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
-            component.approverName = "App";
-            let temp : HTMLElement ; 
-            temp  = approverInput.querySelector('input');  
-            temp.click();
-            var event = document.createEvent('Event');
-        
-            event.initEvent('keydown',true,true);
-            temp.dispatchEvent(event);
-            component.onApproverChange(true);
-            fixture.whenStable().then(()=>{
-              approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
-              fixture.detectChanges();
-              expect(submitButton.disabled).toBe(true);      
-            });
-          }));  
 
-          
-    // TEST CASE UT005 - STARTED 
-    it('Clone field is not present for API & Function',()=>{
-      component.changeServiceType('api');
-      fixture.detectChanges();
-      let cloneapi = fixture.debugElement.query(By.css('#checkbox-gitclone'));
-      component.changeServiceType('function');
-      fixture.detectChanges();
-      let clonefunction = fixture.debugElement.query(By.css('#checkbox-gitclone'));
-      expect(cloneapi).toBeNull ;
-      expect(clonefunction).toBeNull ;
-    });
-    it('CDN field is not present for API & Function',()=>{
-      component.changeServiceType('api');
-      fixture.detectChanges();
-      let cdnapi = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
-      component.changeServiceType('function');
-      fixture.detectChanges();
-      let cdnfunction = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
-      expect(cdnapi).toBeNull ;
-      expect(cdnfunction).toBeNull ;
-    });
-    it('CDN field is not present for API & Function',()=>{
-      component.changeServiceType('api');
-      fixture.detectChanges();
-      let cdnapi = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
-      component.changeServiceType('function');
-      fixture.detectChanges();
-      let cdnfunction = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
-      expect(cdnapi).toBeNull ;
-      expect(cdnfunction).toBeNull ;
-    });
+
+
+
+  // TEST CASE UT005 - STARTED 
+  it('Clone field is not present for API & Function', () => {
+    component.changeServiceType('api');
+    fixture.detectChanges();
+    let cloneapi = fixture.debugElement.query(By.css('#checkbox-gitclone'));
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let clonefunction = fixture.debugElement.query(By.css('#checkbox-gitclone'));
+    expect(cloneapi).toBeNull;
+    expect(clonefunction).toBeNull;
+  });
+  it('CDN field is not present for API & Function', () => {
+    component.changeServiceType('api');
+    fixture.detectChanges();
+    let cdnapi = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let cdnfunction = fixture.debugElement.query(By.css('#checkbox-cdnconfig'));
+    expect(cdnapi).toBeNull;
+    expect(cdnfunction).toBeNull;
+  });
+
+
 
 });
 
