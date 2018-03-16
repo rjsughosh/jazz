@@ -16,7 +16,7 @@ import { ConfigService } from '../../../app.config';
     selector: 'service-overview',
     templateUrl: './service-overview.component.html',
     providers: [RequestService, MessageService],
-    styleUrls: ['../service-detail/service-detail.component.scss','./service-overview.component.scss']
+    styleUrls: ['../../service-detail/oss/service-detail.component.scss','./service-overview.component.scss']
 })
 
 export class ServiceOverviewComponent implements OnInit {

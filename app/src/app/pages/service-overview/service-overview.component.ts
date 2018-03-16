@@ -11,7 +11,7 @@ import { ToasterService} from 'angular2-toaster';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceDetailComponent } from '../service-detail/internal/service-detail.component'
+import { ServiceDetailComponent } from '../service-detail/oss/service-detail.component'
 // import  $  from 'jquery';
 declare var $:any;
 
@@ -19,7 +19,7 @@ declare var $:any;
     selector: 'service-overview',
     templateUrl: './service-overview.component.html',
     providers: [RequestService, MessageService],
-    styleUrls: ['../service-detail/service-detail.component.scss','./service-overview.component.scss']
+    styleUrls: ['../service-detail/oss/service-detail.component.scss','./service-overview.component.scss']
 })
 
 export class ServiceOverviewComponent implements OnInit {

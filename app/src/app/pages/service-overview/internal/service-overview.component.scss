@@ -1,6 +1,6 @@
-@import './../../../main-styles';
-@import './../service-detail/service-detail.component.scss';
-@import './../../secondary-components/create-service/create-service.component.scss';
+@import './../../../../main-styles.scss';
+@import './../../service-detail/internal/service-detail.component.scss';
+@import './../../../secondary-components/create-service/create-service.component.scss';
 
 @keyframes blink {
 

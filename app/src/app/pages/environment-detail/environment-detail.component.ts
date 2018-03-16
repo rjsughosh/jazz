@@ -77,7 +77,7 @@ breadcrumbs = [];
   };
 EnvLoad(event){
   this.environment_obj=event.environment[0];
-  this.envStatus=this.environment_obj.status.replace("_"," ")
+  // this.envStatus=this.environment_obj.status.replace("_"," ")
   this.status_val = parseInt(status[this.environment_obj.status]); 
     if((this.status_val < 2) || (this.status_val == 4) )
     {
