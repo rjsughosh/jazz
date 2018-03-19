@@ -2,7 +2,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {environment} from '../../environments/environment';
-import {routes} from './service.route';
+import {routes} from './service.route.oss';
 //End
 // Importing The Required Modules via Barrel 
 import * as CommonServiceModules from './service.module.imports.common'

@@ -17,7 +17,7 @@ import { RequestService, DataCacheService, MessageService, AuthenticationService
     providers: [RequestService, MessageService]
 })
 
-export class ServiceDetailComponent implements OnInit {
+export class ServiceDetailComponentOss implements OnInit {
 
 
     constructor(

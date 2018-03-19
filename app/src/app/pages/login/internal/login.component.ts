@@ -7,8 +7,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToasterService} from 'angular2-toaster';
-import { AuthenticationService, MessageService } from '../../core/services/index';
-import {DataCacheService } from '../../core/services/index';
+import { AuthenticationService, MessageService } from '../../../core/services/index';
+import {DataCacheService } from '../../../core/services/index';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
 
         this.toasterService = toasterService;
         this.toastmessage =messageservice;
-        
+        alert('interena;');
 
     }
 

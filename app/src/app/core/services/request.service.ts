@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 import { ConfigService } from '../../app.config';
 import { Router } from '@angular/router';
 import {ServiceCostComponent} from '../../pages/service-cost/service-cost.component';
-import { environment } from '../../../environments/environment.dev';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class RequestService {

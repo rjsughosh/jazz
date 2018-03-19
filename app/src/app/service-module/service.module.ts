@@ -2,7 +2,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {environment} from '../../environments/environment';
-import {routes} from './service.route';
+import {routes} from './service.route.internal';
+
+// import * as OssRoutes from './service.route.oss';
+// import * as InternalRoutes from './service.route.internal'
 //End
 // Importing The Required Modules via Barrel 
 import * as CommonServiceModules from './service.module.imports.common'
@@ -18,16 +21,25 @@ import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters
 
 import { AdvFilters }            from '../adv-filter.directive';
 import {AdvancedFilterService} from '../advanced-filter.service';
+import { ServiceDetailContainerComponent } from './../pages/service-detail-container/service-detail-container.component';
+import { ServiceDetailComponent} from './../pages/service-detail/internal/service-detail.component';
+import { ServiceDetailComponentOss} from './../pages/service-detail/oss/service-detail.component';
 // End 
 import { Symbol } from 'rxjs';
 
-let specificComponents:any
+// let det_comp:any;
+let routerRoutes:any;
+let specificComponents:any;
 let specificModules: any;
 //alert(environment.envName);
 if(environment.envName == 'oss'){
+  // routerRoutes = OssRoutes.routes;
+  // det_comp = ServiceDetailComponentOss;
   specificComponents = OssComponents;
   specificModules =  OssModules
-}else if(environment.envName == "jazz")  {
+}else  {
+  // routerRoutes = InternalRoutes.routes;
+  // det_comp = ServiceDetailComponent;
   specificComponents = InternalComponents;
   specificModules =  InternalModules;
 }
@@ -47,6 +59,7 @@ for(let i in specificComponents){
 }
 console.log('imports  ',importsArray)
 console.log('dec  ',declarationsArray)
+console.log('routes',routes)
 
 @NgModule({
   imports: [
@@ -77,6 +90,7 @@ console.log('dec  ',declarationsArray)
     //AmountComponent,
     //BarGraphComponent
     ...declarationsArray,
+    ServiceDetailContainerComponent,
     AdvFilters,
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent

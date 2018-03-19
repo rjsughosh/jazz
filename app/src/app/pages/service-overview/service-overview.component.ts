@@ -11,7 +11,7 @@ import { ToasterService} from 'angular2-toaster';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceDetailComponent } from '../service-detail/oss/service-detail.component'
+// import { ServiceDetailComponent } from '../service-detail/oss/service-detail.component'
 // import  $  from 'jquery';
 declare var $:any;
 
@@ -128,7 +128,7 @@ export class ServiceOverviewComponent implements OnInit {
         private messageservice:MessageService,
         private cache: DataCacheService,
         private toasterService: ToasterService,
-        private serviceDetail:ServiceDetailComponent,
+        // private serviceDetail:ServiceDetailComponent,
         private authenticationservice: AuthenticationService
     ) {
         this.http = request;
@@ -608,7 +608,7 @@ export class ServiceOverviewComponent implements OnInit {
                     // alert('last stage');
                     this.http.get('/jazz/services/'+this.service.id).subscribe(
                         (response) => {
-                            this.serviceDetail.onDataFetched(response.data);
+                            // this.serviceDetail.onDataFetched(response.data);
                         }
                     )
                     this.intervalSubscription.unsubscribe();
