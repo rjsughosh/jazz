@@ -215,16 +215,6 @@ export class ServiceMetricsComponent implements OnInit {
   }
   ngOnInit() {
     this.cache.set("codequality",false)
-    // console.log('metrics changes branch')
-    // below hardcoding for serviceType :: hotfix for Tech Training - Aug 31.. to be removed later
-		// if(this.service.serviceType === 'function' || this.service.serviceType === 'lambda'){
-		// 	var serviceName = "custom-ad-authorizer"
-		// } else if(this.service.serviceType === 'api'){
-		// var serviceName = "events"
-		// }else if(this.service.serviceType === 'website'){
-		// var serviceName = " service-onboarding"
-    // }
-    
     if(this.service.serviceType === 'api'){
       this.service_api = false;
     }
@@ -239,12 +229,7 @@ export class ServiceMetricsComponent implements OnInit {
         "interval": this.periodListSeconds[this.periodList.indexOf(this.periodList[0])],
         "statistics": this.statisticSelected
     };
-    // console.log("this.payload.interval ", this.payload.interval);
-    //     - services (API)
-    // - events(API)
-    // - service-onboarding(Website)
-    // - custom-ad-authorizer(Function)
-    // below hardcoding for serviceType :: hotfix for Tech Training - Aug 31.. to be removed later
+  
     if(!this.service.serviceType){
       if(this.payload.service == "services"){
         this.service.serviceType = "api"; 
@@ -390,7 +375,7 @@ export class ServiceMetricsComponent implements OnInit {
 		this.subscription = this.http.post('/jazz/metrics', this.payload).subscribe(
     // this.http.get('https://api.myjson.com/bins/x4j5f').subscribe(
       response => {
-        // console.log("response = ", response);
+        
           //Bind to view
         let serviceMetrics = response.data;
         
