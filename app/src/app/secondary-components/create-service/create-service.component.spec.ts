@@ -5,9 +5,9 @@ import { NO_ERRORS_SCHEMA, Component, Input, OnInit, Output, EventEmitter, NgMod
 
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './service-form-data';
 import { FocusDirective } from './focus.directive';
-
+import { fakeAsync } from '@angular/core/testing';
 import { ToasterService } from 'angular2-toaster';
-
+import { tick } from '@angular/core/testing';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { ServicesListComponent } from '../../pages/services-list/services-list.component';
@@ -27,7 +27,7 @@ import { BtnTmobileSecondaryComponent } from '../../primary-components/btn-tmobi
 import { LandingComponent } from '../../pages/landing/landing.component';
 import { CronParserService } from '../../core/helpers';
 import { SharedService } from "../../SharedService.service";
-import { ConfigService,  ConfigLoader } from '../../app.config';
+import { ConfigService, ConfigLoader } from '../../app.config';
 import { ServicesComponent } from '../../pages/services/services.component';
 import { TmobileTableComponent } from '../../secondary-components/tmobile-table/tmobile-table.component';
 import { SideTileFixedComponent } from '../../secondary-components/side-tile-fixed/side-tile-fixed.component';
@@ -172,7 +172,6 @@ describe('CreateServiceComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    // expect("true").toBe("true");
   });
   it('Should be same service with injector', () => {
     inject([AuthenticationService], (injectService: AuthenticationService) => {
@@ -284,7 +283,6 @@ describe('CreateServiceComponent', () => {
     component.invalidServiceName = false;
     component.model.domainName = "true-domain"
     component.invalidDomainName = false;
-    //fixture.detectChanges();
     serviceInput = fixture.debugElement.query(By.css('.each-step-wrap.service-name')).nativeElement;
     namespaceInput = fixture.debugElement.query(By.css('.each-step-wrap.domain-name input')).nativeElement;
     namespaceInput.focus();
@@ -357,17 +355,15 @@ describe('CreateServiceComponent', () => {
         userEmail: "ap1@moonraft.com"
       }
     ];
-    //expect(component.validateServiceName).toHaveBeenCalled();
-    //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
     approverInput = fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
     component.approverName = "App";
-    let temp: HTMLElement;
-    temp = approverInput.querySelector('input');
-    temp.click();
+    let tempElement: HTMLElement;
+    tempElement = approverInput.querySelector('input');
+    tempElement.click();
     var event = document.createEvent('Event');
 
     event.initEvent('keydown', true, true);
-    temp.dispatchEvent(event);
+    tempElement.dispatchEvent(event);
     component.onApproverChange(true);
     fixture.whenStable().then(() => {
       approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
@@ -413,17 +409,15 @@ describe('CreateServiceComponent', () => {
         userEmail: "ap1@moonraft.com"
       }
     ];
-    //expect(component.validateServiceName).toHaveBeenCalled();
-    //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
     approverInput = fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
     component.approverName = "App";
-    let temp: HTMLElement;
-    temp = approverInput.querySelector('input');
-    temp.click();
+    let tempElement: HTMLElement;
+    tempElement = approverInput.querySelector('input');
+    tempElement.click();
     var event = document.createEvent('Event');
 
     event.initEvent('keydown', true, true);
-    temp.dispatchEvent(event);
+    tempElement.dispatchEvent(event);
     component.onApproverChange(true);
     fixture.whenStable().then(() => {
       approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
@@ -473,13 +467,13 @@ describe('CreateServiceComponent', () => {
     //expect(serviceInput.querySelector('.termsConditions').textContent).toContain('Service name is available');
     approverInput = fixture.debugElement.query(By.css('.each-step-wrap.approvers')).nativeElement;
     component.approverName = "App";
-    let temp: HTMLElement;
-    temp = approverInput.querySelector('input');
-    temp.click();
+    let tempElement: HTMLElement;
+    tempElement = approverInput.querySelector('input');
+    tempElement.click();
     var event = document.createEvent('Event');
 
     event.initEvent('keydown', true, true);
-    temp.dispatchEvent(event);
+    tempElement.dispatchEvent(event);
     component.onApproverChange(true);
     fixture.whenStable().then(() => {
       approverInput.querySelector('.approvers-list-wrap .approvers-dets div').click();
@@ -550,7 +544,7 @@ describe('CreateServiceComponent', () => {
     expect(elementText).toContain("s3".toLocaleLowerCase());
 
   })
-  it('User should be able to choose none from The subsection on Event schedule ', () => {
+  it('User should be able to choose none from The subsection on Event schedule ', <any>fakeAsync(() => {
     component.changeServiceType('function');
     fixture.detectChanges();
     let contextElement: DebugElement;
@@ -567,21 +561,20 @@ describe('CreateServiceComponent', () => {
     }
     contextElement.query(By.css('input')).nativeElement.click();
     fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(component.onEventScheduleChange).toHaveBeenCalled();
-    });
+    fixture.detectChanges();
+    expect(component.onEventScheduleChange).toHaveBeenCalled();
+
     expect(contextElement).not.toBeNull();
-  });
+  }));
 
-
+  //Needs Review -----------------------
   it('User should be able to choose fixed rate  from The subsection on Event schedule ', () => {
     component.changeServiceType('function');
     fixture.detectChanges();
     let contextElement: DebugElement;
     let elementText: String;
     let passed = false;
-    let temp;
+    let checkElement = undefined;
     let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule .radio-container'));
     for (let i = 0; i < elementList.length; i++) {
       if (elementList[i].nativeElement.textContent.toLowerCase().search('Fixed Rate of'.toLowerCase()) != -1) {
@@ -589,27 +582,44 @@ describe('CreateServiceComponent', () => {
         passed = true;
       }
     }
-    temp = contextElement.query(By.css('#fixedRate')).nativeElement;
-    temp.click();
+    contextElement.query(By.css('#fixedRate')).nativeElement.click();
     fixture.detectChanges();
-    
-    var event = document.createEvent('Event');
-    event.initEvent('input', true, true);
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      temp = contextElement.query(By.css('.event-schedule-fields .rateField input')).nativeElement;
-      expect(temp).not.toBeUndefined;
-     // component.rateExpression.duration = '';
-    });
+    checkElement = fixture.debugElement.query(By.css('.event-schedule-fields .rate-field input'));
+    expect(checkElement).not.toBeNull()
   });
 
-it('User should be able to choose cron Expression   from The subsection on Event schedule ', () => {
+  it('Error warning is shown when user input for fixed rate field is null ', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    component.rateExpression.duration = "";
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Fixed Rate of'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#fixedRate')).nativeElement.click();
+    fixture.detectChanges();
+    tick()
+    contextElement = fixture.debugElement.query(By.css('.rate-field input'));
+    contextElement.nativeElement.Value = component.rateExpression.duration;
+    contextElement.nativeElement.click()
+    component.generateExpression(component.rateExpression)
+    fixture.detectChanges();
+    checkElement = fixture.debugElement.query(By.css('.event-schedule-fields .form-error')).nativeElement;
+    expect(checkElement.textContent.toLowerCase()).toContain('Please enter a valid duration'.toLowerCase());
+  }));
+
+  it('User should be able to choose cron Expression from The subsection on Event schedule ', <any>fakeAsync(() => {
     component.changeServiceType('function');
     fixture.detectChanges();
     let contextElement: DebugElement;
     let elementText: String;
     let passed = false;
-    let temp;
+    let checkElement = null;
     let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.event-schedule .radio-container'));
     for (let i = 0; i < elementList.length; i++) {
       if (elementList[i].nativeElement.textContent.toLowerCase().search('Cron Expression'.toLowerCase()) != -1) {
@@ -617,20 +627,172 @@ it('User should be able to choose cron Expression   from The subsection on Event
         passed = true;
       }
     }
-    temp = contextElement.query(By.css('#cron')).nativeElement;
-    temp.click();
+    contextElement.query(By.css('#cron')).nativeElement.click();
     fixture.detectChanges();
-     fixture.whenStable().then(() => {
-      temp = contextElement.query(By.css('.event-schedule-fields .rate-field input')).nativeElement;
-      expect(temp).not.toBeUndefined;
-     // component.rateExpression.duration = '';
-    });
+    //checkElement = contextElement.query(By.css('.event-schedule-fields .cron-fields input')).nativeElement;
+    //expect(checkElement).not.toBeNull;
+    checkElement = fixture.debugElement.query(By.css('.cron-fields.arrow_box')).nativeElement;
+    expect(checkElement).not.toBeNull()
+  }));
+
+
+  //Needs Review 
+
+  it('User should be able to choose none for the AWS event field ', () => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('None'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('input')).nativeElement.click();
+    fixture.detectChanges();
+    expect(contextElement).not.toBeNull();
   });
-  
+  it('User should be able to choose DynamoDB form the AWS event field  ', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    spyOn(component, "onAWSEventChange");
+
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('DynamoDB'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#dynamodb')).nativeElement.click();
+    fixture.detectChanges();
+    tick()
+    expect(component.onAWSEventChange).toHaveBeenCalled();
+
+    expect(contextElement).not.toBeNull();
+  }));
+
+
+  it('User should be able to input Value to TableARN subsection under DynamoDB  ', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('DynamoDB'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#dynamodb')).nativeElement.click();
+    component.eventExpression.dynamoTable = "New Value";
+    fixture.detectChanges();
+    tick();
+    checkElement = fixture.debugElement.query(By.css('#dynamoTable')).nativeElement;
+    checkElement.click();
+    checkElement.blur();
+    fixture.detectChanges
+    expect(checkElement).not.toBeNull();
+    expect(checkElement.value).toBe("New Value");
+  }));
+
+
+  it('User should be able to choose Kinesis form the AWS event field  ', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    spyOn(component, "onAWSEventChange");
+
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Kinesis'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#kinesis')).nativeElement.click();
+    fixture.detectChanges();
+    tick()
+    expect(component.onAWSEventChange).toHaveBeenCalled();
+    expect(contextElement).not.toBeNull();
+  }));
 
 
 
+  it('User should be able to input Value to Stream ARN subsection under Kinesis ', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Kinesis'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#kinesis')).nativeElement.click();
+    component.eventExpression.streamARN = "New Value";
+    fixture.detectChanges();
+    tick();
+    checkElement = fixture.debugElement.query(By.css('#streamARN')).nativeElement;
+    checkElement.click();
+    checkElement.blur();
+    fixture.detectChanges
+    expect(checkElement).not.toBeNull();
+    expect(checkElement.value).toBe("New Value");
+  }));
 
+  it('User should be able to choose S3 form the AWS event field', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    spyOn(component, "onAWSEventChange");
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('S3'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#s3')).nativeElement.click();
+    fixture.detectChanges();
+    tick()
+    expect(component.onAWSEventChange).toHaveBeenCalled();
+    expect(contextElement).not.toBeNull();
+  }));
+
+  it('User should be able to input Value to Bucket ARN subsection under S3 ', <any>fakeAsync(() => {
+    component.changeServiceType('function');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let checkElement = undefined;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.aws-events .radio-container'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('S3'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+      }
+    }
+    contextElement.query(By.css('#s3')).nativeElement.click();
+    component.eventExpression.S3BucketName = 'New Value';
+    fixture.detectChanges();
+    tick()
+    checkElement = fixture.debugElement.query(By.css('#S3BucketName')).nativeElement;
+    checkElement.click();
+    checkElement.blur();
+    fixture.detectChanges
+    expect(checkElement).not.toBeNull();
+    console.log(checkElement.value);
+    expect(checkElement.value).toContain("New Value");
+  }));
   // TEST CASE UT005 - STARTED 
   it('Clone field is not present for API & Function', () => {
     component.changeServiceType('api');
@@ -652,9 +814,179 @@ it('User should be able to choose cron Expression   from The subsection on Event
     expect(cdnapi).toBeNull;
     expect(cdnfunction).toBeNull;
   });
+  it('Website should show specific field Clone from repository and CDN ', () => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    let elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.cloudfront-url'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('CDN configuration'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(elementText).not.toBeNull;
 
+    elementList = fixture.debugElement.queryAll(By.css('.each-step-wrap.cloudfront-url'));
+    for (let i = 0; i < elementList.length; i++) {
+      if (elementList[i].nativeElement.textContent.toLowerCase().search('Clone Repository from Git'.toLowerCase()) != -1) {
+        contextElement = elementList[i];
+        passed = true;
+      }
+    }
+    elementText = contextElement.nativeElement.textContent.toLowerCase()
+    expect(passed).toBe(true);
+    expect(contextElement).not.toBeNull;
+  });
+  it('User should be able to check/uncheck CDN configuration', () => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    checkElement = fixture.debugElement.query(By.css('#checkbox-cdnconfig')).nativeElement;
+    checkElement.click();
+    fixture.detectChanges();
+    expect(contextElement).not.toBeNull();
+  });
+  it('User should be able to check/uncheck Clone Repository from git ', () => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    checkElement = fixture.debugElement.query(By.css('#checkbox-gitclone')).nativeElement;
+    checkElement.click();
+    fixture.detectChanges();
+    expect(contextElement).not.toBeNull();
+  });
+  it('The url entered under Clone Repository from git must be validated', () => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let spy = spyOn(component, "validateGIT")
+    let passed = false;
+    checkElement = fixture.debugElement.query(By.css('#checkbox-gitclone')).nativeElement;
+    checkElement.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      component.gitRepo = "some repo";
+      checkElement = fixture.debugElement.query(By.css('#giturl')).nativeElement;
+      fixture.detectChanges();
+      checkElement.click();
+      var event = document.createEvent('Event');
+      event.initEvent('blur', true, true);
+      checkElement.dispatchEvent(event);
+      fixture.detectChanges()
+      expect(component.validateGIT).toHaveBeenCalled();
+    });
+    fixture.detectChanges();
 
+  });
 
+  it('The url entered under Clone Repository from git must be validated  and error must be displayed  for invalid URL', <any>fakeAsync(() => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    checkElement = fixture.debugElement.query(By.css('#checkbox-gitclone')).nativeElement;
+    checkElement.click();
+    fixture.detectChanges();
+
+    component.gitRepo = "some repo";
+    checkElement = fixture.debugElement.query(By.css('#giturl')).nativeElement;
+    fixture.detectChanges();
+    checkElement.click();
+    var event = document.createEvent('Event');
+    event.initEvent('blur', true, true);
+    checkElement.dispatchEvent(event);
+    fixture.detectChanges();
+
+    checkElement = fixture.debugElement.query(By.css('.git-error')).nativeElement;
+    expect(checkElement.textContent.toLowerCase()).toContain("Invalid Git Url".toLowerCase());
+    fixture.detectChanges();
+  }));
+
+  it('User Should be able to check/uncheck "is this a private repository " checkbox ', <any>fakeAsync(() => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    checkElement = fixture.debugElement.query(By.css('#checkbox-gitclone')).nativeElement;
+    checkElement.click();
+    fixture.detectChanges();
+    tick();
+    fixture.debugElement.query(By.css('#checkbox-gitprivate')).nativeElement.click();
+    fixture.detectChanges();
+    tick();
+    debugger
+    checkElement = fixture.debugElement.query(By.css('#gitusername')).nativeElement;
+    expect(checkElement.textContent).not.toBeNull()
+    expect(checkElement).not.toBeNull;
+    checkElement = fixture.debugElement.query(By.css('#gituserpwd')).nativeElement;
+    expect(checkElement).not.toBeNull()
+    tick();
+    fixture.detectChanges();
+  }));
+
+  it('User must be able to select slack channel integration  ', <any>fakeAsync(() => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    spyOn(component, "slackFunction")
+    checkElement = fixture.debugElement.query(By.css('#checkbox-slack')).nativeElement;
+    checkElement.click();
+    expect(component.slackFunction).toHaveBeenCalled();
+  }));
+  it('User Must be able to enter slack channel url ', <any>fakeAsync(() => {
+    component.changeServiceType('website');
+    fixture.detectChanges();
+    let checkElement: HTMLElement;
+    let contextElement: DebugElement;
+    let elementText: String;
+    let passed = false;
+    spyOn(component, "checkSlackNameAvailability").and.callFake(() => {
+      if (component.model.slackName === "https://www.slack.com/123") {
+        component.createSlackModel.name = component.model.slackName;
+        component.slackAvailble = true;
+        component.slackNotAvailble = false;
+      }
+      else {
+        component.createSlackModel.name = component.model.slackName;
+        component.serviceAvailable = true;
+        component.slackAvailble = false;
+        component.slackNotAvailble = false;
+
+      }
+    });
+    checkElement = fixture.debugElement.query(By.css('#checkbox-slack')).nativeElement;
+    checkElement.click();
+    fixture.detectChanges();
+    tick();
+    checkElement = fixture.debugElement.query(By.css('#channelname')).nativeElement;
+    component.model.slackName = "https://www.slack.com/123";
+    component.onSlackChange()
+    component.checkSlackNameAvailability();
+    tick();
+    fixture.detectChanges();
+    tick();
+
+  }));
 });
 
 
