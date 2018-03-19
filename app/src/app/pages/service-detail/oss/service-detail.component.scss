@@ -319,6 +319,10 @@
     }
 }
 
+.blocked{
+    cursor:not-allowed;
+}
+
 .loading-circle {
     position: relative;
     &:before,
@@ -339,6 +343,27 @@
         animation-duration: 1s;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
+    }
+}
+tabs{
+    /deep/.tabs-wrap{
+        ul{
+            li{
+                cursor: not-allowed;
+                pointer-events: none;
+                &:first-child(){
+                    pointer-events: all;
+                }
+                &:nth-child(5){
+                    pointer-events: all;
+
+                }
+                &:hover{
+                    background: none;
+                }
+
+            }
+        }
     }
 }
 

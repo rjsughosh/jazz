@@ -81,6 +81,7 @@ export class ServiceDetailComponent implements OnInit {
     };
 
     processService(service){
+        console.log('service   ',service)
         if (service === undefined) {
             return {};
         } else{
