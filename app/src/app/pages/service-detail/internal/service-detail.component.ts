@@ -70,6 +70,7 @@ export class ServiceDetailComponent implements OnInit {
     successMessage: string = "";
     errorMessage: string = "";
     test:any="delete testing";
+    disabled_tab:boolean=false;
 
 
     private sub: any;
@@ -77,7 +78,7 @@ export class ServiceDetailComponent implements OnInit {
     private toastmessage:any;
 
     statusData = ['All','Active','Pending','Stopped'];
-    tabData = ['OVERVIEW', 'ACCESS CONTROL', 'COST', 'METRICS', 'LOGS'];
+    tabData = ['OVERVIEW', 'ACCESS CONTROL', 'METRICS', 'LOGS' , 'COST'];
 
     breadcrumbs = []
 
@@ -206,6 +207,9 @@ export class ServiceDetailComponent implements OnInit {
 
     tabChanged (i) {
         this.selectedTab = i;
+        if( i == 4){
+            this.disabled_tab = true;
+        }
     };
 
     statusFilter(item){
