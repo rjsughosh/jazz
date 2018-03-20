@@ -242,21 +242,21 @@ export class EnvLogsSectionComponent implements OnInit {
 		// let viewContainerRef = this.advanced_filters.viewContainerRef;
 		// viewContainerRef.clear();
 		// filterServ.setRootViewContainerRef(viewContainerRef);
-		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
-		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		console.log(this.advFilters);
-		var comp = this;
-		// this.advfilters.clearView();
-		let viewContainerRef = this.advFilters.viewContainerRef;
-		console.log(viewContainerRef);
-		viewContainerRef.clear();
-		let componentRef = viewContainerRef.createComponent(componentFactory);
-		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
-		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
-			alert("1");
-			comp.onFilterSelect(event);
-		});
+		// let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		// let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		// // console.log(this.advFilters);
+		// var comp = this;
+		// // this.advfilters.clearView();
+		// let viewContainerRef = this.advFilters.viewContainerRef;
+		// // console.log(viewContainerRef);
+		// viewContainerRef.clear();
+		// let componentRef = viewContainerRef.createComponent(componentFactory);
+		// // this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		// (<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		// (<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+		// 	alert("1");
+		// 	comp.onFilterSelect(event);
+		// });
 
 	}
 
@@ -566,7 +566,7 @@ export class EnvLogsSectionComponent implements OnInit {
 			})
 	};
 	cancelFilter(event){
-		console.log('event',event);
+		// console.log('event',event);
 		// switch(event){
 		// 	case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
 		// 	  break;

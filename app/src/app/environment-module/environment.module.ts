@@ -20,6 +20,8 @@ import {SharedModule} from '../shared-module/shared.module';
 // import {ServiceModule} from '../service-module/service.module';
 import {RouterModule} from '@angular/router';
 import {routes} from './environment.route';
+// import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+// import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 
 
 
@@ -47,8 +49,9 @@ import {routes} from './environment.route';
     EnvCodequalitySectionComponent,
     EnvLogsSectionComponent,
     EnvOverviewSectionComponent,
+  ]
     
     // SharedModule
-  ]
+  
 })
 export class EnvironmentModule { }

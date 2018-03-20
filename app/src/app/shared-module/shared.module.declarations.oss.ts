@@ -1,1 +1,1 @@
-export * from '../pages/login/internal/login.component';
+export * from '../pages/login/oss/login.component';

@@ -45,8 +45,8 @@ for(let i in CommonServiceComponents){
 for(let i in specificComponents){
  declarationsArray.push(specificComponents[i]);
 }
-console.log('imports  ',importsArray)
-console.log('dec  ',declarationsArray)
+// console.log('imports  ',importsArray)
+// console.log('dec  ',declarationsArray)
 
 @NgModule({
   imports: [
@@ -85,6 +85,6 @@ console.log('dec  ',declarationsArray)
 })
 export class ServiceModule {
   constructor(){
-    console.log('imports  ',importsArray)
+    // console.log('imports  ',importsArray)
   }
 }

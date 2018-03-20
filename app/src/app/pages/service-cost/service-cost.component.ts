@@ -192,11 +192,11 @@ export class ServiceCostComponent implements OnInit {
 		// filterServ.setRootViewContainerRef(viewContainerRef);
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		console.log(this.advFilters);
+		// console.log(this.advFilters);
 		var comp = this;
 		// this.advfilters.clearView();
 		let viewContainerRef = this.advFilters.viewContainerRef;
-		console.log(viewContainerRef);
+		// console.log(viewContainerRef);
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
@@ -262,7 +262,7 @@ export class ServiceCostComponent implements OnInit {
 				}
 				var method=event.value;
 				// alert('notifying tags')
-				console.log('event is this',event);
+				// console.log('event is this',event);
 				this.FilterTags.notify('filter-Method',method);
 	// alert('notified tags');
 				this.methodSelected=method;
@@ -367,55 +367,54 @@ export class ServiceCostComponent implements OnInit {
 		// console.log('onRowClicked',row);
 	}
 	cancelFilter(event){
-		switch(event){
-		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
-			break;
-		  }
-		  case 'time-range-slider':{
-				this.getRangefunc(1);
+		// switch(event){
+		//   case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
+		// 	break;
+		//   }
+		//   case 'time-range-slider':{
+		// 		this.getRangefunc(1);
 		  
-			break;
-		  }
-		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
-			break;
-		  }
-		  case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
+		// 	break;
+		//   }
+		//   case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
+		// 	break;
+		//   }
+		//   case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
 		  
-			break;
-		  }
-		  case 'account':{      this.instance_yes.onaccSelected('Acc 1');
+		// 	break;
+		//   }
+		//   case 'account':{      this.instance_yes.onaccSelected('Acc 1');
 		  
-			break;
-		  }
-		  case 'region':{      this.instance_yes.onregSelected('reg 1');
+		// 	break;
+		//   }
+		//   case 'region':{      this.instance_yes.onregSelected('reg 1');
 		  
-			break;
-		  }
-		  case 'env':{      this.instance_yes.onEnvSelected('prod');
+		// 	break;
+		//   }
+		//   case 'env':{      this.instance_yes.onEnvSelected('prod');
 		  
-			break;
-		  }
-		  case 'method':{      
-				// alert('cancelling method')
-				console.log('instace is this',this.instance_yes);
-				this.instance_yes.onMethodListSelected('POST');
+		// 	break;
+		//   }
+		//   case 'method':{      
+		// 		// alert('cancelling method')
+		// 		// console.log('instace is this',this.instance_yes);
+		// 		this.instance_yes.onMethodListSelected('POST');
 		  
-			break;
-		  }
-		  case 'all':{ this.instance_yes.onRangeListSelected('Day');    
-		  this.instance_yes.onPeriodSelected('15 Minutes');
-		  this.instance_yes.onStatisticSelected('Average');
-		  this.instance_yes.onaccSelected('Acc 1');
-		  this.instance_yes.onregSelected('reg 1');
-		  this.instance_yes.onEnvSelected('prod');
-		  this.instance_yes.onMethodListSelected('POST');
-			break;
-		  }
-		}
+		// 	break;
+		//   }
+		//   case 'all':{ this.instance_yes.onRangeListSelected('Day');    
+		// 		this.instance_yes.onPeriodSelected('15 Minutes');
+		// 		this.instance_yes.onStatisticSelected('Average');
+		// 		this.instance_yes.onaccSelected('Acc 1');
+		// 		this.instance_yes.onregSelected('reg 1');
+		// 		this.instance_yes.onEnvSelected('prod');
+		// 		this.instance_yes.onMethodListSelected('POST');
+		// 		break;
+		//   	}
+		// }
 	   
-		this.getRange(1);
-	
-	  }
+		// this.getRange(1);
+}
 	  onMethodListSelected(method){
 
 		this.FilterTags.notify('filter-Method',method);

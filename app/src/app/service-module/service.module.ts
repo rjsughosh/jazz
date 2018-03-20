@@ -16,15 +16,14 @@ import * as InternalModules from './service.module.imports.internal'
 import * as CommonServiceComponents from './service.module.declarations.common';
 import * as OssComponents from './service.module.declarations.oss';
 import * as InternalComponents from './service.module.declarations.internal';
-import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
-import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+// import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+// import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 
 import { AdvFilters }            from '../adv-filter.directive';
 import {AdvancedFilterService} from '../advanced-filter.service';
-import { ServiceDetailContainerComponent } from './../pages/service-detail-container/service-detail-container.component';
-import { ServiceDetailComponent} from './../pages/service-detail/internal/service-detail.component';
-import { ServiceDetailComponentOss} from './../pages/service-detail/oss/service-detail.component';
-// End 
+// import { ServiceDetailComponent} from './../pages/service-detail/internal/service-detail.component';
+// import { ServiceDetailComponentOss} from './../pages/service-detail/oss/service-detail.component';
+// // End 
 import { Symbol } from 'rxjs';
 
 // let det_comp:any;
@@ -57,9 +56,9 @@ for(let i in CommonServiceComponents){
 for(let i in specificComponents){
  declarationsArray.push(specificComponents[i]);
 }
-console.log('imports  ',importsArray)
-console.log('dec  ',declarationsArray)
-console.log('routes',routes)
+// console.log('imports  ',importsArray)
+// console.log('dec  ',declarationsArray)
+// console.log('routes',routes)
 
 @NgModule({
   imports: [
@@ -90,15 +89,14 @@ console.log('routes',routes)
     //AmountComponent,
     //BarGraphComponent
     ...declarationsArray,
-    ServiceDetailContainerComponent,
     AdvFilters,
-    AdvancedFiltersComponentOSS,
-    AdvancedFiltersComponent
+    // AdvancedFiltersComponentOSS,
+    // AdvancedFiltersComponent
   ],
-  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
+  // entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
 })
 export class ServiceModule {
   constructor(){
-    console.log('imports  ',importsArray)
+    // console.log('imports  ',importsArray)
   }
 }

@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
         this.toasterService = toasterService;
         this.toastmessage =messageservice;
         this.http = request;
-        alert('sssosss')
+        // alert('sssosss')
 
     }
 

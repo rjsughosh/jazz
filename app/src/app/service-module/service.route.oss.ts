@@ -2,8 +2,7 @@ import {Routes} from '@angular/router';
 import {ServicesListComponent} from '../pages/services-list/services-list.component';
 // import * as ServiceDetailComponentOSS from '../pages/service-detail/oss/service-detail.component';
 // import * as ServiceDetailComponentInternal from '../pages/service-detail/internal/service-detail.component'
-import {ServiceDetailContainerComponent} from '../pages/service-detail-container/service-detail-container.component';
-// import {ServiceDetailComponent} from '../pages/service-detail/internal/service-detail.component'
+import {ServiceDetailComponent} from '../pages/service-detail/internal/service-detail.component'
 
 
 import {ServicesComponent} from '../pages/services/services.component';
@@ -29,7 +28,7 @@ export const routes: Routes = [
       },
       {
         path: ':id',
-        component: ServiceDetailContainerComponent,
+        component: ServiceDetailComponent,
         canActivate: [RouteGuard]
       },
       {

@@ -260,11 +260,11 @@ export class ServiceLogsComponent implements OnInit {
 		// filterServ.setRootViewContainerRef(viewContainerRef);
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		console.log(this.advFilters);
+		// console.log(this.advFilters);
 		var comp = this;
 		// this.advfilters.clearView();
 		let viewContainerRef = this.advFilters.viewContainerRef;
-		console.log(viewContainerRef);
+		// console.log(viewContainerRef);
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
@@ -394,7 +394,7 @@ export class ServiceLogsComponent implements OnInit {
 		this.resetPayload();
 	}
 	cancelFilter(event){
-		console.log('event',event);
+		// console.log('event',event);
 		// switch(event){
 		// 	case 'time-range':{
 		// 		this.adv_filters.onRangeListSelected('Day'); 
@@ -732,7 +732,7 @@ export class ServiceLogsComponent implements OnInit {
 	  }
 	ngOnInit() {
 		//this.logs = this.logsData;
-		console.log('deployed to dev')
+		// console.log('deployed to dev')
 		var todayDate = new Date();
 		this.payload= {
 			"service" :  this.service.name ,//"logs", //

@@ -47,6 +47,8 @@ import {LineGraphComponent} from '../secondary-components/line-graph/line-graph.
 import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import {FooterComponent} from '../secondary-components/footer/footer.component';
 import { OverviewSidebarComponent } from './../secondary-components/overview-sidebar/overview-sidebar.component';
+import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 
 let specificComponents:any
 let specificModules: any;
@@ -66,8 +68,8 @@ let declarationsArray=[];
 for(let i in specificComponents){
  declarationsArray.push(specificComponents[i]);
 }
-console.log('imports shared  ',importsArray)
-console.log('dec shared ',declarationsArray)
+// console.log('imports shared  ',importsArray)
+// console.log('dec shared ',declarationsArray)
 
 // 
 @NgModule({
@@ -113,7 +115,10 @@ console.log('dec shared ',declarationsArray)
     FooterComponent,
     OverviewSidebarComponent,
     ...declarationsArray,
+    AdvancedFiltersComponentOSS,
+    AdvancedFiltersComponent
   ],
+  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
   exports: [
     BtnJazzPrimaryComponent,
     BtnJazzSecondaryComponent,
