@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Filter } from '../../secondary-components/tmobile-table/tmobile-filter';
-import { Sort } from '../../secondary-components/tmobile-table/tmobile-table-sort';
+import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
+import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from 'angular2-toaster';

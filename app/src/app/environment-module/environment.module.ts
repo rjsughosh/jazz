@@ -20,7 +20,6 @@ import {SharedModule} from '../shared-module/shared.module';
 // import {ServiceModule} from '../service-module/service.module';
 import {RouterModule} from '@angular/router';
 import {routes} from './environment.route';
-// import {TmobileHeaderComponent} from '../secondary-components/tmobile-header/tmobile-header.component';
 
 
 
@@ -49,7 +48,6 @@ import {routes} from './environment.route';
     EnvLogsSectionComponent,
     EnvOverviewSectionComponent,
     
-    // TmobileHeaderComponent
     // SharedModule
   ]
 })

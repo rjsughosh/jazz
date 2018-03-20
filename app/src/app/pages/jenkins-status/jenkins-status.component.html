@@ -1,5 +1,5 @@
 <div class="page-hdr-wrp" >
-	<tmobile-header type="landing" (loginClick) = "onLoginClicked($event)" noLink = 'noLink' [closed]="closed"></tmobile-header>
+	<jazz-header type="landing" (loginClick) = "onLoginClicked($event)" noLink = 'noLink' [closed]="closed"></jazz-header>
 </div>
 <div class="page-body">
 	<div class="content-wrp">
@@ -25,8 +25,8 @@
         <a href=""></a>
       </div> -->
       <div class="column retry">
-        <!-- <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary> -->
-        <btn-tmobile-primary class='retry-btn gotoService' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-tmobile-primary>
+        <!-- <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary> -->
+        <btn-jazz-primary class='retry-btn gotoService' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-jazz-primary>
     </div>
     </section>
     <section class="error-screen content-section" *ngIf="status == 'expired' && status != 'loading'">
@@ -47,8 +47,8 @@
         <a href=""></a>
       </div> -->
       <div class="column retry">
-        <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
-        <!-- <btn-tmobile-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-tmobile-primary> -->
+        <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
+        <!-- <btn-jazz-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-jazz-primary> -->
     </div>
     </section>
     <section class="error-screen content-section" *ngIf="status == 'error' && status != 'loading'">
@@ -66,7 +66,7 @@
         <p>Error while deploying the service</p>
         <p><a (click)="refresh($event)">REFRESH</a> to give it another try.</p>
         <div class="column retry hide">
-            <btn-tmobile-primary class='retry-btn retryService' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
+            <btn-jazz-primary class='retry-btn retryService' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
         </div><br>
         <p> If the problem persists, Please email us at <a href="mailto:serverlessdev@t-mobile.com">serverlessdev@t-mobile.com</a></p>
       </div>
@@ -74,7 +74,7 @@
         <a target="_blank" href=""></a>
       </div> -->
       <!-- <div class="column retry">
-        <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
+        <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
     </div> -->
     </section>
     <section class="error-screen content-section" *ngIf="status == 'rejected' && status != 'loading'">
@@ -93,8 +93,8 @@
         <a target="_blank" href=""></a>
       </div> -->
       <div class="column retry">
-        <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
-        <!-- <btn-tmobile-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-tmobile-primary> -->
+        <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
+        <!-- <btn-jazz-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-jazz-primary> -->
     </div>
     </section>
     <section class="error-screen content-section" *ngIf="status == 'error2' && status != 'loading'">
@@ -113,8 +113,8 @@
         <a target="_blank" href=""></a>
       </div> -->
       <div class="column retry">
-        <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
-        <!-- <btn-tmobile-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-tmobile-primary> -->
+        <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
+        <!-- <btn-jazz-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-jazz-primary> -->
     </div>
     </section>
     <section class="error-screen content-section" *ngIf="status == 'aborted' && status != 'loading'">
@@ -133,15 +133,15 @@
         <a target="_blank" href=""></a>
       </div> -->
       <div class="column retry">
-        <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
-        <!-- <btn-tmobile-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-tmobile-primary> -->
+        <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
+        <!-- <btn-jazz-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-jazz-primary> -->
     </div>
     </section>
     
   </div>
   <!-- <div class="column retry">
-      <btn-tmobile-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-tmobile-primary>
-      <btn-tmobile-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-tmobile-primary>
+      <btn-jazz-primary newclass='retry-btn' text='RETRY' (click)="rebuild($event)"></btn-jazz-primary>
+      <btn-jazz-primary newclass='retry-btn' text='GO BACK TO SERVICE' (click)="gotoService()"></btn-jazz-primary>
   </div> -->
  
     <!-- <p class="link" (click)="gotoService()">GO BACK TO SERVICE</p> -->

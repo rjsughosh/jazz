@@ -29,7 +29,7 @@
              <div class="cb-status-dets">Include error details</div>
           </div>
           <a (click)='openModal = !openModal;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-          <btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+          <btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
        </div>
     </div>
  </div>
@@ -67,8 +67,8 @@
         
     </div>
     <div class='widget-buttons'>
-        <btn-tmobile-secondary newclass='btn' text='REJECT'></btn-tmobile-secondary>
-        <btn-tmobile-primary newclass='btn' text='APPROVE'></btn-tmobile-primary>
+        <btn-jazz-secondary newclass='btn' text='REJECT'></btn-jazz-secondary>
+        <btn-jazz-primary newclass='btn' text='APPROVE'></btn-jazz-primary>
         
     </div>
     </li> -->
@@ -84,8 +84,8 @@
     
     <div class='widget-ft Deployed'>
     <div class='widget-buttons'>
-        <btn-tmobile-secondary newclass='btn' text='REJECT'></btn-tmobile-secondary>
-        <btn-tmobile-primary newclass='btn' text='APPROVE'></btn-tmobile-primary>
+        <btn-jazz-secondary newclass='btn' text='REJECT'></btn-jazz-secondary>
+        <btn-jazz-primary newclass='btn' text='APPROVE'></btn-jazz-primary>
     </div>
     <div class='hide'>Deployment Approved</div>
     </div>
@@ -115,7 +115,7 @@
        </div>
     </div>
     <div class="column retry">
-       <btn-tmobile-primary [disablePrimaryBtn]='status[i] != "successful" && status[i] != "failed"' newclass='retry-btn' text='RETRY' (click)="rebuild($event,id[i])"></btn-tmobile-primary>
+       <btn-jazz-primary [disablePrimaryBtn]='status[i] != "successful" && status[i] != "failed"' newclass='retry-btn' text='RETRY' (click)="rebuild($event,id[i])"></btn-jazz-primary>
     </div>
  </div>
  </table-template>

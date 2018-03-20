@@ -29,7 +29,7 @@
                         <div class="cb-status-dets">Include error details</div>
                     </div>
                 <a (click)='openModal = !openModal;isLoading=false'  [class.invisible]="isLoading || feedbackRes">CANCEL</a>
-                <btn-tmobile-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-tmobile-primary>
+                <btn-jazz-primary text="{{buttonText}}" class="feedback-submit" [class.invisible]="isLoading" [disablePrimaryBtn]="!model.userFeedback && buttonText=='SUBMIT'" (click)='submitFeedback(buttonText)'></btn-jazz-primary>
             </div> 
     </div>    
 </div>
@@ -125,8 +125,8 @@
                 <span>{{service.endpoints.dev}}</span>
             </div>
             <div class='det-value align-slf'>
-                    <btn-tmobile-secondary class='testApiBtn' text='Test Dev Api' (click)='testApi("api","dev")' *ngIf='service.serviceType=="api"'></btn-tmobile-secondary>
-                    <btn-tmobile-secondary class='testApiBtn' text='Go to Website' (click)='testApi("website","dev")'  *ngIf='service.serviceType=="website"'></btn-tmobile-secondary>
+                    <btn-jazz-secondary class='testApiBtn' text='Test Dev Api' (click)='testApi("api","dev")' *ngIf='service.serviceType=="api"'></btn-jazz-secondary>
+                    <btn-jazz-secondary class='testApiBtn' text='Go to Website' (click)='testApi("website","dev")'  *ngIf='service.serviceType=="website"'></btn-jazz-secondary>
             </div>
 
         </li>
@@ -137,8 +137,8 @@
                 <span>{{service.endpoints.prod}}</span>
             </div>
             <div class='det-value align-slf'>
-                    <btn-tmobile-secondary class='testApiBtn' text='Test Prod Api' (click)='testApi("api","prod")' *ngIf='service.serviceType=="api"'></btn-tmobile-secondary>
-                    <btn-tmobile-secondary class='testApiBtn' text='Go to Website' (click)='testApi("website","prod")'  *ngIf='service.serviceType=="website"'></btn-tmobile-secondary>
+                    <btn-jazz-secondary class='testApiBtn' text='Test Prod Api' (click)='testApi("api","prod")' *ngIf='service.serviceType=="api"'></btn-jazz-secondary>
+                    <btn-jazz-secondary class='testApiBtn' text='Go to Website' (click)='testApi("website","prod")'  *ngIf='service.serviceType=="website"'></btn-jazz-secondary>
             </div>
         </li>
     </ul>
@@ -154,9 +154,9 @@
         </span> -->
 <div class='edit-service-overview-btn'>
   <!-- Commented for production push - Sprint close #18 -->
-  <!-- <btn-tmobile-secondary class='btn-edit-overview' *ngIf='showCancel'  text='CANCEL' (click)='onCancelClick()' ></btn-tmobile-secondary> -->
+  <!-- <btn-jazz-secondary class='btn-edit-overview' *ngIf='showCancel'  text='CANCEL' (click)='onCancelClick()' ></btn-jazz-secondary> -->
   <a  *ngIf='showCancel' (click)='onCancelClick()'>CANCEL</a>
-  <btn-tmobile-secondary class='btn-edit-overview'  text='{{edit_save}}'  [class.diabledbtn]="service.status === 'creation started'" [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableSaveBtn() || service.status == "creation started"'></btn-tmobile-secondary>
+  <btn-jazz-secondary class='btn-edit-overview'  text='{{edit_save}}'  [class.diabledbtn]="service.status === 'creation started'" [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableSaveBtn() || service.status == "creation started"'></btn-jazz-secondary>
   <!-- [style.borders]="edit_save=='SAVE'? 'none':'1px solid'"  -->
 </div><br>
 <div class='show-service-overview' [class.hide]="disp_show">
