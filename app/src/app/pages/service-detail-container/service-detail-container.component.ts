@@ -1,23 +1,29 @@
 import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { ServiceDetailService } from './../../service-detail.service';
 import { ServDetail} from './../../serv-detail.directive';
+import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../core/services/index';
+
 // import { ServiceDetailComponent} from './../service-detail/internal/service-detail.component';
 
 @Component({
   selector: 'service-detail-container',
   templateUrl: './service-detail-container.component.html',
-  styleUrls: ['./service-detail-container.component.css']
+	styleUrls: ['./service-detail-container.component.css'],
+	providers: [RequestService, MessageService]
+
 })
 export class ServiceDetailContainerComponent implements OnInit {
   componentFactoryResolver:ComponentFactoryResolver;
   @ViewChild(ServDetail) serv_detail: ServDetail;
 
 
-  constructor( @Inject(ComponentFactoryResolver) componentFactoryResolver,private service_det_service: ServiceDetailService ,)
+  constructor(@Inject(ElementRef) elementRef: ElementRef, @Inject(ComponentFactoryResolver) componentFactoryResolver,private service_det_service: ServiceDetailService)
   {
     this.componentFactoryResolver = componentFactoryResolver;
 		var comp = this;
+		alert('out')
 		setTimeout(function(){
+			alert('in');
 			comp.getComp(service_det_service);
 		},3000);
 		
