@@ -156,7 +156,7 @@
   <!-- Commented for production push - Sprint close #18 -->
   <!-- <btn-jazz-secondary class='btn-edit-overview' *ngIf='showCancel'  text='CANCEL' (click)='onCancelClick()' ></btn-jazz-secondary> -->
   <a  *ngIf='showCancel' (click)='onCancelClick()'>CANCEL</a>
-  <btn-jazz-secondary class='btn-edit-overview'  text='{{edit_save}}'  [class.diabledbtn]="service.status === 'creation started'" [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableSaveBtn() || service.status == "creation started"'></btn-jazz-secondary>
+  <btn-jazz-secondary *ngIf='internal_build' class='btn-edit-overview'  text='{{edit_save}}'  [class.diabledbtn]="service.status === 'creation started'" [ngClass]="service.status === 'creation started' ? 'non-clickable':''" (click)='onEditClick()' [disablebtn]='disableSaveBtn() || service.status == "creation started"'></btn-jazz-secondary>
   <!-- [style.borders]="edit_save=='SAVE'? 'none':'1px solid'"  -->
 </div><br>
 <div class='show-service-overview' [class.hide]="disp_show">
@@ -169,7 +169,7 @@
             <div class="det-label">Description</div>
             <div class="det-value wrap" [ngClass]="{PlaceHolder:description_empty}">{{service.description || 'Give me the details for your service'}}</div>
         </li>
-        <li>
+        <li *ngIf='internal_build'>
             <div class="det-label decap">Approver(s)</div>
             <div class="det-value" [ngClass]="{PlaceHolder:approvers_empty}"  >{{service.approvers || 'NA'}}</div>
         </li>
@@ -215,13 +215,14 @@
             <div class="det-label">Email</div>
             <div class="det-value" [class.link]='!email_empty' [ngClass]="{PlaceHolder:email_empty}" >{{service.email || 'Stay connected with an email'}}</div>
         </li>
-        <li>
+        <li *ngIf='internal_build'>
             <div class="det-label">Slack Channel</div>
             <div class="det-value" [class.link]='!slackChannel_empty' [ngClass]="{PlaceHolder:slackChannel_empty}"  (click)="slack_link()">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
         </li>
         <li>
             <div class="det-label">Repository</div>
             <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
+
         </li>
         <li *ngIf="service.serviceType != 'website' ">
             <div class="det-label">Runtime</div>
@@ -245,7 +246,7 @@
     
 </div>
 </div>
-<div class='edit-service-overview' [class.hide]="disp_edit">
+<div *ngIf='internal_build' class='edit-service-overview' [class.hide]="disp_edit">
         <ul class="section-left col-md-6 col-sm-12">
 
             <li>
@@ -472,8 +473,8 @@
         </div>          
     </div>
 
-    <div *ngIf='noStg && !isenvLoading' class='empty-row stage-wrp active'>No Data <br> Available</div>
-    <div *ngIf='!noStg' class="stage-wrp active"  (click)="stageClicked(stgEnv.logical_id)">        
+    <div *ngIf='noStg && !isenvLoading && !is_multi_env' class='empty-row stage-wrp active'>No Data <br> Available</div>
+    <div *ngIf='!noStg && !is_multi_env' class="stage-wrp active"  (click)="stageClicked(stgEnv.logical_id)">        
         <div class="stage-title stageDisp">{{stgEnv.logical_id}} 
             <span class='icon-icon-rightArrow right-arow'></span>        
         </div>

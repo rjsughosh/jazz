@@ -13,6 +13,8 @@ import {Observable} from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 import { ServiceDetailComponent } from '../../service-detail/internal/service-detail.component'
 // import  $  from 'jquery';
+import { environment } from './../../../../environments/environment';
+
 declare var $:any;
 
 @Component({
@@ -918,7 +920,12 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 frndload(event){
                 }
+                is_multi_env:boolean = false;
                 ngOnInit() {
+                    console.log('internabuild?? ',this.internal_build)
+                    if(environment.multi_env) this.is_multi_env=true;
+                    if(environment.envName == 'oss') this.internal_build = false;
+
                     this.service.accounts="tmo-dev-ops, tmo-int";
                     this.service.regions="us-west-2, us-east";
                     this.createloader = true;
@@ -950,23 +957,146 @@ export class ServiceOverviewComponent implements OnInit {
         },500);
         
     }
+    transform_env_oss(data){
+        var arrEnv = data.data.environment
+        if(environment.multi_env){
+            for(var i=0;i<arrEnv.length;i++){
+                arrEnv[i].status=arrEnv[i].status.replace('_',' ');
+                if(arrEnv[i].logical_id == 'prod')
+                    this.prodEnv=arrEnv[i];
+                else
+                    this.Environments.push(arrEnv[i]);
+            }
+        }
+        else{
+            for(var i=0;i<arrEnv.length;i++){
+                arrEnv[i].status=arrEnv[i].status.replace('_',' ');
+                if(arrEnv[i].logical_id == 'prod')
+                    this.prodEnv=arrEnv[i];
+                else
+                    this.stgEnv=arrEnv[i];
+            }
+        }
+        arrEnv[0].status.replace("_"," ");
+        console.log('arrenv ',arrEnv)
+    }
+    envfoross(){
+        var url_multi_env = 'https://api.myjson.com/bins/k6qvn';
+        var url_dev_prod = 'https://api.myjson.com/bins/vhzdf';
+        var chosen_url;
+        if(environment.multi_env){
+            chosen_url = url_multi_env;
+        }
+        else{
+            chosen_url = url_dev_prod;
+        }
 
+
+        this.http.get(chosen_url).subscribe(
+            response => {
+                console.log("oss response == ", response);
+                this.transform_env_oss(response);
+                // var spoon = response.data.environment;
+                // console.log("spoon == ", spoon[1])
+                // for(var i=0 ; i < spoon.length ; i++ ){
+                //    if(spoon[i].friendly_name != undefined){
+                //        this.friendly_name = spoon[i].friendly_name;
+                //    }
+                // }
+                // this.friendly_name = response
+                // this.isenvLoading=false;
+                //   this.environ_arr=response.data.environment;
+                //   if(this.environ_arr!=undefined)    
+                //     if(this.environ_arr.length==0 || response.data==''){
+                //             this.noEnv=true;   
+                //     }             
+                //   this.ErrEnv=false;
+                  
+                //   var obj1={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"dev"}
+                //   var obj2={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"feature"}
+                //   var obj3={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"stg"}
+                //   this.environ_arr[1]=obj1;
+                //   this.environ_arr[2]=obj2;
+                //   this.environ_arr[3]=obj3;
+                //   this.modifyEnvArr();
+                  
+              },
+              err => {
+                // this.isenvLoading=false;
+                
+                  console.log('oss error',err);
+                //   this.ErrEnv=true;
+                //   if(err.status == 404) this.err404=true;
+                //   this.errMessage="Something went wrong while fetching your data";
+                //   this.errMessage=this.toastmessage.errorMessage(err,"environment");
+                //   var payload = {
+                //       "domain" : +this.service.domain,
+                //       "service" : this.service.name
+                //   }
+                //   this.getTime();
+                //   this.errorURL = window.location.href;
+                //   this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
+                //   this.errorRequest = payload;
+                //   this.errorUser = this.authenticationservice.getUserId();
+                //   this.errorResponse = JSON.parse(err._body);
+    
+                // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
+                // this.popToast('error', 'Oops!', errorMessage);
+            });
+        
+        // va
+        console.log('env file,',environment)
+        
+        
+    
+    }
+
+    public getJSON(): Observable<any> {
+        console.log('file path-------',environment.configFile)
+        return this.http.get('./../../../../'+environment.configFile)
+        .map( (response: Response) => {
+           const data = response.json();
+           return data;
+        });
+    }
+
+    internal_build:boolean = true;
     ngOnChanges(x:any){
+        if(environment.multi_env) this.is_multi_env=true;
+        if(environment.envName == 'oss') this.internal_build = false;
+        var obj;
+        // this.getJSON().subscribe(data => obj=data, error => console.log(error));
+        // console.log('got config,,,,,',obj)
+        // let test = require(environment.configFile);
+        // console.log('test = ',test)
+
+
         this.prodEnv={};
         this.stgEnv={};
-        if(this.service.domain!=undefined){
+        if((this.service.domain!=undefined) && (this.internal_build == true)){
             this.getenvData();
             
+        }
+        if(!this.internal_build){
+            this.envfoross();
         }
         
         
      
-    this.check_empty_fields();
+        this.check_empty_fields();
 
        setTimeout(() =>  {
            this.islink = this.ValidURL(this.service.repository);
            if(this.islink){
-            this.bitbucketRepo = "View on Bitbucket";
+               if(this.internal_build){
+                this.bitbucketRepo = "View on Bitbucket";
+
+               }
+               else{
+                this.bitbucketRepo = "Git Repo";
+
+               }
+            // this.bitbucketRepo = "View on Bitbucket";
             this.repositorylink = this.service.repository;
         } else if(this.service.repository === "[Archived]"){
             this.bitbucketRepo = "Archived";

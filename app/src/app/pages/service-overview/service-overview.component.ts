@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 // import { ServiceDetailComponent } from '../service-detail/oss/service-detail.component'
 // import  $  from 'jquery';
 declare var $:any;
+import { environment } from './../../../environments/environment';
 
 @Component({
     selector: 'service-overview',
@@ -799,7 +800,13 @@ export class ServiceOverviewComponent implements OnInit {
                   this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
                   this.errorRequest = payload;
                   this.errorUser = this.authenticationservice.getUserId();
-                  this.errorResponse = JSON.parse(err._body);
+                  try{
+                    this.errorResponse = JSON.parse(err._body);
+                  }
+                  catch(e){
+                        console.log(e);
+                  }
+                 
     
                 // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
                 // this.popToast('error', 'Oops!', errorMessage);
@@ -919,6 +926,7 @@ export class ServiceOverviewComponent implements OnInit {
                 frndload(event){
                 }
                 ngOnInit() {
+                    if(environment.envName == 'oss') this.internal_build = false;
                     this.service.accounts="tmo-dev-ops, tmo-int";
                     this.service.regions="us-west-2, us-east";
                     this.createloader = true;
@@ -950,11 +958,12 @@ export class ServiceOverviewComponent implements OnInit {
         },500);
         
     }
-
+    internal_build:boolean = true;
     ngOnChanges(x:any){
+        if(environment.envName == 'oss') this.internal_build = false;
         this.prodEnv={};
         this.stgEnv={};
-        if(this.service.domain!=undefined){
+        if((this.service.domain!=undefined) && (this.internal_build == true)){
             this.getenvData();
             
         }
