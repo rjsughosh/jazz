@@ -573,7 +573,7 @@ export class ServiceLogsComponent implements OnInit {
 		this.subscription = this.http.post('/jazz/logs', this.payload).subscribe(
       response => {
 	   this.logs  = response.data.logs;
-	   
+	   if(this.logs != undefined)
 		if(this.logs.length !=0){
 			var pageCount = response.data.count;
 			this.totalPagesTable = 0;

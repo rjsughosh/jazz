@@ -8,3 +8,5 @@ export {ServiceMetricsComponent} from '../pages/service-metrics/service-metrics.
 export {ServiceCostComponent} from '../pages/service-cost/service-cost.component';
 export {ServiceAccessControlComponent} from '../pages/service-access-control/service-access-control.component';
 export {ServiceDetailComponent} from '../pages/service-detail/internal/service-detail.component';//*
+export { ServiceOverviewMultienvComponent } from '../secondary-components/service-overview-multienv/service-overview-multienv.component';
+export { ServiceOverviewNonMultienvComponent } from '../secondary-components/service-overview-non-multienv/service-overview-non-multienv.component';

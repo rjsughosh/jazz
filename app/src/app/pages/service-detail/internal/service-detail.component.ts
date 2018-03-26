@@ -14,7 +14,7 @@ import { ToasterService} from 'angular2-toaster';
 import { BarGraphComponent} from '../../../secondary-components/bar-graph/bar-graph.component';
 import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../../core/services/index';
 import { ServiceMetricsComponent } from '../../service-metrics/service-metrics.component';
-
+import {environment} from './../../../../environments/environment';
 
 @Component({
     selector: 'service-detail',
@@ -24,8 +24,21 @@ import { ServiceMetricsComponent } from '../../service-metrics/service-metrics.c
 })
 
 export class ServiceDetailComponent implements OnInit {
-
-
+    disabletabs:any;
+    disabletabsoss={
+        'OVERVIEW':false,
+        'ACCESS CONTROL':true,
+        'METRICS':true, 
+        'LOGS':false , 
+        'COST':true
+      };
+    disabletabsinternal={
+    'OVERVIEW':false,
+    'ACCESS CONTROL':false,
+    'METRICS':false, 
+    'LOGS':false , 
+    'COST':true
+    };
 
     constructor(
         
@@ -78,7 +91,7 @@ export class ServiceDetailComponent implements OnInit {
     private toastmessage:any;
 
     statusData = ['All','Active','Pending','Stopped'];
-    tabData = ['OVERVIEW', 'ACCESS CONTROL', 'METRICS', 'LOGS' , 'COST'];
+    tabData = ['overview', 'access control', 'cost', 'metrics' , 'logs'];
 
     breadcrumbs = []
 
@@ -374,6 +387,8 @@ export class ServiceDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+        if(environment.envName == 'oss')this.disabletabs=this.disabletabsoss;
+        else this.disabletabs=this.disabletabsinternal;
         this.breadcrumbs = [
         {
             'name' : this.service['name'],

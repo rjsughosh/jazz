@@ -3,6 +3,8 @@ export const environment = {
     configFile: 'config/config.oss.json',
     baseurl: "https://9mkfepwkjh.execute-api.us-east-1.amazonaws.com/prod",
     envName : "oss",
-    multi_env:true
+    multi_env:false,
+    serviceTabs:['overview','logs'],
+    environmentTabs:['overview','logs']
   };
   

@@ -9,6 +9,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Output, EventEmitter } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { DataService } from "../data-service/data.service";
+import {environment} from './../../../environments/environment';
 
 
 // import {}
@@ -26,6 +27,7 @@ export class EnvironmentDetailComponent implements OnInit {
 @ViewChild('envoverview') envoverview:EnvOverviewSectionComponent;
 @ViewChild('envdeployments') envdeployments:EnvDeploymentsSectionComponent;
 
+
 breadcrumbs = [];
   selectedTab = 0; 
   service: any= {};
@@ -36,7 +38,7 @@ breadcrumbs = [];
   environment_obj:any;
   isLoadingService: boolean = true;
   status_inactive:boolean = false;
-  tabData = ['Overview','deployments','Code quality','Assets','Logs'];
+  tabData = ['overview','deployments','code quality','assets','logs'];
   envSelected:string='';
   endpoint_env:string='';
   environment = {
@@ -245,7 +247,7 @@ frndload(event){
 }
 close:boolean=false;
 closed:boolean = false;
-
+disabletabs:any;
   ngOnInit()
   {
     

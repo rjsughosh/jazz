@@ -35,6 +35,7 @@ export class ServiceOverviewComponent implements OnInit {
     @Input() isLoadingService: boolean = false;
     private subscription:any;
 
+    multiENV:boolean = true;
     list_env = []
     list_inactive_env = [];
     copyLink:string='Copy Link';
@@ -922,6 +923,9 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 is_multi_env:boolean = false;
                 ngOnInit() {
+                    if(environment.envName == 'oss')
+                        if(environment.multi_env == false)
+                            this.multiENV = false;
                     console.log('internabuild?? ',this.internal_build)
                     if(environment.multi_env) this.is_multi_env=true;
                     if(environment.envName == 'oss') this.internal_build = false;

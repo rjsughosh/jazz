@@ -18,7 +18,7 @@
         <!-- <div class="page-status-row hide-for-mobile">
             <div class="page-status" [ngClass]="service.status"><span>Status</span></div>
         </div> -->
-        <tabs [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
+        <tabs [type]="'service'" [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
        
        <div *ngIf='!err_flag'> <section class="page-content" *ngIf="selectedTab == 0">
             <service-overview (open_sidebar)='opnSidebar($event)'(onload)='env($event)' (onEnvGet)='envList($event)' [service]="service" [isLoadingService]="isLoadingService"></service-overview>
