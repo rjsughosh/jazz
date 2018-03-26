@@ -187,7 +187,8 @@ export class ServiceMetricsComponent implements OnInit {
   regList=['us-west-2', 'us-east-1'];
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
-  
+  instance_yes;
+
   getFilter(filterServ){
 		// let viewContainerRef = this.advanced_filters.viewContainerRef;
 		// viewContainerRef.clear();
@@ -201,7 +202,7 @@ export class ServiceMetricsComponent implements OnInit {
 		// console.log(viewContainerRef);
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
-		// this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
 		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
 		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
 			// alert("1");
@@ -804,52 +805,53 @@ export class ServiceMetricsComponent implements OnInit {
   }
   
   cancelFilter(event){
-    // switch(event){
-    //   case 'time-range':{this.adv_filters.onRangeListSelected('Day'); 
-    //     break;
-    //   }
-    //   case 'time-range-slider':{
-    //     this.getRangefunc(1);
-      
-    //     break;
-    //   }
-    //   case 'period':{ this.adv_filters.onPeriodSelected('15 Minutes');
-    //     break;
-    //   }
-    //   case 'statistic':{      this.adv_filters.onStatisticSelected('Average');
-      
-    //     break;
-    //   }
-    //   case 'account':{      this.adv_filters.onaccSelected('Acc 1');
-      
-    //     break;
-    //   }
-    //   case 'region':{      this.adv_filters.onregSelected('reg 1');
-      
-    //     break;
-    //   }
-    //   case 'env':{      this.adv_filters.onEnvSelected('prod');
-      
-    //     break;
-    //   }
-    //   case 'method':{      this.adv_filters.onMethodListSelected('POST');
-      
-    //     break;
-    //   }
-    //   case 'all':{ this.adv_filters.onRangeListSelected('Day');    
-    //   this.adv_filters.onPeriodSelected('15 Minutes');
-    //   this.adv_filters.onStatisticSelected('Average');
-    //   this.adv_filters.onaccSelected('Acc 1');
-    //   this.adv_filters.onregSelected('reg 1');
-    //   this.adv_filters.onEnvSelected('prod');
-    //   this.adv_filters.onMethodListSelected('POST');
-    //     break;
-    //   }
-    // }
-   
-    // this.getRange(1);
-
-  }
+		switch(event){
+		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
+			break;
+		  }
+		  case 'time-range-slider':{
+				this.getRangefunc(1);
+		  
+			break;
+		  }
+		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
+			break;
+		  }
+		  case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
+		  
+			break;
+		  }
+		  case 'account':{      this.instance_yes.onaccSelected('Acc 1');
+		  
+			break;
+		  }
+		  case 'region':{      this.instance_yes.onregSelected('reg 1');
+		  
+			break;
+		  }
+		  case 'env':{      this.instance_yes.onEnvSelected('prod');
+		  
+			break;
+		  }
+		  case 'method':{      
+				
+				this.instance_yes.onMethodListSelected('POST');
+		  
+			break;
+		  }
+		  case 'all':{ this.instance_yes.onRangeListSelected('Day');    
+				this.instance_yes.onPeriodSelected('15 Minutes');
+				this.instance_yes.onStatisticSelected('Average');
+				this.instance_yes.onaccSelected('Acc 1');
+				this.instance_yes.onregSelected('reg 1');
+				this.instance_yes.onEnvSelected('prod');
+				this.instance_yes.onMethodListSelected('POST');
+				break;
+		  	}
+		}
+	   
+		this.getRangefunc(1);
+}
   onPathListicSelected(path){
     this.pathSelected=path;
     this.displayMetrics();
@@ -969,11 +971,11 @@ export class ServiceMetricsComponent implements OnInit {
     
     this.FilterTags.notify('filter-TimeRangeSlider',e);
     
-    this.sliderFrom=1;
-    this.sliderPercentFrom=1;
-    var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-    this.payload.start_time = resetdate;
-    this.callMetricsFunc();
+    // this.sliderFrom=1;
+    // this.sliderPercentFrom=1;
+    // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
+    // this.payload.start_time = resetdate;
+    // this.callMetricsFunc();
  
     
   }
