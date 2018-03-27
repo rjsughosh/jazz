@@ -119,8 +119,6 @@ export class AdvancedFiltersComponent implements OnInit {
 
     onMethodListSelected(method){
 
-       
-
         this.methodSelected=method;
         this.selectFilter["key"]='method';
         this.selectFilter["value"]=method;

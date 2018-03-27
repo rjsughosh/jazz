@@ -371,9 +371,7 @@ export class ServiceCostComponent implements OnInit {
 		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
 			break;
 		  }
-		  case 'time-range-slider':{
-				this.getRangefunc(1);
-		  
+		  case 'time-range-slider':{this.getRangefunc(1);
 			break;
 		  }
 		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
@@ -485,26 +483,29 @@ export class ServiceCostComponent implements OnInit {
 	  setTimeout(() => {
 		tst.classList.remove('toaster-anim');
 	  }, 7000);
-  }
+	}
+	
   getRangefunc(e){
+		console.log( "e1 = ", e);
     this.FilterTags.notify('filter-TimeRangeSlider',e.from);
     
     this.sliderFrom=1;
-    this.sliderPercentFrom=1;
-		var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-		    
-    this.refreshCostData('');
+    this.sliderPercentFrom=0;
+		var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom); 
+		this.refreshCostData('');
+	
 	}
 	
   getRange(e){
+		console.log( "e2 = ", e);
     this.FilterTags.notify('filter-TimeRangeSlider',e);
-    
-    // this.sliderFrom =e.from;
-    // this.sliderPercentFrom=e.from_percent;
-    // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-	
+		
+		// this.selectedTimeRange = e;
+
 }
   onClickFilter(){
+
+		
     
     //ng2-ion-range-slider
       // alert('sda')
@@ -516,7 +517,9 @@ export class ServiceCostComponent implements OnInit {
     slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
     slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
     slider.getElementsByClassName('irs-max')[0].setAttribute('style','background: none');
-    slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
+		slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
+		
+		
     
   }
   processServiceList(serviceCost,serviceInput){
