@@ -24,4 +24,4 @@ function loadTextFileAjaxSync(filePath, mimeType) {
   }
 }
 
-export const environment = loadJSON('https://api.myjson.com/bins/kvqsv');
+export const environment = loadJSON('https://api.myjson.com/bins/10r15r');
