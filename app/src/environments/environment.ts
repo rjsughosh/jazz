@@ -2,14 +2,26 @@
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
+function loadJSON(filePath) {
+  const json = loadTextFileAjaxSync(filePath, "application/json");
+  return JSON.parse(json);
+}
 
-export const environment = {
-  production: false,
-  configFile: 'config/config.json',
-  baseurl: "https://cloud-api.corporate.t-mobile.com/api",
-  envName : "jazz",
-  multi_env:false,
-  serviceTabs:['overview','access control','metrics','logs'],
-  environmentTabs:['overview','deployments','code quality','assets','logs']
+function loadTextFileAjaxSync(filePath, mimeType) {
+  const xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", filePath, false);
+  if (mimeType != null) {
+    if (xmlhttp.overrideMimeType) {
+      xmlhttp.overrideMimeType(mimeType);
+    }
+  }
+  xmlhttp.send();
+  if (xmlhttp.status == 200) {
+    return xmlhttp.responseText;
+  }
+  else {
+    return null;
+  }
+}
 
-};
+export const environment = loadJSON('https://api.myjson.com/bins/kvqsv');
