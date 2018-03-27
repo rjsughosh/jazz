@@ -259,3 +259,9 @@ filter-tags{
     padding-bottom: 1.5rem;
 
 }
+
+/deep/.filter-inner-wrap{
+    &:first-child{
+        display: none;
+    }
+}

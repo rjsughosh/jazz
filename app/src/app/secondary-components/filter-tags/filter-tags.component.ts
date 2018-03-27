@@ -89,8 +89,7 @@ export class FilterTagsComponent implements OnInit {
 
     notify(key,value){
         console.log('key='+key,'  value='+value)
-        this.setDefaults();
-        
+        this.setDefaults();        
         
         switch(key){
             case 'filter-TimeRange':{

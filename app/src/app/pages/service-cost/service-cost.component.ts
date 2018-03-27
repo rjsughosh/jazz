@@ -310,7 +310,7 @@ export class ServiceCostComponent implements OnInit {
 			break;
 		  case "Week":
 			this.sliderMax = 5;
-			var  resetdate = new Date(todayDate.setDate(todayDate.getDate()-(sliderFrom*7))).toISOString();
+			var resetdate = new Date(todayDate.setDate(todayDate.getDate()-(sliderFrom*7))).toISOString();
 			break;
 		  case "Month":
 			this.sliderMax = 12;
@@ -367,53 +367,50 @@ export class ServiceCostComponent implements OnInit {
 		// console.log('onRowClicked',row);
 	}
 	cancelFilter(event){
-		// switch(event){
-		//   case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
-		// 	break;
-		//   }
-		//   case 'time-range-slider':{
-		// 		this.getRangefunc(1);
+		switch(event){
+		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
+			break;
+		  }
+		  case 'time-range-slider':{this.getRangefunc(1);
+			break;
+		  }
+		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
+			break;
+		  }
+		  case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
 		  
-		// 	break;
-		//   }
-		//   case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
-		// 	break;
-		//   }
-		//   case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
+			break;
+		  }
+		  case 'account':{      this.instance_yes.onaccSelected('Acc 1');
 		  
-		// 	break;
-		//   }
-		//   case 'account':{      this.instance_yes.onaccSelected('Acc 1');
+			break;
+		  }
+		  case 'region':{      this.instance_yes.onregSelected('reg 1');
 		  
-		// 	break;
-		//   }
-		//   case 'region':{      this.instance_yes.onregSelected('reg 1');
+			break;
+		  }
+		  case 'env':{      this.instance_yes.onEnvSelected('prod');
 		  
-		// 	break;
-		//   }
-		//   case 'env':{      this.instance_yes.onEnvSelected('prod');
+			break;
+		  }
+		  case 'method':{      
+				
+				this.instance_yes.onMethodListSelected('POST');
 		  
-		// 	break;
-		//   }
-		//   case 'method':{      
-		// 		// alert('cancelling method')
-		// 		// console.log('instace is this',this.instance_yes);
-		// 		this.instance_yes.onMethodListSelected('POST');
-		  
-		// 	break;
-		//   }
-		//   case 'all':{ this.instance_yes.onRangeListSelected('Day');    
-		// 		this.instance_yes.onPeriodSelected('15 Minutes');
-		// 		this.instance_yes.onStatisticSelected('Average');
-		// 		this.instance_yes.onaccSelected('Acc 1');
-		// 		this.instance_yes.onregSelected('reg 1');
-		// 		this.instance_yes.onEnvSelected('prod');
-		// 		this.instance_yes.onMethodListSelected('POST');
-		// 		break;
-		//   	}
-		// }
+			break;
+		  }
+		  case 'all':{ this.instance_yes.onRangeListSelected('Day');    
+				this.instance_yes.onPeriodSelected('15 Minutes');
+				this.instance_yes.onStatisticSelected('Average');
+				this.instance_yes.onaccSelected('Acc 1');
+				this.instance_yes.onregSelected('reg 1');
+				this.instance_yes.onEnvSelected('prod');
+				this.instance_yes.onMethodListSelected('POST');
+				break;
+		  	}
+		}
 	   
-		// this.getRange(1);
+		this.getRange(1);
 }
 	  onMethodListSelected(method){
 
@@ -451,7 +448,8 @@ export class ServiceCostComponent implements OnInit {
 		
 		// this.cache.set('filter-TimeRange',range);
 		this.timerangeSelected=range;
-		this.sliderFrom =1;
+		this.sliderFrom = 1;
+
 		this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);
 		
 		var resetdate = this.getStartDate(range, this.sliderFrom);
@@ -485,26 +483,29 @@ export class ServiceCostComponent implements OnInit {
 	  setTimeout(() => {
 		tst.classList.remove('toaster-anim');
 	  }, 7000);
-  }
+	}
+	
   getRangefunc(e){
-    
-    this.FilterTags.notify('filter-TimeRangeSlider',e);
-    
-    this.sliderFrom=1;
-    this.sliderPercentFrom=1;
-    var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-    
-    this.refreshCostData('');
-  }
-  getRange(e){
+		console.log( "e1 = ", e);
     this.FilterTags.notify('filter-TimeRangeSlider',e.from);
     
-    this.sliderFrom =e.from;
-    this.sliderPercentFrom=e.from_percent;
-    var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
+    this.sliderFrom=1;
+    this.sliderPercentFrom=0;
+		var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom); 
+		this.refreshCostData('');
 	
+	}
+	
+  getRange(e){
+		console.log( "e2 = ", e);
+    this.FilterTags.notify('filter-TimeRangeSlider',e);
+		
+		// this.selectedTimeRange = e;
+
 }
   onClickFilter(){
+
+		
     
     //ng2-ion-range-slider
       // alert('sda')
@@ -516,7 +517,9 @@ export class ServiceCostComponent implements OnInit {
     slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
     slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
     slider.getElementsByClassName('irs-max')[0].setAttribute('style','background: none');
-    slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
+		slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
+		
+		
     
   }
   processServiceList(serviceCost,serviceInput){
