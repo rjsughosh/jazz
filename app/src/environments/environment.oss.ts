@@ -1,23 +1,10 @@
-function loadJSON(filePath) {
-  const json = loadTextFileAjaxSync(filePath, "application/json");
-  return JSON.parse(json);
-}
+export const environment = {
+  production: false,
+  configFile: 'config/config.oss.json',
+  baseurl: "https://9mkfepwkjh.execute-api.us-east-1.amazonaws.com/prod",
+  envName : "oss",
+  multi_env:false,
+  serviceTabs:['overview','logs'],
+  environmentTabs:['overview','logs']
 
-function loadTextFileAjaxSync(filePath, mimeType) {
-  const xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", filePath, false);
-  if (mimeType != null) {
-    if (xmlhttp.overrideMimeType) {
-      xmlhttp.overrideMimeType(mimeType);
-    }
-  }
-  xmlhttp.send();
-  if (xmlhttp.status == 200) {
-    return xmlhttp.responseText;
-  }
-  else {
-    return null;
-  }
-}
-
-export const environment = loadJSON('https://api.myjson.com/bins/zqg3v');
+};
