@@ -83,6 +83,8 @@ export class ServiceCostComponent implements OnInit {
 		}
 	}
 
+
+
 	methodList:Array<string>  = ['POST','GET','DELETE','PUT'];
 	methodSelected:string = this.methodList[0];
 	timerangeSelected:any;
@@ -142,6 +144,7 @@ export class ServiceCostComponent implements OnInit {
 		'filter': 'filter1',
 		'environment': this.env
 	}
+	
 
 	costTableData = {
 		'filter': 'filter1',
@@ -211,6 +214,8 @@ export class ServiceCostComponent implements OnInit {
     // alert('key: '+event.key+'  value: '+event.value);
     switch(event.key){
       case 'slider':{
+				console.log("event slider : ",event.value);
+				event.value.from_percent = 0;
         this.getRangefunc(event.value);
         break;
       }
@@ -367,11 +372,13 @@ export class ServiceCostComponent implements OnInit {
 		// console.log('onRowClicked',row);
 	}
 	cancelFilter(event){
+
 		switch(event){
 		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
 			break;
 		  }
-		  case 'time-range-slider':{this.getRangefunc(1);
+			case 'time-range-slider':{this.getRangefunction(1);
+				console.log("reset filters");
 			break;
 		  }
 		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
@@ -486,7 +493,7 @@ export class ServiceCostComponent implements OnInit {
 	}
 	
   getRangefunc(e){
-		console.log( "e1 = ", e);
+		console.log("e ======== ",e);
     this.FilterTags.notify('filter-TimeRangeSlider',e.from);
     
     this.sliderFrom=1;
@@ -495,13 +502,14 @@ export class ServiceCostComponent implements OnInit {
 		this.refreshCostData('');
 	
 	}
+
+	getRangefunction(e){
+		this.FilterTags.notify('filter-TimeRangeSlider',e);
+	}
 	
   getRange(e){
-		console.log( "e2 = ", e);
+		console.log("yo yo");
     this.FilterTags.notify('filter-TimeRangeSlider',e);
-		
-		// this.selectedTimeRange = e;
-
 }
   onClickFilter(){
 
