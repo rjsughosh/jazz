@@ -167,7 +167,7 @@ export class ServiceDetailComponent implements OnInit {
             this.onDataFetched(cachedData)
              if(this.service.serviceType == "website")
             {
-                this.tabData = ['OVERVIEW', 'ACCESS CONTROL', 'COST', 'METRICS'];
+                this.tabData = ['OVERVIEW', 'ACCESS CONTROL', 'METRICS' , 'COST'];
             }
         } else{
             this.http.get('/jazz/services/'+id).subscribe(
@@ -175,7 +175,7 @@ export class ServiceDetailComponent implements OnInit {
                     let service = response.data;
                      if(response.data.type === "website")
                     {
-                        this.tabData = ['OVERVIEW', 'ACCESS CONTROL', 'COST', 'METRICS'];
+                        this.tabData = ['OVERVIEW', 'ACCESS CONTROL', 'METRICS' , 'COST'];
                     }
                     this.cache.set(id, service);
                     this.onDataFetched(service);
