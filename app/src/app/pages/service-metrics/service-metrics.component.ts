@@ -151,7 +151,7 @@ export class ServiceMetricsComponent implements OnInit {
   graphInput:Array<any>;
   slider:any;
   sliderFrom = 1;
-  sliderPercentFrom;
+  sliderPercentFrom = 0;
   sliderMax:number = 7;
   service_api:boolean = true;
   metricsIndex:number=0;
@@ -189,27 +189,6 @@ export class ServiceMetricsComponent implements OnInit {
   regSelected:string = 'us-west-2';
   instance_yes;
 
-  getFilter(filterServ){
-		// let viewContainerRef = this.advanced_filters.viewContainerRef;
-		// viewContainerRef.clear();
-		// filterServ.setRootViewContainerRef(viewContainerRef);
-		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
-		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		// console.log(this.advFilters);
-		var comp = this;
-		// this.advfilters.clearView();
-		let viewContainerRef = this.advFilters.viewContainerRef;
-		// console.log(viewContainerRef);
-		viewContainerRef.clear();
-		let componentRef = viewContainerRef.createComponent(componentFactory);
-		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
-		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
-			// alert("1");
-			comp.onFilterSelect(event);
-		});
-
-	}
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
@@ -809,9 +788,7 @@ export class ServiceMetricsComponent implements OnInit {
 		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
 			break;
 		  }
-		  case 'time-range-slider':{
-				this.getRangefunc(1);
-		  
+		  case 'time-range-slider':{this.instance_yes.resetslider(1);
 			break;
 		  }
 		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
@@ -839,17 +816,18 @@ export class ServiceMetricsComponent implements OnInit {
 		  
 			break;
 		  }
-		  case 'all':{ this.instance_yes.onRangeListSelected('Day');    
+      case 'all':{ this.instance_yes.onRangeListSelected('Day');   
+        this.instance_yes.resetslider(1); 
 				this.instance_yes.onPeriodSelected('15 Minutes');
 				this.instance_yes.onStatisticSelected('Average');
 				this.instance_yes.onaccSelected('Acc 1');
 				this.instance_yes.onregSelected('reg 1');
 				this.instance_yes.onEnvSelected('prod');
-				this.instance_yes.onMethodListSelected('POST');
+        this.instance_yes.onMethodListSelected('POST');
 				break;
 		  	}
 		}
-	   
+	  console.log("tui");
 		this.getRangefunc(1);
 }
   onPathListicSelected(path){
@@ -968,18 +946,11 @@ export class ServiceMetricsComponent implements OnInit {
     }
   }
   getRangefunc(e){
-    
-    this.FilterTags.notify('filter-TimeRangeSlider',e);
-    
-    // this.sliderFrom=1;
-    // this.sliderPercentFrom=1;
-    // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-    // this.payload.start_time = resetdate;
-    // this.callMetricsFunc();
- 
-    
+    this.FilterTags.notify('filter-TimeRangeSlider',e);    
   }
+
   getRange(e){
+    console.log("getRange = ",e);
     this.FilterTags.notify('filter-TimeRangeSlider',e.from);
     
     this.sliderFrom =e.from;
@@ -1005,6 +976,29 @@ export class ServiceMetricsComponent implements OnInit {
     
   }
 
+  getFilter(filterServ){
+    console.log("filterServ",filterServ);
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		// console.log(this.advFilters);
+		var comp = this;
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advFilters.viewContainerRef;
+		// console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+			// alert("1");
+			comp.onFilterSelect(event);
+		});
+
+	}
+
   selectedMetrics(index){
     this.metricsIndex=index;
     this.graphInput = this.metricsList[index];
@@ -1015,6 +1009,7 @@ export class ServiceMetricsComponent implements OnInit {
     }
     ele[index].className += ' arrow_box';
   }
+
 
 
 

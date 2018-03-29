@@ -377,8 +377,7 @@ export class ServiceCostComponent implements OnInit {
 		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
 			break;
 		  }
-			case 'time-range-slider':{this.getRangefunction(1);
-				console.log("reset filters");
+			case 'time-range-slider':{this.instance_yes.resetslider(1);
 			break;
 		  }
 		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');

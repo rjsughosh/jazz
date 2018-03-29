@@ -152,9 +152,7 @@ console.log('filter emitter has',this.onFilterSelect)
     this.onFilterSelect.emit(this.selectFilter);
    }
 
-   onClickFilter(){
-    
-      
+   onClickFilter(){      
     var slider = document.getElementById('sliderElement');
     console.log('slider  -=->',slider);
     if(slider != null || slider != undefined){

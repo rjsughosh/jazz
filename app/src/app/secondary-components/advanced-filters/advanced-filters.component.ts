@@ -26,7 +26,7 @@ export class AdvancedFiltersComponent implements OnInit {
 
     slider:any;
     sliderFrom = 1;
-    sliderPercentFrom;
+    sliderPercentFrom = 0;
     sliderMax:number = 7;
 
 
@@ -59,7 +59,7 @@ export class AdvancedFiltersComponent implements OnInit {
     envSelected:string=this.envList[0];
   
     getRange(e){
-        this.sliderPercentFrom=e.from_percent;
+        this.sliderPercentFrom=e;
         // this.FilterTags.notify('filter-TimeRangeSlider',e.from);
         this.selectFilter["key"]='slider';
         this.selectFilter["value"]=e;
@@ -70,6 +70,12 @@ export class AdvancedFiltersComponent implements OnInit {
         // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
         // // this.payload.start_time = resetdate;
         // this.callMetricsFunc();
+    }
+
+    resetslider(e){
+        this.sliderPercentFrom=0;
+        this.sliderFrom=e;
+        this.onClickFilter();
     }
       
     onPeriodSelected(period){
@@ -92,9 +98,7 @@ export class AdvancedFiltersComponent implements OnInit {
 
     }
     onRangeListSelected(range){
-       
-        this.sliderFrom =1;
-        this.sliderPercentFrom=0;
+    
         this.selectedTimeRange = range;
         this.selectFilter["key"]='range';
         this.selectFilter["value"]=range;
@@ -147,16 +151,11 @@ export class AdvancedFiltersComponent implements OnInit {
     this.onFilterSelect.emit(this.selectFilter);
    }
 
-   onClickFilter(){
-    var from = this.cache.get("sliderFrom");
-    console.log("from = ",from);
-    if(from == 1){
-        this.sliderPercentFrom  = 0;
-    }
-    console.log("sliderPercentFrom = ",this.sliderPercentFrom);
-      
+   onClickFilter(){ 
     var slider = document.getElementById('sliderElement');
-    console.log('slider  -=->',slider);
+    if( this.sliderFrom == 1 ){
+        slider.getElementsByClassName('irs-single')[0].attributes[0].ownerElement.innerHTML = "1";
+    }
     if(slider != null || slider != undefined){
         // alert('1')
         slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
@@ -167,6 +166,7 @@ export class AdvancedFiltersComponent implements OnInit {
         // alert('3')
         // console.log('3 ,',slider);
         slider.getElementsByClassName('irs-single')[0].setAttribute('style',' background: none;background-color: #ed008c;left:'+this.sliderPercentFrom+'%');
+        
         // alert('4')
         // console.log('4 ,',slider);
         slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
@@ -194,14 +194,10 @@ export class AdvancedFiltersComponent implements OnInit {
         console.log(this.data);
         this.advanced_filter_input = this.data.advanced_filter_input;
         this.service = this.data.service;
-        var from = this.cache.get("sliderFrom");
-        console.log("from = ", from);
         
     }
     ngOnChanges(x:any){
        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
-        var from = this.cache.get("sliderFrom");
-        console.log("from = ", from);
         }
 }

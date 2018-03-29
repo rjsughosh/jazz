@@ -401,7 +401,7 @@ export class ServiceLogsComponent implements OnInit {
 			break;
 		  }
 		  case 'time-range-slider':{
-				this.getRangefunc(1);
+			this.instance_yes.resetslider(1);
 		  
 			break;
 		  }
