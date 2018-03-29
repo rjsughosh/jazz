@@ -1,6 +1,7 @@
 import { Component,ViewContainerRef, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
 import {DataCacheService } from '../../core/services/index';
-import {IonRangeSliderModule} from "ng2-ion-range-slider"
+import {IonRangeSliderModule} from "ng2-ion-range-slider";
+
 
 @Component({
   selector: '[advanced_filters]',
@@ -10,7 +11,7 @@ import {IonRangeSliderModule} from "ng2-ion-range-slider"
 export class AdvancedFiltersComponent implements OnInit {
    
 
-    constructor(public viewContainerRef: ViewContainerRef) { }
+    constructor(public viewContainerRef: ViewContainerRef , private cache: DataCacheService) { }
     data: any;
     @Input() advanced_filter_input:any = {};
     @Input() logs:boolean = false;
@@ -58,7 +59,6 @@ export class AdvancedFiltersComponent implements OnInit {
     envSelected:string=this.envList[0];
   
     getRange(e){
-        console.log('getrange e ==> ',e)
         this.sliderPercentFrom=e.from_percent;
         // this.FilterTags.notify('filter-TimeRangeSlider',e.from);
         this.selectFilter["key"]='slider';
@@ -148,13 +148,17 @@ export class AdvancedFiltersComponent implements OnInit {
    }
 
    onClickFilter(){
-    
+    var from = this.cache.get("sliderFrom");
+    console.log("from = ",from);
+    if(from == 1){
+        this.sliderPercentFrom  = 0;
+    }
+    console.log("sliderPercentFrom = ",this.sliderPercentFrom);
       
     var slider = document.getElementById('sliderElement');
     console.log('slider  -=->',slider);
     if(slider != null || slider != undefined){
         // alert('1')
-        // console.log('1 ,',slider);
         slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
         
         // alert('2')
@@ -167,6 +171,9 @@ export class AdvancedFiltersComponent implements OnInit {
         // console.log('4 ,',slider);
         slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
         // alert('5')
+
+
+        
         // console.log('5 ,',slider);
         slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
         // alert('6')
@@ -187,10 +194,14 @@ export class AdvancedFiltersComponent implements OnInit {
         console.log(this.data);
         this.advanced_filter_input = this.data.advanced_filter_input;
         this.service = this.data.service;
+        var from = this.cache.get("sliderFrom");
+        console.log("from = ", from);
         
     }
     ngOnChanges(x:any){
        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
+        var from = this.cache.get("sliderFrom");
+        console.log("from = ", from);
         }
 }
