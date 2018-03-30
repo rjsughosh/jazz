@@ -505,7 +505,6 @@ export class ServiceCostComponent implements OnInit {
 	getRangefunction(e){
 		this.FilterTags.notify('filter-TimeRangeSlider',e);
 		this.sliderFrom=1;
-		console.log("yoyoyoyoyoyoy");
 		this.cache.set('sliderFrom',this.sliderFrom);
 	}
 	

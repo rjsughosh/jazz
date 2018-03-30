@@ -174,21 +174,22 @@ export class ServiceDetailComponent implements OnInit {
         this.isLoadingService = true;
 
         let cachedData = this.cache.get(id);
-
         if (cachedData) {
             this.isGraphLoading=false;
             this.onDataFetched(cachedData)
              if(this.service.serviceType == "website")
             {
-                this.tabData = ['OVERVIEW', 'ACCESS CONTROL', 'COST', 'METRICS'];
+
+                this.tabData = ['overview', 'access control', 'cost', 'metrics'];
             }
         } else{
             this.http.get('/jazz/services/'+id).subscribe(
               response => {
+
                     let service = response.data;
                      if(response.data.type === "website")
                     {
-                        this.tabData = ['OVERVIEW', 'ACCESS CONTROL', 'COST', 'METRICS'];
+                        this.tabData = ['overview', 'access control', 'cost', 'metrics'];
                     }
                     this.cache.set(id, service);
                     this.onDataFetched(service);
