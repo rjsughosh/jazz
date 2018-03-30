@@ -259,6 +259,9 @@ export class ServiceLogsComponent implements OnInit {
 		// let viewContainerRef = this.advanced_filters.viewContainerRef;
 		// viewContainerRef.clear();
 		// filterServ.setRootViewContainerRef(viewContainerRef);
+		this.service['islogs']=true;
+		console.log('this service in logs,',this.service)
+
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
 		// console.log(this.advFilters);

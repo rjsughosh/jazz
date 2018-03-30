@@ -189,8 +189,9 @@ export class AdvancedFiltersComponent implements OnInit {
     
   }
 
-   
+   hideleft:boolean=false;
     ngOnInit(){
+        if(this.service.islogs) this.hideleft=true;
         console.log(this.data);
         this.advanced_filter_input = this.data.advanced_filter_input;
         this.service = this.data.service;
@@ -200,6 +201,7 @@ export class AdvancedFiltersComponent implements OnInit {
         
     }
     ngOnChanges(x:any){
+
        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
 
