@@ -194,10 +194,14 @@ export class AdvancedFiltersComponent implements OnInit {
         console.log(this.data);
         this.advanced_filter_input = this.data.advanced_filter_input;
         this.service = this.data.service;
+        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
+        this.pathSelected = this.pathList[0];
+
         
     }
     ngOnChanges(x:any){
        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
+
         }
 }
