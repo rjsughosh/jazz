@@ -59,14 +59,14 @@ export class AdvancedFiltersComponent implements OnInit {
     envSelected:string=this.envList[0];
   
     getRange(e){
-        this.sliderPercentFrom=e;
+        console.log("e === ",e);
         // this.FilterTags.notify('filter-TimeRangeSlider',e.from);
         this.selectFilter["key"]='slider';
         this.selectFilter["value"]=e;
         this.onFilterSelect.emit(this.selectFilter);
 
-        // this.sliderFrom =e.from;
-        // this.sliderPercentFrom=e.from_percent;
+        this.sliderFrom =e.from;
+        this.sliderPercentFrom=e.from_percent;
         // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
         // // this.payload.start_time = resetdate;
         // this.callMetricsFunc();

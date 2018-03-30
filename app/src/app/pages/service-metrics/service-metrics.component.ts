@@ -785,10 +785,12 @@ export class ServiceMetricsComponent implements OnInit {
   
   cancelFilter(event){
 		switch(event){
-		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
+      case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
+      this.getRangefunc(1);
 			break;
 		  }
-		  case 'time-range-slider':{this.instance_yes.resetslider(1);
+      case 'time-range-slider':{this.instance_yes.resetslider(1);
+        this.getRangefunc(1);
 			break;
 		  }
 		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
@@ -817,18 +819,18 @@ export class ServiceMetricsComponent implements OnInit {
 			break;
 		  }
       case 'all':{ this.instance_yes.onRangeListSelected('Day');   
-        this.instance_yes.resetslider(1); 
 				this.instance_yes.onPeriodSelected('15 Minutes');
 				this.instance_yes.onStatisticSelected('Average');
 				this.instance_yes.onaccSelected('Acc 1');
 				this.instance_yes.onregSelected('reg 1');
 				this.instance_yes.onEnvSelected('prod');
         this.instance_yes.onMethodListSelected('POST');
+        this.getRangefunc(1);
+        this.instance_yes.resetslider(1); 
 				break;
 		  	}
 		}
-	  console.log("tui");
-		this.getRangefunc(1);
+		// this.getRangefunc(1);
 }
   onPathListicSelected(path){
     this.pathSelected=path;
