@@ -1,6 +1,7 @@
 import { Component,ViewContainerRef, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
 import {DataCacheService } from '../../core/services/index';
-import {IonRangeSliderModule} from "ng2-ion-range-slider"
+import {IonRangeSliderModule} from "ng2-ion-range-slider";
+
 
 @Component({
   selector: '[advanced_filters]',
@@ -10,7 +11,7 @@ import {IonRangeSliderModule} from "ng2-ion-range-slider"
 export class AdvancedFiltersComponent implements OnInit {
    
 
-    constructor(public viewContainerRef: ViewContainerRef) { }
+    constructor(public viewContainerRef: ViewContainerRef , private cache: DataCacheService) { }
     data: any;
     @Input() advanced_filter_input:any = {};
     @Input() logs:boolean = false;
@@ -25,7 +26,7 @@ export class AdvancedFiltersComponent implements OnInit {
 
     slider:any;
     sliderFrom = 1;
-    sliderPercentFrom;
+    sliderPercentFrom = 0;
     sliderMax:number = 7;
 
 
@@ -58,8 +59,7 @@ export class AdvancedFiltersComponent implements OnInit {
     envSelected:string=this.envList[0];
   
     getRange(e){
-        console.log('getrange e ==> ',e)
-        this.sliderPercentFrom=e.from_percent;
+        this.sliderPercentFrom=e;
         // this.FilterTags.notify('filter-TimeRangeSlider',e.from);
         this.selectFilter["key"]='slider';
         this.selectFilter["value"]=e;
@@ -70,6 +70,12 @@ export class AdvancedFiltersComponent implements OnInit {
         // var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
         // // this.payload.start_time = resetdate;
         // this.callMetricsFunc();
+    }
+
+    resetslider(e){
+        this.sliderPercentFrom=0;
+        this.sliderFrom=e;
+        this.onClickFilter();
     }
       
     onPeriodSelected(period){
@@ -92,9 +98,7 @@ export class AdvancedFiltersComponent implements OnInit {
 
     }
     onRangeListSelected(range){
-       
-        this.sliderFrom =1;
-        this.sliderPercentFrom=0;
+    
         this.selectedTimeRange = range;
         this.selectFilter["key"]='range';
         this.selectFilter["value"]=range;
@@ -147,14 +151,13 @@ export class AdvancedFiltersComponent implements OnInit {
     this.onFilterSelect.emit(this.selectFilter);
    }
 
-   onClickFilter(){
-    
-      
+   onClickFilter(){ 
     var slider = document.getElementById('sliderElement');
-    console.log('slider  -=->',slider);
+    if( this.sliderFrom == 1 ){
+        slider.getElementsByClassName('irs-single')[0].attributes[0].ownerElement.innerHTML = "1";
+    }
     if(slider != null || slider != undefined){
         // alert('1')
-        // console.log('1 ,',slider);
         slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
         
         // alert('2')
@@ -163,10 +166,14 @@ export class AdvancedFiltersComponent implements OnInit {
         // alert('3')
         // console.log('3 ,',slider);
         slider.getElementsByClassName('irs-single')[0].setAttribute('style',' background: none;background-color: #ed008c;left:'+this.sliderPercentFrom+'%');
+        
         // alert('4')
         // console.log('4 ,',slider);
         slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
         // alert('5')
+
+
+        
         // console.log('5 ,',slider);
         slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
         // alert('6')
