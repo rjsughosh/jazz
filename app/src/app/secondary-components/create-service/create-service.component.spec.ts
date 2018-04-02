@@ -1360,19 +1360,89 @@ it('change platform type', () => {
   component.onSelectionChange("node");
   expect(component.runtime).toEqual("node");
   });
-  it ('checking if the entered service name is valid', async(() => {
+  it ('Validate Service name should give true if servicename is available', <any> fakeAsync(() => {
     component.serviceAvailable = false;
     component.model.serviceName = "testing";
     component.model.domainName = "jazz";
+    let fakeResponse = {
+      data: {
+        available:true
+      }
+    }
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Response(<ResponseOptions>{
+        body: JSON.stringify(fakeResponse)
+      }));
+    });
     
     component.validateServiceName(); 
-    fixture.detectChanges();
-    expect(component.serviceAvailable).toBe(false)
-    fixture.whenStable().then(()=>{
-      
-      expect(component.serviceAvailable).toBe(false)
-      
+    tick()
+    expect(component.serviceAvailable).toBe(true);
+    expect(component.serviceNotAvailable).toBe(false);
+
+  })); 
+  it ('Validate Service name should give false if servicename is notavailable', <any> fakeAsync(() => {
+    component.serviceAvailable = false;
+    component.model.serviceName = "testing";
+    component.model.domainName = "jazz";
+    let fakeResponse = {
+      data: {
+        available:false
+      }
+    }
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Response(<ResponseOptions>{
+        body: JSON.stringify(fakeResponse)
+      }));
     });
+    
+    component.validateServiceName(); 
+    tick()
+    expect(component.serviceAvailable).toBe(false);
+    expect(component.serviceNotAvailable).toBe(true);
+
+  })); 
+
+  it ('Validate Service name should give false if servicename availablity is not defined ', <any> fakeAsync(() => {
+    component.serviceAvailable = false;
+    component.model.serviceName = "testing";
+    component.model.domainName = "jazz";
+    let fakeResponse = {
+      data: {
+        available:undefined
+      }
+    }
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Response(<ResponseOptions>{
+        body: JSON.stringify(fakeResponse)
+      }));
+    });
+    
+    component.validateServiceName(); 
+    tick()
+    expect(component.serviceAvailable).toBe(false);
+    expect(component.serviceNotAvailable).toBe(false);
+
+  })); 
+  it ('Validate Service name should handle Http Error scenario', <any> fakeAsync(() => {
+    component.serviceAvailable = false;
+    component.model.serviceName = "testing";
+    component.model.domainName = "jazz";
+    let fakeResponse = {
+      data: {
+        available:true
+      }
+    }
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Error("Sample Error"));
+    });
+    
+    component.validateServiceName(); 
+    tick()
+    expect(component.serviceAvailable).toBe(false);
+    expect(component.serviceNotAvailable).toBe(false);
+    expect(component.showLoader).toBe(false);
+
   })); 
   it("closeCreateservice Should emit the output event onClose",()=>{
     spyOn(component.onClose,"emit")
@@ -1556,23 +1626,62 @@ it ('checking if the entered service name is valid', async(() => {
   }
   })); 
 
-it('checking if the slack channel is available', async(() => {
+it('checking if the slack channel is available  for valid input', <any> fakeAsync(() => {
     component.slackAvailble = false;
-    if(component.model.serviceName == "myslack"){
-    component.validateChannelName();
-    fixture.detectChanges(); 
-    fixture.whenStable().then(()=>{
-      expect(component.slackAvailble).toBe(false)
+    let fakeResponse = {
+      data: {
+        is_available:true
+      }
+    }
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Response(<ResponseOptions>{
+        body: JSON.stringify(fakeResponse)
+      }));
     });
-  }else if(component.model.serviceName == "serverless"){
+    component.model.serviceName == "myslack"
     component.validateChannelName();
-    fixture.detectChanges(); 
-    fixture.whenStable().then(()=>{
-      expect(component.slackAvailble).toBe(true)
-    });
-  }
+    tick();
+    expect(component.slackAvailble).toBe(true) ;
+    expect(component.slackNotAvailble).toBe(false);
+  
 }));
-it("sjdaskjd",<any> fakeAsync(()=>{
+it('checking if the slack channel is available  for invalid input', <any> fakeAsync(() => {
+  component.slackAvailble = false;
+  let fakeResponse = {
+    data: {
+      is_available:false
+    }
+  }
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Response(<ResponseOptions>{
+      body: JSON.stringify(fakeResponse)
+    }));
+  });
+  component.model.serviceName == "myslack"
+  component.validateChannelName();
+  tick();
+  expect(component.slackAvailble).toBe(false) ;
+  expect(component.slackNotAvailble).toBe(true);
+}));
+it('ValidateChannel  name should handle Http error scenario', <any> fakeAsync(() => {
+  component.slackAvailble = false;
+  let fakeResponse = {
+    data: {
+      is_available:false
+    }
+  }
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Error(
+      "Sample Error"
+    )
+  )});
+  component.model.serviceName == "myslack"
+  component.validateChannelName();
+  tick();
+  expect(component.slackChannelLoader ).toBe(false) ;
+
+}));
+it("Get Data function should update the approver list ",<any> fakeAsync(()=>{
   let fresponse ={
    data:  {
     values: [
@@ -1602,7 +1711,44 @@ spyOn(component, "getUserDetails");
     }));
   });
   component.getData();
+  tick();
+  expect(component.approversList).toContain({
+    displayName: "Approver3",
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  })
+  }));
 
+  it("Get Data function should update the approver list ",<any> fakeAsync(()=>{
+    let fresponse ={
+     data:  {
+      values: [
+      {
+        displayName: "Approver1",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      },
+      {
+        displayName: "Approver3",
+        givenName: "Approver1",
+        userId: "AP1",
+        userEmail: "ap1@moonraft.com"
+      }
+    ]}
+  };
+  spyOn(component, "getUserDetails");
+    backend.connections.subscribe(connection => {
+      connection.mockRespond(new Error());
+    });
+    component.getData();
+    expect(component.resMessage).toBeDefined;
   }));
 
 it("Create service should create Service for valid input set for api",<any> fakeAsync(()=>{
@@ -1706,6 +1852,117 @@ it("Create service should create Service for valid input set for functions",<any
   expect(component.isLoading).toBe(false);
 }));
 
+it("Create service should create Service for valid input set for website",<any> fakeAsync(()=>{
+  component.selectedApprovers =  [{
+    displayName: "Approver1",
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  },
+  {
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  }];
+  let fakeResponse ={
+    "data": {
+    "message": "Service creation is triggered successfully, your code will be available shortly!",
+    "request_id": "4bb7a117-4e7e-431b-950a-53fb78518fa6"
+    },
+    "input": {
+    "service_type": "website",
+    "service_name": "testing-service",
+    "approvers": ["VBansal1"],
+    "domain": "jazztest",
+    "description": "",
+    "runtime": "nodejs",
+    "require_internal_access": false,
+    "is_public_endpoint": false
+    }
+    };
+  component.typeOfService =  'website';
+  component.gitCloneSelected = true;
+  component.git_url ='sample Url'
+  component.git_private = true;
+  component.gitusername = "sampleUser";
+  component.gituserpwd ="samplePwd";
+  component.model.serviceName = 'sampleService';
+  component.model.domainName = 'sampleDomain';
+  component.model.serviceDescription =  "sampleDescription";
+  component.runtime = 'nodejs';
+  component.vpcSelected = false;
+  component.publicSelected = true;
+
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Response(<ResponseOptions>{
+      body: JSON.stringify(fakeResponse)
+    }));
+  });
+  component.createService();
+  tick()
+  expect(component.serviceRequested).toBe(true);
+  expect(component.serviceRequestSuccess).toBe(true);
+  expect(component.serviceRequestFailure).toBe(false);
+  expect(component.isLoading).toBe(false);
+}));
+
+
+
+it("Create Service should handle error  http call  ",<any> fakeAsync(()=>{
+  component.selectedApprovers =  [{
+    displayName: "Approver1",
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  },
+  {
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  }];
+  let fakeResponse ={
+    "data": {
+    "message": "Service creation is triggered successfully, your code will be available shortly!",
+    "request_id": "4bb7a117-4e7e-431b-950a-53fb78518fa6"
+    },
+    "input": {
+    "service_type": "website",
+    "service_name": "testing-service",
+    "approvers": ["VBansal1"],
+    "domain": "jazztest",
+    "description": "",
+    "runtime": "nodejs",
+    "require_internal_access": false,
+    "is_public_endpoint": false
+    }
+    };
+  component.typeOfService =  'website';
+  component.gitCloneSelected = true;
+  component.git_url ='sample Url'
+  component.git_private = true;
+  component.gitusername = "sampleUser";
+  component.gituserpwd ="samplePwd";
+  component.model.serviceName = 'sampleService';
+  component.model.domainName = 'sampleDomain';
+  component.model.serviceDescription =  "sampleDescription";
+  component.runtime = 'nodejs';
+  component.vpcSelected = false;
+  component.publicSelected = true;
+
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Error(
+      "sample Error"
+    ));
+  });
+  component.createService();
+  tick();
+  expect(component.serviceRequested).toBe(true);
+  expect(component.serviceRequestSuccess).toBe(false);
+  expect(component.serviceRequestFailure).toBe(true);
+  expect(component.isLoading).toBe(false);
+}));
+
+
 
 
 it('validating onSelectedDr function', <any>fakeAsync(() => {
@@ -1745,7 +2002,9 @@ it('validating onApproverChange2 function',() => {
 
 it('validating checkSlackNameAvailability function',() => {
   component.model.slackName = "abcd";
+  
   component.checkSlackNameAvailability();
+
   expect(component.validateChannelName()).toHaveBeenCalled;
 });
 
@@ -1768,31 +2027,56 @@ it('validating onTTLChange function',() => {
 
 it('validating validateName function',() => {
   component.model.serviceName = "testing";
-  component.validateName();
+  component.validateName(true);
   expect(component.firstcharvalidation).toEqual("NaN");
 
   component.model.serviceName = "1testing";
-  component.validateName();
+  component.validateName(true);
   expect(component.invalidServiceName).toEqual(true);
 
   component.model.domainName = "testing";
-  component.validateName();
+  component.validateName(true);
   expect(component.firstcharvalidation).toEqual("NaN");
 
   component.model.domainName = "1testing";
-  component.validateName();
+  component.validateName(true);
   expect(component.invalidDomainName).toEqual(true);
 
   component.model.serviceName = "-testing-";
-  component.validateName();
+  component.validateName(true);
   expect(component.invalidServiceName).toEqual(true);
 
   component.model.domainName = "-testing-";
-  component.validateName();
+  component.validateName(true);
   expect(component.invalidDomainName).toEqual(true);
 });
 
-
+it("backtoCreate service should reset the values to inital stage ",()=>{
+  component.approversList = [
+    {
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    },
+    {
+      displayName: "Approver3",
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    }
+  ];
+  component.selApprover =   {
+    displayName: "Approver1",
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  };
+  component.backToCreateService();
+  expect(component.approversList).toContain(component.selApprover);
+  expect(component.serviceRequested).toBe(false);
+  expect(component.serviceRequestSuccess).toBe(false);
+  expect(component.serviceRequestFailure).toBe(false);
+})
 
 
 
