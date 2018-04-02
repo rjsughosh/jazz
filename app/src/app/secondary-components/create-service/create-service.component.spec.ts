@@ -85,7 +85,7 @@ import { Router } from '@angular/router';
 import { ServiceList } from 'app/pages/services-list/service-list';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { generate } from 'rxjs/observable/generate';
+//import { generate } from 'rxjs/observable/generate';
 class MockAuthService {
   // constructor(private http: Http, private configService: MockConfigService,  private router:Router){
   //   super(http, configService, router);
@@ -1384,18 +1384,187 @@ it('change platform type', () => {
     expect(component.gitprivateSelected).toBe(false);
     expect(component.gitCloneSelected).toBe(false);
   })
-  fit("Generate Expression should rate Expression error to undefined if rate Expression is NOT undefined ",()=>{
+  it("Generate Expression should rate Expression error to undefined if rate Expression is NOT undefined ",()=>{
     component.generateExpression(component.rateExpression)
     expect(component.rateExpression.error).toBeUndefined
   })
-  fit("Generate Expression should change rateExpression.isvalid to undefined if function called with undefined rate expression or if rateexpression.type is none",()=>{
+  it("Generate Expression should change rateExpression.isvalid to undefined if function called with undefined rate expression or if rateexpression.type is none",()=>{
     component.generateExpression(undefined);
     expect(component.rateExpression.isValid).toBeUndefined;
     let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
     temp.isValid= true;
+    component.rateExpression.isValid = false;
     component.generateExpression(temp);
     expect(component.rateExpression.isValid).toBeUndefined
   });
+  it("GenerateExpression should change rateExpression.isvalid to false and rateExpression.error to error message if rateExpression.type is rate and duration is not defined",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "rate";
+    temp.duration=undefined;
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBe(false)
+    expect(component.rateExpression.error).toContain("Please enter a valid duration");
+  } )
+  it("GenerateExpression should change rateExpression.isvalid to false and rateExpression.error to error message if rateExpression.type is rate and duration is null",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "rate";
+    temp.duration=null;
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBe(false)
+    expect(component.rateExpression.error).toContain("Please enter a valid duration");
+  } )
+  it("GenerateExpression should change rateExpression.isvalid to false and rateExpression.error to error message if rateExpression.type is rate and duration is less than zero",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "rate";
+    temp.duration= "-1";
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBe(false)
+    expect(component.rateExpression.error).toContain("Please enter a valid duration");
+  } )
+  it("GenerateExpression should create cron object and change rateExpression.isvalid to true if duration is valid and interval is set to minutes",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "rate";
+    temp.duration= "5";
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBe(true)
+    expect(component.cronObj).toBeDefined;
+    expect(component.rateExpression.cronStr).not.toBeUndefined;
+   
+  })
+  it("GenerateExpression should create cron object and change rateExpression.isvalid to true if duration is valid and interval is set to Hours",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "rate";
+    temp.duration= "5";
+    temp.interval='Hours';
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBe(true)
+    expect(component.cronObj).toBeDefined;
+    expect(component.rateExpression.cronStr).not.toBeUndefined;
+   
+  })
+  it("GenerateExpression should create cron object and change rateExpression.isvalid to true if duration is valid and interval is set to days",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "rate";
+    temp.duration= "5";
+    temp.interval='Days';
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBe(true)
+    expect(component.cronObj).toBeDefined;
+    expect(component.rateExpression.cronStr).not.toBeUndefined;
+   
+  })
+  it("GetExpression should create cron string if rateexpression.type is cron ",()=>{
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.type= "cron";
+    temp.duration= "5";
+    temp.interval='Days';
+    component.cronObj = new CronObject(('0/' + 5),'*','*','*','?','*');
+    component.generateExpression(temp);
+    console.log("cron error : ", component.rateExpression.cronStr);
+  })
+// KeyPress 
+  it("KeyPress with arrowdown button should increment the focus index by 1",()=>{
+    component.typeOfService ='api';
+    let hash =  {key:'ArrowDown'};
+    component.focusindex = 2;
+    component.keypress(hash);
+    expect(component.focusindex).toBe(3);
+  })
+  it("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
+    component.typeOfService ='api';
+    let hash =  {key:'ArrowUp'};
+    component.focusindex = 2;
+    component.keypress(hash);
+    expect(component.focusindex).toBe(1);
+  })
+  it("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
+    component.typeOfService ='api';
+    let hash =  {key:'ArrowUp'};
+    component.focusindex = -1;
+    component.keypress(hash);
+    expect(component.focusindex).toBe(-1);
+  })
+// KEYPRESS 2 
+fit("KeyPress with arrowdown button should increment the focus index by 1",()=>{
+  component.typeOfService ='api';
+  let hash =  {key:'ArrowDown'};
+  component.focusindex = 2;
+  component.keypress2(hash);
+  expect(component.focusindex).toBe(3);
+})
+fit("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
+  component.typeOfService ='api';
+  let hash =  {key:'ArrowUp'};
+  component.focusindex = 2;
+  component.keypress2(hash);
+  expect(component.focusindex).toBe(1);
+})
+fit("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
+  component.typeOfService ='api';
+  let hash =  {key:'ArrowUp'};
+  component.focusindex = -1;
+  component.keypress2(hash);
+  expect(component.focusindex).toBe(-1);
+})
+
+  it('user must be able to change platform type', () => {
+    component.disablePlatform = false;
+    component.changePlatformType("aws");
+    expect(component.typeOfPlatform).toEqual("aws");
+  });
+
+  it('user must be able to change selection', () => {
+    component.onSelectionChange("node");
+    expect(component.runtime).toEqual("node");
+  });
+
+  it('checking if the domain name is entered', () => {
+    component.checkdomainName();
+    if(component.model.domainName == "jazz"){
+      expect(component.isDomainDefined).toBe(true);
+    }else if(component.model.domainName == undefined){
+      expect(component.isDomainDefined).toBe(true);
+    }
+});
+
+
+it ('checking if the entered service name is valid', async(() => {
+    component.serviceAvailable = false;
+    if(component.model.serviceName == "testing" && component.model.domainName == "jazz"){
+    component.validateServiceName(); 
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+    expect(component.serviceAvailable).toBe(false)
+    });
+  }else if(component.model.serviceName == "assets" && component.model.domainName == "platform"){
+    component.validateServiceName(); 
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+    expect(component.serviceAvailable).toBe(false)
+    });
+  }
+  })); 
+
+it('checking if the slack channel is available', async(() => {
+    component.slackAvailble = false;
+    if(component.model.serviceName == "myslack"){
+    component.validateChannelName();
+    fixture.detectChanges(); 
+    fixture.whenStable().then(()=>{
+      expect(component.slackAvailble).toBe(false)
+    });
+  }else if(component.model.serviceName == "serverless"){
+    component.validateChannelName();
+    fixture.detectChanges(); 
+    fixture.whenStable().then(()=>{
+      expect(component.slackAvailble).toBe(true)
+    });
+  }
+}));
+
+
+
+
   
 
 });
