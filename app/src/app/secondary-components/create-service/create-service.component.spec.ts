@@ -2121,6 +2121,7 @@ this.createslackSelected = false;
       userEmail: "ap1@moonraft.com"
     }
   ];
+  component.cancelCreateSlack()
   expect(component.createSlackModel.name).toBe('');
   expect(component.createSlackModel.purpose).toBe('');
   expect(component.createSlackModel.invites).toBe('');
