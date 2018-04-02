@@ -1604,22 +1604,51 @@ it('validating checkSlackNameAvailability function',() => {
 });
 
 
+it('validating onTTLChange function',() => {
 
-// onTTLChange() {
-//   if (this.model.ttlValue) {
-//     if (parseInt(this.model.ttlValue) > 3600 || parseInt(this.model.ttlValue) < 1) {
-//       this.invalidttl = true;
-//     } else {
-//       this.invalidttl = false;
-//     }
-//   } else {
-//     this.invalidttl = true;
-//   }
-// };
+  component.model.ttlValue = "100";
+  component.onTTLChange();
+  expect(component.invalidttl).toBe(false);
+  
+  component.model.ttlValue = "10000";
+  component.onTTLChange();
+  expect(component.invalidttl).toBe(true);
+  
+  component.model.ttlValue = undefined;
+  component.onTTLChange();
+  expect(component.invalidttl).toBe(true);
+  
+});
 
-// it('validating onTTLChange function',() => {
+it('validating validateName function',() => {
+  component.model.serviceName = "testing";
+  component.validateName();
+  expect(component.firstcharvalidation).toEqual("NaN");
 
-// });
+  component.model.serviceName = "1testing";
+  component.validateName();
+  expect(component.invalidServiceName).toEqual(true);
+
+  component.model.domainName = "testing";
+  component.validateName();
+  expect(component.firstcharvalidation).toEqual("NaN");
+
+  component.model.domainName = "1testing";
+  component.validateName();
+  expect(component.invalidDomainName).toEqual(true);
+
+  component.model.serviceName = "-testing-";
+  component.validateName();
+  expect(component.invalidServiceName).toEqual(true);
+
+  component.model.domainName = "-testing-";
+  component.validateName();
+  expect(component.invalidDomainName).toEqual(true);
+});
+
+
+
+
 
 
   

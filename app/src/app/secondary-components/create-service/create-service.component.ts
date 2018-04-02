@@ -231,6 +231,7 @@ export class CreateServiceComponent implements OnInit {
 
     this.http.get('/platform/ad/users')
       .subscribe((res: Response) => {
+        console.log("resp = ",res);
         this.approversListRes = res;
         this.approversList = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
@@ -454,6 +455,7 @@ export class CreateServiceComponent implements OnInit {
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
       (Response) => {
+        console.log("main response : ", Response);
         var service = payload.service_name;
         var domain = payload.domain;
         var reqId = Response.data.request_id;
@@ -626,10 +628,12 @@ export class CreateServiceComponent implements OnInit {
     else this.git_err = false;
   }
 
-  validateName(event) {
+  validateName() {
+    // console.log("event == ",event);
 
     if (this.model.serviceName != null) {
       this.firstcharvalidation = Number(this.model.serviceName[0]).toString();
+      console.log("firstcharvalidation : ",this.firstcharvalidation);
     }
     if (this.firstcharvalidation != "NaN") {
       this.invalidServiceName = true;
@@ -665,6 +669,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function ttl value
   onTTLChange() {
+    console.log("ttl == ", this.model.ttlValue );
     if (this.model.ttlValue) {
       if (parseInt(this.model.ttlValue) > 3600 || parseInt(this.model.ttlValue) < 1) {
         this.invalidttl = true;
@@ -916,7 +921,6 @@ export class CreateServiceComponent implements OnInit {
   ngOnInit() {
     // this.gitRepo = "https://";
     this.getData();
-
   };
 
   publicEndpoint() {
