@@ -85,6 +85,7 @@ import { Router } from '@angular/router';
 import { ServiceList } from 'app/pages/services-list/service-list';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { generate } from 'rxjs/observable/generate';
 class MockAuthService {
   // constructor(private http: Http, private configService: MockConfigService,  private router:Router){
   //   super(http, configService, router);
@@ -1383,6 +1384,18 @@ it('change platform type', () => {
     expect(component.gitprivateSelected).toBe(false);
     expect(component.gitCloneSelected).toBe(false);
   })
+  fit("Generate Expression should rate Expression error to undefined if rate Expression is NOT undefined ",()=>{
+    component.generateExpression(component.rateExpression)
+    expect(component.rateExpression.error).toBeUndefined
+  })
+  fit("Generate Expression should change rateExpression.isvalid to undefined if function called with undefined rate expression or if rateexpression.type is none",()=>{
+    component.generateExpression(undefined);
+    expect(component.rateExpression.isValid).toBeUndefined;
+    let temp = new RateExpression(undefined, undefined, 'none', '5', "Minutes", '');
+    temp.isValid= true;
+    component.generateExpression(temp);
+    expect(component.rateExpression.isValid).toBeUndefined
+  });
   
 
 });
