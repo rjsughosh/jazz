@@ -1384,6 +1384,10 @@ it('change platform type', () => {
     expect(component.gitCloneSelected).toBe(false);
   })
 
+  
+
+  
+
   it('user must be able to change platform type', () => {
     component.disablePlatform = false;
     component.changePlatformType("aws");
@@ -1437,8 +1441,19 @@ it('checking if the slack channel is available', async(() => {
       expect(component.slackAvailble).toBe(true)
     });
   }
-  
+}));
 
+
+
+
+
+
+
+
+
+
+
+  
 });
 
 
