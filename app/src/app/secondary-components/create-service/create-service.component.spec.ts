@@ -1704,8 +1704,97 @@ it("Create service should create Service for valid input set for functions",<any
   expect(component.serviceRequestSuccess).toBe(true);
   expect(component.serviceRequestFailure).toBe(false);
   expect(component.isLoading).toBe(false);
-
 }));
+
+
+
+it('validating onSelectedDr function', <any>fakeAsync(() => {
+  component.onSelectedDr("Minutes");
+  expect(component.generateExpression(this.rateExpression)).toHaveBeenCalled;
+}));
+
+it('validating onServiceChange function',() => {
+  component.onServiceChange();
+  expect(component.isDomainDefined).toBe(false);
+  expect(component.serviceNameError).toBe(false);
+  expect(component.serviceAvailable).toBe(false);
+  expect(component.serviceNotAvailable).toBe(false);
+});
+
+it('validating onApproverChange function',() => {
+  let newVal;
+  if(newVal == "vban"){
+  component.onApproverChange(newVal);
+  expect(component.showApproversList).toBe(true);
+  }else if(newVal == undefined){
+    component.onApproverChange(newVal);
+    expect(component.showApproversList).toBe(false);
+  }
+});
+
+it('validating onApproverChange2 function',() => {
+  let newVal;
+  if(newVal == "vban"){
+  component.onApproverChange2(newVal);
+  expect(component.showApproversList2).toBe(true);
+  }else if(newVal == undefined){
+    component.onApproverChange2(newVal);
+    expect(component.showApproversList2).toBe(false);
+  }
+});
+
+it('validating checkSlackNameAvailability function',() => {
+  component.model.slackName = "abcd";
+  component.checkSlackNameAvailability();
+  expect(component.validateChannelName()).toHaveBeenCalled;
+});
+
+
+it('validating onTTLChange function',() => {
+
+  component.model.ttlValue = "100";
+  component.onTTLChange();
+  expect(component.invalidttl).toBe(false);
+  
+  component.model.ttlValue = "10000";
+  component.onTTLChange();
+  expect(component.invalidttl).toBe(true);
+  
+  component.model.ttlValue = undefined;
+  component.onTTLChange();
+  expect(component.invalidttl).toBe(true);
+  
+});
+
+it('validating validateName function',() => {
+  component.model.serviceName = "testing";
+  component.validateName();
+  expect(component.firstcharvalidation).toEqual("NaN");
+
+  component.model.serviceName = "1testing";
+  component.validateName();
+  expect(component.invalidServiceName).toEqual(true);
+
+  component.model.domainName = "testing";
+  component.validateName();
+  expect(component.firstcharvalidation).toEqual("NaN");
+
+  component.model.domainName = "1testing";
+  component.validateName();
+  expect(component.invalidDomainName).toEqual(true);
+
+  component.model.serviceName = "-testing-";
+  component.validateName();
+  expect(component.invalidServiceName).toEqual(true);
+
+  component.model.domainName = "-testing-";
+  component.validateName();
+  expect(component.invalidDomainName).toEqual(true);
+});
+
+
+
+
 
 
   
