@@ -74,13 +74,15 @@ import { Error404Component } from '../../pages/error404/error404.component';
 import { PopoverModule } from 'ng2-popover';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule , BaseRequestOptions, Connection} from '@angular/http';
 import { AuthenticationService, RouteGuard, DataCacheService, RequestService, MessageService } from '../../core/services';
 import { RouterModule, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonRangeSliderModule } from 'ng2-ion-range-slider';
 import { environment } from '../../../environments/environment';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, RequestOptions,ResponseOptions } from '@angular/http';
+import {  } from '@angular/http'
+import{MockBackend} from '@angular/http/testing'
 import { Router } from '@angular/router';
 import { ServiceList } from 'app/pages/services-list/service-list';
 import { DebugElement } from '@angular/core';
@@ -125,6 +127,7 @@ describe('CreateServiceComponent', () => {
   let testBedConfigService: ConfigService;
   let componentConfigService: ConfigService;
   let de: DebugElement;
+  let backend: MockBackend;
   beforeEach(async(() => {
     TestBed.overrideComponent(
       LoginComponent,
@@ -135,14 +138,22 @@ describe('CreateServiceComponent', () => {
       imports: [FormsModule, ReactiveFormsModule, BrowserModule, DropdownModule, PopoverModule, HttpModule],
       providers: [
         ToasterService, CronParserService, DataCacheService,
+        MockBackend,BaseRequestOptions,
         { provide: Router, useClass: MockRouter },
         { provide: ConfigService, useClass: MockConfigService },
         { provide: RequestService, useClass: RequestServiceMock },
-        { provide: AuthenticationService, useClass: MockAuthService }, SharedService
+        { provide: AuthenticationService, useClass: MockAuthService }, 
+        {provide:Http,
+         useFactory: (backend,options)=> new Http(backend,options),
+         deps:[MockBackend,BaseRequestOptions]
+        },
+        SharedService
         , MessageService, ServicesListComponent],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
+    
+      backend = TestBed.get(MockBackend); 
   }));
 
   beforeEach(() => {
@@ -1485,21 +1496,21 @@ it('change platform type', () => {
     expect(component.focusindex).toBe(-1);
   })
 // KEYPRESS 2 
-fit("KeyPress with arrowdown button should increment the focus index by 1",()=>{
+it("KeyPress with arrowdown button should increment the focus index by 1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowDown'};
   component.focusindex = 2;
   component.keypress2(hash);
-  expect(component.focusindex).toBe(3);
+  expect(component.focusindex).toBe(0);
 })
-fit("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
+it("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowUp'};
   component.focusindex = 2;
   component.keypress2(hash);
   expect(component.focusindex).toBe(1);
 })
-fit("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
+it("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowUp'};
   component.focusindex = -1;
@@ -1561,8 +1572,140 @@ it('checking if the slack channel is available', async(() => {
     });
   }
 }));
+it("sjdaskjd",<any> fakeAsync(()=>{
+  let fresponse ={
+   data:  {
+    values: [
+    {
+      displayName: "Approver1",
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    },
+    {
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    },
+    {
+      displayName: "Approver3",
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    }
+  ]}
+};
+spyOn(component, "getUserDetails");
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Response(<ResponseOptions>{
+      body: JSON.stringify(fresponse)
+    }));
+  });
+  component.getData();
 
+  }));
 
+it("Create service should create Service for valid input set for api",<any> fakeAsync(()=>{
+  component.selectedApprovers =  [{
+    displayName: "Approver1",
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  },
+  {
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  }];
+  let fakeResponse ={
+    "data": {
+    "message": "Service creation is triggered successfully, your code will be available shortly!",
+    "request_id": "4bb7a117-4e7e-431b-950a-53fb78518fa6"
+    },
+    "input": {
+    "service_type": "api",
+    "service_name": "testing-service",
+    "approvers": ["VBansal1"],
+    "domain": "jazztest",
+    "description": "",
+    "runtime": "nodejs",
+    "require_internal_access": false,
+    "is_public_endpoint": false
+    }
+    };
+  component.typeOfService =  'api';
+  component.model.serviceName = 'sampleService';
+  component.model.domainName = 'sampleDomain';
+  component.model.serviceDescription =  "sampleDescription";
+  component.runtime = 'nodejs';
+  component.vpcSelected = false;
+  component.publicSelected = true;
+
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Response(<ResponseOptions>{
+      body: JSON.stringify(fakeResponse)
+    }));
+  });
+  component.createService();
+  tick()
+  expect(component.serviceRequested).toBe(true);
+  expect(component.serviceRequestSuccess).toBe(true);
+  expect(component.serviceRequestFailure).toBe(false);
+  expect(component.isLoading).toBe(false);
+
+}));
+
+it("Create service should create Service for valid input set for functions",<any> fakeAsync(()=>{
+  component.selectedApprovers =  [{
+    displayName: "Approver1",
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  },
+  {
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  }];
+  let fakeResponse ={
+    "data": {
+    "message": "Service creation is triggered successfully, your code will be available shortly!",
+    "request_id": "4bb7a117-4e7e-431b-950a-53fb78518fa6"
+    },
+    "input": {
+    "service_type": "api",
+    "service_name": "testing-service",
+    "approvers": ["VBansal1"],
+    "domain": "jazztest",
+    "description": "",
+    "runtime": "nodejs",
+    "require_internal_access": false,
+    "is_public_endpoint": false
+    }
+    };
+  component.typeOfService =  'function';
+  component.rateExpression.type = 'none';
+  component.eventExpression.type='awsEventsNone';
+  component.model.serviceName = 'sampleService';
+  component.model.domainName = 'sampleDomain';
+  component.model.serviceDescription =  "sampleDescription";
+  component.runtime = 'nodejs';
+  component.vpcSelected = false;
+  component.publicSelected = true;
+
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Response(<ResponseOptions>{
+      body: JSON.stringify(fakeResponse)
+    }));
+  });
+  component.createService();
+  tick()
+  expect(component.serviceRequested).toBe(true);
+  expect(component.serviceRequestSuccess).toBe(true);
+  expect(component.serviceRequestFailure).toBe(false);
+  expect(component.isLoading).toBe(false);
+
+}));
 
 
   
