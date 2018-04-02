@@ -208,11 +208,15 @@ export class CreateServiceComponent implements OnInit {
   }
 
   getUserDetails(list) {
+    console.log("list == ", list);
     this.loginUser = this.authenticationservice.getUserId();
+    console.log("loginUser == ", this.loginUser);
     if (list.length) {
       for (var i = 0; i < list.length; i++) {
         if (list[i].userId.toLowerCase() === this.loginUser) {
           this.loginUserDetail = list[i];
+          console.log("loginUserDetail == ", this.loginUserDetail);
+
         }
       }
     }
@@ -531,6 +535,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
+    console.log("newvaalue = ", newVal);
     if (!newVal) {
       this.showApproversList = false;
     } else {
@@ -539,6 +544,7 @@ export class CreateServiceComponent implements OnInit {
   }
 
   onApproverChange2(newVal) {
+    console.log("newvaalue2 = ", newVal);
     if (!newVal) {
       this.showApproversList2 = false;
     } else {

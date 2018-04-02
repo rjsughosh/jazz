@@ -1485,21 +1485,21 @@ it('change platform type', () => {
     expect(component.focusindex).toBe(-1);
   })
 // KEYPRESS 2 
-fit("KeyPress with arrowdown button should increment the focus index by 1",()=>{
+it("KeyPress with arrowdown button should increment the focus index by 1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowDown'};
   component.focusindex = 2;
   component.keypress2(hash);
-  expect(component.focusindex).toBe(3);
+  expect(component.focusindex).toBe(0);
 })
-fit("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
+it("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowUp'};
   component.focusindex = 2;
   component.keypress2(hash);
   expect(component.focusindex).toBe(1);
 })
-fit("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
+it("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowUp'};
   component.focusindex = -1;
@@ -1562,7 +1562,64 @@ it('checking if the slack channel is available', async(() => {
   }
 }));
 
+it('validating onSelectedDr function', <any>fakeAsync(() => {
+  component.onSelectedDr("Minutes");
+  expect(component.generateExpression(this.rateExpression)).toHaveBeenCalled;
+}));
 
+it('validating onServiceChange function',() => {
+  component.onServiceChange();
+  expect(component.isDomainDefined).toBe(false);
+  expect(component.serviceNameError).toBe(false);
+  expect(component.serviceAvailable).toBe(false);
+  expect(component.serviceNotAvailable).toBe(false);
+});
+
+it('validating onApproverChange function',() => {
+  let newVal;
+  if(newVal == "vban"){
+  component.onApproverChange(newVal);
+  expect(component.showApproversList).toBe(true);
+  }else if(newVal == undefined){
+    component.onApproverChange(newVal);
+    expect(component.showApproversList).toBe(false);
+  }
+});
+
+it('validating onApproverChange2 function',() => {
+  let newVal;
+  if(newVal == "vban"){
+  component.onApproverChange2(newVal);
+  expect(component.showApproversList2).toBe(true);
+  }else if(newVal == undefined){
+    component.onApproverChange2(newVal);
+    expect(component.showApproversList2).toBe(false);
+  }
+});
+
+it('validating checkSlackNameAvailability function',() => {
+  component.model.slackName = "abcd";
+  component.checkSlackNameAvailability();
+  expect(component.validateChannelName()).toHaveBeenCalled;
+});
+
+
+
+// onTTLChange() {
+//   if (this.model.ttlValue) {
+//     if (parseInt(this.model.ttlValue) > 3600 || parseInt(this.model.ttlValue) < 1) {
+//       this.invalidttl = true;
+//     } else {
+//       this.invalidttl = false;
+//     }
+//   } else {
+//     this.invalidttl = true;
+//   }
+// };
+
+// it('validating onTTLChange function',() => {
+
+// });
 
 
   
