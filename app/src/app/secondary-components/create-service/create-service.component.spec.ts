@@ -1663,6 +1663,24 @@ it('checking if the slack channel is available  for invalid input', <any> fakeAs
   expect(component.slackAvailble).toBe(false) ;
   expect(component.slackNotAvailble).toBe(true);
 }));
+it('checking if the slack channel is available is not defined ', <any> fakeAsync(() => {
+  component.slackAvailble = false;
+  let fakeResponse = {
+    data: {
+      is_available:undefined
+    }
+  }
+  backend.connections.subscribe(connection => {
+    connection.mockRespond(new Response(<ResponseOptions>{
+      body: JSON.stringify(fakeResponse)
+    }));
+  });
+  component.model.serviceName == "myslack"
+  component.validateChannelName();
+  tick();
+  expect(component.slackAvailble).toBe(false) ;
+  expect(component.slackNotAvailble).toBe(false);
+}));
 it('ValidateChannel  name should handle Http error scenario', <any> fakeAsync(() => {
   component.slackAvailble = false;
   let fakeResponse = {
@@ -2077,11 +2095,42 @@ it("backtoCreate service should reset the values to inital stage ",()=>{
   expect(component.serviceRequestSuccess).toBe(false);
   expect(component.serviceRequestFailure).toBe(false);
 })
-
-
-
-
+it("canclecreateslack should reset the values",()=>{
+/*
+this.createslackSelected = false;
+    this.createSlackModel.name = '';
+    this.createSlackModel.purpose = '';
+    this.createSlackModel.invites = '';
+    for (var i = 0; i < this.selectedApprovers2.length; i++) {
+      this.approversList2.push(this.selectedApprovers2[i]);
+    }
+    this.selectedApprovers2 = [];
+  }
+  *///
+  component.approversList2 = [];
+  component.selectedApprovers2=[
+    {
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    },
+    {
+      displayName: "Approver3",
+      givenName: "Approver1",
+      userId: "AP1",
+      userEmail: "ap1@moonraft.com"
+    }
+  ];
+  expect(component.createSlackModel.name).toBe('');
+  expect(component.createSlackModel.purpose).toBe('');
+  expect(component.createSlackModel.invites).toBe('');
+  expect(component.approversList2).toContain({
+    givenName: "Approver1",
+    userId: "AP1",
+    userEmail: "ap1@moonraft.com"
+  });
   
+});
 
 });
 
