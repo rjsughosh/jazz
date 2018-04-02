@@ -1383,6 +1383,60 @@ it('change platform type', () => {
     expect(component.gitprivateSelected).toBe(false);
     expect(component.gitCloneSelected).toBe(false);
   })
+
+  it('user must be able to change platform type', () => {
+    component.disablePlatform = false;
+    component.changePlatformType("aws");
+    expect(component.typeOfPlatform).toEqual("aws");
+  });
+
+  it('user must be able to change selection', () => {
+    component.onSelectionChange("node");
+    expect(component.runtime).toEqual("node");
+  });
+
+  it('checking if the domain name is entered', () => {
+    component.checkdomainName();
+    if(component.model.domainName == "jazz"){
+      expect(component.isDomainDefined).toBe(true);
+    }else if(component.model.domainName == undefined){
+      expect(component.isDomainDefined).toBe(true);
+    }
+});
+
+
+it ('checking if the entered service name is valid', async(() => {
+    component.serviceAvailable = false;
+    if(component.model.serviceName == "testing" && component.model.domainName == "jazz"){
+    component.validateServiceName(); 
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+    expect(component.serviceAvailable).toBe(false)
+    });
+  }else if(component.model.serviceName == "assets" && component.model.domainName == "platform"){
+    component.validateServiceName(); 
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+    expect(component.serviceAvailable).toBe(false)
+    });
+  }
+  })); 
+
+it('checking if the slack channel is available', async(() => {
+    component.slackAvailble = false;
+    if(component.model.serviceName == "myslack"){
+    component.validateChannelName();
+    fixture.detectChanges(); 
+    fixture.whenStable().then(()=>{
+      expect(component.slackAvailble).toBe(false)
+    });
+  }else if(component.model.serviceName == "serverless"){
+    component.validateChannelName();
+    fixture.detectChanges(); 
+    fixture.whenStable().then(()=>{
+      expect(component.slackAvailble).toBe(true)
+    });
+  }
   
 
 });
