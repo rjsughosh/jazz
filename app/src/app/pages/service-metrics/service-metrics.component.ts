@@ -1,12 +1,15 @@
-import { Component, OnInit, ElementRef, Inject, Input } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { DayData, WeekData, MonthData, Month6Data, YearData } from './data';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
 import { ToasterService} from 'angular2-toaster';
 import { RequestService, MessageService , AuthenticationService } from '../../core/services/index';
 import {DataCacheService } from '../../core/services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {IonRangeSliderModule} from "ng2-ion-range-slider"
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+import {AdvancedFilterService} from './../../advanced-filter.service';
+import {AdvFilters} from './../../adv-filter.directive';
 
 
 
@@ -15,7 +18,7 @@ import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter
 @Component({ 
   selector: 'service-metrics',
   templateUrl: './service-metrics.component.html',
-  providers: [RequestService, MessageService],
+  providers: [RequestService, MessageService,AdvancedFilterService],
   styleUrls: ['./service-metrics.component.scss']
 })
 export class ServiceMetricsComponent implements OnInit {
@@ -24,7 +27,10 @@ export class ServiceMetricsComponent implements OnInit {
 
   @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
   @ViewChild('filtertags') FilterTags: FilterTagsComponent;
-  
+  // @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
+  componentFactoryResolver:ComponentFactoryResolver;
+
   
 
 	// public lineGraph: LineGraphComponent;
@@ -35,6 +41,36 @@ export class ServiceMetricsComponent implements OnInit {
   public from:any;
   public step:any;
   
+  advanced_filter_input:any = {
+    time_range:{
+        show:true,
+    },
+    slider:{
+        show:true,
+    },
+    period:{
+        show:true,
+    },
+    statistics:{
+        show:true,
+    },
+    path:{
+        show:true,
+    },
+    environment:{
+        show:true,
+    },
+    method:{
+        show:true,
+    },
+    account:{
+        show:true,
+    },
+    region:{
+        show:true,
+    }
+}
+
   envList:any=['prod','stg'];
 
 
@@ -115,7 +151,7 @@ export class ServiceMetricsComponent implements OnInit {
   graphInput:Array<any>;
   slider:any;
   sliderFrom = 1;
-  sliderPercentFrom;
+  sliderPercentFrom = 0;
   sliderMax:number = 7;
   service_api:boolean = true;
   metricsIndex:number=0;
@@ -131,7 +167,7 @@ export class ServiceMetricsComponent implements OnInit {
 	json:any={};
 
 
-  constructor(@Inject(ElementRef) elementRef: ElementRef, private authenticationservice: AuthenticationService , private cache: DataCacheService,private router:Router, private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
+  constructor(@Inject(ElementRef) elementRef: ElementRef, @Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService , private authenticationservice: AuthenticationService , private cache: DataCacheService,private router:Router, private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
     var el:HTMLElement = elementRef.nativeElement;
     this.root = el;
     this.graphs = DayData;
@@ -139,13 +175,20 @@ export class ServiceMetricsComponent implements OnInit {
     this.toasterService = toasterService;
     this.http = request;
     this.toastmessage= messageservice;
+    this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},3000);
+		
   }
  
 	accList=['tmodevops','tmonpe'];
   regList=['us-west-2', 'us-east-1'];
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
-  
+  instance_yes;
+
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
@@ -212,6 +255,88 @@ export class ServiceMetricsComponent implements OnInit {
     if(env_list != undefined){
       this.envList=env_list.friendly_name;
     }
+  }
+  onFilterSelect(event){
+    // alert('key: '+event.key+'  value: '+event.value);
+    switch(event.key){
+      case 'slider':{
+        this.getRange(event.value);
+        break;
+      }
+      case 'period':{
+        this.FilterTags.notify('filter-Period',event.value);
+        this.payload.interval = this.periodListSeconds[this.periodList.indexOf(event.value)];
+        this.callMetricsFunc();
+        break;
+      }
+      case 'range':{
+        this.FilterTags.notify('filter-TimeRange',event.value);
+        this.sendDefaults(event.value); 
+        this.timerangeSelected=event.value;
+        this.sliderFrom =1;
+        this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);        
+        var resetdate = this.getStartDate(event.value, this.sliderFrom);
+        this.resetPeriodList(event.value);
+        this.selectedTimeRange = event.value;
+        this.payload.start_time = resetdate;
+        this.callMetricsFunc();
+        // this.adv_filters.setSlider(this.sliderMax);
+        break;
+      }
+      case 'environment':{
+        var envt = event.value;
+        this.FilterTags.notify('filter-Env',envt);
+        this.envSelected = envt;
+        this.payload.environment = envt;
+        var env_list=this.cache.get('envList');
+        var fName = env_list.friendly_name;
+        var index = fName.indexOf(envt);
+        var env = env_list.env[index];
+        this.envSelected = envt;
+        this.payload.environment = env;
+        this.callMetricsFunc();
+        this.envUpdate = true;
+        break;
+      }
+      case 'statistics':{
+        var statistics=event.value;
+        // this.payload.statistics = statistics;
+        this.FilterTags.notify('filter-Statistic',statistics);
+        
+        // this.cache.set('filter-Statistic',statistics);
+        this.statisticSelected = statistics;
+        this.payload.statistics = statistics;
+        this.callMetricsFunc();
+        break;
+
+      }
+      case 'method':{
+        var method=event.value;
+        this.FilterTags.notify('filter-Method',method);
+
+        this.methodSelected=method;
+        this.displayMetrics();
+      }
+      case 'path':{
+        this.pathSelected=event.value;
+        this.displayMetrics();
+        break;
+      }
+      case 'account':{
+          this.FilterTags.notify('filter-Account',event.value);
+        this.accSelected=event.value;
+        break;
+      }
+      case 'region':{ 
+        this.FilterTags.notify('filter-Region',event.value);
+        this.regSelected=event.value;
+        break;
+            
+      }
+
+   
+    }
+    
   }
   ngOnInit() {
     this.cache.set("codequality",false)
@@ -659,51 +784,54 @@ export class ServiceMetricsComponent implements OnInit {
   }
   
   cancelFilter(event){
-    switch(event){
-      case 'time-range':{this.onRangeListSelected('Day'); 
-        break;
-      }
-      case 'time-range-slider':{this.getRangefunc(1);
-      
-        break;
-      }
-      case 'period':{ this.onPeriodSelected('15 Minutes');
-        break;
-      }
-      case 'statistic':{      this.onStatisticSelected('Average');
-      
-        break;
-      }
-      case 'account':{      this.onaccSelected('Acc 1');
-      
-        break;
-      }
-      case 'region':{      this.onregSelected('reg 1');
-      
-        break;
-      }
-      case 'env':{      this.onEnvSelected('prod');
-      
-        break;
-      }
-      case 'method':{      this.onMethodListSelected('POST');
-      
-        break;
-      }
-      case 'all':{ this.onRangeListSelected('Day');    
-      this.onPeriodSelected('15 Minutes');
-      this.onStatisticSelected('Average');
-      this.onaccSelected('Acc 1');
-      this.onregSelected('reg 1');
-      this.onEnvSelected('prod');
-      this.onMethodListSelected('POST');
-        break;
-      }
-    }
-   
-    // this.getRange(1);
-
-  }
+		switch(event){
+      case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
+      this.getRangefunc(1);
+			break;
+		  }
+      case 'time-range-slider':{this.instance_yes.resetslider(1);
+        this.getRangefunc(1);
+			break;
+		  }
+		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
+			break;
+		  }
+		  case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
+		  
+			break;
+		  }
+		  case 'account':{      this.instance_yes.onaccSelected('Acc 1');
+		  
+			break;
+		  }
+		  case 'region':{      this.instance_yes.onregSelected('reg 1');
+		  
+			break;
+		  }
+		  case 'env':{      this.instance_yes.onEnvSelected('prod');
+		  
+			break;
+		  }
+		  case 'method':{      
+				
+				this.instance_yes.onMethodListSelected('POST');
+		  
+			break;
+		  }
+      case 'all':{ this.instance_yes.onRangeListSelected('Day');   
+				this.instance_yes.onPeriodSelected('15 Minutes');
+				this.instance_yes.onStatisticSelected('Average');
+				this.instance_yes.onaccSelected('Acc 1');
+				this.instance_yes.onregSelected('reg 1');
+				this.instance_yes.onEnvSelected('prod');
+        this.instance_yes.onMethodListSelected('POST');
+        this.getRangefunc(1);
+        this.instance_yes.resetslider(1); 
+				break;
+		  	}
+		}
+		// this.getRangefunc(1);
+}
   onPathListicSelected(path){
     this.pathSelected=path;
     this.displayMetrics();
@@ -806,6 +934,7 @@ export class ServiceMetricsComponent implements OnInit {
     if(this.payload != undefined && this.payload.interval != undefined){
       this.payload.interval = this.periodListSeconds[this.periodList.indexOf(this.periodList[0])];
     }
+    // this.adv_filters.resetPeriodList(this.periodList);
   }
   public goToAbout(hash){
     this.router.navigateByUrl('landing');
@@ -819,18 +948,11 @@ export class ServiceMetricsComponent implements OnInit {
     }
   }
   getRangefunc(e){
-    
-    this.FilterTags.notify('filter-TimeRangeSlider',e);
-    
-    this.sliderFrom=1;
-    this.sliderPercentFrom=1;
-    var resetdate = this.getStartDate(this.selectedTimeRange, this.sliderFrom);
-    this.payload.start_time = resetdate;
-    this.callMetricsFunc();
- 
-    
+    this.FilterTags.notify('filter-TimeRangeSlider',e);    
   }
+
   getRange(e){
+    console.log("getRange = ",e);
     this.FilterTags.notify('filter-TimeRangeSlider',e.from);
     
     this.sliderFrom =e.from;
@@ -856,6 +978,29 @@ export class ServiceMetricsComponent implements OnInit {
     
   }
 
+  getFilter(filterServ){
+    console.log("filterServ",filterServ);
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		// console.log(this.advFilters);
+		var comp = this;
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advFilters.viewContainerRef;
+		// console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+			// alert("1");
+			comp.onFilterSelect(event);
+		});
+
+	}
+
   selectedMetrics(index){
     this.metricsIndex=index;
     this.graphInput = this.metricsList[index];
@@ -866,6 +1011,7 @@ export class ServiceMetricsComponent implements OnInit {
     }
     ele[index].className += ' arrow_box';
   }
+
 
 
 

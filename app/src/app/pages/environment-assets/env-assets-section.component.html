@@ -37,10 +37,16 @@
 
 <div class='full-page'>
     <div class="page-section-assets relative" [class.oneasset]='length == 1'>
-            <div class='filtr-wrap hide' *ngIf='service.serviceType == "function"'>
-                    <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
+            <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
+
+            <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [assets]='fromassets' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
+            <div>
+                <!-- <template adv-filters></template> -->
+            </div>
+            <div class='filtr-wrap ' *ngIf='service.serviceType == "function"'>
+                    <!-- <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags> -->
         
-                    <div class="filter-icon relative" >
+                    <div class="filter-icon relative hide" >
                             <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; "></span>
                             <div [class.show]='filterSelected' class="filter-wrap">
                                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected"></span>                    

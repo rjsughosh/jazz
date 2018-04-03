@@ -89,8 +89,7 @@ export class FilterTagsComponent implements OnInit {
 
     notify(key,value){
         console.log('key='+key,'  value='+value)
-        this.setDefaults();
-        
+        this.setDefaults();        
         
         switch(key){
             case 'filter-TimeRange':{
@@ -122,6 +121,7 @@ export class FilterTagsComponent implements OnInit {
                 break;
             }
             case 'filter-Method':{
+                // alert('in method case')
                 this.filterTags[7].value=this.filter_Method=value;                
                 break;
             }
@@ -147,6 +147,7 @@ export class FilterTagsComponent implements OnInit {
     notifyServices(key){
     }
     clearall(value){
+       console.log('emiting this value from cancel filters',value) 
         this.OnCancel.emit(value);
         
     }

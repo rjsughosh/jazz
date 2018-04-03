@@ -19,6 +19,7 @@ import {DaterangePickerComponent} from '../primary-components/daterange-picker/d
 import {FiltersComponent} from '../secondary-components/filters/filters.component';
 import {FilterTagsComponent} from '../secondary-components/filter-tags/filter-tags.component';
 import {FilterTagsServicesComponent} from '../secondary-components/filter-tags-services/filter-tags-services.component';
+//import {AdvancedFiltersComponent} from './../secondary-components/advanced-filters/advanced-filters.component';
 import {TabsComponent} from '../primary-components/tabs/tabs.component';
 import {JenkinsStatusComponent} from '../pages/jenkins-status/jenkins-status.component';
 import {FocusDirective} from '../secondary-components/create-service/focus.directive';
@@ -33,13 +34,44 @@ import {BrowserModule} from '@angular/platform-browser';
 import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datepicker';
 import {MomentModule} from 'angular2-moment';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
-import {LoginComponent} from '../pages/login/login.component';
+
+// Importing The Required Components via Barrel
+// import * as CommonServiceComponents from './shared.module.declarations.common';
+import * as OssComponents from './shared.module.declarations.oss';
+import * as InternalComponents from './shared.module.declarations.internal';
+import {environment} from '../../environments/environment';
+
+
+// import {LoginComponent} from '../pages/login/login.component';
 import {LineGraphComponent} from '../secondary-components/line-graph/line-graph.component';
 import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import {FooterComponent} from '../secondary-components/footer/footer.component';
 import { OverviewSidebarComponent } from './../secondary-components/overview-sidebar/overview-sidebar.component';
+import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 
+let specificComponents:any
+let specificModules: any;
+//alert(environment.envName);
+if(environment.envName == 'oss'){
+  specificComponents = OssComponents;
+}else if(environment.envName == "jazz")  {
+  specificComponents = InternalComponents;
+}
+let importsArray = [];
+let declarationsArray=[];
 
+// for(let i in specificModules){
+//  importsArray.push(specificModules[i]);
+// }
+
+for(let i in specificComponents){
+ declarationsArray.push(specificComponents[i]);
+}
+// console.log('imports shared  ',importsArray)
+// console.log('dec shared ',declarationsArray)
+
+// 
 @NgModule({
   imports: [
     CommonModule,
@@ -57,9 +89,9 @@ import { OverviewSidebarComponent } from './../secondary-components/overview-sid
     BtnJazzSecondaryComponent,
     JazzHeaderComponent,
     JazzTableComponent,
-    DropdownComponent,
-    LoginComponent,
     TabsComponent,
+    DropdownComponent,
+    // LoginComponent,
     SidebarComponent,
     InputComponent,
     MyFilterPipe,
@@ -70,7 +102,7 @@ import { OverviewSidebarComponent } from './../secondary-components/overview-sid
     ClickOutsideDirective,
     FiltersComponent,
     FilterTagsServicesComponent,
-    FilterTagsComponent,
+    FilterTagsComponent,    
     TableTemplateComponent,
     SearchBoxComponent,
     MobileSecondaryTabComponent,
@@ -82,8 +114,11 @@ import { OverviewSidebarComponent } from './../secondary-components/overview-sid
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
-
+    ...declarationsArray,
+    AdvancedFiltersComponentOSS,
+    AdvancedFiltersComponent
   ],
+  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
   exports: [
     BtnJazzPrimaryComponent,
     BtnJazzSecondaryComponent,
@@ -93,7 +128,7 @@ import { OverviewSidebarComponent } from './../secondary-components/overview-sid
     TabsComponent,
     SidebarComponent,
     InputComponent,
-    LoginComponent,
+    // LoginComponent,
     MyFilterPipe,
     BtnPrimaryWithIconComponent,
     NavigationBarComponent,
@@ -110,10 +145,11 @@ import { OverviewSidebarComponent } from './../secondary-components/overview-sid
     JenkinsStatusComponent,
     LineGraphComponent,
     FilterTagsServicesComponent,
-    FilterTagsComponent,
+    FilterTagsComponent,    
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
+    ...declarationsArray
 
   ]
 })

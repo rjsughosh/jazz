@@ -6,15 +6,15 @@
 import { Http, Headers, Response } from '@angular/http';
 import { Component, OnInit , Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SharedService } from "../../SharedService.service";
+import { SharedService } from "../../../SharedService.service";
 import { AfterViewInit, ViewChild } from '@angular/core';
 
 // import { RequestService, DataCacheService } from "../../core/services";
 import { ToasterService} from 'angular2-toaster';
-import { BarGraphComponent} from '../../secondary-components/bar-graph/bar-graph.component';
-import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../core/services/index';
-import { ServiceMetricsComponent } from '../service-metrics/service-metrics.component';
-
+import { BarGraphComponent} from '../../../secondary-components/bar-graph/bar-graph.component';
+import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../../core/services/index';
+import { ServiceMetricsComponent } from '../../service-metrics/service-metrics.component';
+import {environment} from './../../../../environments/environment';
 
 @Component({
     selector: 'service-detail',
@@ -24,8 +24,21 @@ import { ServiceMetricsComponent } from '../service-metrics/service-metrics.comp
 })
 
 export class ServiceDetailComponent implements OnInit {
-
-
+    disabletabs:any;
+    disabletabsoss={
+        'OVERVIEW':false,
+        'ACCESS CONTROL':true,
+        'METRICS':true, 
+        'LOGS':false , 
+        'COST':true
+      };
+    disabletabsinternal={
+    'OVERVIEW':false,
+    'ACCESS CONTROL':false,
+    'METRICS':false, 
+    'LOGS':false , 
+    'COST':true
+    };
 
     constructor(
         
@@ -161,7 +174,6 @@ export class ServiceDetailComponent implements OnInit {
         this.isLoadingService = true;
 
         let cachedData = this.cache.get(id);
-
         if (cachedData) {
             this.isGraphLoading=false;
             this.onDataFetched(cachedData)
@@ -172,6 +184,7 @@ export class ServiceDetailComponent implements OnInit {
         } else{
             this.http.get('/jazz/services/'+id).subscribe(
               response => {
+
                     let service = response.data;
                      if(response.data.type === "website")
                     {
@@ -374,6 +387,8 @@ export class ServiceDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+        if(environment.envName == 'oss')this.disabletabs=this.disabletabsoss;
+        else this.disabletabs=this.disabletabsinternal;
         this.breadcrumbs = [
         {
             'name' : this.service['name'],

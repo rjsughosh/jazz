@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 
-import {APP_INITIALIZER} from '@angular/core';
+import {APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 
 import {MomentModule} from 'angular2-moment';
 import {DatePickerModule} from './primary-components/daterange-picker/ng2-datepicker';
@@ -11,7 +11,7 @@ import {ChartsModule} from 'ng2-charts';
 
 import {ToasterModule} from 'angular2-toaster';
 import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
-
+import {environment} from '../environments/environment';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthenticationService, RouteGuard, DataCacheService, RequestService, MessageService} from './core/services';
 import {SharedService} from './SharedService.service';
@@ -20,6 +20,7 @@ import {DropdownModule} from 'ng2-dropdown';
 import {PopoverModule} from 'ng2-popover';
 import {AppComponent} from './app.component';
 import {ConfigService, ConfigLoader} from './app.config';
+import {AdvancedFilterService} from './advanced-filter.service';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {LandingComponent} from './pages/landing/landing.component';
 import {TestApiComponent} from './pages/testapi/test-api.component';
@@ -31,6 +32,14 @@ import {routes} from './app.route';
 // import {EnvironmentModule} from './environment-module/environment.module';
 // import {ServiceModule} from './service-module/service.module';
 
+let environmentval = environment.envName;
+let loadedModule;
+if(environmentval == "oss"){
+    loadedModule = require('./pages/login/oss/login.component')
+    
+}else{
+  loadedModule = require('./pages/login/internal/login.component')
+}
 
 
 @NgModule({
@@ -40,6 +49,7 @@ import {routes} from './app.route';
     Error404Component,
     // FooterComponent,
     TestApiComponent,
+   
     
   ],
   imports: [
@@ -58,6 +68,7 @@ import {routes} from './app.route';
     CronParserService,
     SharedService,
     RouteGuard,
+    
     DataCacheService,
     RequestService,
     MessageService,
@@ -69,7 +80,10 @@ import {routes} from './app.route';
       multi: true
     }
   ],
+  
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap: [AppComponent]
+  
 })
 
 export class AppModule {

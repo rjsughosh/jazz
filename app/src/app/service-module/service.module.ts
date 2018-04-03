@@ -1,60 +1,102 @@
+// NgMoudle,Enviornment and Router Module Import 
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ServiceAccessControlComponent} from '../pages/service-access-control/service-access-control.component';
-import {ServiceCostComponent} from '../pages/service-cost/service-cost.component';
-import {ServiceMetricsComponent} from '../pages/service-metrics/service-metrics.component';
-import {ServiceLogsComponent} from '../pages/service-logs/service-logs.component';
-import {ServiceOverviewComponent} from '../pages/service-overview/service-overview.component';
-import {CreateServiceComponent} from '../secondary-components/create-service/create-service.component';
-import {ServicesComponent} from '../pages/services/services.component';
-import {PopoverModule} from 'ng2-popover';
-import {ChartsModule} from 'ng2-charts';
-import {DropdownModule} from 'ng2-dropdown';
-import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datepicker';
-import {MomentModule} from 'angular2-moment';
-import {IonRangeSliderModule} from 'ng2-ion-range-slider';
-import {SharedModule} from '../shared-module/shared.module';
-import {routes} from './service.route';
 import {RouterModule} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-import {ServicesListComponent} from '../pages/services-list/services-list.component';
-import {ServiceDetailComponent} from '../pages/service-detail/service-detail.component';
-import {AmountComponent} from '../primary-components/amount/amount.component';
-import {BarGraphComponent} from '../secondary-components/bar-graph/bar-graph.component';
-import { EnvironmentModule } from '../environment-module/environment.module';
+import {environment} from '../../environments/environment';
+import {routes} from './service.route.internal';
 
+// import * as OssRoutes from './service.route.oss';
+// import * as InternalRoutes from './service.route.internal'
+//End
+// Importing The Required Modules via Barrel 
+import * as CommonServiceModules from './service.module.imports.common'
+import * as OssModules from './service.module.imports.oss'
+import * as InternalModules from './service.module.imports.internal'
+// End
+// Importing The Required Components via Barrel
+import * as CommonServiceComponents from './service.module.declarations.common';
+import * as OssComponents from './service.module.declarations.oss';
+import * as InternalComponents from './service.module.declarations.internal';
+// import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+// import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 
+import { AdvFilters }            from '../adv-filter.directive';
+import {AdvancedFilterService} from '../advanced-filter.service';
+// import { ServiceDetailComponent} from './../pages/service-detail/internal/service-detail.component';
+// import { ServiceDetailComponentOss} from './../pages/service-detail/oss/service-detail.component';
+// // End 
+import { Symbol } from 'rxjs';
 
-
+// let det_comp:any;
+let routerRoutes:any;
+let specificComponents:any;
+let specificModules: any;
+//alert(environment.envName);
+if(environment.envName == 'oss'){
+  // routerRoutes = OssRoutes.routes;
+  // det_comp = ServiceDetailComponentOss;
+  specificComponents = OssComponents;
+  specificModules =  OssModules
+}else  {
+  // routerRoutes = InternalRoutes.routes;
+  // det_comp = ServiceDetailComponent;
+  specificComponents = InternalComponents;
+  specificModules =  InternalModules;
+}
+let importsArray = [];
+let declarationsArray=[];
+for(let i in CommonServiceModules){
+  importsArray.push(CommonServiceModules[i]);
+}
+for(let i in specificModules){
+ importsArray.push(specificModules[i]);
+}
+for(let i in CommonServiceComponents){
+  declarationsArray.push(CommonServiceComponents[i]);
+}
+for(let i in specificComponents){
+ declarationsArray.push(specificComponents[i]);
+}
+// console.log('imports  ',importsArray)
+// console.log('dec  ',declarationsArray)
+// console.log('routes',routes)
 
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    FormsModule,
-    CommonModule,
-    DropdownModule,
-    DatePickerModule,
-    MomentModule,
+    ...importsArray
+    //EnvironmentModule,
+    //FormsModule,
+    //CommonModule,
+    //DropdownModule,
+    //DatePickerModule,
+    //MomentModule,
     // ToasterModule,
-    PopoverModule,
-    ChartsModule,
-    IonRangeSliderModule,
-    SharedModule,
-    EnvironmentModule
+    //PopoverModule,
+    //ChartsModule,
+    //IonRangeSliderModule,
+    //SharedModule,
+    
   ],
+  providers:[AdvancedFilterService],
   declarations: [
-    ServiceAccessControlComponent,
-    ServiceCostComponent,
-    ServiceMetricsComponent,
-    ServiceLogsComponent,
-    ServiceOverviewComponent,
-    CreateServiceComponent,
-    ServiceDetailComponent,
-    ServicesListComponent,
-    ServicesComponent,
-    AmountComponent,
-    BarGraphComponent,
-  ]
+    //ServiceAccessControlComponent,
+    //ServiceCostComponent,
+    //ServiceMetricsComponent,
+    //ServiceLogsComponent,
+    //ServiceOverviewComponent,
+    //ServicesListComponent,
+    //ServicesComponent,
+    //AmountComponent,
+    //BarGraphComponent
+    ...declarationsArray,
+    AdvFilters,
+    // AdvancedFiltersComponentOSS,
+    // AdvancedFiltersComponent
+  ],
+  // entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
 })
 export class ServiceModule {
+  constructor(){
+    // console.log('imports  ',importsArray)
+  }
 }

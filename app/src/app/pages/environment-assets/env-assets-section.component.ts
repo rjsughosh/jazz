@@ -1,9 +1,13 @@
-import { Component, OnInit, Input , ViewChild } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { RequestService } from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import {DataCacheService , AuthenticationService } from '../../core/services/index';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+import {AdvancedFilterService} from './../../advanced-filter.service';
+import {AdvFilters} from './../../adv-filter.directive';
+
 
 
 @Component({
@@ -25,6 +29,43 @@ export class EnvAssetsSectionComponent implements OnInit {
 	private http:any;
 	private subscription:any;
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
+	// @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
+	componentFactoryResolver:ComponentFactoryResolver;
+
+	fromassets:boolean = true;
+
+
+	advanced_filter_input:any = {
+		time_range:{
+			show:false,
+		},
+		slider:{
+			show:false,
+		},
+		period:{
+			show:false,
+		},
+		statistics:{
+			show:false,
+		},
+		path:{
+			show:false,
+		},
+		environment:{
+			show:false,
+		},
+		method:{
+			show:false,
+		},
+		account:{
+			show:true,
+		},
+		region:{
+			show:true,
+		}
+	}
 
 	assetsList: any = [];
 	
@@ -78,13 +119,39 @@ export class EnvAssetsSectionComponent implements OnInit {
 		private router: Router,
 		private cache: DataCacheService,
 		private authenticationservice: AuthenticationService ,
+		@Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService ,
 		
   ) {
-    this.http = request;
+		this.http = request;
+		this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},5000);
    }
 
 
- 
+	 getFilter(filterServ){
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// // viewContainerRef.clear();
+		// // filterServ.setRootViewContainerRef(viewContainerRef);
+		// let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		// let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		// // console.log(this.advFilters);
+		// var comp = this;
+		// // this.advfilters.clearView();
+		// let viewContainerRef = this.advFilters.viewContainerRef;
+		// // console.log(viewContainerRef);
+		// viewContainerRef.clear();
+		// let componentRef = viewContainerRef.createComponent(componentFactory);
+		// // this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		// (<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		// (<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+		// 	// alert("1");
+		// 	comp.onFilterSelect(event);
+		// });
+
+	}
   
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
@@ -96,27 +163,49 @@ export class EnvAssetsSectionComponent implements OnInit {
     this.regSelected=event;
    }
 
-   cancelFilter(event){
-	console.log('event',event);
-	switch(event){
-		
-		case 'account':{this.onaccSelected('Acc 1');
-	
+   onFilterSelect(event){
+	// alert('key: '+event.key+'  value: '+event.value);
+	switch(event.key){
+	  
+	  
+	  case 'account':{
+		  this.FilterTags.notify('filter-Account',event.value);
+		this.accSelected=event.value;
 		break;
-		}
-		case 'region':{this.onregSelected('reg 1');
-	
-		break;
-		}
-		
-			
-		case 'all':{ 
-		this.onaccSelected('Acc 1');   
-		this.onregSelected('reg 1');
-		  break;
-		}
 	  }
+	  case 'region':{ 
+		this.FilterTags.notify('filter-Region',event.value);
+		this.regSelected=event.value;
+		break;
+			
+	  }
+
+   
+	}
+	
 }
+
+   cancelFilter(event){
+		// // console.log('event',event);
+		// switch(event){
+			
+		// 	case 'account':{this.onaccSelected('Acc 1');
+		
+		// 	break;
+		// 	}
+		// 	case 'region':{this.onregSelected('reg 1');
+		
+		// 	break;
+		// 	}
+			
+				
+		// 	case 'all':{ 
+		// 	this.onaccSelected('Acc 1');   
+		// 	this.onregSelected('reg 1');
+		// 		break;
+		// 	}
+		// 	}
+	}
 	callServiceEnvAssets() {
 		this.isLoading = true;
     if ( this.subscription ) {

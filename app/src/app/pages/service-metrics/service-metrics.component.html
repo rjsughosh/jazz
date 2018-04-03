@@ -33,11 +33,14 @@
     </div>    
 </div>
 
-
 <div class="row page-section section-top">
+        <div>
+            <template adv-filters></template>
+        </div>
+        <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
     <!-- TODO: Remove disclaimer after techtraining -->
     <div class="disclaimer-static-data hide"><i>This data is for representational purpose only and may not be accurate</i></div>
-    <div class="filter-wrp"> 
+    <div class="filter-wrp hide"> 
         <div class="filter-section-right">
             <div class="filter-icon relative">
                 <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>

@@ -46,7 +46,7 @@
             Looks like this environment is inactive, related assets might not be available during this time.
     </div>
     <div class="tab-component">
-        <tabs [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
+        <tabs [type]="'env'" [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
         
         
         <section class="page-content" *ngIf="selectedTab == 0">

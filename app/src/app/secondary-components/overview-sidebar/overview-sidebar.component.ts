@@ -123,12 +123,12 @@ popup(state,i){
   if(state == 'enter'){
     this.copyLink = "COPY LINK TO CLIPBOARD";
     var ele = document.getElementsByClassName('new-pop');
-    console.log('edededed',ele);
+    // console.log('edededed',ele);
   ele[i].classList.add('endp-visible');
   }
   if(state == 'leave'){
     var ele = document.getElementsByClassName('new-pop');
-    console.log('edededed',ele);
+    // console.log('edededed',ele);
     ele[i].classList.remove('endp-visible');
   }
   

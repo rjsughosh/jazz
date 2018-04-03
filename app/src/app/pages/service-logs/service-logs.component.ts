@@ -1,12 +1,16 @@
-import { Component, OnInit, ElementRef, Inject, Input, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ReflectiveInjector, ElementRef ,EventEmitter, Output, Inject, Input,ViewChild} from '@angular/core';
 import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
 import { Sort } from '../../secondary-components/jazz-table/jazz-table-sort';
 import { ToasterService} from 'angular2-toaster';
 import { RequestService, MessageService } from '../../core/services/index';
 import {FilterTagsComponent} from '../../secondary-components/filter-tags/filter-tags.component';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
 import { AuthenticationService } from '../../core/services/index';
 import {DataCacheService } from '../../core/services/index';
+import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
+import {AdvancedFilterService} from './../../advanced-filter.service';
+import {AdvFilters} from './../../adv-filter.directive';
+
 
 
 
@@ -18,17 +22,56 @@ import {DataCacheService } from '../../core/services/index';
 export class ServiceLogsComponent implements OnInit {
 
 	
-	constructor(@Inject(ElementRef) elementRef: ElementRef,private cache: DataCacheService, private authenticationservice: AuthenticationService , private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
+	constructor(@Inject(ElementRef) elementRef: ElementRef, @Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService ,private cache: DataCacheService, private authenticationservice: AuthenticationService , private request: RequestService,private toasterService: ToasterService,private messageservice: MessageService) {
 		var el:HTMLElement = elementRef.nativeElement;
 		this.root = el;
 		this.toasterService = toasterService;
 		this.http = request;
 		this.toastmessage= messageservice;
+		this.componentFactoryResolver = componentFactoryResolver;
+		var comp = this;
+		setTimeout(function(){
+			comp.getFilter(advancedFilters);
+		},3000);
+		
 	}
 
 	@Input() service: any = {};
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
-	
+	// @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
+	@ViewChild(AdvFilters) advFilters: AdvFilters;
+	componentFactoryResolver:ComponentFactoryResolver;
+  
+	advanced_filter_input:any = {
+		time_range:{
+			show:true,
+		},
+		slider:{
+			show:true,
+		},
+		period:{
+			show:false,
+		},
+		statistics:{
+			show:false,
+		},
+		path:{
+			show:false,
+		},
+		environment:{
+			show:false,
+		},
+		method:{
+			show:false,
+		},
+		account:{
+			show:true,
+		},
+		region:{
+			show:true,
+		}
+	}
+	fromlogs:boolean = true;
 	payload:any={};
 	private http:any;
 	root: any;
@@ -211,6 +254,32 @@ export class ServiceLogsComponent implements OnInit {
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
   
+    instance_yes;
+	getFilter(filterServ){
+		// let viewContainerRef = this.advanced_filters.viewContainerRef;
+		// viewContainerRef.clear();
+		// filterServ.setRootViewContainerRef(viewContainerRef);
+		this.service['islogs']=true;
+		console.log('this service in logs,',this.service)
+
+		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
+		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
+		// console.log(this.advFilters);
+		var comp = this;
+		// this.advfilters.clearView();
+		let viewContainerRef = this.advFilters.viewContainerRef;
+		// console.log(viewContainerRef);
+		viewContainerRef.clear();
+		let componentRef = viewContainerRef.createComponent(componentFactory);
+		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+			// alert("1");
+			comp.onFilterSelect(event);
+		});
+
+	}
+
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
@@ -239,6 +308,55 @@ export class ServiceLogsComponent implements OnInit {
 		this.resetPayload();
 	}
 
+	onFilterSelect(event){
+		// alert('key: '+event.key+'  value: '+event.value);
+		switch(event.key){
+		  case 'slider':{
+			this.getRange(event.value);
+			break;
+		  }
+		  
+		  case 'range':{
+			this.sendDefaults(event.value);
+			this.FilterTags.notifyLogs('filter-TimeRange',event.value);		
+			this.sliderFrom =1;
+			this.FilterTags.notifyLogs('filter-TimeRangeSlider',this.sliderFrom);
+			
+			var resetdate = this.getStartDate(event.value, this.sliderFrom);
+			// this.resetPeriodList(range);
+			this.selectedTimeRange = event.value;
+			this.payload.start_time = resetdate;
+			this.resetPayload();
+			// this.FilterTags.notify('filter-TimeRange',event.value);
+			// this.sendDefaults(event.value); 
+			// this.timerangeSelected=event.value;
+			// this.sliderFrom =1;
+			// this.FilterTags.notify('filter-TimeRangeSlider',this.sliderFrom);        
+			// var resetdate = this.getStartDate(event.value, this.sliderFrom);
+			// this.resetPeriodList(event.value);
+			// this.selectedTimeRange = event.value;
+			// this.payload.start_time = resetdate;
+			// this.callMetricsFunc();
+			// this.adv_filters.setSlider(this.sliderMax);
+			break;
+		  }
+		  
+		  case 'account':{
+			  this.FilterTags.notify('filter-Account',event.value);
+			this.accSelected=event.value;
+			break;
+		  }
+		  case 'region':{ 
+			this.FilterTags.notify('filter-Region',event.value);
+			this.regSelected=event.value;
+			break;
+				
+		  }
+	
+	   
+		}
+		
+	  }
 	onClickFilter(){
 		
 		//ng2-ion-range-slider
@@ -279,37 +397,55 @@ export class ServiceLogsComponent implements OnInit {
 		this.payload.start_time = resetdate;
 		this.resetPayload();
 	}
+
 	cancelFilter(event){
-		console.log('event',event);
 		switch(event){
-			case 'time-range':{this.onRangeListSelected('Day'); 
-			  break;
-			}
-			case 'time-range-slider':{this.getRangefunc(1);
-			
-			  break;
-			}
-			case 'account':{this.onaccSelected('Acc 1');
-		
+		  case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 
 			break;
-			}
-			case 'region':{this.onregSelected('reg 1');
-		
-			break;
-			}
-			case 'env':{this.onEnvSelected('prod');
-		
-			break;
-			}
-				
-			case 'all':{ this.onRangeListSelected('Day'); 
-			this.onaccSelected('Acc 1');   
-			this.onregSelected('reg 1');
-			this.onEnvSelected('prod');
-			  break;
-			}
 		  }
-	}
+		  case 'time-range-slider':{
+			this.instance_yes.resetslider(1);
+		  
+			break;
+		  }
+		  case 'period':{ this.instance_yes.onPeriodSelected('15 Minutes');
+			break;
+		  }
+		  case 'statistic':{      this.instance_yes.onStatisticSelected('Average');
+		  
+			break;
+		  }
+		  case 'account':{      this.instance_yes.onaccSelected('Acc 1');
+		  
+			break;
+		  }
+		  case 'region':{      this.instance_yes.onregSelected('reg 1');
+		  
+			break;
+		  }
+		  case 'env':{      this.instance_yes.onEnvSelected('prod');
+		  
+			break;
+		  }
+		  case 'method':{      
+				
+				this.instance_yes.onMethodListSelected('POST');
+		  
+			break;
+		  }
+		  case 'all':{ this.instance_yes.onRangeListSelected('Day');    
+				this.instance_yes.onPeriodSelected('15 Minutes');
+				this.instance_yes.onStatisticSelected('Average');
+				this.instance_yes.onaccSelected('Acc 1');
+				this.instance_yes.onregSelected('reg 1');
+				this.instance_yes.onEnvSelected('prod');
+				this.instance_yes.onMethodListSelected('POST');
+				break;
+		  	}
+		}
+	   
+		this.getRangefunc(1);
+}
 
 	sendDefaults(range){
 		switch(range){
@@ -458,7 +594,7 @@ export class ServiceLogsComponent implements OnInit {
 		this.subscription = this.http.post('/jazz/logs', this.payload).subscribe(
       response => {
 	   this.logs  = response.data.logs;
-	   
+	   if(this.logs != undefined)
 		if(this.logs.length !=0){
 			var pageCount = response.data.count;
 			this.totalPagesTable = 0;
@@ -617,7 +753,7 @@ export class ServiceLogsComponent implements OnInit {
 	  }
 	ngOnInit() {
 		//this.logs = this.logsData;
-		console.log('deployed to dev')
+		// console.log('deployed to dev')
 		var todayDate = new Date();
 		this.payload= {
 			"service" :  this.service.name ,//"logs", //

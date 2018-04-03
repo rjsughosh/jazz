@@ -70,7 +70,11 @@
 .filter-wrap.show{
     height: auto;   
 }
-
+filter-tags{
+    .row{
+        padding: 0 0 !important;
+    }    
+} 
 .refresh{
     // margin-top:7px;
     order:3;
@@ -248,9 +252,16 @@ filter-tags{
     }
     /deep/.row{
         margin-top:0.6rem;
+        padding:0 0rem;
     }
 }
 .slider-wrap{
     padding-bottom: 1.5rem;
 
 }
+
+// /deep/.filter-inner-wrap{
+//     &:first-child{
+//         display: none;
+//     }
+// }

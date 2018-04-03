@@ -11,6 +11,9 @@
         height: 56px;
     }
     ul {
+        li{
+            text-transform: uppercase;
+        }
         padding: 0;
         margin: 6px 0;
         overflow-x: auto;
@@ -59,3 +62,12 @@
         }
     }
 }
+.disable{
+    pointer-events: none;
+    cursor:not-allowed;
+    opacity:0.6;
+}
+
+// .caps{
+//     text-transform: capitalize;
+// }
