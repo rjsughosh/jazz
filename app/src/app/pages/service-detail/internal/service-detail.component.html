@@ -20,21 +20,22 @@
         </div> -->
         <tabs [type]="'service'" [tabData]="tabData" [selectedTab]="selectedTab" [tabChanged]="tabChanged" (onSelected)="onSelectedDr($event)"></tabs>
        
-       <div *ngIf='!err_flag'> <section class="page-content" *ngIf="selectedTab == 0">
-            <service-overview (open_sidebar)='opnSidebar($event)'(onload)='env($event)' (onEnvGet)='envList($event)' [service]="service" [isLoadingService]="isLoadingService"></service-overview>
-        </section>
-        <section class="page-content" *ngIf="selectedTab == 1">
-            <service-access-control></service-access-control>
-        </section>
-        <section class="page-content" *ngIf="selectedTab == 2">
-            <service-cost #cost [service]="service"></service-cost>
-        </section>
-        <section class="page-content" *ngIf="selectedTab == 3">
-            <service-metrics  [service]="service" #metric></service-metrics>
-        </section>
-        <section class="page-content" *ngIf="selectedTab == 4">
-            <service-logs #logs [service]="service"></service-logs>
-        </section>
+        <div *ngIf='!err_flag'> 
+            <section class="page-content" *ngIf="selectedTab == 0">
+                <service-overview (open_sidebar)='opnSidebar($event)'(onload)='env($event)' (onEnvGet)='envList($event)' [service]="service" [isLoadingService]="isLoadingService"></service-overview>
+            </section>
+            <section class="page-content" *ngIf="selectedTab == 1">
+                <service-access-control></service-access-control>
+            </section>
+            <section class="page-content" *ngIf="selectedTab == 2">
+                <service-metrics  [service]="service" #metric></service-metrics>
+            </section>
+            <section class="page-content" *ngIf="selectedTab == 3">
+                <service-logs #logs [service]="service"></service-logs>
+            </section>
+            <section class="page-content" *ngIf="selectedTab == 4">
+                <service-cost #cost [service]="service"></service-cost>
+            </section>
         </div>
         <div *ngIf='err_flag' class='err-wrp'>
                 

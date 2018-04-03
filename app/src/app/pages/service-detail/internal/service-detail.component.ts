@@ -91,7 +91,7 @@ export class ServiceDetailComponent implements OnInit {
     private toastmessage:any;
 
     statusData = ['All','Active','Pending','Stopped'];
-    tabData = ['overview', 'access control', 'cost', 'metrics' , 'logs'];
+    tabData = ['OVERVIEW', 'ACCESS CONTROL', 'METRICS', 'LOGS' , 'COST'];
 
     breadcrumbs = []
 
