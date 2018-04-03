@@ -17,27 +17,25 @@ import { AppComponent } from '../../app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MomentModule } from 'angular2-moment';
-//import { DatePickerModule } from '../../primary-components/daterange-picker/ng2-datepicker';
+
 import { ChartsModule } from 'ng2-charts';
 import { APP_BASE_HREF } from '@angular/common';
 import { APP_INITIALIZER } from '@angular/core';
 import { DropdownModule } from "ng2-dropdown";
-import { BtnTmobilePrimaryComponent } from '../../primary-components/btn-tmobile-primary/btn-tmobile-primary.component';
-import { BtnTmobileSecondaryComponent } from '../../primary-components/btn-tmobile-secondary/btn-tmobile-secondary.component';
+
 import { LandingComponent } from '../../pages/landing/landing.component';
 import { CronParserService } from '../../core/helpers';
 import { SharedService } from "../../SharedService.service";
 import { ConfigService, ConfigLoader } from '../../app.config';
 import { ServicesComponent } from '../../pages/services/services.component';
-import { TmobileTableComponent } from '../../secondary-components/tmobile-table/tmobile-table.component';
+
 import { SideTileFixedComponent } from '../../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import { DropdownComponent } from '../../primary-components/dropdown/dropdown.component';
 import { MyFilterPipe } from '../../primary-components/custom-filter';
 import { TabsComponent } from '../../primary-components/tabs/tabs.component';
 import { OnlyNumber } from '../../secondary-components/create-service/onlyNumbers';
 import { SidebarComponent } from '../../secondary-components/sidebar/sidebar.component';
-import { TmobileHeaderComponent } from '../../secondary-components/tmobile-header/tmobile-header.component';
-import { ClickOutsideDirective } from '../../secondary-components/tmobile-header/outside-click';
+
 import { LoginComponent } from '../../pages/login/login.component';
 import { ServiceOverviewComponent } from '../../pages/service-overview/service-overview.component';
 import { InputComponent } from '../../primary-components/input/input.component';
@@ -62,11 +60,11 @@ import { TableTemplateComponent } from '../../secondary-components/table-templat
 import { SearchBoxComponent } from '../../primary-components/search-box/search-box.component';
 import { DaterangePickerComponent } from '../../primary-components/daterange-picker/daterange-picker.component';
 import { MobileSecondaryTabComponent } from '../../secondary-components/mobile-secondary-tab/mobile-secondary-tab.component';
-import { TmobileMobHeaderComponent } from '../../secondary-components/tmobile-mob-header/tmobile-mob-header.component';
+
 import { ToasterModule } from 'angular2-toaster';
 import { LineGraphComponent } from '../../secondary-components/line-graph/line-graph.component';
 import { ServiceMetricsComponent } from '../../pages/service-metrics/service-metrics.component';
-import { TmobileToasterComponent } from '../../secondary-components/tmobile-toaster/tmobile-toaster.component';
+
 import { JenkinsStatusComponent } from '../../pages/jenkins-status/jenkins-status.component';
 import { TestApiComponent } from '../../pages/testapi/test-api.component';
 import { FooterComponent } from '../../secondary-components/footer/footer.component';
@@ -84,10 +82,10 @@ import { Http, Headers, Response, RequestOptions,ResponseOptions } from '@angula
 import {  } from '@angular/http'
 import{MockBackend} from '@angular/http/testing'
 import { Router } from '@angular/router';
-import { ServiceList } from 'app/pages/services-list/service-list';
+import { ServiceList } from '../../../app/pages/services-list/service-list';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-//import { generate } from 'rxjs/observable/generate';
+
 class MockAuthService {
   // constructor(private http: Http, private configService: MockConfigService,  private router:Router){
   //   super(http, configService, router);
