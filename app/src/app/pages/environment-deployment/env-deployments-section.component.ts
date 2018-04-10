@@ -288,7 +288,6 @@ export class EnvDeploymentsSectionComponent implements OnInit {
           this.isLoading = false;
 					}else{
 
-
           var pageCount = response.data.count;
           
           if(pageCount){
@@ -302,13 +301,6 @@ export class EnvDeploymentsSectionComponent implements OnInit {
           this.isLoading = false;
           this.envResponseTrue = true;
           this.deployments =  response.data.deployments;
-          this.deployments.push.apply( this.deployments, this.deployments)
-
-          this.deployments.push.apply( this.deployments, this.deployments)
-
-          this.deployments.push.apply( this.deployments, this.deployments)
-          // this.deployments.push.apply( this.deployments.push.apply, this.deployments.push.apply)
-          // this.deployments.push.apply( this.deployments.push.apply, this.deployments.push.apply)
           this.deployedList =  this.deployments;
           this.length =  this.deployments.length;
           for(var i=0 ; i<this.length ; i++){
