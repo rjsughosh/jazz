@@ -50,6 +50,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
   deployment_id:any=[];
   length:any;
   status_val:number;
+  rebuild_id:any;
   relativeUrl:string='/jazz/deployments'
   status: any =[];
   buildNo:any =[];
@@ -159,16 +160,17 @@ export class EnvDeploymentsSectionComponent implements OnInit {
       filter: {
 				type: 'dateRange'
 			}        
-    },
-    {
-      label:"",
-      key:"",
-      sort: false ,
-      filter: {
-				type: 'dateRange'
-			}    
-
     }
+    // ,
+    // {
+    //   label:"",
+    //   key:"",
+    //   sort: false ,
+    //   filter: {
+		// 		type: 'dateRange'
+		// 	}    
+
+    // }
     
   ];
 
@@ -286,7 +288,6 @@ export class EnvDeploymentsSectionComponent implements OnInit {
           this.isLoading = false;
 					}else{
 
-
           var pageCount = response.data.count;
           
           if(pageCount){
@@ -307,6 +308,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
             this.status[i] = this.deployments[i].status;
             this.commitDetails[i] = this.deployments[i].scm_commit_hash;
             this.id[i] = this.deployments[i].deployment_id;
+            this.rebuild_id = this.id[0];
             this.buildNo[i] = this.deployments[i].provider_build_id;
             this.buildurl[i] = this.deployments[i].provider_build_url;
             this.deployment_id[i] = this.deployments[i].deployment_id;
@@ -644,10 +646,9 @@ toast_pop(error,oops,errorMessage)
       }, 3000);
 }
 
-rebuild(event, id){
-  
+rebuild(){
   this.rowclick = false;
-  this.http.post('/jazz/deployments/'+id+'/re-build').subscribe(
+  this.http.post('/jazz/deployments/'+this.rebuild_id+'/re-build').subscribe(
     (response) => {
 
       let successMessage = this.toastmessage.successMessage(response, "retryDeploy");

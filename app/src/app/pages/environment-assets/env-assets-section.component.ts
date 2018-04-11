@@ -221,7 +221,9 @@ export class EnvAssetsSectionComponent implements OnInit {
 				if(this.offsetval > 0){
 					payload["offset"] = this.offsetval;
 				}
+				
 				this.subscription = this.http.post(this.relativeUrl, payload).subscribe(
+					// this.subscription = this.http.get("https://api.myjson.com/bins/1ccgh3").subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
 
       // this.subscription = this.http.get('/jazz/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
@@ -233,13 +235,13 @@ export class EnvAssetsSectionComponent implements OnInit {
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
-					if((response.data == undefined) || (response.data.length == 0)){
+					if((response.data.items == undefined) || (response.data.items.length == 0)){
             this.envResponseEmpty = true;
 						this.isLoading = false;
 					}
 					else
 					{
-						var pageCount = response.data.length;
+						var pageCount = response.data.items.length;
 
           
           if(pageCount){
@@ -253,43 +255,43 @@ export class EnvAssetsSectionComponent implements OnInit {
 						
 					this.envResponseTrue = true;
 					// console.log('response.data ',response.data );
-					this.length = response.data.length;
+					this.length = response.data.items.length;
 					// console.log('length ',this.length );
 
 					// this.length = 21;
-					this.assetsList = response.data;
+					this.assetsList = response.data.items;
 					
 					for(var i=0; i < this.length ; i++){
-						this.type[i] = response.data[i].type;
+						this.type[i] = response.data.items[i].type;
 						
 						this.slNumber[i] = (i+1);
-						if( response.data[i].provider == undefined ){
+						if( response.data.items[i].provider == undefined ){
 							this.Provider[i] = "-"
 						}else{
-						this.Provider[i] = response.data[i].provider;
+						this.Provider[i] = response.data.items[i].provider;
 						}
-						if( response.data[i].status == undefined ){
+						if( response.data.items[i].status == undefined ){
 							this.status[i] = "-"
 						}else{
-						this.status[i] = response.data[i].status;
+						this.status[i] = response.data.items[i].status;
 						}
-						if( response.data[i].endpoint_url == undefined ){
+						if( response.data.items[i].endpoint_url == undefined ){
 							this.endpoint[i] = "-"
 						}else{
-						this.endpoint[i] = response.data[i].endpoint_url;;
+						this.endpoint[i] = response.data.items[i].endpoint_url;;
 						}
-						if( response.data[i].swagger_url == undefined ){
+						if( response.data.items[i].swagger_url == undefined ){
 							this.url[i] = "-"
 						}else{
-						this.url[i] = response.data[i].swagger_url;
+						this.url[i] = response.data.items[i].swagger_url;
 						}
-						if( response.data[i].provider_id == undefined ){
+						if( response.data.items[i].provider_id == undefined ){
 							this.arn[i] = "-"
 						}else{
-						this.arn[i] = response.data[i].provider_id;
+						this.arn[i] = response.data.items[i].provider_id;
 						}
 
-						this.lastCommitted = response.data[i].timestamp;
+						this.lastCommitted = response.data.items[i].timestamp;
 						var commit = this.lastCommitted.substring(0,19);
 						var lastCommit = new Date(commit);						
 						var now = new Date();
