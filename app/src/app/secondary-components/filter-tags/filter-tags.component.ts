@@ -141,6 +141,10 @@ export class FilterTagsComponent implements OnInit {
                 this.filterTags[1].value=this.filter_TimeRange=value;                
                 break;
             }
+            case 'filter-Environment':{
+                this.filterTags[6].value=this.filter_TimeRange=value;     
+                break;           
+            }
             
         }
     }

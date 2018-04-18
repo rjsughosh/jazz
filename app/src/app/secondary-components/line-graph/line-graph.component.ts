@@ -57,6 +57,7 @@ export class LineGraphComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem("stat",this.stat)
+    console.log('graphData',this.graphData)
   }
 
   ngOnDestroy() {
