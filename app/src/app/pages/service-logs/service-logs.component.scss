@@ -136,6 +136,10 @@ filter-tags{
     }
 }
 
+.icon-icon-filter-unselected-font{
+    font-size:1.5rem;
+}
+
 .dropdown-3 
 /deep/ .dropdown{
     margin-bottom: 1rem;
@@ -274,3 +278,6 @@ filter-tags{
     order:3;
 }
 
+#hidethis{
+    padding-top:6px;
+}

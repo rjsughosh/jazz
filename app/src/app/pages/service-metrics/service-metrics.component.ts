@@ -352,7 +352,7 @@ export class ServiceMetricsComponent implements OnInit {
         "end_time": (new Date().toISOString()).toString(),
         "start_time": this.getStartDate(this.selectedTimeRange, this.sliderFrom),
         "interval": this.periodListSeconds[this.periodList.indexOf(this.periodList[0])],
-        "statistics": this.statisticSelected,
+        "statistics": this.statisticSelected
        
 
     };
@@ -372,7 +372,6 @@ export class ServiceMetricsComponent implements OnInit {
       }
     }
     else{
-      // console.log("this.service.serviceType is defined as ", this.service.serviceType);
     }
     this.callMetricsFunc();
   }
@@ -380,10 +379,11 @@ export class ServiceMetricsComponent implements OnInit {
     this.filtersApplied='day';
   }
   ngOnChanges(x:any){
+
+    
     this.filterTags();
     this.fetchEnvlist();
 
-    // console.log('---------------------------------------------------------aplied filter chaneged',this.filtersApplied);
     this.pathList = ['/'+this.service.domain+'/'+this.service.name];
     this.pathSelected = this.pathList[0];
     }
@@ -502,10 +502,9 @@ export class ServiceMetricsComponent implements OnInit {
 		this.subscription = this.http.post('/jazz/metrics', this.payload).subscribe(
     // this.http.get('https://api.myjson.com/bins/x4j5f').subscribe(
       response => {
-        
+       
           //Bind to view
         let serviceMetrics = response.data;
-        console.log('metrics response =>',response)
         // let serviceInput = response.input;
         if (serviceMetrics !== undefined && serviceMetrics !== "" && serviceMetrics.assets !== undefined && serviceMetrics.assets.length > 0 ) {
             this.serviceMetricsList = this.processServiceList(serviceMetrics);
@@ -513,13 +512,12 @@ export class ServiceMetricsComponent implements OnInit {
               this.dropDownSelecters();
             }
             this.displayMetrics();
-            console.log('graphInput =>',this.graphInput);
-            console.log('checking conditon=',serviceMetrics === "serviceMetrics !== undefined");
             if(serviceMetrics === "serviceMetrics !== undefined"){
               // let errorMessage = this.toastmessage.successMessage(response,"serviceMetrics");
               // this.popToast('error', 'Oops!', errorMessage)
               this.isGraphLoading = false;
               this.isDataNotAvailable = true;
+
             }
         } else if(serviceMetrics !== undefined && serviceMetrics === "" || serviceMetrics.assets.length == 0 ){
           this.isGraphLoading = false;
@@ -535,8 +533,15 @@ export class ServiceMetricsComponent implements OnInit {
         }
         setTimeout(() => {
           this.checkcarausal();
+          var gHeight ;
+          var g_height = document.getElementsByClassName('graph-container')[0]
+          if(g_height != undefined)
+            gHeight = g_height.clientHeight;
+            gHeight=gHeight+31;
+            g_height.setAttribute('style','min-height:'+gHeight+'px;')
+          console.log('g_height ',gHeight)
         }, 1000)
-
+       
       },
       err => {
         this.isError=true;
@@ -1025,7 +1030,6 @@ export class ServiceMetricsComponent implements OnInit {
   }
 
   getFilter(filterServ){
-    console.log("filterServ",filterServ);
 		// let viewContainerRef = this.advanced_filters.viewContainerRef;
 		// viewContainerRef.clear();
 		// filterServ.setRootViewContainerRef(viewContainerRef);
