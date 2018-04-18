@@ -54,8 +54,11 @@
             </div> -->
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>    
-            <div class='template-wrp'>
+            <div  class='template-wrp'>
                 <template adv-filters></template>
+            </div>
+            <div id='hidethis' [class.hide]='filter_loaded' *ngIf='!filter_loaded' class='template-wrp'>     
+                <span class="icon-icon-filter-unselected icon-icon-filter-unselected-font "  title="Filter" ></span>                    
             </div>
         </div>
     </div>

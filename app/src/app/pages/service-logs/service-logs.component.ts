@@ -32,10 +32,12 @@ export class ServiceLogsComponent implements OnInit {
 		var comp = this;
 		setTimeout(function(){
 			comp.getFilter(advancedFilters);
+			this.filter_loaded = true;
+			console.log('filter load',this.filter_loaded)
 		},3000);
 		
 	}
-
+	filter_loaded:boolean = false;
 	@Input() service: any = {};
 	@ViewChild('filtertags') FilterTags: FilterTagsComponent;
 	// @ViewChild('adv_filters') adv_filters: AdvancedFiltersComponent;
@@ -760,6 +762,13 @@ export class ServiceLogsComponent implements OnInit {
 		  this.fetchEnvlist();
 	  }
 	ngOnInit() {
+		setTimeout(function(){
+			// comp.getFilter(advancedFilters);
+			this.filter_loaded = true;
+			document.getElementById('hidethis').classList.add('hide')
+
+			console.log('filter load',this.filter_loaded)
+		},3000);
 		//this.logs = this.logsData;
 		// console.log('deployed to dev')
 		var todayDate = new Date();
