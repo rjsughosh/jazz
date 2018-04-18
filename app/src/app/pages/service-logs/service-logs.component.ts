@@ -34,7 +34,7 @@ export class ServiceLogsComponent implements OnInit {
 			comp.getFilter(advancedFilters);
 			this.filter_loaded = true;
 			console.log('filter load',this.filter_loaded)
-		},3000);
+		},1000);
 		
 	}
 	filter_loaded:boolean = false;
@@ -768,7 +768,7 @@ export class ServiceLogsComponent implements OnInit {
 			document.getElementById('hidethis').classList.add('hide')
 
 			console.log('filter load',this.filter_loaded)
-		},3000);
+		},1000);
 		//this.logs = this.logsData;
 		// console.log('deployed to dev')
 		var todayDate = new Date();

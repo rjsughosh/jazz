@@ -179,7 +179,7 @@ export class ServiceMetricsComponent implements OnInit {
 		var comp = this;
 		setTimeout(function(){
 			comp.getFilter(advancedFilters);
-		},3000);
+		},1000);
 		
   }
  
@@ -792,10 +792,14 @@ export class ServiceMetricsComponent implements OnInit {
       setTimeout(function(){
         if(thisele.metricsList.length>0){
           var ele = document.getElementsByClassName('metrics-card');
-          var eachCardWidth =ele[0].clientHeight + 24;
-          for(var i = 0; i< ele.length; i++){
-            ele[i].setAttribute('style','min-height:'+ele[0].clientHeight+'px');
+          var eachCardWidth;
+          if(ele[0] != undefined){
+            eachCardWidth =ele[0].clientHeight + 24;
+            for(var i = 0; i< ele.length; i++){
+              ele[i].setAttribute('style','min-height:'+ele[0].clientHeight+'px');
+            }
           }
+          
           var mainEle = document.getElementsByClassName('scroll-cards-wrap')[0].clientWidth;
           var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
           document.getElementsByClassName('metrics-cards-wrap')[0].setAttribute('style','height:'+eachCardWidth+'px')      
