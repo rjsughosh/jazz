@@ -352,7 +352,9 @@ export class ServiceMetricsComponent implements OnInit {
         "end_time": (new Date().toISOString()).toString(),
         "start_time": this.getStartDate(this.selectedTimeRange, this.sliderFrom),
         "interval": this.periodListSeconds[this.periodList.indexOf(this.periodList[0])],
-        "statistics": this.statisticSelected
+        "statistics": this.statisticSelected,
+       
+
     };
   
     if(!this.service.serviceType){
@@ -503,7 +505,7 @@ export class ServiceMetricsComponent implements OnInit {
         
           //Bind to view
         let serviceMetrics = response.data;
-        
+        console.log('metrics response =>',response)
         // let serviceInput = response.input;
         if (serviceMetrics !== undefined && serviceMetrics !== "" && serviceMetrics.assets !== undefined && serviceMetrics.assets.length > 0 ) {
             this.serviceMetricsList = this.processServiceList(serviceMetrics);
@@ -511,6 +513,8 @@ export class ServiceMetricsComponent implements OnInit {
               this.dropDownSelecters();
             }
             this.displayMetrics();
+            console.log('graphInput =>',this.graphInput);
+            console.log('checking conditon=',serviceMetrics === "serviceMetrics !== undefined");
             if(serviceMetrics === "serviceMetrics !== undefined"){
               // let errorMessage = this.toastmessage.successMessage(response,"serviceMetrics");
               // this.popToast('error', 'Oops!', errorMessage)
@@ -529,6 +533,10 @@ export class ServiceMetricsComponent implements OnInit {
           this.isDataNotAvailable = true;
           this.isError = true;
         }
+        setTimeout(() => {
+          this.checkcarausal();
+        }, 1000)
+
       },
       err => {
         this.isError=true;
@@ -706,15 +714,33 @@ export class ServiceMetricsComponent implements OnInit {
   }
 
   displayMetrics(){
+    var conditon;
     var thisele=this, max = null, min = null;
     thisele.isGraphLoading = true;
     thisele.metricsList=[];
     this.graphInput=[];
     this.serviceMetricsList.forEach(function(each){
-      if( each.asset_properties.Method == thisele.methodSelected && each.asset_properties.Resource == thisele.pathSelected){
+      console.log('first each,',each)
+      each.asset_properties.Method = "a";
+      thisele.methodSelected = "a";
+      each.asset_properties.Resource = "b";
+      thisele.pathSelected = "b";
+      if(thisele.service.serviceType == "api"){
+        var first = (each.asset_properties.Method == thisele.methodSelected);
+        var second = (each.asset_properties.Resource == thisele.pathSelected);
+
+        conditon = first && second;
+
+      }
+      else{
+        conditon=true;
+      }
+      if(conditon){  
         each.metrics.forEach(eachSet => {
+
           var sum=0; var value =0;
           eachSet.data.forEach(element => {
+
             var elem =parseInt( element.value);
             sum = sum+parseInt(element.value);
             if(max==null || max<elem) max = elem;
@@ -782,7 +808,27 @@ export class ServiceMetricsComponent implements OnInit {
     } else{
     }
   }
-  
+  onResize(event) {
+    this.checkcarausal();
+  }
+
+  checkcarausal() {
+    var main_ele = document.getElementsByClassName('scroll-cards-wrap')[0];
+    if(main_ele != undefined)
+      var mainEle = document.getElementsByClassName('scroll-cards-wrap')[0].clientWidth;
+
+    var _limit = document.getElementsByClassName('metrics-cards-wrap')[0];
+    if(_limit != undefined)
+      var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
+
+    if (mainEle > limit) {
+      this.maxCards = true;
+    } else {
+      this.maxCards = false;
+      this.minCards = false;
+    }
+  }
+
   cancelFilter(event){
 		switch(event){
       case 'time-range':{this.instance_yes.onRangeListSelected('Day'); 

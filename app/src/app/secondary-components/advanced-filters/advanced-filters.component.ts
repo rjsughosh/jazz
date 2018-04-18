@@ -188,10 +188,25 @@ export class AdvancedFiltersComponent implements OnInit {
     
     
   }
-
+    isAPI:boolean = false;
    hideleft:boolean=false;
+   changeCss:boolean = false;
     ngOnInit(){
-        if(this.service.islogs) this.hideleft=true;
+        var env_list=this.cache.get('envList')
+        if(env_list != undefined)
+            this.envList=env_list.friendly_name;
+
+     
+       
+        setTimeout(() => {
+            
+                    if(this.service.serviceType == 'api')this.isAPI=true;
+        
+                    this.changeCss = this.service.isServicelogs;
+                    console.log('change css',this.changeCss)
+                    document.getElementsByClassName('icon-icon-filter-unselected')[0].setAttribute('style','box-shadow:none');
+                }, 1000)
+
         console.log(this.data);
         this.advanced_filter_input = this.data.advanced_filter_input;
         this.service = this.data.service;
@@ -201,7 +216,7 @@ export class AdvancedFiltersComponent implements OnInit {
         
     }
     ngOnChanges(x:any){
-
+        console.log('advance filter ip',this.advanced_filter_input)
        this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
 

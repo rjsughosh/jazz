@@ -34,9 +34,7 @@
 </div>
 
 <div class="row page-section section-top">
-        <div>
-            <template adv-filters></template>
-        </div>
+        
         <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
     <!-- TODO: Remove disclaimer after techtraining -->
     <div class="disclaimer-static-data hide"><i>This data is for representational purpose only and may not be accurate</i></div>
@@ -105,7 +103,13 @@
             </div>
         </div>
     </div> -->
-    <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
+    <div class='filter-and-tags'>
+        <div class='template-wrap'>
+            <template adv-filters></template>
+        </div>
+        <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
+    </div>
+    
     
     <div class="graph-section-container">
         <div *ngIf=" isGraphLoading || isDataNotAvailable || isError" class='display-widget'>

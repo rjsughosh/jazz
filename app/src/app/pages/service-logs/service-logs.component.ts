@@ -59,16 +59,16 @@ export class ServiceLogsComponent implements OnInit {
 			show:false,
 		},
 		environment:{
-			show:false,
+			show:true,
 		},
 		method:{
 			show:false,
 		},
 		account:{
-			show:true,
+			show:false,
 		},
 		region:{
-			show:true,
+			show:false,
 		}
 	}
 	fromlogs:boolean = true;
@@ -259,8 +259,9 @@ export class ServiceLogsComponent implements OnInit {
 		// let viewContainerRef = this.advanced_filters.viewContainerRef;
 		// viewContainerRef.clear();
 		// filterServ.setRootViewContainerRef(viewContainerRef);
-		this.service['islogs']=true;
-		console.log('this service in logs,',this.service)
+		this.service['islogs']=false;
+		this.service['isServicelogs']=true;
+		// console.log('this service in logs,',this.service)
 
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
@@ -351,6 +352,13 @@ export class ServiceLogsComponent implements OnInit {
 			this.regSelected=event.value;
 			break;
 				
+		  }
+		  case "environment":{
+			this.FilterTags.notifyLogs('filter-Environment',event.value);
+			this.environment = event.value;
+			this.payload.environment = event.value;
+			this.resetPayload();
+			break;
 		  }
 	
 	   

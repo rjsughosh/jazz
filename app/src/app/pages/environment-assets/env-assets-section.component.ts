@@ -235,13 +235,14 @@ export class EnvAssetsSectionComponent implements OnInit {
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
-					if((response.data.items == undefined) || (response.data.items.length == 0)){
+					var res = response.data || response.data.items;
+					if((res == undefined) || (res.length == 0)){
             this.envResponseEmpty = true;
 						this.isLoading = false;
 					}
 					else
 					{
-						var pageCount = response.data.items.length;
+						var pageCount = res.length;
 
           
           if(pageCount){
@@ -255,43 +256,43 @@ export class EnvAssetsSectionComponent implements OnInit {
 						
 					this.envResponseTrue = true;
 					// console.log('response.data ',response.data );
-					this.length = response.data.items.length;
+					this.length = res.length;
 					// console.log('length ',this.length );
 
 					// this.length = 21;
-					this.assetsList = response.data.items;
+					this.assetsList = res;
 					
 					for(var i=0; i < this.length ; i++){
-						this.type[i] = response.data.items[i].type;
+						this.type[i] = res[i].type;
 						
 						this.slNumber[i] = (i+1);
-						if( response.data.items[i].provider == undefined ){
+						if( res[i].provider == undefined ){
 							this.Provider[i] = "-"
 						}else{
-						this.Provider[i] = response.data.items[i].provider;
+						this.Provider[i] = res[i].provider;
 						}
-						if( response.data.items[i].status == undefined ){
+						if( res[i].status == undefined ){
 							this.status[i] = "-"
 						}else{
-						this.status[i] = response.data.items[i].status;
+						this.status[i] = res[i].status;
 						}
-						if( response.data.items[i].endpoint_url == undefined ){
+						if( res[i].endpoint_url == undefined ){
 							this.endpoint[i] = "-"
 						}else{
-						this.endpoint[i] = response.data.items[i].endpoint_url;;
+						this.endpoint[i] = res[i].endpoint_url;;
 						}
-						if( response.data.items[i].swagger_url == undefined ){
+						if( res[i].swagger_url == undefined ){
 							this.url[i] = "-"
 						}else{
-						this.url[i] = response.data.items[i].swagger_url;
+						this.url[i] = res[i].swagger_url;
 						}
-						if( response.data.items[i].provider_id == undefined ){
+						if( res[i].provider_id == undefined ){
 							this.arn[i] = "-"
 						}else{
-						this.arn[i] = response.data.items[i].provider_id;
+						this.arn[i] = res[i].provider_id;
 						}
 
-						this.lastCommitted = response.data.items[i].timestamp;
+						this.lastCommitted = res[i].timestamp;
 						var commit = this.lastCommitted.substring(0,19);
 						var lastCommit = new Date(commit);						
 						var now = new Date();

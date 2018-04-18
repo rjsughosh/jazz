@@ -102,7 +102,7 @@
           <!-- (click)='tableExpand();' -->
           PAST DEPLOYMENTS <div [class.rot]='!rot_icon2' [class.rot-rev]='rot_icon2' class='icon-icon-down'>
        </div>
-       <btn-jazz-primary class="rebuild" text='BUILD NOW' (click)="rebuild()"></btn-jazz-primary>
+       <btn-jazz-primary class="rebuild" [disablePrimaryBtn]='status_val > 5' text='Build now' (click)="rebuild()"></btn-jazz-primary>
 
     </div>
     <div id='slid-table'>

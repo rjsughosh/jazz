@@ -599,7 +599,12 @@ export class EnvDeploymentsSectionComponent implements OnInit {
  }
 
   ngOnChanges(x:any) {
+  //   "deletion_failed",
+  // "inactive",
+  // "deletion_started", 
+  // "archived"
     this.envObj = this.cache.get('currentEnv');
+    
     this.status_val = parseInt(status[this.envObj.status]); 
 
     if(this.envObj != undefined && this.status_val > 2){
@@ -673,8 +678,9 @@ export enum status {
   "deployment_started" ,
   "deployment_failed",
   "pending_approval",
-  "inactive",
-  "deletion_started",
   "deletion_failed",
+  "inactive",
+  "deletion_started", 
   "archived"
 }
+
