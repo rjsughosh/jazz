@@ -61,6 +61,7 @@ export class EnvLogsSectionComponent implements OnInit {
 	}
 	fromlogs:boolean = true;
 	private subscription: any;
+
 	limitValue: number = 20;
 	offsetValue: number = 0;
 	payload: any;
@@ -424,13 +425,13 @@ export class EnvLogsSectionComponent implements OnInit {
 		this.toastmessage = messageservice;
 		this.componentFactoryResolver = componentFactoryResolver;
 		var comp = this;
-		alert('out geting fiter')
 
 		setTimeout(function(){
-			alert('geting fiter')
 
 			comp.getFilter(advancedFilters);
-		},3000);
+			document.getElementById('hidethis').classList.add('hide')
+
+		},10);
 	}
 
 
@@ -606,6 +607,13 @@ export class EnvLogsSectionComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		// setTimeout(function(){
+		// 	// comp.getFilter(advancedFilters);
+		// 	this.filter_loaded = true;
+		// 	document.getElementById('hidethis').classList.add('hide')
+
+		// 	console.log('filter load',this.filter_loaded)
+		// },1000);
 		var todayDate = new Date();
 		//   this.getData();
 		this.payload = {

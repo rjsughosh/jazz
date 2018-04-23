@@ -92,13 +92,12 @@ for(let i in specificComponents){
     //AmountComponent,
     //BarGraphComponent
     ...declarationsArray,
-    AdvancedFiltersComponentOSS,
-    AdvancedFiltersComponent,
-    AdvFilters,
-    AdvancedFiltersComponentOSS,
-    AdvancedFiltersComponent
+    // AdvancedFiltersComponentOSS,
+    // AdvancedFiltersComponent,
+    // AdvFilters,
+   
   ],
-  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
+  // entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
 })
 export class ServiceModule {
   constructor(){

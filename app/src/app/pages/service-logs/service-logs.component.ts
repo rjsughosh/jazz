@@ -30,11 +30,22 @@ export class ServiceLogsComponent implements OnInit {
 		this.toastmessage= messageservice;
 		this.componentFactoryResolver = componentFactoryResolver;
 		var comp = this;
+		// comp.getFilter(advancedFilters);
+
 		setTimeout(function(){
 			comp.getFilter(advancedFilters);
 			this.filter_loaded = true;
+			document.getElementById('hidethis').classList.add('hide')
+
 			console.log('filter load',this.filter_loaded)
-		},1000);
+		},10);
+		// setTimeout(function(){
+		// 	// comp.getFilter(advancedFilters);
+		// 	this.filter_loaded = true;
+		// 	document.getElementById('hidethis').classList.add('hide')
+
+		// 	console.log('filter load',this.filter_loaded)
+		// },1000);
 		
 	}
 	filter_loaded:boolean = false;
@@ -763,13 +774,13 @@ export class ServiceLogsComponent implements OnInit {
 		  this.fetchEnvlist();
 	  }
 	ngOnInit() {
-		setTimeout(function(){
-			// comp.getFilter(advancedFilters);
-			this.filter_loaded = true;
-			document.getElementById('hidethis').classList.add('hide')
+		// setTimeout(function(){
+		// 	// comp.getFilter(advancedFilters);
+		// 	this.filter_loaded = true;
+		// 	document.getElementById('hidethis').classList.add('hide')
 
-			console.log('filter load',this.filter_loaded)
-		},1000);
+		// 	console.log('filter load',this.filter_loaded)
+		// },1000);
 		//this.logs = this.logsData;
 		// console.log('deployed to dev')
 		var todayDate = new Date();

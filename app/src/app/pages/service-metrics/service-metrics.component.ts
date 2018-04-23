@@ -1036,7 +1036,8 @@ export class ServiceMetricsComponent implements OnInit {
   getFilter(filterServ){
 		// let viewContainerRef = this.advanced_filters.viewContainerRef;
 		// viewContainerRef.clear();
-		// filterServ.setRootViewContainerRef(viewContainerRef);
+    // filterServ.setRootViewContainerRef(viewContainerRef);
+    this.service['ismetrics']=true;
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
 		// console.log(this.advFilters);

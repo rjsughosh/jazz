@@ -22,6 +22,7 @@ import {RouterModule} from '@angular/router';
 import {routes} from './environment.route';
 // import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
 // import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+import {AdvancedFilterService} from '../advanced-filter.service';
 
 
 
@@ -49,7 +50,9 @@ import {routes} from './environment.route';
     EnvCodequalitySectionComponent,
     EnvLogsSectionComponent,
     EnvOverviewSectionComponent,
-  ]
+  ],
+  providers:[AdvancedFilterService],
+
     
     // SharedModule
   

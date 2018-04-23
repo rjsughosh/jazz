@@ -1,7 +1,6 @@
 <div class="row page-section section-top relative">
     
     
-    <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)'  [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
     <filter-tags #filtertags (OnCancel)='cancelFilter($event)'></filter-tags>
 
     <div class="filter-wrp">
@@ -50,6 +49,11 @@
 
                 <div class='template-wrp'>
                     <template adv-filters></template>
+                    <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)'  [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
+
+                </div>
+                <div id='hidethis' [class.hide]='filter_loaded' *ngIf='!filter_loaded' class='template-wrp'>     
+                    <span class="icon-icon-filter-unselected icon-icon-filter-unselected-font "  title="Filter" ></span>                    
                 </div>
 
                 <div class='pointer refresh icon-icon-refresh' title="Refresh" (click)='callLogsFunc()' height="19"></div>
