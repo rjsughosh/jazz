@@ -19,7 +19,7 @@ import {DaterangePickerComponent} from '../primary-components/daterange-picker/d
 import {FiltersComponent} from '../secondary-components/filters/filters.component';
 import {FilterTagsComponent} from '../secondary-components/filter-tags/filter-tags.component';
 import {FilterTagsServicesComponent} from '../secondary-components/filter-tags-services/filter-tags-services.component';
-//import {AdvancedFiltersComponent} from './../secondary-components/advanced-filters/advanced-filters.component';
+// import {AdvancedFiltersComponent} from './../secondary-components/advanced-filters/advanced-filters.component';
 import {TabsComponent} from '../primary-components/tabs/tabs.component';
 import {JenkinsStatusComponent} from '../pages/jenkins-status/jenkins-status.component';
 import {FocusDirective} from '../secondary-components/create-service/focus.directive';
@@ -47,8 +47,7 @@ import {LineGraphComponent} from '../secondary-components/line-graph/line-graph.
 import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import {FooterComponent} from '../secondary-components/footer/footer.component';
 import { OverviewSidebarComponent } from './../secondary-components/overview-sidebar/overview-sidebar.component';
-import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
-import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+
 
 let specificComponents:any
 let specificModules: any;
@@ -115,10 +114,8 @@ for(let i in specificComponents){
     FooterComponent,
     OverviewSidebarComponent,
     ...declarationsArray,
-    AdvancedFiltersComponentOSS,
-    AdvancedFiltersComponent
+   
   ],
-  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
   exports: [
     BtnJazzPrimaryComponent,
     BtnJazzSecondaryComponent,

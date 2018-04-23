@@ -24,6 +24,9 @@ import {AdvancedFilterService} from '../advanced-filter.service';
 // import { ServiceDetailComponent} from './../pages/service-detail/internal/service-detail.component';
 // import { ServiceDetailComponentOss} from './../pages/service-detail/oss/service-detail.component';
 // // End 
+import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
+import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+
 import { Symbol } from 'rxjs';
 
 // let det_comp:any;
@@ -89,11 +92,13 @@ for(let i in specificComponents){
     //AmountComponent,
     //BarGraphComponent
     ...declarationsArray,
+    AdvancedFiltersComponentOSS,
+    AdvancedFiltersComponent,
     AdvFilters,
-    // AdvancedFiltersComponentOSS,
-    // AdvancedFiltersComponent
+    AdvancedFiltersComponentOSS,
+    AdvancedFiltersComponent
   ],
-  // entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
+  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
 })
 export class ServiceModule {
   constructor(){

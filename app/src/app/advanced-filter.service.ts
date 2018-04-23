@@ -19,10 +19,12 @@ export class AdvancedFilterService {
   }
   addDynamicComponent(obj) {
     // alert(this.environ)
+    console.log('in service, obj',obj)
     if(this.environ == 'oss'){
       return  {"component" : AdvancedFiltersComponentOSS,obj};
     }
     else{
+      console.log('AdvancedFiltersComponent',AdvancedFiltersComponent);
       return  {"component" : AdvancedFiltersComponent,obj};
     }
     //[service]='service' [advanced_filter_input]='advanced_filter_input'

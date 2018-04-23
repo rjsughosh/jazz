@@ -270,6 +270,7 @@ export class ServiceLogsComponent implements OnInit {
 		// console.log(this.advFilters);
 		var comp = this;
 		// this.advfilters.clearView();
+		console.log('this.advFIlters',this.advFilters)
 		let viewContainerRef = this.advFilters.viewContainerRef;
 		// console.log(viewContainerRef);
 		viewContainerRef.clear();
