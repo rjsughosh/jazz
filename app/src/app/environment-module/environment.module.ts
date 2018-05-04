@@ -17,12 +17,8 @@ import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datep
 import {MomentModule} from 'angular2-moment';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {SharedModule} from '../shared-module/shared.module';
-// import {ServiceModule} from '../service-module/service.module';
 import {RouterModule} from '@angular/router';
-import {routes} from './environment.route';
-// import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
-// import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
-import {AdvancedFilterService} from '../advanced-filter.service';
+import {routes} from './environment.route';import {AdvancedFilterService} from '../advanced-filter.service';
 
 
 

@@ -203,8 +203,8 @@ export class ServiceCostComponent implements OnInit {
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
-		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
+		this.instance_yes.data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		this.instance_yes.onFilterSelect.subscribe(event => {
 			// alert("1");
 			comp.onFilterSelect(event);
 		});
