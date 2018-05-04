@@ -24,6 +24,7 @@
     }
 }
 
+
 .graph-wrp
 {
     width: 85%;
@@ -41,8 +42,10 @@
     border-radius:3px;
     @media(max-width: $screen-sm){
         width:100%;
-    }
+    }   
+    
 }
+
 .stage-title-left {
     padding: 1.5rem;
     text-align: center;
