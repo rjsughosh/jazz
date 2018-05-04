@@ -35,7 +35,6 @@
 
 <div class="row page-section section-top">
         
-        <!-- <advanced-filters #adv_filters (onFilterSelect)='onFilterSelect($event)' [service]='service' [advanced_filter_input]='advanced_filter_input'></advanced-filters> -->
     <!-- TODO: Remove disclaimer after techtraining -->
     <div class="disclaimer-static-data hide"><i>This data is for representational purpose only and may not be accurate</i></div>
     <div class="filter-wrp hide"> 
@@ -93,16 +92,7 @@
        
     </div>
 
-    <!-- <div class="graph-section-container">
-        <div class="graph-wrp" *ngFor=" let graph of graphsList; let i=index ">
-            <div class="line-graph-wrp">
-                <div class="line-graph-inr">
-                    <div class="graph-title">{{graph.title}}</div>
-                    <line-graph [id]="graph.id" [graphData]="graph.data" [graphDataOld]="graph.dataOld" (render)="triggerRenderGraph(graph.data)"></line-graph>
-                </div>
-            </div>
-        </div>
-    </div> -->
+
     <div class='filter-and-tags'>
         <div class='template-wrap'>
             <template adv-filters></template>

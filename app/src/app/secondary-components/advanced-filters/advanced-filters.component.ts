@@ -11,7 +11,7 @@ import {IonRangeSliderModule} from "ng2-ion-range-slider";
 export class AdvancedFiltersComponent implements OnInit {
    
 
-    constructor(public viewContainerRef: ViewContainerRef , private cache: DataCacheService) { }
+    constructor(public viewContainerRef: ViewContainerRef , private cache: DataCacheService) {}
     data: any;
     @Input() advanced_filter_input:any = {};
     @Input() logs:boolean = false;
@@ -194,27 +194,19 @@ export class AdvancedFiltersComponent implements OnInit {
     ngOnInit(){
         var env_list=this.cache.get('envList')
         if(env_list != undefined)
-            this.envList=env_list.friendly_name;
-
-     
-       
+            this.envList=env_list.friendly_name;  
         setTimeout(() => {
-            
                     if(this.service.serviceType == 'api')this.isAPI=true;
                     this.changeCss = this.service.ismetrics;
                     if(this.changeCss){
                         document.getElementsByClassName('icon-icon-filter-unselected')[2].setAttribute('style','box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15)');
 
-                    }
-    
-                    
-                },10)
-                
+                    }                      
+        },10)                
         this.advanced_filter_input = this.data.advanced_filter_input;
         this.service = this.data.service;
         this.pathList = ['/'+this.service.domain+'/'+this.service.name];
         this.pathSelected = this.pathList[0];
-
         
     }
     ngOnChanges(x:any){

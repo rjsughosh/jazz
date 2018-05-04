@@ -411,15 +411,15 @@ export class EnvLogsSectionComponent implements OnInit {
 		this.toastmessage = messageservice;
 		this.componentFactoryResolver = componentFactoryResolver;
 		var comp = this;
-
+		
 		setTimeout(function(){
 
 			comp.getFilter(advancedFilters);
-			document.getElementById('hidethis').classList.add('hide')
+			comp.filter_loaded=true;
 
 		},10);
 	}
-
+	filter_loaded:boolean = false;
 
 
 	callLogsFunc() {
@@ -593,13 +593,7 @@ export class EnvLogsSectionComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		// setTimeout(function(){
-		// 	// comp.getFilter(advancedFilters);
-		// 	this.filter_loaded = true;
-		// 	document.getElementById('hidethis').classList.add('hide')
-
-		// 	console.log('filter load',this.filter_loaded)
-		// },1000);
+		
 		var todayDate = new Date();
 		//   this.getData();
 		this.payload = {

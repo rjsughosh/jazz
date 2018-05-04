@@ -57,7 +57,7 @@
             <div  class='template-wrp'>
                 <template adv-filters></template>
             </div>
-            <div id='hidethis' [class.hide]='filter_loaded' *ngIf='!filter_loaded' class='template-wrp'>     
+            <div *ngIf='!filter_loaded' class='template-wrp'>     
                 <span class="icon-icon-filter-unselected icon-icon-filter-unselected-font "  title="Filter" ></span>                    
             </div>
         </div>
