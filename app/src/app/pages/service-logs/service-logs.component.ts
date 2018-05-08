@@ -266,8 +266,6 @@ export class ServiceLogsComponent implements OnInit {
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-		this.instance_yes.advanced_filter_input = this.advanced_filter_input;
-		this.instance_yes.service = this.service;
 		this.instance_yes.data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
 		this.instance_yes.onFilterSelect.subscribe(event => {
 			comp.onFilterSelect(event);

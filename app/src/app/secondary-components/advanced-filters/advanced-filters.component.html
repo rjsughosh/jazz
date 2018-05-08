@@ -1,9 +1,9 @@
 <div class="filter-wrp" [class.hide]='assets' > 
     <div class="filter-section-right">
         <div class="filter-icon relative">
-            <span class="icon-icon-filter-unselected" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>
+            <span class="icon-icon-filter-unselected" [ngStyle]="{'box-shadow': style_exp}" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>
             <div [class.show]='filterSelected' class="filter-wrap">
-                <span class="icon-icon-filter-unselected"  title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>                    
+                <span class="icon-icon-filter-unselected" [ngStyle]="{'box-shadow': style_exp}" title="Filter" [class.selected]="filterSelected" (click)="filterSelected = !filterSelected; onClickFilter()"></span>                    
                 <div class='filter-inner'>
                     <div class="filter-inner-wrap first-child" [class.hide]='service.islogs'>
                         <div class='view-label'>Filter by:</div>

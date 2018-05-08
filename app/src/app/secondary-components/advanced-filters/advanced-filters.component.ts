@@ -190,17 +190,17 @@ export class AdvancedFiltersComponent implements OnInit {
   }
     isAPI:boolean = false;
    hideleft:boolean=false;
-   changeCss:boolean = false;
+   style_exp:string='none';
+
     ngOnInit(){
         var env_list=this.cache.get('envList')
         if(env_list != undefined)
             this.envList=env_list.friendly_name;  
+        var comp=this;
         setTimeout(() => {
                     if(this.service.serviceType == 'api')this.isAPI=true;
-                    this.changeCss = this.service.ismetrics;
-                    if(this.changeCss){
-                        document.getElementsByClassName('icon-icon-filter-unselected')[2].setAttribute('style','box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15)');
-
+                    if(this.service.ismetrics){
+                        comp.style_exp = '0 2px 4px 0 rgba(0, 0, 0, 0.15) !important;';
                     }                      
         },10)                
         this.advanced_filter_input = this.data.advanced_filter_input;
