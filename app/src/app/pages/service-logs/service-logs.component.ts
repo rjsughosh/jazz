@@ -10,10 +10,6 @@ import {DataCacheService } from '../../core/services/index';
 import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
 import {AdvancedFilterService} from './../../advanced-filter.service';
 import {AdvFilters} from './../../adv-filter.directive';
-
-
-
-
 @Component({
   selector: 'service-logs',
   templateUrl: './service-logs.component.html',
@@ -30,11 +26,12 @@ export class ServiceLogsComponent implements OnInit {
 		this.toastmessage= messageservice;
 		this.componentFactoryResolver = componentFactoryResolver;
 		var comp = this;
+
 		setTimeout(function(){
 			comp.getFilter(advancedFilters);
-			this.filter_loaded = true;
-			console.log('filter load',this.filter_loaded)
-		},1000);
+			comp.filter_loaded = true;
+		},10);
+
 		
 	}
 	filter_loaded:boolean = false;
@@ -258,26 +255,19 @@ export class ServiceLogsComponent implements OnInit {
   
     instance_yes;
 	getFilter(filterServ){
-		// let viewContainerRef = this.advanced_filters.viewContainerRef;
-		// viewContainerRef.clear();
-		// filterServ.setRootViewContainerRef(viewContainerRef);
+		
 		this.service['islogs']=false;
 		this.service['isServicelogs']=true;
-		// console.log('this service in logs,',this.service)
 
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		// console.log(this.advFilters);
 		var comp = this;
-		// this.advfilters.clearView();
 		let viewContainerRef = this.advFilters.viewContainerRef;
-		// console.log(viewContainerRef);
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
-		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
-			// alert("1");
+		this.instance_yes.data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		this.instance_yes.onFilterSelect.subscribe(event => {
 			comp.onFilterSelect(event);
 		});
 
@@ -761,16 +751,9 @@ export class ServiceLogsComponent implements OnInit {
 	  ngOnChanges(x:any){
 		  this.fetchEnvlist();
 	  }
+	 
 	ngOnInit() {
-		setTimeout(function(){
-			// comp.getFilter(advancedFilters);
-			this.filter_loaded = true;
-			document.getElementById('hidethis').classList.add('hide')
-
-			console.log('filter load',this.filter_loaded)
-		},1000);
-		//this.logs = this.logsData;
-		// console.log('deployed to dev')
+		
 		var todayDate = new Date();
 		this.payload= {
 			"service" :  this.service.name ,//"logs", //

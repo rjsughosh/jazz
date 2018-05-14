@@ -18,23 +18,13 @@ export class AdvancedFilterService {
     this.rootViewContainer = viewContainerRef
   }
   addDynamicComponent(obj) {
-    // alert(this.environ)
     if(this.environ == 'oss'){
       return  {"component" : AdvancedFiltersComponentOSS,obj};
     }
     else{
       return  {"component" : AdvancedFiltersComponent,obj};
     }
-    //[service]='service' [advanced_filter_input]='advanced_filter_input'
-  
-    // if(env=="oss"){
-     
-    // }
-    // else
-    // {
-    
-    // }
-    
+   
   }
   
 

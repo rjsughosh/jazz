@@ -1033,23 +1033,17 @@ export class ServiceMetricsComponent implements OnInit {
     
   }
 
-  getFilter(filterServ){
-		// let viewContainerRef = this.advanced_filters.viewContainerRef;
-		// viewContainerRef.clear();
-		// filterServ.setRootViewContainerRef(viewContainerRef);
+  getFilter(filterServ){		
+    this.service['ismetrics']=true;
 		let filtertypeObj = filterServ.addDynamicComponent({"service" : this.service, "advanced_filter_input" : this.advanced_filter_input});
 		let componentFactory = this.componentFactoryResolver.resolveComponentFactory(filtertypeObj.component);
-		// console.log(this.advFilters);
 		var comp = this;
-		// this.advfilters.clearView();
 		let viewContainerRef = this.advFilters.viewContainerRef;
-		// console.log(viewContainerRef);
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-		(<AdvancedFiltersComponent>componentRef.instance).data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
-		(<AdvancedFiltersComponent>componentRef.instance).onFilterSelect.subscribe(event => {
-			// alert("1");
+		this.instance_yes.data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
+		this.instance_yes.onFilterSelect.subscribe(event => {
 			comp.onFilterSelect(event);
 		});
 
@@ -1058,7 +1052,6 @@ export class ServiceMetricsComponent implements OnInit {
   selectedMetrics(index){
     this.metricsIndex=index;
     this.graphInput = this.metricsList[index];
-    // console.log("graph data = ", this.graphInput);
     var ele = document.getElementsByClassName('metrics-card');
     for(var i=0;i<ele.length;i++){
       ele[i].classList.remove('arrow_box');

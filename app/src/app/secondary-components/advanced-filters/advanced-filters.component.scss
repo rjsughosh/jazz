@@ -45,3 +45,12 @@
         background: none !important;
     }
 }
+// .
+.filter-icon {
+    margin: 0 0 0 0rem;
+    // margin-left: 25px;
+    .icon-icon-filter-unselected{
+        box-shadow: none;
+        border-radius: 3px;
+    }
+}
