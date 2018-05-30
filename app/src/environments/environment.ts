@@ -7,7 +7,7 @@ export const environment = {
   serviceTabs:['overview','access control','metrics','logs'],
   environmentTabs:['overview','deployments','code quality','assets','logs'],
   urls:{
-    docs_link:"",
-    content_base: "https://github.com/tmobile/jazz-content/blob/master"
+    docs_link:"https://docs.jazz.corporate.t-mobile.com",
+    content_base: "https://d35w9xh2k53vcv.cloudfront.net/external-content"
   }
 }; 
