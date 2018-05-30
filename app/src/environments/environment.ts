@@ -5,6 +5,9 @@ export const environment = {
   envName : "jazz",
   multi_env:false,
   serviceTabs:['overview','access control','metrics','logs'],
-  environmentTabs:['overview','deployments','code quality','assets','logs']
-
+  environmentTabs:['overview','deployments','code quality','assets','logs'],
+  urls:{
+    docs_link:"",
+    content_base: "https://github.com/tmobile/jazz-content/blob/master"
+  }
 }; 

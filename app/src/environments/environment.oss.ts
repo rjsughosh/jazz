@@ -5,6 +5,9 @@ export const environment = {
   envName : "oss",
   multi_env:false,
   serviceTabs:['overview','logs'],
-  environmentTabs:['overview','logs']
-
+  environmentTabs:['overview','logs'],
+  urls:{
+    docs_link:"",
+    content_base: "https://github.com/tmobile/jazz-content/blob/master"
+  }
 };
