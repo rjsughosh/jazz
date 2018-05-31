@@ -204,7 +204,7 @@ export class ServiceDetailComponentOss implements OnInit {
     };
 
 
-    deleteServiveInit(){
+    deleteServiceInit(){
 
         this.isLoading=true;
         this.disblebtn =true;

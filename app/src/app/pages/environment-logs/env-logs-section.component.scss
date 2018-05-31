@@ -67,12 +67,12 @@
 
 .refresh{
     margin-left:0.5rem;
-    order:2;
     font-size:1.5rem;
     align-self: center;
 }
 .drp-wrp{
     display:flex;
+    justify-content: flex-end;
 }
 
 .filter-wrp {
@@ -163,9 +163,10 @@ search-box {
     background-repeat: no-repeat;
     background-size: 20rem auto;
     background-position: center;
-} 
+}
+
 .expandbtn{
-    margin: 0.55rem 0rem;
+    margin: 0.55rem .5rem;
     cursor: pointer;
     font-size: 1.5rem;
 }

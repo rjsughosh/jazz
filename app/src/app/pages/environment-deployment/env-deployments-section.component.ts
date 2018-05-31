@@ -82,6 +82,11 @@ export class EnvDeploymentsSectionComponent implements OnInit {
       this.toastmessage = messageservice;
   }
 
+  refresh() {
+    if (this.isLoading) return;
+    this.ngOnChanges();
+  }
+
   move_right:boolean=false;
   move_left:boolean = false;
   show_icon:boolean = true;
@@ -598,7 +603,7 @@ export class EnvDeploymentsSectionComponent implements OnInit {
 		this.paginatePage(this.currentlyActive);
  }
 
-  ngOnChanges(x:any) {
+  ngOnChanges(changes?:any) {
   //   "deletion_failed",
   // "inactive",
   // "deletion_started", 
