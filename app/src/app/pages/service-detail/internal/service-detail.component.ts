@@ -284,7 +284,6 @@ export class ServiceDetailComponent implements OnInit {
         this.deleteServiceInit()
     }
 
-
     deleteServiceInit(){
 
         this.isLoading=true;
