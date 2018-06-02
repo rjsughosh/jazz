@@ -432,7 +432,7 @@ export class CreateServiceComponent implements OnInit {
           event["action"] = "PutRecord";
         } else if (this.eventExpression.type === "s3") {
           event["source"] = this.eventExpression.S3BucketName;
-          event["action"] = "S3:S3:ObjectCreated:*";
+          event["action"] = "S3:ObjectCreated:*";
         }
         payload["events"] = [];
         payload["events"].push(event);
