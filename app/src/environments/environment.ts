@@ -5,6 +5,9 @@ export const environment = {
   envName : "jazz",
   multi_env:false,
   serviceTabs:['overview','access control','metrics','logs'],
-  environmentTabs:['overview','deployments','code quality','assets','logs']
-
+  environmentTabs:['overview','deployments','code quality','assets','logs'],
+  urls: {
+    swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com',
+    service_apis: 'http://cloud-api-doc.corporate.t-mobile.com'
+  }
 }; 

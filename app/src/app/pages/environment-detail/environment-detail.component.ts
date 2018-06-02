@@ -209,12 +209,8 @@ export class EnvironmentDetailComponent implements OnInit {
   testApi(type){
     switch(type){
       case 'api':
-        window.open('/test-api?service=' + this.service.name + '&domain='+ this.service.domain + '&env=' +this.envSelected);
-        // this.baseUrl="http://jazz-training-api-doc.s3-website-us-east-1.amazonaws.com"
-        // this.swaggerUrl="http://editor.swagger.io/?url="+this.baseUrl+"/"+this.service.domain +"/"+ this.service.name +"/"+this.envSelected+"/swagger.json"
-        // window.open(this.swaggerUrl);
-        break;
-
+        let swaggerFile = '/' + this.service.domain + '_' + this.service.name+ '/' + this.envSelected +'/swagger.json';
+        return window.open(environment.urls['swagger_editor'] + '/?url=' + environment.urls['service_apis'] + swaggerFile);
       case 'website' :
         if(this.endpoint_env!=(undefined||'')){
           window.open(this.endpoint_env);
@@ -280,6 +276,7 @@ export class EnvironmentDetailComponent implements OnInit {
   ngOnChanges(x:any){
     this.fetchService(this.serviceId);
   }
+
 }
 
 export enum status {
