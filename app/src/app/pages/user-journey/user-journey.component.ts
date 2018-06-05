@@ -1,13 +1,14 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { Router } from '@angular/router';
 import {UserJourney} from "./user-journey";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'user-journey',
   templateUrl: './user-journey.component.html',
-  styleUrls: ['./user-journey.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./user-journey.component.scss']
 })
+
 export class UserJourneyComponent implements OnInit {
   public last = false;
   public stepIndex = 0;
@@ -16,8 +17,8 @@ export class UserJourneyComponent implements OnInit {
   public bitbucketStep = 7;
   public loaded = false;
 
-  constructor(private router: Router) {
-  }
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
   }
