@@ -5,14 +5,20 @@ import { Pipe, PipeTransform } from '@angular/core';
     pure: false
 })
 export class MyFilterPipe implements PipeTransform {
+    
     transform(items: any[], filter: any): any {
-        
         if (!items || !filter || filter.length < 3) {
             if(items !== undefined )
                 return items.slice(0,50);//limiting number of rows in items for performance
             else
                 return items;
         } else if(items.length > 0){
+            if(items[0].heading){
+                return items.filter(item => item.heading.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
+            }
+            if(items[0].message){
+                return items.filter(item => item.message.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.location.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+            }
             if(items[0].displayName){
                 return items.filter(item => item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
             }
