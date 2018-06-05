@@ -209,7 +209,7 @@ export class EnvironmentDetailComponent implements OnInit {
   testApi(type){
     switch(type){
       case 'api':
-        let swaggerFile = environment.swaggerLocation(this.service.domain, this.service.name, this.envSelected);
+        let swaggerFile = '/' + this.service.domain + '_' + this.service.name + '/' + this.envSelected + '/swagger.json';
         return window.open(environment.urls['swagger_editor'] + '/?url=' + environment['api_doc_name'] + swaggerFile);
       case 'website' :
         if(this.endpoint_env!=(undefined||'')){
@@ -276,7 +276,6 @@ export class EnvironmentDetailComponent implements OnInit {
   ngOnChanges(x:any){
     this.fetchService(this.serviceId);
   }
-
 }
 
 export enum status {
