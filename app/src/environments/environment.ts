@@ -8,6 +8,7 @@ export const environment = {
   serviceTabs:['overview','access control','metrics','logs'],
   environmentTabs:['overview','deployments','code quality','assets','logs'],
   urls: {
+    docs_link: 'https://docs.jazz.corporate.t-mobile.com',
     swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com'
   }
 };

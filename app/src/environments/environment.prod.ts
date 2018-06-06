@@ -9,8 +9,5 @@ export const environment = {
   urls: {
     docs_link: 'https://docs.jazz.corporate.t-mobile.com',
     swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com'
-  },
-  swaggerLocation: (domain, name, env) => {
-    return '/' + domain + '_' + name+ '/' + env +'/swagger.json';
   }
-}; 
+};
