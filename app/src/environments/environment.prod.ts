@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   configFile: 'config/config.json',
   baseurl: "https://cloud-api.corporate.t-mobile.com/api",
+  api_doc_name: 'http://cloud-api-doc.corporate.t-mobile.com',
   envName : "jazz",
   multi_env:false,
   serviceTabs:['overview','access control','metrics','logs'],
