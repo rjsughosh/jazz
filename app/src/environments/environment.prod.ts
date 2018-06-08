@@ -9,6 +9,8 @@ export const environment = {
   urls:{
     docs_link: "https://docs.jazz.corporate.t-mobile.com/",
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content"
+  },
+  userJourney: {
+    registrationMessage: ''
   }
-
-}; 
+};
