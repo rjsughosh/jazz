@@ -10,19 +10,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ClearWaterComponent implements OnInit {
 
-  constructor(
-    private request:RequestService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) 
-  {
-    this.http = request;
-  }
-
-  private subscription:any;
-  private http:any;
-  obj:any = {
-};
 @Input() service: any = {};
 env:string;
 error:boolean=true;
@@ -33,11 +20,37 @@ cw_results;
 oneObject:any;
 isloaded:boolean = false;
 expandText: string = 'Expand all';
+tableHeader = [];
+errMessage;
+search_text:string;
+loadingState:string='default';
+paginationSelected: Boolean = false;
+warningSelected:boolean;
+search_bar:string;
+searchDetail_bar:string;
+detailView:boolean = true;
+cw_obj:any={};
+private subscription:any;
+private http:any;
+obj:any = {};
+congratulations:boolean = false;
 
+  constructor(
+    private request:RequestService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) 
+  {
+    this.http = request;
+  }
 
-tableHeader = [
   
-]
+
+viewDetails(index){
+  this.oneObject = this.cw_results[index];
+  this.oneObject['heading']=this.cw_keysList[index];
+}
+
 expandall(){
   for(var i=0;i<this.cw_results.length;i++){
     var rowData = this.cw_results[i];
@@ -59,45 +72,33 @@ onRowClicked(row, index) {
   index=this.cw_results.indexOf(row)
   for (var i = 0; i < this.cw_results.length; i++) {
     var rowData = this.cw_results[i]
-
     if (i == index) {
       rowData['expanded'] = !rowData['expanded'];
-    } else{
-      rowData['expanded'] = false;
     }
   }
 }
-errMessage;
-search_text:string;
-loadingState:string='default';
-paginationSelected: Boolean = false;
-warningSelected:boolean;
-search_bar:string;
-searchDetail_bar:string;
-detailView:boolean = true;
-viewDetails(index){
-  this.oneObject = this.cw_results[index];
-  this.oneObject['heading']=this.cw_keysList[index];
 
-}
-hideWarning(){
-
-}
 onCWDetailsearch(data){
-
   this.searchDetail_bar = data.searchString;
 }
+
 onCWsearch(data){
   this.search_bar = data.searchString;
 }
-cw_obj:any={};
+
 getData(){
     var body = {
       "url":"http://cloud-api-doc.corporate.t-mobile.com/"+this.service.domain+"_"+this.service.name+"/"+this.env+"/swagger.json"
     };
     this.subscription = this.http.post('/jazz/apilinter',body).subscribe(
+    // this.subscription = this.http.get('https://api.myjson.com/bins/h14ua').subscribe(
     (response) => {
+      console.log('response',response);
           this.obj=response;
+          if(this.obj.results.errors == 0 && this.obj.results.warnings == 0){
+            this.congratulations=true;
+          }
+          
           this.cw_obj = response.results;
           this.cw_score=response.results.score;
           this.cw_message=response.results.message;
@@ -112,27 +113,24 @@ getData(){
           });
           for(var i=0;i<this.cw_results.length;i++){
             this.cw_results[i]["heading"]=this.cw_keysList[i];
+            this.cw_results[i].score = Math.abs(this.cw_results[i].score);
           }
+
         },
         (error) => {     
           this.isloaded=true;  
-          this.error = true;
-        
+          this.error = true;        
     });
     
   }
-  ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-      this.env = params.env;
-    });
+
+  refresh(){
+    this.isloaded=false;
     this.getData();
   }
-  ngOnChanges(){
-    this.route.params.subscribe(
-      params => {
-      this.env = params.env;
-    });
+  ngOnInit() {
+    this.env=this.route.snapshot.params['env'];
+    this.getData();
   }
 
 }

@@ -12,7 +12,7 @@
            <ul>
              <li>
                <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
-               <div class='det-label cw-label'>Organizational<br>score</div>
+               <div class='det-label cw-label'>Organizational<br>goal</div>
              </li>
              <li>
                  <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
@@ -32,10 +32,10 @@
         </div>
     </div>
     <div class="separator-row"></div>
-    <div class='service-details row' *ngIf='detailView'>
+    <div class='service-details row' *ngIf='detailView && !congratulations'>
       <div class='cw-top-part'>
         <div class='warning-chk custom-cb'>
-            <input type="checkbox" (click)='hideWarning()' id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="warningSelected" (change)="warningSelected = !warningSelected">
+            <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="warningSelected" (change)="warningSelected = !warningSelected">
             <label for="checkbox-cw"></label>
             <div class="cb-status-dets">Hide Warnings</div>    
         </div>
@@ -44,7 +44,8 @@
             <search-box #searchbox (onChange)="onCWsearch($event)"></search-box> 
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
-    
+            <span class='pointer refresh icon-icon-refresh' title="Refresh" (click)='refresh()' height="19"></span>
+
         </div>
       </div>
       <div class='cw-errors-cover'>
@@ -55,7 +56,7 @@
                 <span class='{{row.status}}'>{{row.status}} </span><span class='right'>{{row.issues.length}} issue<span *ngIf='row.issues.length > 1'>s</span></span>
               </div>         
             </div>        
-            <div class="table-row-expanded">
+            <div *ngIf='row.status == "error" || !warningSelected' class="table-row-expanded">
               <div class='sub-row'>
                 <div>{{row.description}}</div>
                 <div class='{{row.status}} score-cw'>Reduces your score by {{row.score}}</div>
@@ -67,7 +68,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor='let each of row.issues | myfilter:searchDetail_bar;let j = index;'>
+                  <tr *ngFor='let each of row.issues'>
                     <td>
                       {{each.message}}
                     </td>
@@ -84,9 +85,12 @@
         </table-template>
       </div>
     </div>
+    <div class='service-details row congrats' *ngIf='detailView && congratulations'>
+      Congratulations! This API has no issues
+    </div>
     <div class='service-details row' *ngIf='!detailView'>
       <div class='back-search-cover'>
-          <span class='icon-icon-back' (click)='detailView = !detailView'><span class='inside-back'>Back</span></span>
+          <span class='icon-icon-back' (click)='detailView = !detailView'></span><span (click)='detailView = !detailView' class='inside-back'>Back</span>
           <search-box #searchbox (onChange)="onCWDetailsearch($event)"></search-box>
       </div>
               
@@ -106,7 +110,7 @@
                 </tr>
               </thead>
               <tbody class='not-fixed'>
-                <tr *ngFor='let each of oneObject.issues'>
+                <tr *ngFor='let each of oneObject.issues| myfilter:searchDetail_bar;'>
                   <td>
                     {{each.message}}
                   </td>
@@ -131,6 +135,8 @@
         <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span>
     </div>
     <div class='oops'>Oops!</div><br>
-    <div>Something went wrong while fetching your data<br><a (click)="refreshCostData($event)">REFRESH</a> to give it another try.</div>
+    <div>Something went wrong while fetching your data<br><a (click)="getData()">REFRESH</a> to give it another try.</div>
     <br><div class='ctc-us'>If the problem persists, <a (click)='reportIssue()'> contact us</a>.</div>
 </div>
+
+
