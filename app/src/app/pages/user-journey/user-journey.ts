@@ -28,7 +28,7 @@ export const UserJourney = [
     src: environment.urls["content_base"] + "/jazz-ui/user-journey/jazz-go-to-service.mp4?raw=true",
   },
   {
-    message: "This link will take you to you service's Git repository.",
+    message: "This link will take you to your service's Git repository.",
     src: environment.urls["content_base"] + "/jazz-ui/user-journey/jazz-service-details.mp4?raw=true"
   },
   {
