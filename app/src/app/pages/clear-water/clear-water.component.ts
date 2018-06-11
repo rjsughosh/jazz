@@ -48,6 +48,7 @@ congratulations:boolean = false;
 
 viewDetails(obj){
   this.search_bar='';
+  this.searchDetail_bar="";
    var index=this.cw_results.indexOf(obj)
   this.oneObject = this.cw_results[index];
   this.oneObject['heading']=this.cw_keysList[index];
