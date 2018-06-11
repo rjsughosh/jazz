@@ -28,6 +28,7 @@ disableobj:any= {
 'deployments':true,
 'code quality':true,
 'assets':true,
+'clear water':true
 };
 
   constructor() { }
@@ -46,6 +47,7 @@ disableobj:any= {
       if(tabs[i] == 'cost') this.disableobj['cost']=false;
       if(tabs[i] == 'metrics') this.disableobj['metrics']=false;
       if(tabs[i] == 'logs') this.disableobj['logs']=false;
+
     }
 
   }
@@ -58,6 +60,8 @@ disableobj:any= {
       if(tabs[i] == 'code quality') this.disableobj['code quality']=false;
       if(tabs[i] == 'assets') this.disableobj['assets']=false;
       if(tabs[i] == 'logs') this.disableobj['logs']=false;
+      if(tabs[i] == 'clear water') this.disableobj['clear water']=false;
+
     }
   }
   ngOnInit() {

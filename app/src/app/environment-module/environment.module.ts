@@ -17,6 +17,7 @@ import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {SharedModule} from '../shared-module/shared.module';
 import {RouterModule} from '@angular/router';
 import {routes} from './environment.route';import {AdvancedFilterService} from '../advanced-filter.service';
+import { ClearWaterComponent } from '../pages/clear-water/clear-water.component';
 
 
 
@@ -44,6 +45,7 @@ import {routes} from './environment.route';import {AdvancedFilterService} from '
     EnvCodequalitySectionComponent,
     EnvLogsSectionComponent,
     EnvOverviewSectionComponent,
+    ClearWaterComponent
   ],
   providers:[AdvancedFilterService],
 

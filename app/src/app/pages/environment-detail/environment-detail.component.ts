@@ -171,6 +171,10 @@ frndload(event){
           {
               this.tabData = ['Overview','deployments','Code quality','Assets'];
           }
+          else if(this.service.serviceType == "api"){
+
+            this.tabData = ['overview','deployments','code quality','assets','logs','clear water'];
+          }
       } else{
          if ( this.subscription ) {
             this.subscription.unsubscribe();
@@ -184,6 +188,9 @@ frndload(event){
                   if(this.service.type === "website")
                   {
                       this.tabData = ['Overview','deployments','Code quality','Assets'];
+                  }
+                  else if(this.service.type == "api"){
+                    this.tabData = ['overview','deployments','code quality','assets','logs','clear water'];
                   }
                   this.cache.set(id, this.service);
                   this.onDataFetched(this.service);
