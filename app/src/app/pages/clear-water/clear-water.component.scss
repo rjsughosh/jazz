@@ -4,7 +4,7 @@
 
 .cw-cover{
     display: flex;
-   
+
 
 }
 .cw-top-part{
@@ -30,12 +30,12 @@
         margin-top: 2.5rem;
     }
     li{
-        
+
         display: flex;
         flex-direction: column;
         // height: 2rem;
         div{
-            // border:1px solid black; 
+            // border:1px solid black;
 
         }
     }
@@ -76,7 +76,7 @@
         padding:0.5rem;
         padding-left:2rem;
     }
-    
+
 }
 
 .table-row-expanded{
@@ -90,9 +90,9 @@
     box-shadow: 0 1px 1px #CCCCCC;
 }
 table {
-    border-spacing: 0;   
-    border-collapse:initial; 
-}        
+    border-spacing: 0;
+    border-collapse:initial;
+}
 .bordered th:first-child {
     border-radius: 6px 0 0 0;
     -moz-border-radius: 6px 0 0 0;
@@ -110,7 +110,7 @@ table {
 }
 
 .bordered th {
-   border-top: medium none;   
+   border-top: medium none;
     border-top: 1px solid #CCCCCC;
     border-bottom: 1px solid #CCCCCC;
     padding-left:2rem;
@@ -131,8 +131,8 @@ thead, tbody tr {
     padding-top: 1rem;
     /deep/.table-body{
         padding-bottom: 0;
-    }   
-    
+    }
+
 }
 .remove-border{
     border-bottom: none;
@@ -147,7 +147,7 @@ thead, tbody tr {
     /deep/.btn-primary{
         padding: 0.5rem 1rem !important;
     }
-    
+
 }
 .bbn{
     border-bottom: none;
@@ -157,20 +157,23 @@ thead, tbody tr {
         overflow:hidden;
 }
 
-.icon-icon-back:before{    
-        color: #ed008c;
-        font-size: 1.5rem;
-        cursor: pointer;
+.icon-icon-back {
+  font-size: 1.5rem;
+  color:#ed008c;
+  &:before {
+    cursor: pointer;
+  }
 }
 .inside-back{
-    color:#ed008c;
-    font-size: 1.5rem;
+  color:#ed008c;
+  line-height: normal;
+  font-size: 1.5rem;
     padding-left:1rem;
     cursor: pointer;
 }
 .sub-row,.back-search-cover{
     justify-content: space-between;
-    display: flex
+    display: flex;
 }
 .sub-row{
     margin: 0 0 1rem 0;
@@ -195,7 +198,7 @@ font-weight: normal;
     text-align: center;
 }
 .score-head{
-    color: #bbb;
+    color: #666666;
     font-weight: bold;
     text-align: center;
     margin-bottom: 1rem;
@@ -227,7 +230,7 @@ search-box{
     /deep/.input-wrp.expand input{
         margin: -0.25rem 0;
     }
-} 
+}
 
 .congrats{
     font-size: 2.5rem;
