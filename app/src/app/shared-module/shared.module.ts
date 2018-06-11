@@ -49,6 +49,8 @@ import { OverviewSidebarComponent } from './../secondary-components/overview-sid
 import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
 import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 import { AdvFilters }            from '../adv-filter.directive';
+import {SafeUrlPipe} from "../core/pipes/safe-url.pipe";
+import {SafeHtmlPipe} from "../core/pipes/safe-html.pipe";
 let specificComponents:any
 let specificModules: any;
 //alert(environment.envName);
@@ -116,6 +118,8 @@ for(let i in specificComponents){
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent,
     AdvFilters,
+    SafeHtmlPipe,
+    SafeUrlPipe,
     ...declarationsArray,
    
    
@@ -153,6 +157,8 @@ for(let i in specificComponents){
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent,
     AdvFilters,
+    SafeHtmlPipe,
+    SafeUrlPipe,
     ...declarationsArray
 
   ],

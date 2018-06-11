@@ -69,6 +69,10 @@ export class JazzHeaderComponent implements OnInit {
         this.profileClicked = !this.profileClicked;
     }
 
+    startUserJourney(){
+      return this.router.navigate(['/user-journey']);
+    }
+
     onNavigate(){
         window.open('https://docs.jazz.corporate.t-mobile.com')
     }
