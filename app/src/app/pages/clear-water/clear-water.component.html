@@ -12,7 +12,7 @@
            <ul>
              <li>
                <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
-               <div class='det-label cw-label'>Organizational<br>goal</div>
+               <div class='det-label cw-label'>Organization<br>goal</div>
              </li>
              <li>
                  <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
@@ -44,7 +44,6 @@
             <search-box #searchbox (onChange)="onCWsearch($event)"></search-box> 
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
-            <span class='pointer refresh icon-icon-refresh' title="Refresh" (click)='refresh()' height="19"></span>
 
         </div>
       </div>
@@ -90,7 +89,7 @@
     </div>
     <div class='service-details row' *ngIf='!detailView'>
       <div class='back-search-cover'>
-          <span class='icon-icon-back' (click)='detailView = !detailView'></span><span (click)='detailView = !detailView' class='inside-back'>Back</span>
+          <span class='icon-icon-back' (click)='detailView = !detailView'></span><span (click)='detailView = !detailView;searchDetail_bar="";' class='inside-back'>Back</span>
           <search-box #searchbox (onChange)="onCWDetailsearch($event)"></search-box>
       </div>
               
