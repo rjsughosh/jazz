@@ -523,11 +523,11 @@
     }   
 }
 
-tabs{
-    /deep/.tabs-wrap ul li{
-            &:last-child{
-                pointer-events: none;
-                color: lightgray;
-            }
-    }
-}
+// tabs{
+//     /deep/.tabs-wrap ul li{
+//             &:last-child{
+//                 pointer-events: none;
+//                 color: lightgray;
+//             }
+//     }
+// }

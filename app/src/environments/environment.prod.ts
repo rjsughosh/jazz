@@ -6,10 +6,13 @@ export const environment = {
   envName : "jazz",
   multi_env:false,
   serviceTabs:['overview','access control','metrics','logs'],
-  environmentTabs:['overview','deployments','code quality','assets','logs'],
-  urls: {
-    docs_link: 'https://docs.jazz.corporate.t-mobile.com',
+  environmentTabs:['overview','deployments','code quality','assets','logs','clear water'],
+  urls:{
+    docs_link: "https://docs.jazz.corporate.t-mobile.com/",
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content",
     swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com'
+  },
+  userJourney: {
+    registrationMessage: ''
   }
 };

@@ -1,0 +1,239 @@
+@import './../../../main-styles';
+@import './../service-detail/service-detail.component.scss';
+@import './../service-logs/service-logs.component.scss';
+
+.cw-cover{
+    display: flex;
+
+
+}
+.cw-top-part{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cw-message{
+    width:40%;
+    padding-top: 4rem;
+    font-weight: bold;
+}
+
+.cw-score{
+    width:20%
+}
+
+.cw-values{
+    width:40%;
+    ul{
+        display: flex;
+        justify-content: space-around;
+        margin-top: 2.5rem;
+    }
+    li{
+
+        display: flex;
+        flex-direction: column;
+        // height: 2rem;
+        div{
+            // border:1px solid black;
+
+        }
+    }
+}
+
+.error{
+    color:#DD0F0F;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.hgt{
+    min-height: 30rem;
+}
+.warning{
+    color:#EB9508;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.good{
+    color:#38AB16;
+}
+.cw-table{
+    border:1px solid #ccc;
+    th{
+        padding:0.5rem;
+        font-size: 1rem;
+        border-right: none;
+    }
+    tr{
+        font-size: 1rem;
+        &:nth-child(odd){
+            background:#faf9f9;
+        }
+    }
+    td{
+        padding:0.5rem;
+        padding-left:2rem;
+    }
+
+}
+
+.table-row-expanded{
+    background: white;
+}
+.bordered {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px 6px 6px 6px;
+    -moz-border-radius: 6px 6px 6px 6px;
+    -webkit-border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 1px 1px #CCCCCC;
+}
+table {
+    border-spacing: 0;
+    border-collapse:initial;
+}
+.bordered th:first-child {
+    border-radius: 6px 0 0 0;
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+}
+
+.bordered th:last-child {
+    border-radius: 0 6px 0 0;
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+}
+
+.bordered td:first-child, .bordered th:first-child {
+    border-left: medium none;
+}
+
+.bordered th {
+   border-top: medium none;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+    padding-left:2rem;
+
+}
+
+tbody {
+    display:block;
+    max-height:10rem;
+    overflow:auto;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+.clear-water{
+    padding-top: 1rem;
+    /deep/.table-body{
+        padding-bottom: 0;
+    }
+
+}
+.remove-border{
+    border-bottom: none;
+}
+
+.cb-status-dets{
+    padding-left:1rem;
+    font-weight: bold;
+}
+.view-details{
+    margin-top: 1rem;
+    /deep/.btn-primary{
+        padding: 0.5rem 1rem !important;
+    }
+
+}
+.bbn{
+    border-bottom: none;
+}
+.not-fixed{
+        max-height:1000rem;
+        overflow:hidden;
+}
+
+.icon-icon-back {
+  font-size: 1.5rem;
+  color:#ed008c;
+  &:before {
+    cursor: pointer;
+  }
+}
+.inside-back{
+  color:#ed008c;
+  line-height: normal;
+  font-size: 1.5rem;
+    padding-left:1rem;
+    cursor: pointer;
+}
+.sub-row,.back-search-cover{
+    justify-content: space-between;
+    display: flex;
+}
+.sub-row{
+    margin: 0 0 1rem 0;
+}
+.back-search-cover{
+margin-bottom: 1rem;
+}
+.score-cw{
+    text-transform: capitalize;
+    font-style: italic;
+    font-weight: initial;
+}
+
+.cw-value{
+text-align: center;
+font-size: 1.5rem;
+font-weight: normal;
+}
+
+.cw-label{
+    width:auto;
+    text-align: center;
+}
+.score-head{
+    color: #666666;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.score-val{
+    background: #EB9508;
+    border-radius: 50%;
+    padding: 1rem;
+    width: 4rem;
+    height: 4rem;
+    margin: auto;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.loadingpage{
+
+}
+.expandbtn{
+    margin: 0.55rem 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+search-box{
+    /deep/.search-icon-wrp span {
+        margin: -0.25rem 0;
+    }
+    /deep/.input-wrp.expand input{
+        margin: -0.25rem 0;
+    }
+}
+
+.congrats{
+    font-size: 2.5rem;
+    text-align: center;
+    padding-bottom: 2rem;
+}

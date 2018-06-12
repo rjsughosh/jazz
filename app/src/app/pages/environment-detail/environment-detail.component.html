@@ -69,18 +69,21 @@
               <env-assets-section #selectedTabComponent [service]="service"></env-assets-section>
             </section>
 
-            <section class="page-content" *ngIf="selectedTab == 4">
-              <env-logs-section #selectedTabComponent [service]="service"></env-logs-section>
-            </section>
-          </div>
-        </div>
-      </section>
-      <section class='overview-sidebar'>
-        <sidebar [show]="close" (onClose)="closeSidebar($event)">
-          <overview-sidebar (onClose)="closeSidebar($event)"></overview-sidebar>
-        </sidebar>
-      </section>
-      <footer></footer>
+        <section class="page-content" *ngIf="selectedTab == 4">
+            <env-logs-section #selectedTabComponent [service]="service"></env-logs-section>
+        </section>
+        <section class="page-content" *ngIf="selectedTab == 5">
+            <clear-water #selectedTabComponent [service]="service"></clear-water>
+        </section>
+</div>
+</div>
+</section>
+<section class='overview-sidebar'>
+    <sidebar [show]="close" (onClose)="closeSidebar($event)">
+            <overview-sidebar (onClose)="closeSidebar($event)"></overview-sidebar>
+    </sidebar>
+</section>
+<footer></footer>
 
     </div>
   </div>
