@@ -51,6 +51,7 @@ export class EnvironmentDetailComponent implements OnInit {
   disablingApiButton:boolean=true;
   nonClickable:boolean=false;
   message:string;
+  public assets = [];
 
 
   private sub: any;
@@ -171,6 +172,7 @@ export class EnvironmentDetailComponent implements OnInit {
 
     if (cachedData) {
       this.onDataFetched(cachedData)
+      this.getAssets();
       if(this.service.serviceType === "website")
       {
         this.tabData = ['Overview','deployments','Code quality','Assets'];
@@ -185,6 +187,7 @@ export class EnvironmentDetailComponent implements OnInit {
           this.service.regions="us-west-2, us-east";
           // let service = response.data.data;
           this.service=response.data.data;
+          this.getAssets();
           if(this.service.type === "website")
           {
             this.tabData = ['Overview','deployments','Code quality','Assets'];
@@ -206,11 +209,26 @@ export class EnvironmentDetailComponent implements OnInit {
 
   };
 
+  getAssets() {
+    this.http.post('/jazz/assets/search', {
+      service: this.service.service,
+      domain: this.service.domain,
+      environment: this.envSelected,
+      limit: undefined
+    }).subscribe((assetsResponse) => {
+      this.assets = assetsResponse.data;
+    });
+  }
+
   testApi(type){
     switch(type){
       case 'api':
-        let swaggerFile = '/' + this.service.domain + '_' + this.service.name + '/' + this.envSelected + '/swagger.json';
-        return window.open(environment.urls['swagger_editor'] + '/?url=' + environment['api_doc_name'] + swaggerFile);
+        let foundAsset = this.assets.find((asset) => {return asset.type === 'swagger_url';});
+        if(foundAsset) {
+          return window.open(environment.urls['swagger_editor'] + '/?url=' + foundAsset.provider_id);
+        } else {
+          return window.open('/404');
+        }
       case 'website' :
         if(this.endpoint_env!=(undefined||'')){
           window.open(this.endpoint_env);
