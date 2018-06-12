@@ -201,12 +201,14 @@ export class EnvironmentDetailComponent implements OnInit {
 
   getAssets() {
     this.http.post('/jazz/assets/search', {
-      service: this.service.service,
+      service: this.service.service || this.service.name,
       domain: this.service.domain,
       environment: this.envSelected,
       limit: undefined
     }).subscribe((assetsResponse) => {
       this.assets = assetsResponse.data;
+    }, (err) => {
+      this.toast_pop('error', 'Oops!', 'Swagger File Not Found.');
     });
   }
 
