@@ -419,6 +419,11 @@ export class EnvLogsSectionComponent implements OnInit {
 
 		},10);
 	}
+
+	refresh() {
+	  this.callLogsFunc();
+  }
+
 	filter_loaded:boolean = false;
 
 
