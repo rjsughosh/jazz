@@ -39,12 +39,12 @@ congratulations:boolean = false;
     private request:RequestService,
     private route: ActivatedRoute,
     private router: Router,
-  ) 
+  )
   {
     this.http = request;
   }
 
-  
+
 
 viewDetails(obj){
   this.search_bar='';
@@ -57,21 +57,21 @@ viewDetails(obj){
 expandall(){
   for(var i=0;i<this.cw_results.length;i++){
     var rowData = this.cw_results[i];
-    rowData['expanded'] = true;			
+    rowData['expanded'] = true;
   }
   this.expandText='Collapse all';
-  
+
 }
 
 collapseall(){
   for(var i=0;i<this.cw_results.length;i++){
     var rowData = this.cw_results[i];
-    rowData['expanded'] = false;			
+    rowData['expanded'] = false;
   }
   this.expandText='Expand all';
 }
 
-onRowClicked(row, index) {  
+onRowClicked(row, index) {
   index=this.cw_results.indexOf(row)
   for (var i = 0; i < this.cw_results.length; i++) {
     var rowData = this.cw_results[i]
@@ -90,18 +90,20 @@ onCWsearch(data){
 }
 
 getData(){
+    var swaggerAsset = this.service.assets.find((asset) => {
+      return asset.type === 'swagger_url';
+    });
     var body = {
-      "url":"http://cloud-api-doc.corporate.t-mobile.com/"+this.service.domain+"_"+this.service.name+"/"+this.env+"/swagger.json"
+      "url": swaggerAsset && swaggerAsset.provider_id
     };
     this.subscription = this.http.post('/jazz/apilinter',body).subscribe(
-    // this.subscription = this.http.get('https://api.myjson.com/bins/h14ua').subscribe(
     (response) => {
       console.log('response',response);
           this.obj=response;
           if(this.obj.results.errors == 0 && this.obj.results.warnings == 0){
             this.congratulations=true;
           }
-          
+
           this.cw_obj = response.results;
           this.cw_score=response.results.score;
           this.cw_message=response.results.message;
@@ -120,11 +122,11 @@ getData(){
           }
 
         },
-        (error) => {     
-          this.isloaded=true;  
-          this.error = true;        
+        (error) => {
+          this.isloaded=true;
+          this.error = true;
     });
-    
+
   }
 
   refresh(){
