@@ -768,6 +768,10 @@ p.learn-more {
     background-color: #ed008c;
     color: #fff;
 }
+.pinkfocusapplication{
+    background-color: #ed008c;
+    color: #fff;  
+}
 // /deep/ .sidebar-inr{
 //         overflow-y: hidden;
 //     }
@@ -873,4 +877,20 @@ p.learn-more {
 
 .grey{
     color: #999!important;
+}
+
+.disable{
+    pointer-events: none;
+}
+
+.flex-col{
+    display: flex;
+    flex-direction: column;
+}
+.app-chk{
+    margin:15px;
+}
+.textForm-app{
+    margin: 0 15px;
+    width:95%;
 }

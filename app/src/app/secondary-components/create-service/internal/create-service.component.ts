@@ -41,6 +41,7 @@ export class CreateServiceComponent implements OnInit {
   private createslackSelected: boolean = false;
   private ttlSelected: boolean = false;
   showApproversList: boolean = false;
+  showApplicationList:boolean = false;
   approverName: string;
   approverName2: string;
   currentUserSlack: boolean = false;
@@ -62,6 +63,8 @@ export class CreateServiceComponent implements OnInit {
   showApproversList2: boolean = false;
   showRegionList:boolean = false;
   showAccountList:boolean = false;
+  oneSelected:boolean=false;
+
 
   isLoading: boolean = false;
   slackChannelLoader: boolean = false;
@@ -94,6 +97,8 @@ export class CreateServiceComponent implements OnInit {
   //   model: any = {
   //     gitRepo: '',
   // };
+  applications:any;
+  application_arr=[];
   gitRepo: any = '';
   gitusername: any = '';
   gituserpwd: any = '';
@@ -117,17 +122,20 @@ export class CreateServiceComponent implements OnInit {
   invalidServiceName: boolean = false;
   invalidServiceNameNum: boolean = false;
   invalidDomainName: boolean = false;
+  notMyApp:boolean=false;
   loginUser: string = '';
   loginUserDetail: any;
   service: any = "";
   domain: any = "";
   reqId: any = "";
+  poc_appname:string;
   accounts=['tmodevops','tmonpe'];
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
   regionInput:string;
   selectedAccount=[];
   AccountInput:string;
+  applc:string;
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
@@ -179,7 +187,7 @@ export class CreateServiceComponent implements OnInit {
   }
 
 
-
+  selectedApplications=[];
   selectedApprovers = [];
   selectedApprovers2 = [];
 
@@ -479,7 +487,14 @@ export class CreateServiceComponent implements OnInit {
     //   payload["accounts"]=this.selectedAccount;
     //   payload["regions"]=this.selectedRegion;
     // }
-    
+    if(!this.selectApp){
+      payload["appName"]=this.poc_appname;
+      payload["appID"]="poc";
+    }
+    else{
+      payload["appName"]=this.selectApp.appName;
+    payload["appID"]=this.selectApp.appID.toLowerCase();
+    }
 
     this.isLoading = true;
     this.http.post('/jazz/create-serverless-service', payload)
@@ -507,6 +522,7 @@ export class CreateServiceComponent implements OnInit {
           this.resMessage = output.data.message;
         }
         this.selectedApprovers = [];
+        this.selectApp={};
         this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
         this.rateExpression.error = undefined;
         // this.toasterService.pop('success', 'Success!!', output.data.create_service.data);
@@ -564,8 +580,14 @@ export class CreateServiceComponent implements OnInit {
 
 
   }
-
-
+  
+  onApplicationChange(newVal) {
+    if (!newVal) {
+      this.showApplicationList = false;
+    } else {
+      this.showApplicationList = true;
+    }
+  }
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
     if (!newVal) {
@@ -669,6 +691,9 @@ keypressAccount(hash){
   }
 }
 focusindexR:number=-1;
+focusInputApplication(event) {
+  document.getElementById('applc').focus();
+}
 keypressRegion(hash){
   if (hash.key == 'ArrowDown') {
     this.focusindexR++;
@@ -1121,10 +1146,116 @@ blurRegion(){
     this.selectRegion('us-west-2');
   }
 
+  keypressApplication(hash){
+    if (hash.key == 'ArrowDown') {
+      this.focusindex++;
+      if (this.focusindex > 0) {
+        var pinkElements = document.getElementsByClassName("pinkfocusapplication")[0];
+        if (pinkElements == undefined) {
+          this.focusindex = 0;
+        }
+        // var id=pinkElements.children[0].innerHTML;
+      }
+      // console.log(this.focusindex);
+      if (this.focusindex > 2) {
+        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+  
+      }
+    }
+    else if (hash.key == 'ArrowUp') {
+      if (this.focusindex > -1) {
+        this.focusindex--;
+  
+        if (this.focusindex > 1) {
+          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+        }
+      }
+      if (this.focusindex == -1) {
+        this.focusindex = -1;
+  
+  
+      }
+    }
+    else if (hash.key == 'Enter' && this.focusindex > -1) {
+      if(this.accounts.length == 0){
+        this.showApproversList = false;
+      }
+      event.preventDefault();
+      console.log('pink',document.getElementsByClassName("pinkfocusapplication"))
+      var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
+  
+      var appobj = {
+        "issueID":pinkElement[0].attributes[3].value,
+        "appName": pinkElement[0].attributes[2].value
+      }
+      console.log('apobj',pinkElement[0].attributes)
+
+      this.selectApplication(appobj);
+  
+      this.showApplicationList = false;
+      this.approverName2 = '';
+      this.focusindex = -1;
+  
+    } else {
+      this.focusindex = -1;
+    }
+  }
+  selectApp;
+  selectApplication(app) {
+    this.oneSelected=true;
+    console.log('onclick',app)
+    this.selectApp = app;
+    let thisclass: any = this;
+    this.showApplicationList = false;
+    thisclass.applc = '';
+    this.selectedApplications.push(app);
+    for (var i = 0; i < this.application_arr.length; i++) {
+      if (this.application_arr[i].appName === app.appName) {
+        this.application_arr.splice(i, 1);
+        return;
+      }
+    }
+
+  }
+  removeApplication(index, approver) {
+    this.oneSelected=false;
+    this.selectApp={};
+    this.application_arr.push(approver);
+    this.selectedApplications.splice(index, 1);
+  }
+  start_at:number=0;
+  getapplications(){    
+    this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt='+this.start_at)
+    .subscribe((res: Response) => {
+      this.applications=res;
+      					// response.data.push.apply(response.data,response.data);
+
+      this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
+      // [0],this.applications.data.summary.length);
+      // console.log('reponse adppl data',this.applications.data)
+      // console.log('reponse arr',this.application_arr)
+      if(this.applications.data.total > this.start_at ){
+        this.start_at = this.start_at+100;
+        this.getapplications();
+      }
+      else{
+        console.log('after allreponse arr',this.application_arr);
+        return;
+      } 
+
+      // this.approversListRes = res;
+       // this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+      // this.getUserDetails(this.approversList2);
+    }, error => {
+      // this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
+      // this.toast_pop('error', 'Oops!', this.resMessage);
+    });
+  }
   ngOnInit() {
     this.selectAccountsRegions();
     // this.gitRepo = "https://";
     this.getData();
+    this.getapplications();
     if(this.cronObj.minutes == '')
       this.cronObj.minutes='0/5';
   };

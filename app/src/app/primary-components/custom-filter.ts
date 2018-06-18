@@ -13,6 +13,10 @@ export class MyFilterPipe implements PipeTransform {
             else
                 return items;
         } else if(items.length > 0){
+            if(items[0].appName){
+                console.log('in filter bi', items.filter(item => item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ))
+                return items.filter(item => item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
+            }
             if(items[0].heading){
                 return items.filter(item => item.heading.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
             }
@@ -30,8 +34,14 @@ export class MyFilterPipe implements PipeTransform {
             return items.filter(item => item.indexOf(filter) !== -1 );
         }
         else{
-            return items.filter(item => item.givenName.indexOf(filter) !== -1 );
+            if(items[0].appName){
+                console.log('shound be')
+                return items.filter(item => item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
 
+            }
+            if(items[0].displayName){
+                return items.filter(item => item.givenName.indexOf(filter) !== -1 );
+            }
         }
 
         
