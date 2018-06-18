@@ -129,6 +129,7 @@ export class CreateServiceComponent implements OnInit {
   domain: any = "";
   reqId: any = "";
   poc_appname:string;
+  app_placeH:string = 'Start typing...';
   accounts=['tmodevops','tmonpe'];
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
@@ -1156,7 +1157,6 @@ blurRegion(){
         }
         // var id=pinkElements.children[0].innerHTML;
       }
-      // console.log(this.focusindex);
       if (this.focusindex > 2) {
         this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
   
@@ -1181,21 +1181,17 @@ blurRegion(){
         this.showApproversList = false;
       }
       event.preventDefault();
-      console.log('pink',document.getElementsByClassName("pinkfocusapplication"))
       var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
   
       var appobj = {
         "issueID":pinkElement[0].attributes[3].value,
         "appName": pinkElement[0].attributes[2].value
       }
-      console.log('apobj',pinkElement[0].attributes)
 
-      this.selectApplication(appobj);
-  
+      this.selectApplication(appobj);  
       this.showApplicationList = false;
       this.approverName2 = '';
-      this.focusindex = -1;
-  
+      this.focusindex = -1;  
     } else {
       this.focusindex = -1;
     }
@@ -1203,7 +1199,7 @@ blurRegion(){
   selectApp;
   selectApplication(app) {
     this.oneSelected=true;
-    console.log('onclick',app)
+    this.app_placeH='';
     this.selectApp = app;
     let thisclass: any = this;
     this.showApplicationList = false;
@@ -1220,6 +1216,7 @@ blurRegion(){
   removeApplication(index, approver) {
     this.oneSelected=false;
     this.selectApp={};
+    this.app_placeH='Start typing...';
     this.application_arr.push(approver);
     this.selectedApplications.splice(index, 1);
   }
@@ -1228,27 +1225,25 @@ blurRegion(){
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt='+this.start_at)
     .subscribe((res: Response) => {
       this.applications=res;
-      					// response.data.push.apply(response.data,response.data);
 
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
-      // [0],this.applications.data.summary.length);
-      // console.log('reponse adppl data',this.applications.data)
-      // console.log('reponse arr',this.application_arr)
+      
       if(this.applications.data.total > this.start_at ){
         this.start_at = this.start_at+100;
         this.getapplications();
       }
       else{
-        console.log('after allreponse arr',this.application_arr);
+        for(var i=0;i<this.application_arr.length;i++){
+          if(!this.application_arr[i].appID || !this.application_arr[i].appName){
+            this.application_arr.splice(i,1);
+          }
+        }
+
         return;
       } 
 
-      // this.approversListRes = res;
-       // this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-      // this.getUserDetails(this.approversList2);
     }, error => {
-      // this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
-      // this.toast_pop('error', 'Oops!', this.resMessage);
+     
     });
   }
   ngOnInit() {
