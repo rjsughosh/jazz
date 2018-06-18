@@ -24,22 +24,6 @@ import {environment} from './../../../../environments/environment';
 })
 
 export class ServiceDetailComponent implements OnInit {
-    disabletabs:any;
-    disabletabsoss={
-        'OVERVIEW':false,
-        'ACCESS CONTROL':true,
-        'METRICS':true, 
-        'LOGS':false , 
-        'COST':true
-      };
-    disabletabsinternal={
-    'OVERVIEW':false,
-    'ACCESS CONTROL':false,
-    'METRICS':false, 
-    'LOGS':false , 
-    'COST':true
-    };
-
     constructor(
         
         private toasterService: ToasterService,
@@ -386,8 +370,7 @@ export class ServiceDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        if(environment.envName == 'oss')this.disabletabs=this.disabletabsoss;
-        else this.disabletabs=this.disabletabsinternal;
+        
         this.breadcrumbs = [
         {
             'name' : this.service['name'],

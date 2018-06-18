@@ -606,13 +606,13 @@
                                 <div class="slack-checkbox custom-cb">
                                     <input  type="checkbox" id="checkbox-gitclone" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="gitCloneSelected" (change)="gitChange()">
                                     <label for="checkbox-gitclone"></label>
-                                    <div class="cb-status-dets">Do you need clone your code from Git?</div>
+                                    <div class="cb-status-dets">Import from an existing git repository?</div>
                                 </div>
                             </div>
 
                             <div *ngIf="gitCloneSelected == true">
                                 <label for="giturl" class="static-value">https://</label>
-                                <input name="gitUrl"  id="giturl" type="text" class="textForm" required   [(ngModel)]="gitRepo" (blur)='validateGIT()' placeholder="Enter Git repository url" [class.ip-err]="git_err">
+                                <input name="gitUrl"  id="giturl" type="text" class="textForm" required   [(ngModel)]="gitRepo" (blur)='validateGIT()' [class.ip-err]="git_err">
                                 <p *ngIf='git_err' class='git-error'>Invalid Git Url</p>
                                 <div class="slack-checkbox custom-cb">
                                     <input type="checkbox" id="checkbox-gitprivate" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="gitprivateSelected" (change)="gitprivateSelected = !gitprivateSelected">
