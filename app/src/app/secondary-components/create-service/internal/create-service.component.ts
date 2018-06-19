@@ -1227,9 +1227,9 @@ blurRegion(){
       this.applications=res;
 
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
-      
+      this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
-        this.start_at = this.start_at+100;
+        
         this.getapplications();
       }
       else{
@@ -1237,8 +1237,7 @@ blurRegion(){
           if(!this.application_arr[i].appID || !this.application_arr[i].appName){
             this.application_arr.splice(i,1);
           }
-        }
-
+        }       
         return;
       } 
 
@@ -1246,7 +1245,9 @@ blurRegion(){
      
     });
   }
-  ngOnInit() {
+
+
+ ngOnInit() {
     this.selectAccountsRegions();
     // this.gitRepo = "https://";
     this.getData();
