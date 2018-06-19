@@ -586,6 +586,7 @@ export class ServiceOverviewComponent implements OnInit {
  
 
     serviceCreationStatus(){
+        alert('when')
         this.statusprogress = 20;
         this.creating = true;
         this.deleting = false;
@@ -757,7 +758,8 @@ export class ServiceOverviewComponent implements OnInit {
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(            
         this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
             response => {
-                // console.log("response == ", response);
+
+                console.log("once response == ", response);
                 // var spoon = response.data.environment;
                 // console.log("spoon == ", spoon[1])
                 // for(var i=0 ; i < spoon.length ; i++ ){

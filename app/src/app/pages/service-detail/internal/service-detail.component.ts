@@ -41,6 +41,7 @@ export class ServiceDetailComponent implements OnInit {
     message;
 
     @Output() deleteServiceStatus:EventEmitter<boolean> = new EventEmitter<boolean>();
+    @ViewChild('selectedTabComponent') selectedTabComponent;
 
 
     disblebtn:boolean = true;
@@ -64,6 +65,7 @@ export class ServiceDetailComponent implements OnInit {
     serviceRequestFailure:boolean = false;
     serviceRequestSuccess:boolean = false;
     canDelete:boolean =true;
+    refreshTabClicked:boolean=false;
     successMessage: string = "";
     errorMessage: string = "";
     test:any="delete testing";
@@ -158,7 +160,7 @@ export class ServiceDetailComponent implements OnInit {
         this.isLoadingService = true;
 
         let cachedData = this.cache.get(id);
-        if (cachedData) {
+        if (cachedData && !this.refreshTabClicked) {
             this.isGraphLoading=false;
             this.onDataFetched(cachedData)
              if(this.service.serviceType == "website")
@@ -369,8 +371,17 @@ export class ServiceDetailComponent implements OnInit {
           }, 3000);
     }
 
+    refreshTab(){
+        this.refreshTabClicked=true;
+        if(this.selectedTab == 0){
+            this.refreshServ();
+        }
+        else{
+            this.selectedTabComponent.refresh();
+        }
+
+    }
     ngOnInit() {
-        
         this.breadcrumbs = [
         {
             'name' : this.service['name'],

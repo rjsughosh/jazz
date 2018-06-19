@@ -575,6 +575,10 @@ export class ServiceLogsComponent implements OnInit {
 			}
 		}
 	};
+	
+	refresh(){
+		this.callLogsFunc();
+	}
 
 	onSort(sortData){
 
@@ -583,6 +587,8 @@ export class ServiceLogsComponent implements OnInit {
     if (sortData.reverse == true) {
     	reverse = true
     }
+
+	
 
     this.logs = this.sort.sortByColumn(col , reverse , function(x:any){return x;}, this.logs);
 	};

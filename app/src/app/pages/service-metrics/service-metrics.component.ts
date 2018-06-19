@@ -338,6 +338,11 @@ export class ServiceMetricsComponent implements OnInit {
     }
     
   }
+
+  refresh(){
+    this.callMetricsFunc();
+  }
+
   ngOnInit() {
     this.cache.set("codequality",false)
     if(this.service.serviceType === 'api'){
