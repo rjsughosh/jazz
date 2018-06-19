@@ -88,6 +88,10 @@ export class EnvCodequalitySectionComponent implements OnInit {
     private dataS: DataService
   ) { }
 
+    refresh() {
+    this.graphDataAvailable = false;
+      this.refreshCostData();
+    }
 
   public lineChartData: Array<any> = [
     { data: [0, 0, 0, 20, 0], label: 'Major', lineTension: 0 },
@@ -459,7 +463,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
     this.cache.set('scroll_id', hash);
   }
 
-  refreshCostData(event) {
+  refreshCostData(event?) {
     this.isGraphLoading = true;
     this.displayGraph();
   }

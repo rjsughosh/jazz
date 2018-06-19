@@ -1,4 +1,4 @@
-<div *ngIf='isloaded && !error'>       
+<div *ngIf='isloaded && !error'>
     <div class='service-details row'>
         <div class='cw-cover'>
          <div class='cw-message'>
@@ -25,8 +25,8 @@
              <li>
                <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
                <div class='det-label cw-label'>Total<br>errors</div>
-             </li>   
-            
+             </li>
+
            </ul>
          </div>
         </div>
@@ -37,11 +37,11 @@
         <div class='warning-chk custom-cb'>
             <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="warningSelected" (change)="warningSelected = !warningSelected">
             <label for="checkbox-cw"></label>
-            <div class="cb-status-dets">Hide Warnings</div>    
+            <div class="cb-status-dets">Hide Warnings</div>
         </div>
         <div class='cw-search-wrap'>
 
-            <search-box #searchbox (onChange)="onCWsearch($event)"></search-box> 
+            <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
 
@@ -53,8 +53,8 @@
             <div class="table-row" *ngIf='row.status == "error" || !warningSelected' (click)="onRowClicked(row, i)">
               <div class="column visible">{{row.heading}}
                 <span class='{{row.status}}'>{{row.status}} </span><span class='right'>{{row.issues.length}} issue<span *ngIf='row.issues.length > 1'>s</span></span>
-              </div>         
-            </div>        
+              </div>
+            </div>
             <div *ngIf='row.status == "error" || !warningSelected' class="table-row-expanded">
               <div class='sub-row'>
                 <div>{{row.description}}</div>
@@ -78,7 +78,7 @@
                 </tbody>
               </table>
               <btn-jazz-primary text="View Details" class="view-details right" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'></btn-jazz-primary>
-      
+
             </div>
           </div>
         </table-template>
@@ -89,14 +89,17 @@
     </div>
     <div class='service-details row' *ngIf='!detailView'>
       <div class='back-search-cover'>
-          <span class='icon-icon-back' (click)='detailView = !detailView'></span><span (click)='detailView = !detailView;searchDetail_bar="";' class='inside-back'>Back</span>
+        <span class='icon-icon-back' (click)='detailView = !detailView;searchDetail_bar="";'></span>
+        <span (click)='detailView = !detailView;searchDetail_bar="";' class='inside-back'>
+          Back
+        </span>
           <search-box #searchbox (onChange)="onCWDetailsearch($event)"></search-box>
       </div>
-              
-    
+
+
         <div class="column visible">{{oneObject.heading}}
             <span class='{{oneObject.status}}'>{{oneObject.status}} </span><span class='right'>{{oneObject.issues.length}} issue<span *ngIf='oneObject.issues.length > 1'>s</span></span>
-          </div> 
+          </div>
         <div class="table-row-expanded show">
             <div class='sub-row'>
               <div>{{oneObject.description}}</div>

@@ -110,7 +110,6 @@ export class EnvAssetsSectionComponent implements OnInit {
 	count: any = [];
 	relativeUrl:string = '/jazz/assets/search';
 
-
   @Input() service: any = {};
 
   constructor(
@@ -128,6 +127,13 @@ export class EnvAssetsSectionComponent implements OnInit {
 		setTimeout(function(){
 			comp.getFilter(advancedFilters);
 		},5000);
+   }
+
+   refresh() {
+    this.envResponseEmpty = false;
+    this.envResponseError = false;
+    this.envResponseTrue = false;
+    this.callServiceEnvAssets();
    }
 
 
@@ -242,7 +248,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 					}
 					else
 					{
-						var pageCount = res.length;
+            var pageCount = res.length;
 
           
           if(pageCount){
@@ -520,5 +526,15 @@ public goToAbout(hash){
 	this.cache.set('scroll_flag',true);
 	this.cache.set('scroll_id',hash);
 }
+
+  public assetTypeToLabel(type) {
+      switch(type) {
+        case 'swagger_url':
+        case 'endpoint_url':
+          return 'URL';
+        default:
+          return 'ARN';
+      }
+  }
 
 }

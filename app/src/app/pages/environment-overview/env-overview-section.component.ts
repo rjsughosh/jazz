@@ -114,7 +114,14 @@ export class EnvOverviewSectionComponent implements OnInit {
     this.toastmessage = messageservice;
 
    }
-  //  prd?domain=jazz-testing&service=test-create
+
+  refresh() {
+    this.envResponseEmpty = false;
+    this.envResponseTrue = false;
+    this.envResponseError = false;
+    this.isLoading = true;
+    this.ngOnInit();
+  }
 
   disableEditBtn(){
 

@@ -7,7 +7,8 @@ export const environment = {
   serviceTabs:['overview','logs'],
   environmentTabs:['overview','logs'],
   urls:{
-    docs_link: "https://github.com/tmobile/jazz/wiki",
-    content_base: "https://github.com/tmobile/jazz-content/blob/master"
+    docs_link:"https://github.com/tmobile/jazz/wiki",
+    content_base: "https://github.com/tmobile/jazz-content/blob/master",
+    swagger_editor: 'http://editor.swagger.io'
   }
 };
