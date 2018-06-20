@@ -1233,11 +1233,26 @@ blurRegion(){
         this.getapplications();
       }
       else{
+
         for(var i=0;i<this.application_arr.length;i++){
           if(!this.application_arr[i].appID || !this.application_arr[i].appName){
             this.application_arr.splice(i,1);
           }
+          else{
+            this.application_arr[i].appName=this.application_arr[i].appName.trim();
+          }
         }       
+
+        this.application_arr.sort((a: any, b: any) => {
+          if (a.appName < b.appName) {
+            return -1;
+          } else if (a.appName > b.appName) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
         return;
       } 
 
