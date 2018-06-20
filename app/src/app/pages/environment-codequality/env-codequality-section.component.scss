@@ -18,7 +18,7 @@
    position: relative;
     width:65%;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
-    border-radius:3px; 
+    border-radius:3px;
     @media(max-width: $screen-sm){
         width:100%;
     }
@@ -42,8 +42,8 @@
     border-radius:3px;
     @media(max-width: $screen-sm){
         width:100%;
-    }   
-    
+    }
+
 }
 
 .stage-title-left {
@@ -52,13 +52,13 @@
     font-size: 1.3rem;;
     font-weight: bold;
     color: #aaaaaa;
-    
+
 }
 .stage-title-right {
     padding: 0.5rem;
     text-align: center;
     font-size: 12px;
-    
+
     color: #aaaaaa;
     text-transform: uppercase;
 }
@@ -88,9 +88,9 @@
     background: #fff;
     margin:1rem;
     padding: 0;
-       
+
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
-    
+
     @media (max-width: $screen-sm) {
         width:100%;
     }
@@ -186,7 +186,7 @@
 .bad-value
 {
     color: #d0021b;
-    
+
 }
 
 .settings-icon
@@ -200,7 +200,7 @@
 .good-value
 {
     color: #5dae02;
-    
+
 }
 
 .overview-value span{
@@ -215,9 +215,9 @@ width: 24%;
 
 .more-details:hover
 {
-    
+
     background-color:#444444;
-    
+
 }
 
 .more-details
@@ -226,11 +226,11 @@ width: 24%;
     padding:1rem;
     text-align: center;
     color:white;
-    cursor: pointer; 
+    cursor: pointer;
     font-weight: bold;
     /deep/ .icon-icon-back:before{
-        color:white;   
-        
+        color:white;
+
     }
 
     /deep/ .back-icon{
@@ -326,69 +326,6 @@ span{
     background-color: #fff;
     margin-top: 0rem;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.metrics-cards-wrap{
-    padding: 15px 0;
-    display: block;
-    line-height: 1.5;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 100%;
-    min-height: 175px;
-    .metrics-card{
-        border-radius: 3px;
-        background-color: #fdfdfd;
-        border: solid 1px #dddddd;
-        width:135px;
-        display: inline-block;
-        padding:0.5rem;
-        margin:-1px 0.5rem;
-        text-align: center;
-        font-size: 1rem;
-        color:#000;
-        white-space: normal;
-        vertical-align: top;
-        @media(min-width: 1280px){
-            min-width: 135px;
-        }
-        cursor: pointer;
-
-        &:first-child{
-            margin-left: 0;
-        }
-        &:last-child{
-            margin-right:0;
-        }
-        .metrics-name{
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-align: center;
-            color: #666;
-            height: 2rem;
-            margin: 0.75rem 0 0.5rem;
-            text-transform: capitalize;
-        }
-
-        .metrics-date{
-            font-size: 12px;
-            // font-weight: bold;
-            text-align: center;
-            color: #666;
-            height: 2rem;
-            margin: 0.75rem 0 0.5rem;
-        }
-
-        .metrics-data{
-            font-size: 36px;
-            text-align: center;
-            color: #333;
-        }
-    }
-    .scroll-cards-wrap{
-        position: absolute;
-        transition-duration: 1s;
-    }
 }
 
 .arrow_box {
@@ -537,7 +474,7 @@ span{
             height: 100px !important;
 
         }
-        
+
     }
     .feedback-text-wrap.feedbackRes{
         position: absolute;
@@ -545,7 +482,7 @@ span{
         top: 46%;
         left: 0;
         .show{
-            &.feedbackResSuccess{   
+            &.feedbackResSuccess{
                 // margin:4rem 0;
                 div{
                     // padding-top: 2rem;
@@ -589,5 +526,147 @@ span{
     label{
         border: 1px solid #999;
     }
+}
+
+.section {
+  padding: 1rem 3rem;
+  height: calc(100vh - 100px);
+  background: white;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
+  display: flex;
+}
+
+.section-content {
+  flex: 1;
+  position: relative;
+  display:flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  width: 100%;
+  text-align: center;
+  margin: 5px;
+}
+
+.chart-filters {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.chart-content {
+  margin-top: .25rem;
+  padding: .5rem;
+  flex: 1;
+  position: relative;
+  border-radius: 3px;
+  background-color: #f9f9f9;
+  border: solid 1px #9b9b9b;
+}
+
+.row-chart {
+  position: relative;
+  height: calc(100% - (2rem + 175px));
+  border: 1px solid black;
+  .chart-header {
+    height: 30px;
+    position: relative;
+    width: 100%;
+    border: 1px solid black;
+    text-align: center;
+  }
+  .sonar-link {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e20074;
+    &:after{
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      top: 50%;
+      left: 200px;
+      border: 5px solid transparent;
+      border-left-color: #ed008c;
+      border-right-width: 0;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      transition: all 0.3s ease-out;
+      -webkit-transform-origin: center;
+      transform-origin: center;
+      cursor: pointer;
+    }
+  }
+  .chart-content {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+.metrics-cards-wrap{
+  padding: 15px 0;
+  display: block;
+  line-height: 1.5;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  height: 200px;
+  .metrics-card{
+    border-radius: 3px;
+    background-color: #fdfdfd;
+    border: solid 1px #dddddd;
+    width:135px;
+    display: inline-block;
+    padding:0.5rem;
+    margin:-1px 0.5rem;
+    text-align: center;
+    font-size: 1rem;
+    color:#000;
+    white-space: normal;
+    vertical-align: top;
+    @media(min-width: 1280px){
+      min-width: 135px;
+    }
+    cursor: pointer;
+
+    &:first-child{
+      margin-left: 0;
+    }
+    &:last-child{
+      margin-right:0;
+    }
+    .metrics-name{
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      color: #666;
+      height: 2rem;
+      margin: 0.75rem 0 0.5rem;
+      text-transform: capitalize;
+    }
+
+    .metrics-date{
+      font-size: 12px;
+      // font-weight: bold;
+      text-align: center;
+      color: #666;
+      height: 2rem;
+      margin: 0.75rem 0 0.5rem;
+    }
+
+    .metrics-data{
+      font-size: 36px;
+      text-align: center;
+      color: #333;
+    }
+  }
+  .scroll-cards-wrap{
+    position: absolute;
+    transition-duration: 1s;
+  }
 }
 

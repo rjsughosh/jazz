@@ -239,6 +239,7 @@ export class EnvironmentDetailComponent implements OnInit {
     }
   }
 
+
   toast_pop(error, oops, errorMessage) {
     var tst = document.getElementById('toast-container');
     tst.classList.add('toaster-anim');

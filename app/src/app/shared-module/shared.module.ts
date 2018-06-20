@@ -28,7 +28,7 @@ import {FormsModule} from '@angular/forms';
 import {DropdownModule} from 'ng2-dropdown';
 import {PopoverModule} from 'ng2-popover';
 import {ChartsModule} from 'ng2-charts';
-import {BrowserModule} from '@angular/platform-browser'; 
+import {BrowserModule} from '@angular/platform-browser';
 import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datepicker';
 import {MomentModule} from 'angular2-moment';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
@@ -51,6 +51,7 @@ import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters
 import { AdvFilters }            from '../adv-filter.directive';
 import {SafeUrlPipe} from "../core/pipes/safe-url.pipe";
 import {SafeHtmlPipe} from "../core/pipes/safe-html.pipe";
+import {ChartjsLinegraphComponent} from '../secondary-components/chartjs-linegraph/chartjs-linegraph.component';
 let specificComponents:any
 let specificModules: any;
 //alert(environment.envName);
@@ -72,7 +73,7 @@ for(let i in specificComponents){
 // console.log('imports shared  ',importsArray)
 // console.log('dec shared ',declarationsArray)
 
-// 
+//
 @NgModule({
   imports: [
     CommonModule,
@@ -103,7 +104,7 @@ for(let i in specificComponents){
     ClickOutsideDirective,
     FiltersComponent,
     FilterTagsServicesComponent,
-    FilterTagsComponent,    
+    FilterTagsComponent,
     TableTemplateComponent,
     SearchBoxComponent,
     MobileSecondaryTabComponent,
@@ -120,9 +121,10 @@ for(let i in specificComponents){
     AdvFilters,
     SafeHtmlPipe,
     SafeUrlPipe,
+    ChartjsLinegraphComponent,
     ...declarationsArray,
-   
-   
+
+
   ],
   exports: [
     BtnJazzPrimaryComponent,
@@ -150,7 +152,7 @@ for(let i in specificComponents){
     JenkinsStatusComponent,
     LineGraphComponent,
     FilterTagsServicesComponent,
-    FilterTagsComponent,    
+    FilterTagsComponent,
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
@@ -159,6 +161,7 @@ for(let i in specificComponents){
     AdvFilters,
     SafeHtmlPipe,
     SafeUrlPipe,
+    ChartjsLinegraphComponent,
     ...declarationsArray
 
   ],

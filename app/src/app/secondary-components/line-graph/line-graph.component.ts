@@ -66,8 +66,8 @@ export class LineGraphComponent implements OnInit {
     localStorage.removeItem('range');
     localStorage.removeItem('cx');
     localStorage.removeItem('stat');
-  }     
-   
+  }
+
 
   ngOnChanges(x:any){
     if(this.graphData != undefined){
@@ -75,7 +75,7 @@ export class LineGraphComponent implements OnInit {
       if (this.graphDataOld === undefined) {
         this.graphDataOld = this.graphData;
       }
-    }    
+    }
   }
   public renderGraph(data){
     this.clearGraph(this.onGraphRender);
@@ -102,9 +102,6 @@ export class LineGraphComponent implements OnInit {
   }
 
   public initAxis() {
-
-    
-
     var flagcodequality = this.cache.get("codequality");
     this.y = d3Scale.scaleLinear().range([this.height, 0]);
     for(var i=0 ; i<this.graphData.data.length; i++){
@@ -120,19 +117,6 @@ export class LineGraphComponent implements OnInit {
       }else{
         this.y.domain([0,max5]);
       }
-
-    
-    // if(flagcodequality == true){
-
-    // FOR CODEQUALITY
-    // this.x = d3Scale.scaleTime().range([0, this.width]);
-    // if( this.timeRange == 'Month'){
-    //   this.x.domain([new Date().setDate(new Date().getDate()-180),new Date()]);
-    // }else if( this.timeRange == 'Week'){
-    //   this.x.domain([new Date().setDate(new Date().getDate()-30),new Date()]);
-    // }else if( this.timeRange == 'Day'){
-    //   this.x.domain([new Date().setDate(new Date().getDate()-7),new Date()]);
-    // }
     if( this.graphData.data.length == 1){
       for(var i=0 ; i<this.graphData.data.length ; i++){
         this.graphData.data[i].date = new Date(this.graphData.data[i].date.valueOf() + this.graphData.data[i].date.getTimezoneOffset() * 60000);
@@ -149,11 +133,11 @@ export class LineGraphComponent implements OnInit {
       this.x = d3Scale.scaleTime().range([0, this.width]);
       this.x.domain(d3Array.extent(this.graphData.data, (d) => d.date )).nice();
     }
-    
+
 
     // FOR METRICS
   // }else if(flagcodequality == false){
-       
+
   //      if( this.graphData.data.length == 1){
   //       for(var i=0 ; i<this.graphData.data.length ; i++){
   //         this.graphData.data[i].date = new Date(this.graphData.data[i].date.valueOf() + this.graphData.data[i].date.getTimezoneOffset() * 60000);
@@ -162,7 +146,7 @@ export class LineGraphComponent implements OnInit {
   //             var dayless = this.x.domain()[0].setDate(this.x.domain()[0].getDate()-1)
   //             var daymore = this.x.domain()[1].setDate(this.x.domain()[1].getDate()+1)
   //             this.x.domain([dayless, daymore]).nice()
-  //       } 
+  //       }
   //      }else{
   //       for(var i=0 ; i<this.graphData.data.length ; i++){
   //         this.graphData.data[i].date = new Date(this.graphData.data[i].date.valueOf() + this.graphData.data[i].date.getTimezoneOffset() * 60000);
@@ -174,7 +158,7 @@ export class LineGraphComponent implements OnInit {
 
   }
   public drawLine() {
-    
+
     this.line = d3Shape.line()
       .x( (d: any) => this.x(d.date) )
       .y( (d: any) => this.y(parseFloat(d.value)) );
@@ -183,7 +167,7 @@ export class LineGraphComponent implements OnInit {
       this.graphDataOld = this.graphData;
     }
     var d0 = this.line(this.graphData.data);
-   
+
       this.svg.append("path")
       .attr("class", "line line-plot")
       .attr("d", d0)
@@ -194,18 +178,18 @@ export class LineGraphComponent implements OnInit {
       .attr("d", d0)
       .attr("cx", (d) => this.x(d.date))
       .attr("cy", (d) => this.y(d.value))
-      .on("mouseover", function() { 
+      .on("mouseover", function() {
         self.svg.select(".tool-tip").style("display", null);
         var cy = 204 - d3.select(this).attr("cy");
         var cx = d3.select(this).attr("cx");
         localStorage.setItem('cy', JSON.stringify({ cy: cy }));
         localStorage.setItem('cx', JSON.stringify({ cx: cx }));
       })
-      .on("mouseout", function() { 
+      .on("mouseout", function() {
         self.svg.select(".tool-tip").style("display", "none");
       })
       .on("mousemove", mousemove)
-      
+
     var bisectDate = d3Array.bisector(function(d) { return d.hour; }).left;
 
     var range =  this.graphData.xAxis.range;
@@ -224,7 +208,7 @@ export class LineGraphComponent implements OnInit {
       '1 year' : '%b %y',
       '6 years' : '%Y'
     }
-  
+
     function formatDate(date, range) {
 ;
 
@@ -232,7 +216,7 @@ export class LineGraphComponent implements OnInit {
         range = 'day';
       }
       range = range.toLowerCase();
-      
+
       var dateFormat = d3Format.timeFormat(timeFormat[range]);
       return dateFormat(date);
     }
@@ -254,7 +238,7 @@ export class LineGraphComponent implements OnInit {
     //   return entry;
     // }
     function mousemove() {
-    
+
       var x0 = d3.mouse(this)[0];
       var y0 = d3.mouse(this)[1];
 
@@ -268,14 +252,14 @@ export class LineGraphComponent implements OnInit {
       var date = self.x.invert(x1);
       var hoverX = formatDate(self.x.invert(x1), range)
       var stat = localStorage.getItem("stat");
-      if( stat == 'Average' ){   
+      if( stat == 'Average' ){
         var hoverY = valueY.toFixed(2);
       }else {
         var hoverY = valueY.toFixed(0)
-      }     
+      }
 
       var tooltip = self.svg.select(".tool-tip");
-      
+
       tooltip.attr("transform", "translate(" + (x0 - (75/2)) + "," + (y0 - 65) + ")");
       tooltip.select('.hover-x').text(hoverX);
       tooltip.select('.hover-y').text(hoverY);
@@ -301,12 +285,12 @@ export class LineGraphComponent implements OnInit {
 
     // Calculate width of the axis for accurate alignment
     this.axes.left = this.root.select('g.axis.axis--y').node().getBBox().width;
- 
+
     var flagcodequality = this.cache.get("codequality");
-   
+
     switch(this.timeRange){
-      case 'Day': 
-      
+      case 'Day':
+
       if( flagcodequality ){ this.xAxis = d3Axis.axisBottom(this.x).tickSize(5).tickPadding(9).ticks(2).tickFormat(d3Format.timeFormat( '%b %d'));
         break;
       }else{
@@ -314,22 +298,22 @@ export class LineGraphComponent implements OnInit {
           this.xAxis = d3Axis.axisBottom(this.x).tickSize(5).tickPadding(9).ticks(5).tickFormat(d3Format.timeFormat( '%b %d, %I %p'));
         break;
       }
-      
+
       case 'Week':
       localStorage.setItem("range","week");
       this.xAxis = d3Axis.axisBottom(this.x).tickSize(5).tickPadding(9).ticks(5).tickFormat(d3Format.timeFormat('%b %d'));
                    break;
 
-      case 'Month': 
+      case 'Month':
       localStorage.setItem("range","month");
       this.xAxis = d3Axis.axisBottom(this.x).tickSize(5).tickPadding(9).ticks(5).tickFormat(d3Format.timeFormat('%b'));
                     break;
 
-      case 'Year': 
+      case 'Year':
       localStorage.setItem("range","year");
       this.xAxis = d3Axis.axisBottom(this.x).tickSize(5).tickPadding(9).ticks(5).tickFormat(d3Format.timeFormat('%b %Y'));
                     break;
-    } 
+    }
 
     this.axes.bottom = this.root.select('g.axis.axis--x').node().getBBox().height;
     this.y = this.y.range([(this.height), 0]);
@@ -363,7 +347,7 @@ export class LineGraphComponent implements OnInit {
     this.root.select('g.base-group').attr('transform', 'translate(' + (this.axes.left/ 2 + this.margin.left) + ',' + (this.axes.bottom / 2  + this.margin.top) + ')');
     this.drawLine();
 
-  
+
   }
 
   private toolTip() {
@@ -379,7 +363,7 @@ export class LineGraphComponent implements OnInit {
       .style("display", "none")
       .style("z-index", "100")
       .attr("transform", "translate(" + (rectW/2) + "," + (-rectH + 10) + ")");
-      
+
       this.tooltip.append("rect")
       .attr("class", "rect-outer")
       .attr("rx", 6)
@@ -389,14 +373,14 @@ export class LineGraphComponent implements OnInit {
       .attr("fill","#fff")
       .attr("width", rectW)
       .attr("height", rectH);
-    
+
       this.tooltip.append("text")
       .attr("y", 16)
       .attr("x", 6)
       .attr("fill","#999")
       .attr("width", rectW)
       .attr("class", "hover-x").text("4.00");
-    
+
       this.tooltip.append("text")
       .attr("y", 35)
       .attr("x", 6)

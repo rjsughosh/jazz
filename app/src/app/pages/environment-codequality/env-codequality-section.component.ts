@@ -1,13 +1,16 @@
-import { Component, OnInit, ElementRef, Inject, Input } from '@angular/core';
-import { DayData, WeekData, MonthData, Month6Data, YearData } from './../service-metrics/data';
-import { AfterViewInit, ViewChild } from '@angular/core';
-import { ToasterService } from 'angular2-toaster';
-import { RequestService, MessageService } from '../../core/services/index';
-import { DataCacheService, AuthenticationService } from '../../core/services/index';
-import { Router, ActivatedRoute } from '@angular/router';
-import { IonRangeSliderModule } from "ng2-ion-range-slider";
-import { setTimeout } from 'timers';
-import { DataService } from "../data-service/data.service";
+import {Component, OnInit, ElementRef, Inject, Input} from '@angular/core';
+import {DayData, WeekData, MonthData, Month6Data, YearData} from './../service-metrics/data';
+import {AfterViewInit, ViewChild} from '@angular/core';
+import {ToasterService} from 'angular2-toaster';
+import {RequestService, MessageService} from '../../core/services/index';
+import {DataCacheService, AuthenticationService} from '../../core/services/index';
+import {Router, ActivatedRoute} from '@angular/router';
+import {IonRangeSliderModule} from 'ng2-ion-range-slider';
+import {setTimeout} from 'timers';
+import {DataService} from '../data-service/data.service';
+import * as moment from 'moment';
+import {Observable} from 'rxjs/Observable';
+
 
 // import { Filter } from '../../secondary-components/jazz-table/jazz-filter';
 
@@ -16,11 +19,11 @@ import { DataService } from "../data-service/data.service";
   selector: 'env-codequality-section',
   templateUrl: './env-codequality-section.component.html',
   styleUrls: ['./env-codequality-section.component.scss'],
-  providers: [RequestService, MessageService,DataService],
+  providers: [RequestService, MessageService, DataService],
 })
 export class EnvCodequalitySectionComponent implements OnInit {
   @Input() service: any = {};
-  message:string;
+  message: string;
   edit: boolean = true;
   save: boolean = false;
   minCards: boolean = false;
@@ -35,14 +38,14 @@ export class EnvCodequalitySectionComponent implements OnInit {
   errorUser: any;
   env: any;
   cqList: any = [];
-  xAxis: "";
-  yAxis: "";
+  xAxis: '';
+  yAxis: '';
   cardIndex: any;
-  filtertext: any = "past 6 months";
+  filtertext: any = 'past 6 months';
   cardindex: number = 0;
   link: any = [];
   sonar: any;
-  selectedTimeRange: string = "Month";
+  selectedTimeRange: string = 'Month';
   payload: any = {};
   // selectedTimeRange:string="";
   graphArray: any = [];
@@ -62,9 +65,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
   graphname: any;
   sonarlink: any;
   metricsIndex: any;
-  startDate = "";
+  startDate = '';
   endDate = (new Date()).toISOString();
-  graphInput: Array<any>;
+  public graphInput;
   filtersList = ['DAILY', 'WEEKLY', 'MONTHLY'];
   name: any = [];
   // name = ['Unrsolved Issues','Major Issues','Fixed Issues','Bugs','Vulnarebilities','Code smells'];
@@ -73,37 +76,31 @@ export class EnvCodequalitySectionComponent implements OnInit {
   parsedErrBody: any;
   errMessage: any;
   errorChecked: boolean = true;
-  errorInclude: any = "";
+  errorInclude: any = '';
   json: any = {};
-  private toastmessage: any;
-
-  constructor(
-    private toasterService: ToasterService,
-    private messageservice: MessageService,
-    private route: ActivatedRoute,
-    private http: RequestService,
-    private cache: DataCacheService,
-    private router: Router,
-    private authenticationservice: AuthenticationService,
-    private dataS: DataService
-  ) { }
-
-    refresh() {
-    this.graphDataAvailable = false;
-      this.refreshCostData();
-    }
-
+  feedbackRes: boolean = false;
+  openModal: boolean = false;
+  feedbackMsg: string = '';
+  feedbackResSuccess: boolean = false;
+  feedbackResErr: boolean = false;
+  isFeedback: boolean = false;
+  toast: any;
+  model: any = {
+    userFeedback: ''
+  };
+  buttonText: string = 'SUBMIT';
+  isLoading: boolean = false;
+  sjson: any = {};
+  djson: any = {};
   public lineChartData: Array<any> = [
-    { data: [0, 0, 0, 20, 0], label: 'Major', lineTension: 0 },
-    { data: [0, 10, 10, 10, 0], label: 'Unresolved', lineTension: 0 },
-    { data: [20, 20, 10, 20, 20], label: 'Fixed', lineTension: 0 }
+    {data: [0, 0, 0, 20, 0], label: 'Major', lineTension: 0},
+    {data: [0, 10, 10, 10, 0], label: 'Unresolved', lineTension: 0},
+    {data: [20, 20, 10, 20, 20], label: 'Fixed', lineTension: 0}
 
   ];
-
-
   public lineChartLabels: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
   public lineChartOptions: any = {
-    legend: { position: 'bottom' },
+    legend: {position: 'bottom'},
     scales: {
       yAxes: [{
         ticks: {
@@ -133,14 +130,40 @@ export class EnvCodequalitySectionComponent implements OnInit {
       pointBorderColor: 'transparent',
     }
   ];
-
   public lineChartLegend: boolean = true;
   public lineChartType: string = 'line';
+  private toastmessage: any;
+  public sectionStatus;
+  public graphFilter = 'daily';
+  public graphOptions: {}
+  public graph;
+  public metrics;
+  public selectedMetric;
+  public filterData;
+  public inputQuery;
+
+  constructor(
+    private toasterService: ToasterService,
+    private messageservice: MessageService,
+    private route: ActivatedRoute,
+    private http: RequestService,
+    private cache: DataCacheService,
+    private router: Router,
+    private authenticationservice: AuthenticationService,
+    private dataS: DataService,
+  ) {
+  }
+
+  refresh() {
+    this.graphDataAvailable = false;
+    this.refreshCostData();
+  }
 
   editChanges() {
     this.edit = false;
     this.save = true;
   }
+
   saveChanges() {
     this.edit = true;
     this.save = false;
@@ -149,9 +172,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
   onFilterSelected(event) {
     this.filterdone = false;
     this.filteron = true;
-    if (event[0] == "DAILY") {
-      this.filtertext = "past 7 days";
-      this.selectedTimeRange = "Day";
+    if (event[0] == 'DAILY') {
+      this.filtertext = 'past 7 days';
+      this.selectedTimeRange = 'Day';
       this.selected = ['DAILY'];
       var date = new Date();
       date.setDate(date.getDate() - 7);
@@ -159,9 +182,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
       this.startDate = dateString;
       this.displayGraph();
 
-    } else if (event[0] == "WEEKLY") {
-      this.filtertext = "past 4 weeks";
-      this.selectedTimeRange = "Week";
+    } else if (event[0] == 'WEEKLY') {
+      this.filtertext = 'past 4 weeks';
+      this.selectedTimeRange = 'Week';
       this.selected = ['WEEKLY'];
       var date = new Date();
       date.setDate(date.getDate() - 30);
@@ -169,8 +192,8 @@ export class EnvCodequalitySectionComponent implements OnInit {
       this.startDate = dateString;
       this.displayGraph();
     } else {
-      this.filtertext = "data for past 6 months";
-      this.selectedTimeRange = "Month";
+      this.filtertext = 'data for past 6 months';
+      this.selectedTimeRange = 'Month';
       this.selected = ['MONTHLY'];
       var date = new Date();
       date.setDate(date.getDate() - 180);
@@ -180,51 +203,165 @@ export class EnvCodequalitySectionComponent implements OnInit {
     }
   }
 
-  displayGraph() {
 
-    this.http.get('/jazz/codeq?domain=jazz&service=codeq&environment=' + this.env + '&from=' + this.startDate + '&to=' + this.endDate + '&').subscribe(
-      //this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/codeq?domain=jazz&service=codeq&environment=prod&from=2017-01-01T12:00:00-0700&to=2018-01-20T09:17:26.931Z').subscribe(
-      response => {
-        var res = response;
-        if (res.data == undefined || res.data == null || res.data.length == 0) {
+  mockData() {
+    return {
+      'name': 'clearwater-score',
+      'link': 'https://cloud-api.corporate.t-mobile.com/api/jazz/codeq/help?metrics=clearwater-score',
+      'values': [
+        {
+          'ts': moment().subtract(1, 'day').format(),
+          'value': '65'
+        },
+        {
+          'ts': moment().subtract(2, 'day').format(),
+          'value': '71'
+        },
+        {
+          'ts': moment().subtract(3, 'day').format(),
+          'value': '68'
+        },
+        {
+          'ts': moment().subtract(4, 'day').format(),
+          'value': '85'
+        }
+      ]
+    }
+  }
+
+  queryGraphData(filterData, metricIndex) {
+    let input = {
+      'environment': 'undefined',
+      'from': '2018-06-13T00:48:46.248Z',
+      'to': '2018-06-20T00:48:46.248Z',
+      'service': 'api',
+      'domain': 'michael'
+    };
+    this.sectionStatus = 'loading';
+
+    this.http.get('/jazz/codeq', {
+      domain: this.service.domain,
+      service: this.service.name,
+      environment: this.route.snapshot.params['env'],
+      to: filterData.to,
+      from: filterData.from
+    })
+      .subscribe((response) => {
+      this.sectionStatus = 'resolved';
+      this.inputQuery = response.input;
+      this.metrics = response.data.metrics;
+      this.selectedMetric = this.metrics[metricIndex];
+      this.graph = this.formatGraphData(this.mockData(), filterData.axisLabelFormat, response.input);
+
+    }, (error) => {
+      this.sectionStatus = 'error';
+    });
+
+  }
+
+  selectFilter(filterInput) {
+    let filterData;
+    switch (filterInput) {
+      case 'daily':
+        filterData = {
+          from: moment().subtract(7, 'day').toISOString(),
+          headerMessage: '( past 7 days )',
+          axisLabelFormat: 'dd'
+        };
+        break;
+      case 'weekly':
+        filterData = {
+          from: moment().subtract(4, 'week').toISOString(),
+          headerMessage: '( past 4 weeks)'
+        };
+        break;
+      case 'monthly':
+        filterData = {
+          from: moment().subtract(3, 'month').toISOString(),
+          headerMessage: '( past 4 months )'
+        };
+        break;
+    }
+    filterData.to = moment().toISOString();
+    return filterData;
+  }
+
+  selectMetric(index) {
+    this.metricsIndex = index;
+    this.selectedMetric = this.metrics[index];
+    this.graph = this.formatGraphData(this.selectedMetric, this.inputQuery);
+  }
+
+  formatGraphData(metricData, filterData, query) {
+    let to = moment(query.to), from = moment(query.from)
+    let data = metricData.values
+      .filter((dataPoint) => {
+        let pointDate = moment(dataPoint.ts);
+        let x = pointDate.diff(from);
+        let y = pointDate.diff(to);
+        return x > 0 && y < 0;
+      })
+      .map((dataPoint) => {
+        return {
+          x: moment(dataPoint.ts).valueOf(),
+          y: parseInt(dataPoint.value)
+        }
+      });
+    return {
+      datasets: [data],
+      options: {
+        to: to.valueOf(),
+        from: from.valueOf(),
+        filter: 'daily',
+        xAxisFormat: filterData.axisLabelFormat
+      }
+    }
+  }
+
+  displayGraph() {
+    this.http.get('/jazz/codeq?domain=' + this.service.domain + '&service=' + this.service.name + '&environment=' + this.env + '&from=' + this.startDate + '&to=' + this.endDate + '&').subscribe(response => {
+        this.sectionStatus = 'resovled';
+        if (!response.data) {
           this.emptydata = true;
           this.notemptydata = false;
           this.isGraphLoading = false;
           this.graphDataAvailable = false;
         } else {
-          this.cqList = res.data.metrics;
+          this.cqList = response.data.metrics;
           for (var i = 0; i < this.cqList.length; i++) {
 
             this.graphInput = this.cqList[this.cardindex];
             this.graphname = this.name[this.cardindex];
 
             this.cqList[i].xAxis = {
-              "label": "TIME",
-              "range": "day"
+              'label': 'TIME',
+              'range': 'day'
             };
             this.cqList[i].yAxis = {
-              "label": "ISSUES",
-              "range": "day"
+              'label': 'ISSUES',
+              'range': 'day'
             };
             this.cqList[i].data = this.cqList[i].values;
             this.graphArray[i] = this.cqList[i].data;
             if (this.graphArray[i].length != 0) {
               this.value[i] = this.graphArray[i][Math.floor((this.graphArray[i].length) - 1)].value;
               if (this.value[i] >= 1000) {
-                this.value[i] = (this.value[i] / 1000).toFixed(1) + "K";
-              } if (this.value[i] >= 1000000) {
-                this.value[i] = (this.value[i] / 1000000).toFixed(1) + "M";
-              } if (this.value[i] >= 1000000000) {
-                this.value[i] = (this.value[i] / 1000000000).toFixed(1) + "B";
+                this.value[i] = (this.value[i] / 1000).toFixed(1) + 'K';
               }
-              this.date[i] = this.graphArray[i][Math.floor((this.graphArray[i].length) - 1)].ts.slice(0, -14).split("-").reverse().join("-");
+              if (this.value[i] >= 1000000) {
+                this.value[i] = (this.value[i] / 1000000).toFixed(1) + 'M';
+              }
+              if (this.value[i] >= 1000000000) {
+                this.value[i] = (this.value[i] / 1000000000).toFixed(1) + 'B';
+              }
+              this.date[i] = this.graphArray[i][Math.floor((this.graphArray[i].length) - 1)].ts.slice(0, -14).split('-').reverse().join('-');
             } else {
-              this.value[i] = "";
-              this.date[i] = "OOPS! doesn't look like there is any data available here.";
+              this.value[i] = '';
+              this.date[i] = 'OOPS! doesn\'t look like there is any data available here.';
               this.graphInput = this.cqList[this.cardindex];
               this.graphname = this.name[this.cardindex];
             }
-            this.name[i] = this.cqList[i].name.replace("-", " ").replace("-", " ");
+            this.name[i] = this.cqList[i].name.replace('-', ' ').replace('-', ' ');
             this.link[i] = this.cqList[i].link;
             this.sonar = this.link[0];
             for (var j = 0; j < this.graphArray[i].length; j++) {
@@ -268,15 +405,15 @@ export class EnvCodequalitySectionComponent implements OnInit {
         this.isGraphLoading = false;
         this.isError = true;
         this.payload = {
-          "domain": this.service.domain,
-          "service": this.service.name,
-          "environment": this.env,
-          "from": this.startDate,
-          "to": this.endDate
+          'domain': this.service.domain,
+          'service': this.service.name,
+          'environment': this.env,
+          'from': this.startDate,
+          'to': this.endDate
         }
         this.getTime();
         this.errorURL = window.location.href;
-        this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/codeq";
+        this.errorAPI = 'https://cloud-api.corporate.t-mobile.com/api/jazz/codeq';
         this.errorRequest = this.payload;
         this.errorUser = this.authenticationservice.getUserId();
         this.errorResponse = JSON.parse(error._body);
@@ -288,35 +425,20 @@ export class EnvCodequalitySectionComponent implements OnInit {
 
   getTime() {
     var now = new Date();
-    this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
-      + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
+    this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + ' ' + now.getHours() + ':'
+      + ((now.getMinutes() < 10) ? ('0' + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ('0' + now.getSeconds()) : (now.getSeconds())));
   }
 
-  feedbackRes: boolean = false;
-  openModal: boolean = false;
-  feedbackMsg: string = '';
-  feedbackResSuccess: boolean = false;
-  feedbackResErr: boolean = false;
-  isFeedback: boolean = false;
-  toast: any;
-  model: any = {
-    userFeedback: ''
-  };
-  buttonText: string = 'SUBMIT';
-  isLoading: boolean = false;
-  sjson: any = {};
-  djson: any = {};
-  // isLoading:boolean=false;
   reportIssue() {
 
     this.json = {
-      "user_reported_issue": this.model.userFeedback,
-      "API": this.errorAPI,
-      "REQUEST": this.errorRequest,
-      "RESPONSE": this.errorResponse,
-      "URL": this.errorURL,
-      "TIME OF ERROR": this.errorTime,
-      "LOGGED IN USER": this.errorUser
+      'user_reported_issue': this.model.userFeedback,
+      'API': this.errorAPI,
+      'REQUEST': this.errorRequest,
+      'RESPONSE': this.errorResponse,
+      'URL': this.errorURL,
+      'TIME OF ERROR': this.errorTime,
+      'LOGGED IN USER': this.errorUser
     }
 
     this.openModal = true;
@@ -335,24 +457,26 @@ export class EnvCodequalitySectionComponent implements OnInit {
     this.isLoading = false;
     this.buttonText = 'SUBMIT';
   }
+
   mailTo() {
-    location.href = 'mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by' + " " + this.authenticationservice.getUserId() + '&body=' + this.sjson;
+    location.href = 'mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by' + ' ' + this.authenticationservice.getUserId() + '&body=' + this.sjson;
   }
+
   errorIncluded() {
   }
 
   submitFeedback(action) {
 
-    this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
+    this.errorChecked = (<HTMLInputElement>document.getElementById('checkbox-slack')).checked;
     if (this.errorChecked == true) {
       this.json = {
-        "user_reported_issue": this.model.userFeedback,
-        "API": this.errorAPI,
-        "REQUEST": this.errorRequest,
-        "RESPONSE": this.errorResponse,
-        "URL": this.errorURL,
-        "TIME OF ERROR": this.errorTime,
-        "LOGGED IN USER": this.errorUser
+        'user_reported_issue': this.model.userFeedback,
+        'API': this.errorAPI,
+        'REQUEST': this.errorRequest,
+        'RESPONSE': this.errorResponse,
+        'URL': this.errorURL,
+        'TIME OF ERROR': this.errorTime,
+        'LOGGED IN USER': this.errorUser
       }
     } else {
       this.json = this.model.userFeedback;
@@ -367,12 +491,12 @@ export class EnvCodequalitySectionComponent implements OnInit {
     }
 
     var payload = {
-      "title": "Jazz: Issue reported by " + this.authenticationservice.getUserId(),
-      "project_id": "CAPI",
-      "priority": "P4",
-      "description": this.json,
-      "created_by": this.authenticationservice.getUserId(),
-      "issue_type": "bug"
+      'title': 'Jazz: Issue reported by ' + this.authenticationservice.getUserId(),
+      'project_id': 'CAPI',
+      'priority': 'P4',
+      'description': this.json,
+      'created_by': this.authenticationservice.getUserId(),
+      'issue_type': 'bug'
     }
     this.http.post('/platform/jira-issues', payload).subscribe(
       response => {
@@ -382,8 +506,8 @@ export class EnvCodequalitySectionComponent implements OnInit {
         var respData = response.data;
         this.feedbackRes = true;
         this.feedbackResSuccess = true;
-        if (respData != undefined && respData != null && respData != "") {
-          this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
+        if (respData != undefined && respData != null && respData != '') {
+          this.feedbackMsg = 'Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!';
         }
       },
       error => {
@@ -395,6 +519,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
       }
     );
   }
+
   selectedMetrics(index, gname, link) {
     this.cardindex = index;
     this.graphname = gname;
@@ -430,30 +555,32 @@ export class EnvCodequalitySectionComponent implements OnInit {
 
   ngOnInit() {
 
-    this.isGraphLoading = true;
-    this.cache.set("codequality", true);
-    this.route.params.subscribe(
-      params => {
-        this.env = params.env;
-      });
-    if (this.env == 'prd') {
-      this.env = 'prod';
-    }
-
-    var date = new Date();
-    date.setDate(date.getDate() - 180);
-    var dateString = date.toISOString();
-    this.startDate = dateString;
-
-    this.displayGraph();
-    // this.selectedMetrics(1,"gname","link")
-    this.dataS.currentMessage.subscribe(message => this.message = message)
-    this.newMessage();
+    this.filterData = this.selectFilter(this.graphFilter);
+    this.queryGraphData(this.filterData.to, this.filterData.from, 0);
+    // this.isGraphLoading = true;
+    // this.cache.set('codequality', true);
+    // this.route.params.subscribe(
+    //   params => {
+    //     this.env = params.env;
+    //   });
+    // if (this.env == 'prd') {
+    //   this.env = 'prod';
+    // }
+    //
+    // var date = new Date();
+    // date.setDate(date.getDate() - 180);
+    // var dateString = date.toISOString();
+    // this.startDate = dateString;
+    //
+    // this.displayGraph();
+    // // this.selectedMetrics(1,"gname","link")
+    // this.dataS.currentMessage.subscribe(message => this.message = message)
+    // this.newMessage();
   }
-  
-    newMessage() {
-      this.dataS.changeMessage("fo")
-      
+
+  newMessage() {
+    this.dataS.changeMessage('fo')
+
   }
 
   public goToAbout(hash) {
