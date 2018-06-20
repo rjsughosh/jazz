@@ -50,6 +50,7 @@ export class EnvironmentDetailComponent implements OnInit {
   disablingFunctionButton: boolean = true;
   disablingApiButton: boolean = true;
   nonClickable: boolean = false;
+  swagger_error:boolean = false;
   message: string;
   public assets = [];
 
@@ -210,6 +211,7 @@ export class EnvironmentDetailComponent implements OnInit {
       this.service.assets = this.assets;
     }, (err) => {
       this.toast_pop('error', 'Oops!', 'Swagger File Not Found.');
+      this.swagger_error = true;
     });
   }
 

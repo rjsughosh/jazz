@@ -179,6 +179,7 @@ export class ServiceDetailComponent implements OnInit {
                     this.cache.set(id, service);
                     this.onDataFetched(service);
                     this.isGraphLoading=false;
+                    this.selectedTabComponent.refresh_env();
                 },
                 err => {
                     if( err.status == "404"){
@@ -375,6 +376,7 @@ export class ServiceDetailComponent implements OnInit {
         this.refreshTabClicked=true;
         if(this.selectedTab == 0){
             this.refreshServ();
+            
         }
         else{
             this.selectedTabComponent.refresh();
