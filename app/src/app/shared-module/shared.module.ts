@@ -52,6 +52,7 @@ import { AdvFilters }            from '../adv-filter.directive';
 import {SafeUrlPipe} from "../core/pipes/safe-url.pipe";
 import {SafeHtmlPipe} from "../core/pipes/safe-html.pipe";
 import {ChartjsLinegraphComponent} from '../secondary-components/chartjs-linegraph/chartjs-linegraph.component';
+import {ReportIssueComponent} from '../primary-components/report-issue/report-issue.component';
 let specificComponents:any
 let specificModules: any;
 //alert(environment.envName);
@@ -121,6 +122,7 @@ for(let i in specificComponents){
     AdvFilters,
     SafeHtmlPipe,
     SafeUrlPipe,
+    ReportIssueComponent,
     ChartjsLinegraphComponent,
     ...declarationsArray,
 
@@ -161,6 +163,7 @@ for(let i in specificComponents){
     AdvFilters,
     SafeHtmlPipe,
     SafeUrlPipe,
+    ReportIssueComponent,
     ChartjsLinegraphComponent,
     ...declarationsArray
 

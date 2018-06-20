@@ -29,10 +29,6 @@ import {Error404Component} from './pages/error404/error404.component';
 import {SharedModule} from './shared-module/shared.module';
 import {routes} from './app.route';
 import {UserJourneyComponent} from "./pages/user-journey/user-journey.component";
-// import {FilterTagsServicesComponent} from './secondary-components/filter-tags-services/filter-tags-services.component';
-// import {EnvironmentModule} from './environment-module/environment.module';
-// import {ServiceModule} from './service-module/service.module';
-
 let environmentval = environment.envName;
 let loadedModule;
 if(environmentval == "oss"){

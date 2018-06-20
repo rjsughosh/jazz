@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment'
 
 @Component({
@@ -6,33 +6,24 @@ import * as moment from 'moment'
   templateUrl: './chartjs-linegraph.component.html',
   styleUrls: ['./chartjs-linegraph.component.scss']
 })
-export class ChartjsLinegraphComponent implements OnInit {
+export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   @ViewChild('container') container;
   @ViewChild('linegraph') lineGraph;
   @Input() datasets = [];
-  @Input() graphOptions = {
-    to: 0,
-    from: 0,
-    filter: ''
-  };
+  @Input() graphOptions = {};
   public type = 'scatter';
   public datasets: [];
   public options = {};
-  public millisecondStepSize = {
-    'daily': 86400000,
-    'weekly': 604800000,
-    'monthly': '2592000000'
-  };
-
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
-    this.datasets = this.datasets.map(this.modifyDataSet);
-    this.options = this.getOptions(this.graphOptions);
     this.sizeCanvas();
   }
 
+  ngOnChanges(changes) {
+    this.datasets = this.datasets.map(this.modifyDataSet);
+    this.options = this.getOptions(this.graphOptions);
+  }
 
   modifyDataSet(data) {
     let lineOptions = {
@@ -84,9 +75,9 @@ export class ChartjsLinegraphComponent implements OnInit {
         }]
       }
     };
-    options.scales.xAxes[0].ticks.min = graphOptions.from;
-    options.scales.xAxes[0].ticks.max = graphOptions.to;
-    options.scales.xAxes[0].ticks.stepSize = this.millisecondStepSize[graphOptions.filter];
+    options.scales.xAxes[0].ticks.min = graphOptions.fromDateValue;
+    options.scales.xAxes[0].ticks.max = graphOptions.toDateValue;
+    options.scales.xAxes[0].ticks.stepSize = graphOptions.stepSize;
     options.scales.xAxes[0].ticks.userCallback = (tick) => {
       return moment(tick).format(graphOptions.xAxisFormat)
     };

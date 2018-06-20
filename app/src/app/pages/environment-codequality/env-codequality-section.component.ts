@@ -64,11 +64,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
   safeTransformX = 0;
   graphname: any;
   sonarlink: any;
-  metricsIndex: any;
   startDate = '';
   endDate = (new Date()).toISOString();
   public graphInput;
-  filtersList = ['DAILY', 'WEEKLY', 'MONTHLY'];
   name: any = [];
   // name = ['Unrsolved Issues','Major Issues','Fixed Issues','Bugs','Vulnarebilities','Code smells'];
   selected = ['MONTHLY'];
@@ -132,15 +130,15 @@ export class EnvCodequalitySectionComponent implements OnInit {
   ];
   public lineChartLegend: boolean = true;
   public lineChartType: string = 'line';
+  public filters:any = ['DAILY', 'WEEKLY', 'MONTHLY'];
+  public filterSelected = [this.filters[0]];
   private toastmessage: any;
   public sectionStatus;
-  public graphFilter = 'daily';
-  public graphOptions: {}
   public graph;
   public metrics;
   public selectedMetric;
   public filterData;
-  public inputQuery;
+  public metricsIndex = 0;
 
   constructor(
     private toasterService: ToasterService,
@@ -155,145 +153,77 @@ export class EnvCodequalitySectionComponent implements OnInit {
   }
 
   refresh() {
-    this.graphDataAvailable = false;
-    this.refreshCostData();
-  }
-
-  editChanges() {
-    this.edit = false;
-    this.save = true;
-  }
-
-  saveChanges() {
-    this.edit = true;
-    this.save = false;
+    this.queryGraphData(this.filterData, this.metricsIndex);
   }
 
   onFilterSelected(event) {
-    this.filterdone = false;
-    this.filteron = true;
-    if (event[0] == 'DAILY') {
-      this.filtertext = 'past 7 days';
-      this.selectedTimeRange = 'Day';
-      this.selected = ['DAILY'];
-      var date = new Date();
-      date.setDate(date.getDate() - 7);
-      var dateString = date.toISOString();
-      this.startDate = dateString;
-      this.displayGraph();
-
-    } else if (event[0] == 'WEEKLY') {
-      this.filtertext = 'past 4 weeks';
-      this.selectedTimeRange = 'Week';
-      this.selected = ['WEEKLY'];
-      var date = new Date();
-      date.setDate(date.getDate() - 30);
-      var dateString = date.toISOString();
-      this.startDate = dateString;
-      this.displayGraph();
-    } else {
-      this.filtertext = 'data for past 6 months';
-      this.selectedTimeRange = 'Month';
-      this.selected = ['MONTHLY'];
-      var date = new Date();
-      date.setDate(date.getDate() - 180);
-      var dateString = date.toISOString();
-      this.startDate = dateString;
-      this.displayGraph();
-    }
-  }
-
-
-  mockData() {
-    return {
-      'name': 'clearwater-score',
-      'link': 'https://cloud-api.corporate.t-mobile.com/api/jazz/codeq/help?metrics=clearwater-score',
-      'values': [
-        {
-          'ts': moment().subtract(1, 'day').format(),
-          'value': '65'
-        },
-        {
-          'ts': moment().subtract(2, 'day').format(),
-          'value': '71'
-        },
-        {
-          'ts': moment().subtract(3, 'day').format(),
-          'value': '68'
-        },
-        {
-          'ts': moment().subtract(4, 'day').format(),
-          'value': '85'
-        }
-      ]
-    }
-  }
-
-  queryGraphData(filterData, metricIndex) {
-    let input = {
-      'environment': 'undefined',
-      'from': '2018-06-13T00:48:46.248Z',
-      'to': '2018-06-20T00:48:46.248Z',
-      'service': 'api',
-      'domain': 'michael'
-    };
-    this.sectionStatus = 'loading';
-
-    this.http.get('/jazz/codeq', {
-      domain: this.service.domain,
-      service: this.service.name,
-      environment: this.route.snapshot.params['env'],
-      to: filterData.to,
-      from: filterData.from
-    })
-      .subscribe((response) => {
-      this.sectionStatus = 'resolved';
-      this.inputQuery = response.input;
-      this.metrics = response.data.metrics;
-      this.selectedMetric = this.metrics[metricIndex];
-      this.graph = this.formatGraphData(this.mockData(), filterData.axisLabelFormat, response.input);
-
-    }, (error) => {
-      this.sectionStatus = 'error';
-    });
-
+    this.filterData = this.selectFilter(event[0]);
+    this.queryGraphData(this.filterData, this.metricsIndex);
   }
 
   selectFilter(filterInput) {
     let filterData;
+    this.filterSelected = [filterInput];
     switch (filterInput) {
-      case 'daily':
+      case 'DAILY':
         filterData = {
-          from: moment().subtract(7, 'day').toISOString(),
+          fromDateISO: moment().subtract(7, 'day').toISOString(),
           headerMessage: '( past 7 days )',
-          axisLabelFormat: 'dd'
+          xAxisFormat: 'dd',
+          stepSize: 86400000
         };
         break;
-      case 'weekly':
+      case 'WEEKLY':
         filterData = {
-          from: moment().subtract(4, 'week').toISOString(),
-          headerMessage: '( past 4 weeks)'
+          fromDateISO: moment().subtract(4, 'week').toISOString(),
+          headerMessage: '( past 4 weeks)',
+          xAxisFormat: 'MMM DD',
+          stepSize: 604800000
         };
         break;
-      case 'monthly':
+      case 'MONTHLY':
         filterData = {
-          from: moment().subtract(3, 'month').toISOString(),
-          headerMessage: '( past 4 months )'
+          fromDateISO: moment().subtract(3, 'month').toISOString(),
+          headerMessage: '( past 4 months )',
+          xAxisFormat: 'MMM',
+          stepSize: 2592000000
         };
         break;
     }
-    filterData.to = moment().toISOString();
+    filterData.toDateISO = moment().toISOString();
+    filterData.toDateValue = moment(filterData.toDateISO).valueOf();
+    filterData.fromDateValue = moment(filterData.fromDateISO).valueOf();
     return filterData;
   }
 
   selectMetric(index) {
     this.metricsIndex = index;
     this.selectedMetric = this.metrics[index];
-    this.graph = this.formatGraphData(this.selectedMetric, this.inputQuery);
+    this.graph = this.formatGraphData(this.selectedMetric, this.filterData);
   }
 
-  formatGraphData(metricData, filterData, query) {
-    let to = moment(query.to), from = moment(query.from)
+  queryGraphData(filterData, metricIndex) {
+    this.sectionStatus = 'loading';
+    this.http.get('/jazz/codeq', {
+      domain: this.service.domain,
+      service: this.service.name,
+      environment: this.route.snapshot.params['env'],
+      to: filterData.toDateISO,
+      from: filterData.fromDateISO
+    })
+      .subscribe((response) => {
+        this.sectionStatus = 'resolved';
+        this.metrics = response.data.metrics;
+        this.selectedMetric = this.metrics[metricIndex];
+        this.graph = this.formatGraphData(this.selectedMetric, filterData);
+      }, (error) => {
+        this.sectionStatus = 'error';
+      });
+
+  }
+
+  formatGraphData(metricData, filterData) {
+    let to = moment(filterData.toDateISO), from = moment(filterData.fromDateISO);
     let data = metricData.values
       .filter((dataPoint) => {
         let pointDate = moment(dataPoint.ts);
@@ -309,12 +239,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
       });
     return {
       datasets: [data],
-      options: {
-        to: to.valueOf(),
-        from: from.valueOf(),
-        filter: 'daily',
-        xAxisFormat: filterData.axisLabelFormat
-      }
+      options: filterData
     }
   }
 
@@ -429,25 +354,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
       + ((now.getMinutes() < 10) ? ('0' + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ('0' + now.getSeconds()) : (now.getSeconds())));
   }
 
-  reportIssue() {
-
-    this.json = {
-      'user_reported_issue': this.model.userFeedback,
-      'API': this.errorAPI,
-      'REQUEST': this.errorRequest,
-      'RESPONSE': this.errorResponse,
-      'URL': this.errorURL,
-      'TIME OF ERROR': this.errorTime,
-      'LOGGED IN USER': this.errorUser
-    }
-
-    this.openModal = true;
-    this.errorChecked = true;
-    this.isLoading = false;
-    this.errorInclude = JSON.stringify(this.djson);
-    this.sjson = JSON.stringify(this.json);
-  }
-
   openFeedbackForm() {
     this.isFeedback = true;
     this.model.userFeedback = '';
@@ -456,10 +362,6 @@ export class EnvCodequalitySectionComponent implements OnInit {
     this.feedbackResErr = false;
     this.isLoading = false;
     this.buttonText = 'SUBMIT';
-  }
-
-  mailTo() {
-    location.href = 'mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by' + ' ' + this.authenticationservice.getUserId() + '&body=' + this.sjson;
   }
 
   errorIncluded() {
@@ -555,8 +457,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
 
   ngOnInit() {
 
-    this.filterData = this.selectFilter(this.graphFilter);
-    this.queryGraphData(this.filterData.to, this.filterData.from, 0);
+    this.filterData = this.selectFilter(this.filterSelected[0]);
+    this.sectionStatus = 'error';
+    //this.queryGraphData(this.filterData, this.metricsIndex);
     // this.isGraphLoading = true;
     // this.cache.set('codequality', true);
     // this.route.params.subscribe(
