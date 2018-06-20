@@ -48,7 +48,7 @@ export class LineGraphComponent implements OnInit {
     private cache: DataCacheService,
     @Inject(ElementRef) elementRef: ElementRef
   ) {
-    var el:HTMLElement = elementRef.nativeElement;
+    var el = elementRef.nativeElement;
     this.root = d3.select(el);
 
     this.width = 630 - this.margin.left - this.margin.right ;

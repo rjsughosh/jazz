@@ -1,26 +1,9 @@
 .report-issue {
-  bottom: -78.52px;
-  box-sizing: border-box;
   color: rgb(51, 51, 51);
-  height: 300.8px;
-  left: 0px;
-  min-height: auto;
-  min-width: auto;
   position: relative;
-  right: 0px;
   text-align: center;
   text-decoration: none solid rgb(51, 51, 51);
-  text-size-adjust: 100%;
-  top: 78.5188px;
-  width: 1370.4px;
-  column-rule-color: rgb(51, 51, 51);
-  perspective-origin: 685.2px 150.4px;
-  transform-origin: 685.2px 150.4px;
-  caret-color: rgb(51, 51, 51);
-  border: 0px none rgb(51, 51, 51);
-  font: normal normal 500 normal 18px / 25.7143px Lato;
-  outline: rgb(51, 51, 51) none 0px;
-  padding: 36px 15px;
+  margin-top: 8rem;
 }
 
 .report-issue-header {
@@ -80,6 +63,7 @@
 
 .text-pink {
   color: rgb(237, 2, 149);
+  cursor: pointer;
 }
 
 .feedback-overlay{
@@ -92,13 +76,14 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  z-index: 1;
 }
 
 .feedback-modal{
   position: relative;
   min-width: 500px;
   max-width: 600px;
-  top:20%;
+  height: calc(350rem/12);
   width:45%;
   align-self: center;
   background-color: #fff;
@@ -110,12 +95,19 @@
   }
 }
 
+.feedback-content {
+  display: flex;
+  flex-direction: column;
+}
+
 .separator-row{
   border-bottom: 1px solid #ccc;
   margin-top: 2rem;
 }
 
 .feedback-text-wrap{
+  display: flex;
+  flex-direction: column;
   p{
     padding: 1.5rem 0;
   }
@@ -123,7 +115,7 @@
     padding: 10px 10px;
     width: 100% !important;
     height: 100px !important;
-
+    outline: none;
   }
 
 }
@@ -132,30 +124,19 @@
   padding: 0 3rem;
   top: 46%;
   left: 0;
-  .show{
-    &.feedbackResSuccess{
-      // margin:4rem 0;
-      div{
-        // padding-top: 2rem;
-      }
-    }
-    &.feedbackResErr{
-      // padding: 4rem 0;
-    }
-  }
 }
 .feedback-btn-wrap{
+  margin-top: 10px;
   font-size:13px;
-  text-align: right;
-  // position: absolute;
-  // right: 0;
-  // padding: 2rem;
-  // bottom: 0;
+  display: flex;
+  align-items: center;
   a{
+    align-self: right;
     margin:5px;
     cursor: pointer;
   }
   .feedback-submit{
+    align-self: right;
     /deep/ button.btn-primary{
       line-height:3rem;
     }
@@ -166,4 +147,30 @@
   color: #fff !important;
   border: 1px solid #ed008c !important;
 }
+
+.include-errors {
+  width: 100%;
+  align-self: left;
+}
+
+.feedback-close {
+  align-self: center;
+  color: #ed008c;
+  font-size: 13px;
+  margin: 5px;
+  cursor: pointer;
+  text-transform: none;
+  text-underline: none;
+}
+
+.feedback-message {
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(200rem/24)
+}
+
+
+
+
+
 

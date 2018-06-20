@@ -3,19 +3,21 @@
     <div class='feedback-hdr relative'>Report an issue</div>
     <div class="separator-row"></div>
     <div [ngSwitch]="feedbackModalStatus">
-      <div *ngSwitchCase="'loading'" class="loading-row">
-        <div class="loading-circle"></div>
+      <div *ngSwitchCase="'loading'" class="absolute-container">
+        <div class="jz-spinner"></div>
       </div>
       <div *ngSwitchCase="'ready'" class='feedback-text-wrap'>
         <p>Found a problem with the site? Please use the form below to describe the issue and we will fix it soon.</p>
         <textarea rows="5" cols="50" type="text" name='userFeedback' id="userFeedback"
                   placeholder="Report your issue here" [(ngModel)]="reportIssueForm.userFeedback"></textarea>
         <div class='feedback-btn-wrap'>
-          <div class="slack-checkbox custom-cb includeError">
-            <input type="checkbox" (click)="errorIncluded()" id="checkbox-slack" [checked]="errorInclude">
-            <label for="checkbox-slack"></label>
-            <div class="cb-status-dets">Include error details</div>
-          </div>
+         <div class="include-errors">
+           <div class="jz-checkbox" (click)="reportIssueForm.includeError = !reportIssueForm.includeError">
+             <input type="checkbox" [checked]="reportIssueForm.includeError">
+             <label></label>
+             <div class="jz-checkbox-label">Include error details</div>
+           </div>
+         </div>
           <a (click)='closeFeedbackModal()'>CANCEL</a>
           <btn-jazz-primary text="SUBMIT"
                             class="feedback-submit"
@@ -23,13 +25,13 @@
                             (click)='submitFeedback(buttonText)'></btn-jazz-primary>
         </div>
       </div>
-      <div *ngSwitchCase="'resolved'" class="feedback-text-wrap feedbackRes">
-        <div class="feedbackResSuccess" [class.show]="feedbackResSuccess">
+      <div *ngSwitchCase="'resolved'" class="feedback-message">
           <div>Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!</div>
-        </div>
-        <div *ngSwitchCase="'error'" class="feedbackResErr"> Oops! {{feedbackMsg}}
-          <span> or <a (click)="mailFeedbackForm()"> contact us</a> via email.</span>
-        </div>
+        <a class="feedback-close" (click)="closeFeedbackModal()">CLOSE</a>
+      </div>
+      <div *ngSwitchCase="'error'" class="feedback-message">
+        <span>Oops! {{errorMessage}} or <a class="text-pink" (click)="mailFeedbackForm()"> contact us</a> via email.</span>
+        <a class="feedback-close" (click)="closeFeedbackModal()">CLOSE</a>
       </div>
     </div>
   </div>
@@ -47,10 +49,10 @@
   </div>
   <div class="report-issue-message">
     Something went wrong while fetching your data
-    <br><a class="text-pink pointer">REFRESH</a> to give it another try.
+    <br><a (click)="refreshParent()" class="text-pink">REFRESH</a> to give it another try.
   </div>
   <br/>
   <div class="report-issue-submessage">
-    If the problem persists, <a class="text-pink pointer">contact us</a>.
+    If the problem persists, <a (click)="feedbackModalIn = true" class="text-pink">contact us</a>.
   </div>
 </div>

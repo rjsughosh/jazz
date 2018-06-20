@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
-import * as moment from 'moment'
+import * as moment from 'moment';
+import {UtilsService} from '../../core/services/utils.service';
 
 @Component({
   selector: 'chartjs-linegraph',
@@ -9,32 +10,33 @@ import * as moment from 'moment'
 export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   @ViewChild('container') container;
   @ViewChild('linegraph') lineGraph;
-  @Input() datasets = [];
+  @Input() datasets: any = [];
   @Input() graphOptions = {};
   public type = 'scatter';
-  public datasets: [];
   public options = {};
-  constructor() {}
+
+  constructor(private utils: UtilsService) {}
 
   ngOnInit() {
     this.sizeCanvas();
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes?) {
     this.datasets = this.datasets.map(this.modifyDataSet);
     this.options = this.getOptions(this.graphOptions);
   }
 
   modifyDataSet(data) {
-    let lineOptions = {
+    const lineOptions = {
       data: data,
-      borderColor: 'black',
-      borderWidth: 1,
-      pointBackgroundColor: ['#000', '#00bcd6', '#d300d6'],
-      pointBorderColor: ['#000', '#00bcd6', '#d300d6'],
+      backgroundColor: '#ed89c3',
+      borderColor: '#ed008d',
+      borderWidth: 3,
+      pointBackgroundColor: '#ed008d',
+      pointBorderColor: '#ed008d',
       pointRadius: 5,
       pointHoverRadius: 5,
-      fill: false,
+      fill: true,
       tension: 0,
       showLine: true
     };
@@ -42,7 +44,7 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   }
 
   getOptions(graphOptions) {
-    let options = {
+    const options = {
       responsive: false,
       legend: false,
       tooltips: false,
@@ -54,7 +56,7 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
               max: 100,
               stepSize: undefined,
               userCallback: function (tick) {
-                return tick
+                return tick;
               }
             },
             gridLines: {
@@ -70,7 +72,7 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
           },
           gridLines: {
             color: '#888',
-            drawOnChartArea: true
+            drawOnChartArea: false
           }
         }]
       }
@@ -79,15 +81,14 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
     options.scales.xAxes[0].ticks.max = graphOptions.toDateValue;
     options.scales.xAxes[0].ticks.stepSize = graphOptions.stepSize;
     options.scales.xAxes[0].ticks.userCallback = (tick) => {
-      return moment(tick).format(graphOptions.xAxisFormat)
+      return moment(tick).format(graphOptions.xAxisFormat);
     };
     return options;
   }
 
   sizeCanvas() {
-    let boundingRect = this.container.nativeElement.getBoundingClientRect();
+    const boundingRect = this.container.nativeElement.getBoundingClientRect();
     this.lineGraph.nativeElement.height = boundingRect.height;
     this.lineGraph.nativeElement.width = boundingRect.width;
   }
-
 }
