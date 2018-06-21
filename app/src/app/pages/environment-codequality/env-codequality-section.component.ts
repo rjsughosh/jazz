@@ -14,13 +14,10 @@ import {UtilsService} from '../../core/services/utils.service';
   styleUrls: ['./env-codequality-section.component.scss'],
   providers: [RequestService, MessageService, DataService],
 })
-export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
+export class EnvCodequalitySectionComponent implements OnInit {
   @ViewChild('metricCards') metricCards;
   @ViewChild('metricCardsScroller') metricCardsScroller;
   @Input() service: any = {};
-  public metricCardOverflow = false;
-  public cqList = [];
-  public safeTransform = 0;
   public renderGraph = true;
   public filters: any = ['DAILY', 'WEEKLY', 'MONTHLY'];
   public filterSelected = [this.filters[0]];
@@ -31,7 +28,6 @@ export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
   public selectedMetric;
   public filterData;
   public metricsIndex = 0;
-  public metricAverages = [];
   public resizeDebounced;
   public errorData;
 
@@ -41,8 +37,7 @@ export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private http: RequestService,
     private cache: DataCacheService,
-    private utils: UtilsService,
-    private router: Router) {
+    private utils: UtilsService) {
     this.resizeDebounced = this.utils.debounce(this.resize, 200, false);
   }
 
@@ -50,10 +45,6 @@ export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
     this.env = this.route.snapshot.params['env'];
     this.filterData = this.selectFilter(this.filterSelected[0]);
     this.queryGraphData(this.filterData, this.metricsIndex);
-  }
-
-  ngAfterViewInit() {
-
   }
 
   refresh() {
@@ -120,15 +111,12 @@ export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
     };
     this.http.get(request.url, request.params)
       .subscribe((response) => {
-        response = this.r;
-        //////////////////////////////////////////////////////
-        this.sectionStatus = 'resolved';
+        this.sectionStatus = 'empty';
         this.metrics = response.data.metrics;
-        this.metricAverages = this.metrics.map((metric) => {
-          const average = metric.values.reduce((accumulator, dataPoint) => {
-            return accumulator + (parseInt(dataPoint.value) / metric.values.length);
-          }, 0);
-          return Math.trunc(average);
+        this.metrics.forEach((metric) => {
+          if (metric.values.length) {
+            this.sectionStatus = 'resolved';
+          }
         });
         this.selectedMetric = this.metrics[metricIndex];
         this.graph = this.formatGraphData(this.selectedMetric, filterData);
@@ -166,42 +154,8 @@ export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
     };
   }
 
-  public goToAbout(hash) {
-
-    this.router.navigateByUrl('landing');
-    this.cache.set('scroll_flag', true);
-    this.cache.set('scroll_id', hash);
-  }
-
   sonarLink() {
     window.open(this.selectedMetric.link, '_blank');
-  }
-
-  leftArrowClick() {
-    // var mainEle = document.getElementsByClassName('scroll-cards-wrap');
-    // var innerWidth = (mainEle[0].clientWidth + 12) / this.cqList.length;
-    // this.maxCards = true;
-    // if (this.safeTransformX < 0) {
-    //   this.minCards = true;
-    //   this.safeTransformX = this.safeTransformX + innerWidth;
-    //   if (this.safeTransformX >= 0) {
-    //     this.minCards = false;
-    //   }
-    // }
-  }
-
-  rightArrowClick() {
-    // var mainEle = document.getElementsByClassName('scroll-cards-wrap');
-    // var limit = document.getElementsByClassName('metrics-cards-wrap')[0].clientWidth;
-    // var innerWidth = (mainEle[0].clientWidth) / this.cqList.length;
-    // this.minCards = true;
-    // if (this.safeTransformX > (-mainEle[0].clientWidth + limit)) {
-    //   this.maxCards = true;
-    //   this.safeTransformX = this.safeTransformX - innerWidth;
-    //   if (this.safeTransformX <= (-mainEle[0].clientWidth + limit)) {
-    //     this.maxCards = false;
-    //   }
-    // }
   }
 
   hyphenToSpace(input) {
@@ -215,9 +169,5 @@ export class EnvCodequalitySectionComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
-  getScroll() {
-    if (this.metricCardOverflow && this.metricCardsScroller) {
-      return this.metricCardOverflow = this.metricCardsScroller.nativeElement.clientWidth > this.metricCards.nativeElement.clientWidth;
-    }
-    return false;
-  }
+}
+

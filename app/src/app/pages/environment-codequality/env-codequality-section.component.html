@@ -5,7 +5,7 @@
   <div *ngSwitchCase="'error'" class="section-content">
     <report-issue [request]="errorData.request" [response]="errorData.response" (onRefresh)="refresh()"></report-issue>
   </div>
-  <div *ngSwitchCase="'empty'" class="empty-row nodata with-refresh relative">
+  <div *ngSwitchCase="'empty'" class="section-content empty-row nodata with-refresh relative">
     <div class="icon-icon-nodata"></div>
     <div><b>Oops, No Data Found</b><br>Doesn't look like there is any data available here.</div>
   </div>
@@ -15,7 +15,7 @@
         <div class="chart-header">
           <div class="chart-thirds"></div>
           <div class="chart-thirds center">
-            <p class="graphtitle">{{selectedMetric.name}}</p>
+            <p class="graphtitle">{{hyphenToSpace(selectedMetric.name)}}</p>
             <p class="graphtitlefilter">{{filterData.headerMessage}}</p>
           </div>
           <div class="chart-thirds text-right">
@@ -37,20 +37,12 @@
       </div>
     </div>
     <div #metricCards class='metrics-cards-wrap relative'>
-      <div class='left-arrow' (click)='leftArrowClick()' *ngIf='getScroll()'>
-        <div class='icon-icon-rightArrow'></div>
-      </div>
-      <div class='right-arrow' (click)='rightArrowClick()' *ngIf='getScroll()'>
-        <div class='icon-icon-rightArrow '></div>
-      </div>
-      <div style="overflow: hidden; width: 100%">
-      </div>
         <div #metricCardsScroller class='scroll-cards-wrap' [style.transform]="'translateX('+safeTransformX+'px)'">
           <div class='metrics-card' *ngFor="let metric of metrics; let i=index" [class.arrow_box]='metricsIndex==i'
                [class.active]='metricsIndex===i' (click)="selectMetric(i)">
             <div class='metrics-name'>{{hyphenToSpace(metric.name)}}</div>
-            <div class='metrics-data' *ngIf="metric.values.length">{{metric.values.length}}</div>
-            <div class='metrics-name' *ngIf="!metric.values.length">No Data</div>
+            <div class='metrics-data' *ngIf="metric.values[metric.values.length - 1]?.value">{{metric.values[metric.values.length - 1]?.value}}</div>
+            <div class='metrics-name' *ngIf="!metric.values[metric.values.length - 1]?.value">No Data</div>
           </div>
         </div>
     </div>
