@@ -30,6 +30,9 @@ export class EnvCodequalitySectionComponent implements OnInit {
   public metricsIndex = 0;
   public resizeDebounced;
   public errorData;
+  public dayValue = 86400000;
+  public weekValue = 604800000;
+  public monthValue = 2592000000;
 
   constructor(
     private toasterService: ToasterService,
@@ -65,21 +68,21 @@ export class EnvCodequalitySectionComponent implements OnInit {
           fromDateISO: moment().subtract(7, 'day').toISOString(),
           headerMessage: '( past 7 days )',
           xAxisFormat: 'dd',
-          stepSize: 86400000
+          stepSize: this.dayValue
         };
         break;
       case 'WEEKLY':
         filterData = {
           fromDateISO: moment().subtract(4, 'week').toISOString(),
           headerMessage: '( past 4 weeks)',
-          xAxisFormat: 'MMM DD',
-          stepSize: 604800000
+          xAxisFormat: 'M/D',
+          stepSize: this.dayValue * 2
         };
         break;
       case 'MONTHLY':
         filterData = {
-          fromDateISO: moment().subtract(3, 'month').toISOString(),
-          headerMessage: '( past 4 months )',
+          fromDateISO: moment().subtract(6, 'month').toISOString(),
+          headerMessage: '( past 6 months )',
           xAxisFormat: 'MMM',
           stepSize: 2592000000
         };
