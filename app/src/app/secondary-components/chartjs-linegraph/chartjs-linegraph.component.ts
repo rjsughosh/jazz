@@ -40,8 +40,7 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
       pointHoverRadius: 5,
       fill: true,
       tension: 0,
-      showLine: true,
-      label: 'DATASET LINE'
+      showLine: true
     };
     return lineOptions;
   }
