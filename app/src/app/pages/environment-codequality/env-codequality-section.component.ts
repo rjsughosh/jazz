@@ -100,7 +100,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
         break;
       case 'MONTHLY':
         filterData = {
-          fromDateISO: moment().subtract(12, 'month').toISOString(),
+          fromDateISO: moment().subtract(6, 'month').toISOString(),
           headerMessage: '( past 6 months )',
           xAxisFormat: 'MMM',
           stepSize: 2592000000
