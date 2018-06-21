@@ -1,9 +1,3 @@
-/**
- * @type Service
- * @desc Request Service - wrapper around angular2's Http service
- * @author Sunil Fernandes
- */
-
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
@@ -84,7 +78,7 @@ export class RequestService {
       })
       .catch((error: any) => {
         return this.handleError(error, this.router);
-      })
+      });
   }
 
   post(url: string, body: any): Observable<any> {
@@ -121,8 +115,7 @@ export class RequestService {
       // .catch(this.handleError)
       .catch((error: any) => {
         return this.handleError(error, router);
-      })
-    // .catch((error:any) => Observable.throw(error.json().error || 'Server error'));;
+      });
   }
 
   put(url: string, body: any): Observable<any> {
@@ -159,14 +152,12 @@ export class RequestService {
         }
       })
       .catch((error: any) => {
-        // console.log('put error:', error);
         return this.handleError(error, router);
-      })
+      });
 
   }
 
   private handleError(error: any, router: any) {
-    console.log(error);
     if (error.status === 401 || error.status === 403) {
       if (router) {
         router.navigateByUrl('');//route to landing page
