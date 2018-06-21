@@ -1,8 +1,8 @@
-import {Component, OnInit, ElementRef, Inject, Input, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, OnInit, Input, ViewChild} from '@angular/core';
 import {ToasterService} from 'angular2-toaster';
 import {RequestService, MessageService} from '../../core/services/index';
-import {DataCacheService, AuthenticationService} from '../../core/services/index';
-import {Router, ActivatedRoute} from '@angular/router';
+import {DataCacheService} from '../../core/services/index';
+import {ActivatedRoute} from '@angular/router';
 import {DataService} from '../data-service/data.service';
 import * as moment from 'moment';
 import {UtilsService} from '../../core/services/utils.service';
