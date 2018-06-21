@@ -14,9 +14,8 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   @Input() graphOptions = {};
   public type = 'scatter';
   public options = {};
-  public labels;
 
-  constructor(private utils: UtilsService) {
+  constructor() {
   }
 
   ngOnInit() {
