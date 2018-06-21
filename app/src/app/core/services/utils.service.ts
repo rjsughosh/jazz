@@ -25,4 +25,12 @@ export class UtilsService {
       }
     };
   };
+
+  hyphenToSpace(input) {
+    return input.replace(/-/g, ' ');
+  }
+
+  queryString(params) {
+    return '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  }
 }

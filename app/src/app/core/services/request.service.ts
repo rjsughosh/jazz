@@ -13,6 +13,7 @@ import {ConfigService} from '../../app.config';
 import {Router} from '@angular/router';
 import {ServiceCostComponent} from '../../pages/service-cost/service-cost.component';
 import {environment} from '../../../environments/environment';
+import {UtilsService} from './utils.service';
 
 @Injectable()
 export class RequestService {
@@ -20,7 +21,11 @@ export class RequestService {
   public baseurl: string;
   private _config: any;
 
-  constructor(private http: Http, private authenticationService: AuthenticationService, private config: ConfigService, private router: Router) {
+  constructor(private http: Http,
+              private utils: UtilsService,
+              private authenticationService: AuthenticationService,
+              private config: ConfigService,
+              private router: Router) {
     // set token if saved in local storage
     let currentUser;
     currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -40,15 +45,13 @@ export class RequestService {
 
       // if url is a relative url append basepath
       if (!url.startsWith('/')) {
-        url = url + '/'
+        url = url + '/';
       }
       return this.baseurl + url;
     }
   }
 
-  queryString(params) {
-    return '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
-  }
+
 
   get(url: string, params?): Observable<any> {
     url = this.constructUrl(url);
@@ -63,7 +66,7 @@ export class RequestService {
       search: null
     });
 
-    url = params ? (url + this.queryString(params)) : url;
+    url = params ? (url + this.utils.queryString(params)) : url;
     return this.http.get(url, options)
       .map((response: Response) => {
         let responseBody;
