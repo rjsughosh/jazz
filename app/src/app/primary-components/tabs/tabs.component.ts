@@ -48,7 +48,6 @@ disableobj:any= {
       if(tabs[i] == 'cost') this.disableobj['cost']=false;
       if(tabs[i] == 'metrics') this.disableobj['metrics']=false;
       if(tabs[i] == 'logs') this.disableobj['logs']=false;
-      console.log('disableobj',this.disableobj)
 
     }
 
