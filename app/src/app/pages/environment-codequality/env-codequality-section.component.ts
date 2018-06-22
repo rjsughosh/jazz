@@ -155,7 +155,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
 
   formatGraphData(metricData, filterData) {
     const to = moment(filterData.toDateISO), from = moment(filterData.fromDateISO);
-    const data = metricData.values
+    const values = metricData.values
       .filter((dataPoint) => {
         const pointDate = moment(dataPoint.ts);
         const x = pointDate.diff(from);
@@ -172,19 +172,19 @@ export class EnvCodequalitySectionComponent implements OnInit {
         };
       });
 
-    filterData.yMax = 1.1 * (data
-      .map((point) => {return point.y})
+    filterData.yMax = values.length ? 1.1 * (values
+      .map((point) => {return point.y;})
       .reduce((a, b) => {
         return Math.max(a, b);
-      }));
-    filterData.yMin = .9 * (data
-      .map((point) => {return point.y})
+      })) : 100;
+    filterData.yMin = values.length ? (.9 * (values
+      .map((point) => {return point.y;})
       .reduce((a, b) => {
         return Math.min(a, b);
-      }));
+      }, 100))) : 0;
 
     return {
-      datasets: [data],
+      datasets: [values],
       options: filterData
     };
   }

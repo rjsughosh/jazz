@@ -45,7 +45,6 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   }
 
   getOptions(graphOptions) {
-
     const options = {
       responsive: false,
       legend: false,
