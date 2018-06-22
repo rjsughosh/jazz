@@ -49,7 +49,11 @@
               <span class="icon-icon-refresh"></span>
               <span>Refresh</span>
             </div>
-            <tabs [type]="'env'" [tabData]="tabData" [selectedTab]="selectedTab" (onSelected)="setTab($event)"></tabs>
+            <tabs [service]="service"
+                  [type]="'env'"
+                  [tabData]="tabData"
+                  [selectedTab]="selectedTab"
+                  (onSelected)="setTab($event)"></tabs>
 
             <section class="page-content" *ngIf="selectedTab == 0">
               <env-overview-section #selectedTabComponent #envoverview (open_sidebar)='sidebar($event)' (frndload)='frndload($event)' (envLoad)='EnvLoad($event)' (onload)='env($event)' [service]="service"></env-overview-section>
