@@ -440,9 +440,9 @@ export class ServiceOverviewMultienvComponent implements OnInit {
             this.prodEnv={};
             this.stgEnv={};
             if(!this.env_call){
-                this.env_call = true;
 
                 if((this.service.domain!=undefined) && (this.internal_build == true)){
+                    this.env_call = true;
                     this.getenvData();
                     
                 }
@@ -574,8 +574,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         // let test = require(environment.configFile);
         // console.log('test = ',test)
         if(!this.env_call){
-            this.env_call = true;
             if((this.service.domain!=undefined) && (this.internal_build == true)){
+                this.env_call = true;
                 this.getenvData();
             }
         }

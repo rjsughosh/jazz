@@ -589,7 +589,6 @@ export class ServiceOverviewComponent implements OnInit {
  
 
     serviceCreationStatus(){
-        alert('ehrn');
         this.statusprogress = 20;
         this.creating = true;
         this.deleting = false;
