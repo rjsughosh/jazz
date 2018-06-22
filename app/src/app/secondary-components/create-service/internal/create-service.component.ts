@@ -488,13 +488,13 @@ export class CreateServiceComponent implements OnInit {
     //   payload["accounts"]=this.selectedAccount;
     //   payload["regions"]=this.selectedRegion;
     // }
-    if(!this.selectApp){
+    if(this.notMyApp){
       payload["appName"]=this.poc_appname;
       payload["appID"]="poc";
     }
     else{
       payload["appName"]=this.selectApp.appName;
-    payload["appID"]=this.selectApp.appID.toLowerCase();
+      payload["appID"]=this.selectApp.appID.toLowerCase();
     }
 
     this.isLoading = true;
@@ -523,6 +523,9 @@ export class CreateServiceComponent implements OnInit {
           this.resMessage = output.data.message;
         }
         this.selectedApprovers = [];
+        this.selectedApplications=[];
+        this.notMyApp=false;
+        this.oneSelected=false;
         this.selectApp={};
         this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
         this.rateExpression.error = undefined;
@@ -560,8 +563,8 @@ export class CreateServiceComponent implements OnInit {
 
 
   // function to create a service
-  onSubmit() {
-
+  onSubmit(event) {
+    event.preventDefault();
     this.submitted = true;
     this.getData();
     this.createService();
@@ -581,7 +584,12 @@ export class CreateServiceComponent implements OnInit {
 
 
   }
-  
+  onnotmyapp(){
+    this.applc='';
+    this.showApplicationList=false;
+    this.selectedApplications=[];
+    this.oneSelected=false;
+  }
   onApplicationChange(newVal) {
     if (!newVal) {
       this.showApplicationList = false;
@@ -884,6 +892,7 @@ blurRegion(){
 
   // function disable the submit till all entered datas are valid
   disableForm() {
+    if(this.selectedApplications.length<1 && !this.notMyApp) return true;
     if (this.git_err) return true;
 
     if (this.selectedApprovers === undefined || this.selectedApprovers.length === 0) {

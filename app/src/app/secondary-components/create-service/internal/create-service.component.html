@@ -114,7 +114,7 @@
                 <div class="inner three"></div>
             </div>
         </div>
-        <form (ngSubmit)="onSubmit(); serviceForm.reset()" #serviceForm="ngForm" class='mob-form-pad'>
+        <form (ngSubmit)="onSubmit($event); serviceForm.reset()" #serviceForm="ngForm" class='mob-form-pad'>
             <section class="each-step-wrap service-name">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
@@ -178,7 +178,7 @@
                                             {{selected.appName}}
                                             <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypressApplication($event)" placeholder="{{app_placeH}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                        <input [class.application-ip]='notMyApp' (keydown)="keypressApplication($event)" placeholder="{{app_placeH}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
 
                                     </ul>
                                 </div>
@@ -192,7 +192,7 @@
                             </div>
                         </section>
                         <div class="custom-cb app-chk">
-                            <input type="checkbox" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="notMyApp" (change)="notMyApp = !notMyApp">
+                            <input type="checkbox" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="notMyApp" (change)="notMyApp = !notMyApp;onnotmyapp()">
                             <label for="checkbox-public"></label>
                             <div class="cb-status-dets">I don't see my application here</div>
                         </div>
