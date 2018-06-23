@@ -43,10 +43,13 @@
           <div class='metrics-card' *ngFor="let metric of metrics; let i=index" [class.arrow_box]='metricsIndex==i'
                [class.active]='metricsIndex===i' (click)="selectMetric(i)">
             <div class='metrics-name'>{{utils.hyphenToSpace(metric.name)}}</div>
-            <div class='metrics-data' *ngIf="metric.values[metric.values.length - 1]?.value">
-              {{metric.values[metric.values.length - 1]?.value}}
+
+            <div class='metrics-card-content' *ngIf="metric.values[metric.values.length - 1]?.value">
+              <span class="metrics-data">{{metric.values[metric.values.length - 1]?.value}}</span>
             </div>
-            <div class='metrics-name' *ngIf="!metric.values[metric.values.length - 1]?.value">No Data</div>
+            <div class='metrics-card-content' *ngIf="!metric.values[metric.values.length - 1]?.value">
+              <span class="metrics-message">No Data</span>
+            </div>
           </div>
         </div>
       </div>
