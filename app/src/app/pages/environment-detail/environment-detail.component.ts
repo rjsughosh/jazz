@@ -4,11 +4,11 @@ import {ToasterService} from 'angular2-toaster';
 import {Router, ActivatedRoute} from '@angular/router';
 import {EnvOverviewSectionComponent} from './../environment-overview/env-overview-section.component';
 // import { ViewChild } from '@angular/core/src/metadata/di';
-import {SharedService} from "../../SharedService.service";
+import {SharedService} from '../../SharedService.service';
 import {Http, Headers, Response} from '@angular/http';
 import {Output, EventEmitter} from '@angular/core';
 import {AfterViewInit, ViewChild} from '@angular/core';
-import {DataService} from "../data-service/data.service";
+import {DataService} from '../data-service/data.service';
 import {environment} from './../../../environments/environment';
 
 
@@ -131,7 +131,7 @@ export class EnvironmentDetailComponent implements OnInit {
 
   onDataFetched(service) {
 
-    if (service !== undefined && service !== "") {
+    if (service !== undefined && service !== '') {
       this.service = this.processService(service);
       if (this.friendly_name != undefined) {
         // this.envSelected = this.friendly_name;
@@ -149,7 +149,7 @@ export class EnvironmentDetailComponent implements OnInit {
       this.isLoadingService = false;
     } else {
       this.isLoadingService = false;
-      let errorMessage = this.messageservice.successMessage(service, "serviceDetail");
+      let errorMessage = this.messageservice.successMessage(service, 'serviceDetail');
       // this.tst.classList.add('toast-anim');
       this.toast_pop('error', 'Error', errorMessage)
     }
@@ -163,41 +163,41 @@ export class EnvironmentDetailComponent implements OnInit {
     let cachedData = this.cache.get(id);
 
     if (cachedData) {
-      this.onDataFetched(cachedData)
+      this.onDataFetched(cachedData);
+      this.setTabs();
       this.getAssets();
-      if (this.service.serviceType === "website") {
-        this.tabData = ['Overview', 'deployments', 'Code quality', 'Assets'];
-      }
     } else {
       if (this.subscription) {
         this.subscription.unsubscribe();
       }
       this.subscription = this.http.get('/jazz/services/' + id).subscribe(
         response => {
-          this.service.accounts = "tmo-dev-ops, tmo-int";
-          this.service.regions = "us-west-2, us-east";
-          // let service = response.data.data;
+          this.service.accounts = 'tmo-dev-ops, tmo-int';
+          this.service.regions = 'us-west-2, us-east';
           this.service = response.data.data;
+          this.setTabs();
           this.getAssets();
-          if (this.service.type === "website") {
-            this.tabData = ['Overview', 'deployments', 'Code quality', 'Assets'];
-          }
           this.cache.set(id, this.service);
           this.onDataFetched(this.service);
-
           this.envoverview.notify(this.service);
-
-        },
-        err => {
+        }, err => {
           this.isLoadingService = false;
-          let errorMessage = this.messageservice.errorMessage(err, "serviceDetail");
-          this.toast_pop('error', 'Oops!', errorMessage)
-
+          let errorMessage = this.messageservice.errorMessage(err, 'serviceDetail');
+          this.toast_pop('error', 'Oops!', errorMessage);
         }
-      )
+      );
     }
-
   };
+
+  setTabs() {
+    if (this.service.serviceType === 'api' || this.service.type === 'api') {
+      this.tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clear water'];
+    } else if (this.service.serviceType === 'website' ||  this.service.type === 'website') {
+      this.tabData = ['overview', 'deployments', 'assets'];
+    } else if (this.service.serviceType = 'function' ||  this.service.type === 'function') {
+      this.tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs'];
+    }
+  }
 
   getAssets() {
     this.http.post('/jazz/assets/search', {
@@ -216,8 +216,10 @@ export class EnvironmentDetailComponent implements OnInit {
   testApi(type) {
     switch (type) {
       case 'api':
-        let foundAsset = this.assets.find((asset) => {return asset.type === 'swagger_url';});
-        if(foundAsset) {
+        let foundAsset = this.assets.find((asset) => {
+          return asset.type === 'swagger_url';
+        });
+        if (foundAsset) {
           return window.open(environment.urls['swagger_editor'] + '/?url=' + foundAsset.provider_id);
         } else {
           return window.open('/404');
@@ -292,13 +294,13 @@ export class EnvironmentDetailComponent implements OnInit {
 }
 
 export enum status {
-  "deployment_completed" = 0,
-  "active",
-  "deployment_started",
-  "pending_approval",
-  "deployment_failed",
-  "inactive",
-  "deletion_started",
-  "deletion_failed",
-  "archived"
+  'deployment_completed' = 0,
+  'active',
+  'deployment_started',
+  'pending_approval',
+  'deployment_failed',
+  'inactive',
+  'deletion_started',
+  'deletion_failed',
+  'archived'
 }
