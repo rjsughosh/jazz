@@ -563,8 +563,7 @@ export class CreateServiceComponent implements OnInit {
 
 
   // function to create a service
-  onSubmit(event) {
-    event.preventDefault();
+  onSubmit() {
     this.submitted = true;
     this.getData();
     this.createService();
