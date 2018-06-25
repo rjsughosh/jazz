@@ -178,14 +178,14 @@
                                             {{selected.appName}}
                                             <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input [class.application-ip]='notMyApp' (keydown)="keypressApplication($event)" placeholder="{{app_placeH}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                        <input [class.application-ip]='notMyApp' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{app_placeH}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
 
                                     </ul>
                                 </div>
                                 <div [hidden]="!showApplicationList" class="approvers-list-wrap">
                                     <div class="approvers-list typeShow open">
                                         <div class="approvers-dets" *ngFor="let app of application_arr | myfilter:applc;let m = index;" (focus)="m==focusindex" [ngClass]="{pinkfocusapplication : m==focusindex}" [ngStyle]="scrollList" >
-                                            <div  (click)="selectApplication(app);$event.stopPropagation();" index="{m}" [attr.appName]='app.appName' [attr.issueID]='app.issueID'>{{app.appName}}</div>
+                                            <div  (click)="$event.stopPropagation();selectApplication(app);" index="{m}" [attr.appName]='app.appName' [attr.issueID]='app.issueID'>{{app.appName}}</div>
                                         </div>
                                     </div>
                                 </div>

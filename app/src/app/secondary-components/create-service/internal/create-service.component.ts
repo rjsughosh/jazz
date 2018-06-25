@@ -766,6 +766,13 @@ blurRegion(){
   
 }
 
+blurApplication(){  
+  setTimeout(() => {
+    this.applc='';
+    this.showApplicationList=false;
+  }, 200);
+  
+}
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
     
@@ -893,6 +900,7 @@ blurRegion(){
   // function disable the submit till all entered datas are valid
   disableForm() {
     if(this.selectedApplications.length<1 && !this.notMyApp) return true;
+    if(this.notMyApp && !this.poc_appname) return true;
     if (this.git_err) return true;
 
     if (this.selectedApprovers === undefined || this.selectedApprovers.length === 0) {
