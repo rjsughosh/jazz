@@ -29,15 +29,13 @@ import {Error404Component} from './pages/error404/error404.component';
 import {SharedModule} from './shared-module/shared.module';
 import {routes} from './app.route';
 import {UserJourneyComponent} from "./pages/user-journey/user-journey.component";
-// import {FilterTagsServicesComponent} from './secondary-components/filter-tags-services/filter-tags-services.component';
-// import {EnvironmentModule} from './environment-module/environment.module';
-// import {ServiceModule} from './service-module/service.module';
+import {UtilsService} from './core/services/utils.service';
 
 let environmentval = environment.envName;
 let loadedModule;
 if(environmentval == "oss"){
     loadedModule = require('./pages/login/oss/login.component')
-    
+
 }else{
   loadedModule = require('./pages/login/internal/login.component')
 }
@@ -51,7 +49,7 @@ if(environmentval == "oss"){
     // FooterComponent,
     TestApiComponent,
    UserJourneyComponent
-    
+
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -59,6 +57,8 @@ if(environmentval == "oss"){
     FormsModule,
     DropdownModule,
     HttpModule,
+    MomentModule,
+    ChartsModule,
     ToasterModule,
     NgIdleKeepaliveModule.forRoot(),
     SharedModule,
@@ -69,11 +69,12 @@ if(environmentval == "oss"){
     CronParserService,
     SharedService,
     RouteGuard,
-    
+
     DataCacheService,
     RequestService,
     MessageService,
     ConfigService,
+    UtilsService,
     {
       provide: APP_INITIALIZER,
       useFactory: ConfigLoader,
@@ -81,10 +82,10 @@ if(environmentval == "oss"){
       multi: true
     }
   ],
-  
+
   schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap: [AppComponent]
-  
+
 })
 
 export class AppModule {

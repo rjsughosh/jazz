@@ -191,11 +191,11 @@ export class EnvironmentDetailComponent implements OnInit {
 
   setTabs() {
     if (this.service.serviceType === 'api' || this.service.type === 'api') {
-      this.tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clear water'];
-    } else if (this.service.serviceType === 'website' ||  this.service.type === 'website') {
+      this.tabData = ['overview', 'deployments', 'assets', 'code quality', 'logs', 'clear water'];
+    } else if (this.service.serviceType === 'function' || this.service.type === 'function') {
+      this.tabData = ['overview', 'deployments', 'assets', 'code quality', 'logs'];
+    } else if (this.service.serviceType === 'website' || this.service.type === 'website') {
       this.tabData = ['overview', 'deployments', 'assets'];
-    } else if (this.service.serviceType = 'function' ||  this.service.type === 'function') {
-      this.tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs'];
     }
   }
 
@@ -241,6 +241,7 @@ export class EnvironmentDetailComponent implements OnInit {
         break;
     }
   }
+
 
   toast_pop(error, oops, errorMessage) {
     var tst = document.getElementById('toast-container');
