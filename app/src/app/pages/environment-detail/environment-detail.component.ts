@@ -164,7 +164,7 @@ export class EnvironmentDetailComponent implements OnInit {
     let cachedData = this.cache.get(id);
 
     if (cachedData) {
-      this.onDataFetched(cachedData);
+      this.onDataFetched(cachedData.data);
       this.setTabs();
       this.getAssets();
     } else {
