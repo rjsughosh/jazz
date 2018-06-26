@@ -134,15 +134,14 @@ export class EnvCodequalitySectionComponent implements OnInit {
     };
     this.http.get(request.url, request.params)
       .subscribe((response) => {
-        this.sectionStatus = 'empty';
-        this.metrics = response.data.metrics;
-        this.metrics.forEach((metric) => {
-          if (metric.values.length) {
-            this.sectionStatus = 'resolved';
-          }
-        });
-        this.selectedMetric = this.metrics[metricIndex];
-        this.graph = this.formatGraphData(this.selectedMetric, filterData);
+        if (response && response.data && response.data.metrics && response.data.metrics.length) {
+          this.metrics = response.data.metrics;
+          this.selectedMetric = this.metrics[metricIndex];
+          this.sectionStatus = 'resolved';
+          this.graph = this.formatGraphData(this.selectedMetric, filterData);
+        } else {
+          this.sectionStatus = 'empty';
+        }
       }, (error) => {
         this.sectionStatus = 'error';
         this.errorData = {
