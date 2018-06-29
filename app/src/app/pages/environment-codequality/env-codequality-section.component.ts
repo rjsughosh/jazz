@@ -93,7 +93,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
       case 'WEEKLY':
         filterData = {
           fromDateISO: moment().subtract(4, 'week').toISOString(),
-          headerMessage: '( past 4 weeks)',
+          headerMessage: '( past 4 weeks )',
           xAxisFormat: 'M/D',
           stepSize: this.dayValue * 2
         };
