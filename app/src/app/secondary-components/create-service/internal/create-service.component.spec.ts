@@ -66,7 +66,6 @@ import { LineGraphComponent } from '../../../secondary-components/line-graph/lin
 import { ServiceMetricsComponent } from '../../../pages/service-metrics/service-metrics.component';
 
 import { JenkinsStatusComponent } from '../../../pages/jenkins-status/jenkins-status.component';
-import { TestApiComponent } from '../../../pages/testapi/test-api.component';
 import { FooterComponent } from '../../../secondary-components/footer/footer.component';
 import { Error404Component } from '../../../pages/error404/error404.component';
 import { PopoverModule } from 'ng2-popover';

@@ -125,6 +125,9 @@ export class ServiceAccessControlComponent implements OnInit {
       this.groupsAccess.code[index].accessType = value;
   }
 
+  refresh(){
+      
+  }
   constructor() { }
 
   ngOnInit() {

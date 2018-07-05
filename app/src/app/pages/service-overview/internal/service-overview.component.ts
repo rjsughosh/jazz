@@ -4,7 +4,7 @@
   * @author
 */
 
-import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService, DataCacheService, MessageService , AuthenticationService } from '../../../core/services/index';
 import { ToasterService} from 'angular2-toaster';
@@ -29,6 +29,7 @@ export class ServiceOverviewComponent implements OnInit {
     @Output() onload:EventEmitter<any> = new EventEmitter<any>();
     @Output() onEnvGet:EventEmitter<any> = new EventEmitter<any>();
     @Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
+    @ViewChild('env') envComponent;
 
     flag:boolean=false;
     @Input() service: any = {};
@@ -1064,6 +1065,10 @@ export class ServiceOverviewComponent implements OnInit {
         });
     }
 
+
+    refresh_env(){
+        this.envComponent.refresh();
+    }
     internal_build:boolean = true;
     ngOnChanges(x:any){
         if(environment.multi_env) this.is_multi_env=true;
@@ -1077,10 +1082,7 @@ export class ServiceOverviewComponent implements OnInit {
 
         this.prodEnv={};
         this.stgEnv={};
-        if((this.service.domain!=undefined) && (this.internal_build == true)){
-            this.getenvData();
-            
-        }
+        
         if(!this.internal_build){
             this.envfoross();
         }

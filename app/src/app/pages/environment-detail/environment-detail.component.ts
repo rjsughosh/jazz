@@ -50,6 +50,7 @@ export class EnvironmentDetailComponent implements OnInit {
   disablingFunctionButton: boolean = true;
   disablingApiButton: boolean = true;
   nonClickable: boolean = false;
+  swagger_error:boolean = false;
   message: string;
   public assets = [];
 
@@ -157,19 +158,7 @@ export class EnvironmentDetailComponent implements OnInit {
 
 
   fetchService(id: string) {
-
     this.isLoadingService = true;
-
-    let cachedData = this.cache.get(id);
-
-    if (cachedData) {
-      this.onDataFetched(cachedData);
-      this.setTabs();
-      this.getAssets();
-    } else {
-      if (this.subscription) {
-        this.subscription.unsubscribe();
-      }
       this.subscription = this.http.get('/jazz/services/' + id).subscribe(
         response => {
           this.service.accounts = 'tmo-dev-ops, tmo-int';
@@ -184,9 +173,7 @@ export class EnvironmentDetailComponent implements OnInit {
           this.isLoadingService = false;
           let errorMessage = this.messageservice.errorMessage(err, 'serviceDetail');
           this.toast_pop('error', 'Oops!', errorMessage);
-        }
-      );
-    }
+        });
   };
 
   setTabs() {
@@ -210,6 +197,7 @@ export class EnvironmentDetailComponent implements OnInit {
       this.service.assets = this.assets;
     }, (err) => {
       this.toast_pop('error', 'Oops!', 'Swagger File Not Found.');
+      this.swagger_error = true;
     });
   }
 

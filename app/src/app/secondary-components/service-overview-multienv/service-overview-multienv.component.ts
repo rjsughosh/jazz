@@ -42,7 +42,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     service_error:boolean = true;
     disp_show:boolean = false;
     err404:boolean = false;
-    
+    env_call:boolean = false;
     response_json:any;
     show_loader:boolean = false;
     plc_hldr:boolean = true;
@@ -350,7 +350,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(            
         this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
             response => {
-                // console.log("response == ", response);
+                console.log("2 response == ", response);
                 // var spoon = response.data.environment;
                 // console.log("spoon == ", spoon[1])
                 // for(var i=0 ; i < spoon.length ; i++ ){
@@ -431,6 +431,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
                
         is_multi_env:boolean = false;
         ngOnInit() {
+            
             if(environment.multi_env) this.is_multi_env=true;
             if(environment.envName == 'oss') this.internal_build = false;
             var obj;
@@ -438,10 +439,15 @@ export class ServiceOverviewMultienvComponent implements OnInit {
 
             this.prodEnv={};
             this.stgEnv={};
-            if((this.service.domain!=undefined) && (this.internal_build == true)){
-                this.getenvData();
-                
+            if(!this.env_call){
+
+                if((this.service.domain!=undefined) && (this.internal_build == true)){
+                    this.env_call = true;
+                    this.getenvData();
+                    
+                }
             }
+            
             if(!this.internal_build){
                 this.envfoross();
             }
@@ -551,10 +557,15 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     
     }
 
-  
+    refresh(){
+        if((this.service.domain!=undefined) && (this.internal_build == true)){
+            this.getenvData();
+        }
+    }
 
     internal_build:boolean = true;
     ngOnChanges(x:any){
+        
         if(environment.multi_env) this.is_multi_env=true;
         if(environment.envName == 'oss') this.internal_build = false;
         var obj;
@@ -562,14 +573,16 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         // console.log('got config,,,,,',obj)
         // let test = require(environment.configFile);
         // console.log('test = ',test)
-
+        if(!this.env_call){
+            if((this.service.domain!=undefined) && (this.internal_build == true)){
+                this.env_call = true;
+                this.getenvData();
+            }
+        }
 
         this.prodEnv={};
         this.stgEnv={};
-        if((this.service.domain!=undefined) && (this.internal_build == true)){
-            this.getenvData();
-            
-        }
+        
         if(!this.internal_build){
             this.envfoross();
         }

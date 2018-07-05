@@ -24,22 +24,6 @@ import {environment} from './../../../../environments/environment';
 })
 
 export class ServiceDetailComponent implements OnInit {
-    disabletabs:any;
-    disabletabsoss={
-        'OVERVIEW':false,
-        'ACCESS CONTROL':true,
-        'METRICS':true, 
-        'LOGS':false , 
-        'COST':true
-      };
-    disabletabsinternal={
-    'OVERVIEW':false,
-    'ACCESS CONTROL':false,
-    'METRICS':false, 
-    'LOGS':false , 
-    'COST':true
-    };
-
     constructor(
         
         private toasterService: ToasterService,
@@ -57,6 +41,7 @@ export class ServiceDetailComponent implements OnInit {
     message;
 
     @Output() deleteServiceStatus:EventEmitter<boolean> = new EventEmitter<boolean>();
+    @ViewChild('selectedTabComponent') selectedTabComponent;
 
 
     disblebtn:boolean = true;
@@ -80,6 +65,7 @@ export class ServiceDetailComponent implements OnInit {
     serviceRequestFailure:boolean = false;
     serviceRequestSuccess:boolean = false;
     canDelete:boolean =true;
+    refreshTabClicked:boolean=false;
     successMessage: string = "";
     errorMessage: string = "";
     test:any="delete testing";
@@ -174,7 +160,7 @@ export class ServiceDetailComponent implements OnInit {
         this.isLoadingService = true;
 
         let cachedData = this.cache.get(id);
-        if (cachedData) {
+        if (cachedData && !this.refreshTabClicked) {
             this.isGraphLoading=false;
             this.onDataFetched(cachedData)
              if(this.service.serviceType == "website")
@@ -193,6 +179,7 @@ export class ServiceDetailComponent implements OnInit {
                     this.cache.set(id, service);
                     this.onDataFetched(service);
                     this.isGraphLoading=false;
+                    this.selectedTabComponent.refresh_env();
                 },
                 err => {
                     if( err.status == "404"){
@@ -385,9 +372,18 @@ export class ServiceDetailComponent implements OnInit {
           }, 3000);
     }
 
+    refreshTab(){
+        this.refreshTabClicked=true;
+        if(this.selectedTab == 0){
+            this.refreshServ();
+            
+        }
+        else{
+            this.selectedTabComponent.refresh();
+        }
+
+    }
     ngOnInit() {
-        if(environment.envName == 'oss')this.disabletabs=this.disabletabsoss;
-        else this.disabletabs=this.disabletabsinternal;
         this.breadcrumbs = [
         {
             'name' : this.service['name'],

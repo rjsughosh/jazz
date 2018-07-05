@@ -643,6 +643,7 @@ export class ServiceCostComponent implements OnInit {
 		})
 	};
 	refreshCostData(event){
+
 		this.isGraphLoading=true;
 		this.isDataNotAvailable=false;
 		this.loadingState = 'default';
@@ -760,7 +761,9 @@ export class ServiceCostComponent implements OnInit {
         );
 	}
 	
-	
+	refresh(){
+		this.refreshCostData('');
+	}
 
 	ngOnInit() {
 		this.filter = new Filter(this.costTableData.body);

@@ -23,7 +23,6 @@ import {ConfigService, ConfigLoader} from './app.config';
 import {AdvancedFilterService} from './advanced-filter.service';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {LandingComponent} from './pages/landing/landing.component';
-import {TestApiComponent} from './pages/testapi/test-api.component';
 // import {FooterComponent} from './secondary-components/footer/footer.component';
 import {Error404Component} from './pages/error404/error404.component';
 import {SharedModule} from './shared-module/shared.module';
@@ -47,7 +46,6 @@ if(environmentval == "oss"){
     LandingComponent,
     Error404Component,
     // FooterComponent,
-    TestApiComponent,
    UserJourneyComponent
 
   ],
