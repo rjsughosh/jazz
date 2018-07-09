@@ -230,7 +230,7 @@ popup(state){
 
   }
   openSidebar(){
-    this.open_sidebar.emit(true);
+    this.open_sidebar.emit('overview');
 
 }
    callServiceEnv() {

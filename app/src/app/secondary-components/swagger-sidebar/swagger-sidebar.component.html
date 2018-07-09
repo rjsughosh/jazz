@@ -1,0 +1,79 @@
+<div class='bar-cover relative' [class.removepadding]="isloaded == 'popup'">
+    <div *ngIf='isloaded == "default"'>
+        <div class='icon-icon-close closeicon right' (click)='close_bar("clicked")'></div>
+        <div class='json-cover' *ngIf='isloaded == "default"'>
+            <textarea [(ngModel)]='swagger_json' class='json-input-area'></textarea>
+        </div>
+        <div class='btn-cover'>
+            <btn-jazz-primary class='primary' text='Format' (click)='formatJSON()'></btn-jazz-primary>
+            <btn-jazz-primary class='primary' text='Evaluate' (click)='EvaluateJSON()'></btn-jazz-primary>
+        </div>
+    </div>   
+    <div *ngIf='isloaded == "loading"' class="empty-row with-refresh">
+            <div class="loading-row" [class.show]="isloaded == 'loading'">
+                <div class="loading-circle"></div>
+            </div>
+    </div>
+    <div *ngIf='isloaded == "loaded"'>
+            <div class='service-details row relative'>
+                <span class='icon-icon-close close-icon right' (click)='close_bar("clicked")'></span>
+
+                <div class='cw-cover'>
+                    <div class='cw-message'>
+                    {{cw_message}}
+                    </div>
+                    <div class='cw-score'>
+                    <div class='score-head'>CLEARWATER SCORE</div>
+                    <div class='score-val'>{{cw_score.current}}</div>
+                    </div>
+                    <div class='cw-values'>
+                    <ul>
+                        <li>
+                        <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
+                        <div class='det-label cw-label'>Organization<br>goal</div>
+                        </li>
+                        <li>
+                            <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
+                            <div class='det-label cw-label'>Organization<br>Average</div>
+                        </li>                     
+        
+                    </ul>
+                    <ul>
+                        <li>
+                        <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>
+                        <div class='det-label cw-label'>Total<br>warnings</div>
+                        </li>
+                        <li>
+                        <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
+                        <div class='det-label cw-label'>Total<br>errors</div>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+
+            <btn-jazz-primary class='primary bk-btn' text='Back' (click)='goback()'></btn-jazz-primary>
+
+    </div> 
+    <div *ngIf='isloaded == "error"'>
+        <div *ngIf='isloaded == "error"' class="service-details empty-row-default with-refresh relative hgt">
+            <span class='icon-icon-close close-icon right' (click)='close_bar("clicked")'></span>
+
+            <div class="icon-icon-server-error">
+                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span>
+            </div>
+            <div class='oops'>Oops!</div><br>
+            <div>Something went wrong while fetching your data<br><a (click)="EvaluateJSON()">REFRESH</a> to give it another try.</div>
+            <br><div class='ctc-us'>If the problem persists, <a> contact us</a>.</div>
+        </div>
+        <btn-jazz-primary class='primary bk-btn' text='Back' (click)='goback()'></btn-jazz-primary>
+
+    </div> 
+    <div class='fg-overlay' *ngIf='isloaded == "popup"'>
+        <p>Are you sure you want to close?</p>
+        <p>You may lose your changes</p>
+        <a class='no-btn' (click)='close_bar("no")'>No</a>
+        <btn-jazz-primary class='primary' text='Yes' (click)='close_bar("yes")'></btn-jazz-primary>
+    </div>
+</div>
+

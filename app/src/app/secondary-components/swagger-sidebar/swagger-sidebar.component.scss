@@ -1,0 +1,139 @@
+@import './../../../main-styles';
+@import './../../pages/services-list/services-list.component.scss';
+@import './../../pages/clear-water/clear-water.component.scss';
+
+.sidebar-wrp .sidebar-inr{
+    overflow-y: hidden;
+}
+
+.bar-cover{
+   
+        min-height: 100vh;
+        min-width: 47rem;
+        right:0;
+        top:0;
+        z-index:2;
+        background: #faf9f9;
+        border:2px solid #efefef;    
+        padding:2.5rem;
+
+    
+}
+
+.empty-row-default{
+    position: relative;
+    text-align: center;
+    padding: 3rem 1.25rem;
+    top: 25%;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.json-input-area{
+    height:70vh;
+    width:100%;
+}
+
+.btn-cover{
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-icon{
+    position: absolute;
+    right: 1REM;
+    top: 1rem;
+    font-size: 1.2rem;
+    color: #ed008c;
+}
+
+.sidebar-loading {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.empty-row{
+    position: absolute;
+    top:40%;
+    left:50%;
+    .loading-row{
+        background: transparent;
+
+    }
+}
+
+.cw-cover{
+    flex-direction: column;
+}
+
+.cw-top-part{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cw-message{
+    width: 100%;
+    text-align: center;
+    padding: 0 0 3rem 0;
+    font-weight: bold;
+}
+
+.cw-score{
+    width:100%
+}
+
+.cw-values{
+    width:100%;
+    ul{
+        display: flex;
+        justify-content: space-around;
+        margin-top: 2.5rem;
+    }
+    li{
+
+        display: flex;
+        flex-direction: column;
+        // height: 2rem;
+        div{
+            // border:1px solid black;
+
+        }
+    }
+}
+
+.fg-overlay{
+position: absolute;
+top:40%;
+text-align: center;
+padding:1rem;
+border-radius:3px;
+width: 100%;
+font-size: 1.5rem;
+}
+
+.removepadding{
+    padding:0;
+}
+
+.no-btn{
+    margin:1rem;
+}
+
+btn-jazz-primary{
+    /deep/button.btn-primary{
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+}
+}
+.closeicon{
+    font-size: 1.2rem;
+    color: #ed008c;
+    float: right;
+    margin-bottom:1rem;
+}
+.bk-btn{
+    /deep/button.btn-primary{      
+    margin: 1rem auto !important;
+    display: block !important;
+    }
+}

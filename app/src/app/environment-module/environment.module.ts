@@ -18,6 +18,8 @@ import {SharedModule} from '../shared-module/shared.module';
 import {RouterModule} from '@angular/router';
 import {routes} from './environment.route';import {AdvancedFilterService} from '../advanced-filter.service';
 import { ClearWaterComponent } from '../pages/clear-water/clear-water.component';
+import {RelaxedJsonService} from "../core/helpers/relaxed-json.service";
+
 
 
 
@@ -47,7 +49,10 @@ import { ClearWaterComponent } from '../pages/clear-water/clear-water.component'
     EnvOverviewSectionComponent,
     ClearWaterComponent
   ],
-  providers:[AdvancedFilterService],
+  providers:[
+    AdvancedFilterService,
+    RelaxedJsonService
+  ],
 
     
     // SharedModule

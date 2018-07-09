@@ -33,17 +33,22 @@
     </div>
     <div class="separator-row"></div>
     <div class='service-details row' *ngIf='detailView && !congratulations'>
+      <div class='test-api-btn'>
+
+      </div>
+
       <div class='cw-top-part'>
+
         <div class='warning-chk custom-cb'>
             <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="warningSelected" (change)="warningSelected = !warningSelected">
             <label for="checkbox-cw"></label>
             <div class="cb-status-dets">Hide Warnings</div>
         </div>
         <div class='cw-search-wrap'>
-
             <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
+            <btn-jazz-primary text="TEST API" class="view-details" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-primary>
 
         </div>
       </div>
@@ -131,6 +136,8 @@
         <div class="loading-circle"></div>
     </div>
 </div>
+
+
 
 <div  *ngIf='isloaded && error' class="service-details empty-row with-refresh relative hgt">
     <div class="icon-icon-server-error">

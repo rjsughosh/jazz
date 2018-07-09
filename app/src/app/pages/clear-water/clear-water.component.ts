@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input} from '@angular/core';
+import { Component, OnInit ,Input,Output,EventEmitter} from '@angular/core';
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -10,8 +10,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ClearWaterComponent implements OnInit {
 
+@Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
 @Input() service: any = {};
 env:string;
+swagger_json;
 error:boolean=true;
 cw_score:any = {};
 cw_message:any = '';
@@ -34,6 +36,8 @@ private subscription:any;
 private http:any;
 obj:any = {};
 congratulations:boolean = false;
+close: boolean = false;
+closed: boolean = false;
 
   constructor(
     private request:RequestService,
@@ -81,6 +85,11 @@ onRowClicked(row, index) {
   }
 }
 
+openSidebar(){
+  this.open_sidebar.emit('swagger');
+
+}
+
 onCWDetailsearch(data){
   this.searchDetail_bar = data.searchString;
 }
@@ -93,6 +102,18 @@ getData(){
     var swaggerAsset = this.service.assets.find((asset) => {
       return asset.type === 'swagger_url';
     });
+    console.log('asset',swaggerAsset.provider_id);
+    this.http.get(swaggerAsset.provider_id).subscribe(
+      (response) => {
+        console.log('res',response)
+        this.swagger_json=response;
+      },
+      (error) =>{
+        console.log('error',error)
+
+      }
+    );
+    
     var body = {
       "url": swaggerAsset && swaggerAsset.provider_id
     };
@@ -127,6 +148,15 @@ getData(){
           this.error = true;
     });
 
+  }
+
+  sidebar(event) {
+    this.closeSidebar(true);
+  }
+
+  public closeSidebar(eve) {
+    this.closed = true;
+    this.close = eve;
   }
 
   refresh(){

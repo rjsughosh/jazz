@@ -52,6 +52,8 @@ export class EnvironmentDetailComponent implements OnInit {
   nonClickable: boolean = false;
   message: string;
   public assets = [];
+  public sidebar: string = '';
+
 
 
   private sub: any;
@@ -216,6 +218,8 @@ export class EnvironmentDetailComponent implements OnInit {
   testApi(type) {
     switch (type) {
       case 'api':
+        this.setSidebar('swagger');
+
         let foundAsset = this.assets.find((asset) => {
           return asset.type === 'swagger_url';
         });
@@ -252,13 +256,17 @@ export class EnvironmentDetailComponent implements OnInit {
     }, 3000);
   }
 
-  sidebar(event) {
-    this.closeSidebar(true);
-  }
+  // sidebar(event) {
+  //   this.closeSidebar(true);
+  // }
 
   public closeSidebar(eve) {
     this.closed = true;
     this.close = eve;
+  }
+
+  setSidebar(sidebarValue?) {
+    this.sidebar = sidebarValue;
   }
 
   close: boolean = false;
