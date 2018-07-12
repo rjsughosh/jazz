@@ -1,9 +1,7 @@
 <div *ngIf='isloaded && !error'>
-    <div class='service-details row'>
-        <div class='cw-cover'>
-         <div class='cw-message'>
-           {{cw_message}}
-         </div>
+    <div class='service-details row top-section'>
+        <div class='cw-cover relative'>
+         
          <div class='cw-score'>
            <div class='score-head'>CLEARWATER SCORE</div>
            <div class='score-val'>{{cw_score.current}}</div>
@@ -11,31 +9,37 @@
          <div class='cw-values'>
            <ul>
              <li>
-               <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
-               <div class='det-label cw-label'>Organization<br>goal</div>
+                <div class='det-label cw-label'>Organization<br>goal</div>
+                 <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>               
              </li>
              <li>
+                <div class='det-label cw-label'>Organization<br>Average</div>
                  <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
-                 <div class='det-label cw-label'>Organization<br>Average</div>
              </li>
              <li>
-               <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>
                <div class='det-label cw-label'>Total<br>warnings</div>
+               <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>               
              </li>
              <li>
-               <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
-               <div class='det-label cw-label'>Total<br>errors</div>
+                <div class='det-label cw-label'>Total<br>errors</div>
+               <div class='det-value cw-value error'>{{cw_obj.errors}}</div>               
+             </li>
+             <li>
+                <div class='det-label cw-label'>Description</div>
+               <div class='det-value cw-message'>{{cw_message}}</div>               
              </li>
 
            </ul>
          </div>
+         
+          <div class='cw-button'>
+              <btn-jazz-secondary text="TEST API" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
+
+          </div>
         </div>
     </div>
-    <div class="separator-row"></div>
     <div class='service-details row' *ngIf='detailView && !congratulations'>
-      <div class='test-api-btn'>
 
-      </div>
 
       <div class='cw-top-part'>
 
@@ -48,7 +52,6 @@
             <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
-            <btn-jazz-primary text="TEST API" class="view-details" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-primary>
 
         </div>
       </div>
