@@ -5,10 +5,6 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {EnvOverviewSectionComponent} from './../environment-overview/env-overview-section.component';
 import {DataService} from "../data-service/data.service";
 import {environment} from './../../../environments/environment';
-import {environment as env_internal} from './../../../environments/environment.internal';
-import {environment as env_oss} from './../../../environments/environment.oss';
-
-
 import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-deployments-section.component';
 
 
@@ -157,8 +153,6 @@ export class EnvironmentDetailComponent implements OnInit {
     this.isLoadingService = true;
     this.subscription = this.http.get('/jazz/services/' + id).subscribe(
       response => {
-        this.service.accounts = env_internal.urls.accounts;
-        this.service.regions = env_internal.urls.regions;
         this.service = response.data.data;
         if (environment.envName == 'oss') this.service = response.data;
         this.isFunction = this.service.type === "function";
@@ -238,7 +232,6 @@ export class EnvironmentDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.api_doc_name = env_oss.api_doc_name;
     this.sub = this.route.params.subscribe(params => {
       let id = params['id'];
       this.serviceId = id;

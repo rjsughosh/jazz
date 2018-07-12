@@ -19,7 +19,6 @@ import {DaterangePickerComponent} from '../primary-components/daterange-picker/d
 import {FiltersComponent} from '../secondary-components/filters/filters.component';
 import {FilterTagsComponent} from '../secondary-components/filter-tags/filter-tags.component';
 import {FilterTagsServicesComponent} from '../secondary-components/filter-tags-services/filter-tags-services.component';
-//import {AdvancedFiltersComponent} from './../secondary-components/advanced-filters/advanced-filters.component';
 import {TabsComponent} from '../primary-components/tabs/tabs.component';
 import {JenkinsStatusComponent} from '../pages/jenkins-status/jenkins-status.component';
 import {FocusDirective} from '../secondary-components/create-service/focus.directive';
@@ -48,15 +47,15 @@ import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/si
 import {FooterComponent} from '../secondary-components/footer/footer.component';
 import {OverviewSidebarComponent} from './../secondary-components/overview-sidebar/overview-sidebar.component';
 import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
-import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/internal/advanced-filters.component';
 import {AdvFilters} from '../adv-filter.directive';
-import {SafeHtmlPipe} from "../core/pipes/safe-html.pipe";
-import {SafeUrlPipe} from "../core/pipes/safe-url.pipe";
+import {SafeHtmlPipe} from '../core/pipes/safe-html.pipe';
+import {SafeUrlPipe} from '../core/pipes/safe-url.pipe';
+import {MetricsCarouselComponent} from '../secondary-components/metrics-carousel/metrics-carousel.component';
+import {ServiceMetricsComponent} from '../pages/service-metrics/service-metrics.component';
+import {FilterModalComponent} from '../secondary-components/filter-modal/filter-modal.component';
+import {ChartjsLinegraphComponent} from '../secondary-components/chartjs-linegraph/chartjs-linegraph.component';
 import {ReportIssueComponent} from '../primary-components/report-issue/report-issue.component';
-import {ChartjsLinegraphComponent} from "../secondary-components/chartjs-linegraph/chartjs-linegraph.component";
-import {FilterModalComponent} from "../secondary-components/filter-modal/filter-modal.component";
-import {ServiceMetricsComponent} from "../pages/service-metrics/service-metrics.component";
-import {MetricsCarouselComponent} from "../secondary-components/metrics-carousel/metrics-carousel.component";
+import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
 
 let specificComponents: any
 let specificModules: any;

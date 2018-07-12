@@ -1,14 +1,7 @@
 import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit, Output,
-  ViewChild
+  Component, EventEmitter, Input, OnInit, Output, ViewChild
 } from '@angular/core';
-import {UtilsService} from "../core/services/utils.service";
+import {UtilsService} from '../../core/services/utils.service';
 
 @Component({
   selector: 'metrics-carousel',
@@ -25,31 +18,37 @@ export class MetricsCarouselComponent implements OnInit {
 
   private _selected;
   @Output() selectedChange = new EventEmitter();
+
   @Input()
   set selected(object) {
-      let i = this.metrics.findIndex((metric) => {
-        return object[this.options.nameProperty] === metric[this.options.nameProperty];
-      });
-      this.index = i;
-      this._selected = object;
-      this. selectedChange.emit(this._selected);
+    let i = this.metrics.findIndex((metric) => {
+      return object[this.options.nameProperty] === metric[this.options.nameProperty];
+    });
+    this.index = i;
+    this._selected = object;
+    this.selectedChange.emit(this._selected);
   }
+
   get selected() {
-      return this._selected;
+    return this._selected;
   }
+
   private _index;
   @Output() indexChange = new EventEmitter();
+
   @Input()
   set index(value) {
-      this._index = value;
-      this. indexChange.emit(this._index);
+    this._index = value;
+    this.indexChange.emit(this._index);
   }
+
   get index() {
-      return this._index;
+    return this._index;
   }
 
   @ViewChild('metricCards') metricCards;
   public metricCardsScroller;
+
   @ViewChild('metricCardsScroller') set _metricCardsScroller(input) {
     this.metricCardsScroller = input;
     if (this.metricCards && this.metricCardsScroller) {
@@ -59,6 +58,7 @@ export class MetricsCarouselComponent implements OnInit {
       });
     }
   };
+
   public metricCardsOversized;
   public metricCardSize = 135 + 12;
   public metricCardOffset = 0;
@@ -76,7 +76,7 @@ export class MetricsCarouselComponent implements OnInit {
   }
 
   getRecentValue(metric) {
-    if(!metric[this.options.listProperty].length) return;
+    if (!metric[this.options.listProperty].length) return;
     return metric[this.options.listProperty].slice(-1).pop()[this.options.valueProperty].toFixed(0).toString();
   }
 

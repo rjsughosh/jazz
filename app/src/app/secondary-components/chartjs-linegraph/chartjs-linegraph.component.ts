@@ -1,6 +1,7 @@
 import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment';
 import {UtilsService} from '../../core/services/utils.service';
+
 declare let Promise;
 
 
@@ -18,14 +19,16 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   public type = 'scatter';
   public isRendered = true;
 
-  constructor(private utils: UtilsService) {}
+  constructor(private utils: UtilsService) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnChanges(changes?) {
     this.render();
-      this._datasets = this.datasets.map(this.modifyDataSet);
-      this._options = this.getOptions(this.options);
+    this._datasets = this.datasets.map(this.modifyDataSet);
+    this._options = this.getOptions(this.options);
   }
 
   modifyDataSet(data) {
@@ -103,6 +106,9 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
         }]
       }
     };
+    options.tooltips.callbacks.label = graphOptions.tooltipXFormat ? function (tooltipItem, chart) {
+      return moment(tooltipItem.xLabel).format(graphOptions.tooltipXFormat);
+    } : options.tooltips.callbacks.label;
     options.scales.xAxes[0].ticks.min = graphOptions.fromDateValue;
     options.scales.xAxes[0].ticks.max = graphOptions.toDateValue;
     options.scales.xAxes[0].ticks.stepSize = graphOptions.stepSize;
@@ -111,7 +117,7 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
     };
     options.scales.yAxes[0].ticks.min = graphOptions.yMin || 0;
     options.scales.yAxes[0].ticks.max = graphOptions.yMax || 100;
-    if(graphOptions.yMin && graphOptions.yMax) {
+    if (graphOptions.yMin && graphOptions.yMax) {
       let difference = graphOptions.yMax - graphOptions.yMin;
       options.scales.yAxes[0].ticks.stepSize = difference / 5;
     }
@@ -121,7 +127,9 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   render() {
     this.isRendered = false;
     this.utils.setTimeoutPromise(100)
-      .then(() => {this.isRendered = true;});
+      .then(() => {
+        this.isRendered = true;
+      });
   }
 
 }

@@ -66,7 +66,7 @@ export class FilterModalComponent implements OnInit {
     this.opened = !this.opened;
   }
 
-  addField(column, label, options, values?) {
+  addField(column, label, options, values?, defaultOption?) {
     let columnIndex = _.findIndex(this.form.columns, {label: column});
     if(!~columnIndex) {
       this.form.columns.push({
@@ -75,13 +75,18 @@ export class FilterModalComponent implements OnInit {
       });
       columnIndex = this.form.columns.length - 1;
     }
+    let selected = options[0];
+    if(defaultOption) {
+      let foundDefault = _.find(options, (option) => {return option === defaultOption});
+      selected = foundDefault;
+    }
 
     let field = {
       column: column,
       label: label,
       options: options,
       values: values || options,
-      selected: options[0]
+      selected: selected
     };
     this.form.columns[columnIndex].fields.push(field);
   }
