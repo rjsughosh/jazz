@@ -31,6 +31,7 @@ warningSelected:boolean;
 search_bar:string;
 searchDetail_bar:string;
 detailView:boolean = true;
+slideSidebar:boolean = false;
 cw_obj:any={};
 private subscription:any;
 private http:any;
@@ -86,10 +87,24 @@ onRowClicked(row, index) {
 }
 
 openSidebar(){
-  this.open_sidebar.emit('swagger');
+this.slideSidebar = true;
+document.getElementsByClassName('view-container')[0].classList.add('set-width');
+  // this.open_sidebar.emit('swagger');
 
 }
+closeSidebar(){
+  this.slideSidebar = false;
+  let item = document.getElementsByClassName('view-container')[0];
+  if(item){
+    item.classList.remove('set-width');
 
+  }
+
+}
+callapi(event){
+  this.isloaded=false;
+ this.getData(event);
+}
 onCWDetailsearch(data){
   this.searchDetail_bar = data.searchString;
 }
@@ -98,28 +113,31 @@ onCWsearch(data){
   this.search_bar = data.searchString;
 }
 
-getData(){
-    var swaggerAsset = this.service.assets.find((asset) => {
-      return asset.type === 'swagger_url';
-    });
-    console.log('asset',swaggerAsset.provider_id);
-    this.http.get(swaggerAsset.provider_id).subscribe(
-      (response) => {
-        console.log('res',response)
-        this.swagger_json=response;
-      },
-      (error) =>{
-        console.log('error',error)
-
-      }
-    );
-    
-    var body = {
-      "url": swaggerAsset && swaggerAsset.provider_id
-    };
+getData(payload?){
+    var body;
+    if(!payload){
+      var swaggerAsset = this.service.assets.find((asset) => {
+        return asset.type === 'swagger_url';
+      });
+      this.http.get(swaggerAsset.provider_id).subscribe(
+        (response) => {
+          this.swagger_json=response;
+        },
+        (error) =>{
+          console.log('error',error)
+  
+        }
+      );
+      
+      body = {
+        "url": swaggerAsset && swaggerAsset.provider_id
+      };
+    }
+    else{
+      body = payload;
+    }
     this.subscription = this.http.post('/jazz/apilinter',body).subscribe(
     (response) => {
-      console.log('response',response);
           this.obj=response;
           if(this.obj.results.errors == 0 && this.obj.results.warnings == 0){
             this.congratulations=true;
@@ -150,15 +168,7 @@ getData(){
 
   }
 
-  sidebar(event) {
-    this.closeSidebar(true);
-  }
-
-  public closeSidebar(eve) {
-    this.closed = true;
-    this.close = eve;
-  }
-
+ 
   refresh(){
     this.isloaded=false;
     this.getData();
@@ -168,4 +178,7 @@ getData(){
     this.getData();
   }
 
+  ngOnDestroy(){
+    this.closeSidebar();
+  }
 }

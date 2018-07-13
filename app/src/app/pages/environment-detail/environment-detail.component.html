@@ -76,12 +76,12 @@
 </div>
 </div>
 </section>
+
 <section class='overview-sidebar'>
     <sidebar [show]="sidebar === 'overview'" (onClose)="setSidebar()">
             <overview-sidebar (onClose)="setSidebar()"></overview-sidebar>
     </sidebar>
     <sidebar [show]="sidebar === 'swagger'" (onClose)="setSidebar()">
-      <swagger-sidebar [envSelected]='envSelected' [service]='service' (onClose)="setSidebar()"></swagger-sidebar>
     </sidebar>
 </section>
 <footer></footer>

@@ -18,7 +18,7 @@
 }
 
 .cw-score{
-    width:20%
+    width:21%
 }
 .cw-button{
     position: absolute;
@@ -265,4 +265,38 @@ search-box{
             color: #fff;
         }
     }
+}
+
+.clear-water-sidebar{
+    width:40%;
+    position: fixed;
+    transform: translateX(100%) rotate(360deg);
+    transition: 0.8s transform ease-out;
+    right: 0;
+    top:0;
+}
+.slide-in{
+    transform: translateX(0%) rotate(360deg);
+    transition: all 1s;
+
+}
+
+/deep/.view-container{
+
+}
+
+.set-width{
+    width:60%;
+}
+
+.cw-desc{
+    /deep/.det-value,.det-label{
+    font-size: 1.5rem;
+    margin-top:3rem;
+    width:auto;
+}
+/deep/.det-value{
+    margin-left:2rem;
+
+}
 }

@@ -21,7 +21,9 @@ export class SwaggerSidebarComponent implements OnInit {
 
   @Input() service: any = {};
   @Input() envSelected: any = {};  
-  @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();  
+  @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
+  
   swaggerAsset:any;
   swagger_json:any;
   validityMessage:string;
@@ -35,6 +37,8 @@ export class SwaggerSidebarComponent implements OnInit {
   obj:any = {};
   assets;
   foundAsset;
+  public lineNumberCount: any = new Array(40).fill('');
+
 
   private http:any;
   constructor(
@@ -48,30 +52,16 @@ export class SwaggerSidebarComponent implements OnInit {
 
    }
 
-  closeBar(flag?) {  
-    this.isloaded='popup' 
-    this.onClose.emit(false);
-    
-  }
  
-  close_bar(param){
-    if(param == "yes"){
-      this.closeBar();
-      setTimeout(() => {
-        this.isloaded='default';
-      },1000)
-    }
-    else if(param == "no"){
-      this.isloaded='default';
-    }
-    else{
-      this.isloaded='popup';
-    }
-  }
+ 
+
   ngOnInit() {
 
   }
 
+  closeBar(){
+    this.onClose.emit();
+  }
   stringToPrettyString(input) {
     let parser = this.relaxedJson.getParser();
     let objectValue = parser.stringToValue(input);
@@ -100,22 +90,23 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   EvaluateJSON(){
-    this.isloaded='loading';
+    // this.isloaded='loading';
     var payload = {
       "swaggerDoc":this.swagger_json
     }
-    this.http.post('/jazz/apilinter',payload).subscribe(
-      (response) => {
-        this.isloaded='loaded';
-        this.obj=response;       
-        this.cw_obj = response.results;
-        this.cw_score=response.results.score;
-        this.cw_message=response.results.message;
+    this.evaluate.emit(payload);
+    // this.http.post('/jazz/apilinter',payload).subscribe(
+    //   (response) => {
+    //     this.isloaded='loaded';
+    //     this.obj=response;       
+    //     this.cw_obj = response.results;
+    //     this.cw_score=response.results.score;
+    //     this.cw_message=response.results.message;
        
-          },
-          (error) => {
-            this.isloaded='error';
-      });
+    //       },
+    //       (error) => {
+    //         this.isloaded='error';
+    //   });
   }
 
   getassets(){
@@ -151,6 +142,24 @@ export class SwaggerSidebarComponent implements OnInit {
     }, 3000);
   }
 
+  lineNumbers() {
+    let lines  = this.swagger_json.split(/\r*\n/);    
+    let line_numbers = lines.length;    
+    this.lineNumberCount = new Array(line_numbers).fill('');
+  }
+
+  ontextareaScroll(){
+    var target = $("#target");
+    $("#source").scroll(function() {
+      target.prop("scrollTop", this.scrollTop)
+            .prop("scrollLeft", this.scrollLeft);
+            // .prop("scrollHeight",this.scrollHeight);
+
+            console.log('target',target);
+            // console.log(this)
+    });
+    }
+
   getdata(){
     // this.foundAsset.provider_id=this.foundAsset.provider_id.replace('http','https');
     console.log('swagger url, ',this.foundAsset.provider_id)
@@ -158,6 +167,7 @@ export class SwaggerSidebarComponent implements OnInit {
       (response) => {
         this.swagger_json=JSON.stringify(response);
         this.swagger_json = this.stringToPrettyString(this.swagger_json);
+        this.lineNumbers();
       },
       (error) =>{
         try{

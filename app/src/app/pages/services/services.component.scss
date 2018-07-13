@@ -19,6 +19,8 @@
 
 .view-container {
     /*min-height: 100vh;*/
+    width:100%;
+    transition: 1s width;
     height: 80%; //fallback
     height: calc(100vh - 4.6rem);
     background-color: #f3f3f3;
@@ -129,4 +131,12 @@
     width: calc(100% + 92px);
     height: calc(100% + 92px);
     background-color:#2A343E;
+}
+
+.default-width{
+    
+}
+.set-width{
+    width:60%;
+    transition: 1s width;
 }

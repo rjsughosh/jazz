@@ -11,11 +11,12 @@
         min-height: 100vh;
         min-width: 47rem;
         right:0;
-        top:0;
+        top:-1.5rem;
         z-index:2;
-        background: #faf9f9;
         border:2px solid #efefef;    
-        padding:2.5rem;
+        padding:7rem 3.5rem 2.5rem 2.5rem;;
+        background-color: #efefef;
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.5);
 
     
 }
@@ -29,14 +30,14 @@
     font-weight: 500;
 }
 
-.json-input-area{
-    height:70vh;
-    width:100%;
-}
 
 .btn-cover{
     display: flex;
     justify-content: space-between;
+    padding-right: 1.5rem;
+    a{
+        margin:0.5rem 0;
+    }
 }
 
 .close-icon{
@@ -128,8 +129,13 @@ btn-jazz-primary{
 .closeicon{
     font-size: 1.2rem;
     color: #ed008c;
-    float: right;
-    margin-bottom:1rem;
+    position: absolute;
+    top:0;
+    right:0;
+    &:hover{
+        transform: rotate(90deg);
+        transition: 0.15s transform;
+    }
 }
 .bk-btn{
     /deep/button.btn-primary{      
@@ -137,3 +143,29 @@ btn-jazz-primary{
     display: block !important;
     }
 }
+
+.json-cover{
+    display:flex;
+    max-height: 75vh;
+    margin:1rem 0;
+    padding-top:2rem;
+    
+    >div{
+        background: #2b343e;
+        overflow-y: hidden;
+    }
+    .json-input-area{
+        width:100%;
+        background: #2b343e;
+        color:#ddd;
+        overflow-y: scroll;
+    }
+    
+}
+
+.line-numbers {
+    border-radius: 5px 0 0 5px;
+    width: 4rem;
+    padding: 2px 2px 2.5rem 2px;
+    color:#ddd;
+  }
