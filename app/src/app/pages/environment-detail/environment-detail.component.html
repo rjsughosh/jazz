@@ -81,9 +81,6 @@
     <sidebar [show]="sidebar === 'overview'" (onClose)="setSidebar()">
       <overview-sidebar (onClose)="setSidebar()"></overview-sidebar>
     </sidebar>
-    <sidebar [show]="sidebar === 'try-service'" (onClose)="setSidebar()">
-      <env-try-service-sidebar [service]="service" [environment]='environment_obj' (onClose)="setSidebar()"></env-try-service-sidebar>
-    </sidebar>
 </section>
 <footer></footer>
 

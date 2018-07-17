@@ -213,7 +213,7 @@ export class EnvironmentDetailComponent implements OnInit {
           break;
           case 'function' :
           case 'lambda' :
-            this.setSidebar('try-service');
+            window.open('/404');
           break;
       }
   }
