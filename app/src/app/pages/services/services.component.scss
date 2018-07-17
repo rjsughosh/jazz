@@ -20,7 +20,6 @@
 .view-container {
     /*min-height: 100vh;*/
     width:100%;
-    transition: 1s width;
     height: 80%; //fallback
     height: calc(100vh - 4.6rem);
     background-color: #f3f3f3;
@@ -29,7 +28,7 @@
     background-color: #f3f3f3;
     overflow: auto;
     padding-top: 4.7rem;
-    transition: 0.4s ease;
+    transition: 0.6s ease-in-out;
     @media(max-width: 853px) {
         padding: 7.8rem 0 80px;
     }
@@ -138,5 +137,4 @@
 }
 .set-width{
     width:60%;
-    transition: 1s width;
 }

@@ -96,8 +96,7 @@ closeSidebar(){
   this.slideSidebar = false;
   let item = document.getElementsByClassName('view-container')[0];
   if(item){
-    item.classList.remove('set-width');
-
+      item.classList.remove('set-width');
   }
 
 }

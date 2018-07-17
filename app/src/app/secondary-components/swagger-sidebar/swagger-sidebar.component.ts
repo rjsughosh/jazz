@@ -153,10 +153,6 @@ export class SwaggerSidebarComponent implements OnInit {
     $("#source").scroll(function() {
       target.prop("scrollTop", this.scrollTop)
             .prop("scrollLeft", this.scrollLeft);
-            // .prop("scrollHeight",this.scrollHeight);
-
-            console.log('target',target);
-            // console.log(this)
     });
     }
 

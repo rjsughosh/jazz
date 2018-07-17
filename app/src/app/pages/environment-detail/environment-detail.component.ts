@@ -206,8 +206,7 @@ export class EnvironmentDetailComponent implements OnInit {
   testApi(type) {
     switch (type) {
       case 'api':
-        this.setSidebar('swagger');
-
+        // this.setSidebar('swagger');
         let foundAsset = this.assets.find((asset) => {
           return asset.type === 'swagger_url';
         });

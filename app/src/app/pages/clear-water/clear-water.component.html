@@ -7,6 +7,7 @@
                 <div class='score-head'>CLEARWATER SCORE</div>
                 <div class='score-val'>{{cw_score.current}}</div>
               </div>
+              
               <div class='cw-values'>
                 <ul>
                   <li>
@@ -33,17 +34,14 @@
                 </ul>
               </div>
               
-                <div class='cw-button'>
-                    <btn-jazz-secondary *ngIf='!slideSidebar' text="Evaluate API" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
-                    <btn-jazz-secondary *ngIf='slideSidebar' text="Close" class="testApiBtn" (click)='closeSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
-      
-                </div>
+              <div class='cw-button'>
+                  <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE API" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
+                  <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
+    
+              </div>
           </div>
       </div>
-      <div class='flex cw-desc' *ngIf='slideSidebar'>
-          <div class="det-label">Description :</div>
-					<div class="det-value">{{cw_message}}</div>
-      </div>
+
     </div>
     <div class='service-details row' *ngIf='detailView && !congratulations'>
 
@@ -92,7 +90,7 @@
                   </tr>
                 </tbody>
               </table>
-              <a  class="view-details right" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'>View Details</a>
+              <a  class="view-details right pointer" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'>VIEW DETAILS</a>
 
             </div>
           </div>

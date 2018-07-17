@@ -270,14 +270,14 @@ search-box{
 .clear-water-sidebar{
     width:40%;
     position: fixed;
-    transform: translateX(100%) rotate(360deg);
-    transition: 0.8s transform ease-out;
+    transform: translateX(100%);
+    transition: 0.6s transform ease-in-out ;
+    
     right: 0;
     top:0;
 }
 .slide-in{
-    transform: translateX(0%) rotate(360deg);
-    transition: all 1s;
+    transform: translateX(0%);
 
 }
 
