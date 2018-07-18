@@ -146,7 +146,7 @@
 </div>
 
 <section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-    <swagger-sidebar [envSelected]='envSelected' [service]='service' (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
+    <swagger-sidebar [envSelected]='env' [service]='service' (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
 
 </section>
 
