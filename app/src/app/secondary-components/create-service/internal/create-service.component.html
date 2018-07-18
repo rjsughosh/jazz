@@ -192,8 +192,8 @@
                             </div>
                         </section>
                         <div class="custom-cb app-chk">
-                            <input type="checkbox" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="notMyApp" (change)="notMyApp = !notMyApp;onnotmyapp()">
-                            <label for="checkbox-public"></label>
+                            <input type="checkbox" id="checkbox-notmyapp" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="notMyApp" (change)="notMyApp = !notMyApp;onnotmyapp()">
+                            <label for="checkbox-notmyapp"></label>
                             <div class="cb-status-dets">I don't see my application here</div>
                         </div>
                         <input *ngIf='notMyApp' placeholder="Name your application" autocomplete="off" name='poc_appname' type="text" class="textForm textForm-app" [(ngModel)]="poc_appname">
@@ -283,19 +283,19 @@
                     </div>
                 </div>
             </section>
-            <section class="each-step-wrap Internal-access" *ngIf="typeOfService == 'api'">
+            <section class="each-step-wrap Internal-access" *ngIf="typeOfService == 'api' || typeOfService == 'website'">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
-                        <p class="step-title grey">Accessibility</p>
+                        <p class="step-title" [class.grey]="typeOfService != 'website'">Accessibility</p>
                         <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
                     </div>
                     <div class="col-lg-8 col-md-8">
                         <section class="col-lg-12  pad-left0">
                             <div class="input-field-container">
                                 <div class="slack-checkbox custom-cb">
-                                    <input type="checkbox" [disabled]="true" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
-                                    <label for="checkbox-public" class="disableCb"></label>
-                                    <div class="cb-status-dets grey">The API should be publicly accessible</div>
+                                    <input type="checkbox" [disabled]="typeOfService != 'website'" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
+                                    <label for="checkbox-public" [class.disableCb]="typeOfService != 'website'"></label>
+                                    <div class="cb-status-dets" [class.grey]="typeOfService != 'website'" >The {{typeOfService}} should be publicly accessible</div>
                                 </div>
                             </div>
                         </section>
