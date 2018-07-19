@@ -19,6 +19,7 @@ import { AdvancedFilterService } from '../advanced-filter.service';
 import {ChartsModule} from "ng2-charts";
 import {SessionStorageService} from "../core/helpers/session-storage.service";
 import {RelaxedJsonService} from "../core/helpers/relaxed-json.service";
+import {ClearWaterComponent} from "../pages/clear-water/clear-water.component";
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import {RelaxedJsonService} from "../core/helpers/relaxed-json.service";
     EnvDeploymentsSectionComponent,
     EnvCodequalitySectionComponent,
     EnvLogsSectionComponent,
-    EnvOverviewSectionComponent
+    EnvOverviewSectionComponent,
+    ClearWaterComponent
   ],
   providers: [
     AdvancedFilterService,

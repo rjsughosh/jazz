@@ -199,7 +199,7 @@ export class EnvironmentDetailComponent implements OnInit {
       switch(type){
           case 'api':
             let foundAsset = this.assets.find((asset) => {
-              return asset.asset_type === 'swagger_url';
+              return asset.type === 'swagger_url';
             });
             if (foundAsset) {
               return window.open(environment.urls['swagger_editor'] + foundAsset.provider_id);
