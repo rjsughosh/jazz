@@ -14,12 +14,12 @@
   <div *ngSwitchCase="'resolved'" class="jz-section-content">
     <div class="jz-chart">
       <div class="jz-chart-header">
-        <div style="width:30%;"></div>
-        <div style="width:30%;" class="jz-text-center">
+        <div class="width-30"></div>
+        <div class="width-30 jz-text-center">
           <p class="graphtitle">{{utils.hyphenToSpace(selectedMetric?.name)}}</p>
           <p class="graphtitlefilter">{{selectedMetricGraphData?.options.headerMessage}}</p>
         </div>
-        <div style="width: 30%;" class="jz-text-right">
+        <div class="jz-text-right width-30">
           <filters [filtersList]="filters"
                    (onSelected)="onFilterSelect($event)"
                    [multiple]='false'

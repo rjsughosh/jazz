@@ -1,13 +1,12 @@
 <div class="jz-section">
   <div class="jz-section-content">
-    <div class="jz-row" style="justify-content: flex-end">
-      <button class="jz-btn jz-btn-icon"
+    <div class="jz-row jz-row-end">
+      <button class="jz-btn jz-btn-icon z-index-2"
               [class.jz-toggled]="filters.opened"
-              style="z-index: 2;"
               (click)="filters.toggleModal()">
         <span class="icon-icon-filter-unselected"></span>
       </button>
-      <div class="jz-absolute" style="top: 0; right: 0; z-index: 1;">
+      <div class="filter-modal-position">
         <filter-modal #filters [fields]="formFields" (formChange)="applyFilter($event)"></filter-modal>
       </div>
     </div>
