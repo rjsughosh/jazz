@@ -118,7 +118,6 @@ getData(payload?){
       var swaggerAsset = this.service.assets.find((asset) => {
         return asset.type === 'swagger_url';
       });
-      swaggerAsset.provider_id=swaggerAsset.provider_id.replace('http','https');
 
       this.http.get(swaggerAsset.provider_id).subscribe(
         (response) => {
