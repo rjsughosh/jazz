@@ -10,5 +10,8 @@ export const environment = {
     docs_link:"https://github.com/tmobile/jazz/wiki",
     content_base: "https://github.com/tmobile/jazz-content/blob/master",
     swagger_editor: 'http://editor.swagger.io'
+  },
+  userJourney: {
+    registrationMessage: ''
   }
 };
