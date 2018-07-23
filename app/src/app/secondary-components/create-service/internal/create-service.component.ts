@@ -88,7 +88,7 @@ export class CreateServiceComponent implements OnInit {
   vpcSelected: boolean = false;
   publicSelected: boolean = false;
   resMessage: string = '';
-  cdnConfigSelected: boolean = false;
+  cdnConfigSelected: boolean = true;
   focusindex: any = -1;
   scrollList: any = '';
   toast: any;
@@ -448,6 +448,7 @@ export class CreateServiceComponent implements OnInit {
       }
 
     } else if (this.typeOfService == 'website') {
+      payload["is_public_endpoint"] = this.publicSelected;
       payload["create_cloudfront_url"] = this.cdnConfigSelected;
       console.log("website");
 
@@ -575,7 +576,7 @@ export class CreateServiceComponent implements OnInit {
       this.slackSelected = false;
       this.createslackSelected = false;
       this.ttlSelected = false;
-      this.cdnConfigSelected = false;
+      this.cdnConfigSelected = true;
       this.gitprivateSelected = false;
       this.gitCloneSelected = false;
     }, 2000)
