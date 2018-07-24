@@ -1,21 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {RequestService, DataCacheService, MessageService, AuthenticationService} from '../../core/services/index';
 import {ToasterService} from 'angular2-toaster';
 import {Router, ActivatedRoute} from '@angular/router';
 import {EnvOverviewSectionComponent} from './../environment-overview/env-overview-section.component';
-// import { ViewChild } from '@angular/core/src/metadata/di';
-import {SharedService} from '../../SharedService.service';
-import {Http, Headers, Response} from '@angular/http';
-import {Output, EventEmitter} from '@angular/core';
-import {AfterViewInit, ViewChild} from '@angular/core';
-import {DataService} from '../data-service/data.service';
+import {DataService} from "../data-service/data.service";
 import {environment} from './../../../environments/environment';
-
-
-// import {}
 import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-deployments-section.component';
 
-// import { ViewChild } from '@angular/core/src/metadata/di';
 
 @Component({
   selector: 'environment-detail',
@@ -25,9 +16,12 @@ import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-de
 })
 export class EnvironmentDetailComponent implements OnInit {
   @ViewChild('envoverview') envoverview: EnvOverviewSectionComponent;
+  @ViewChild('envdeployments') envdeployments: EnvDeploymentsSectionComponent;
   @ViewChild('selectedTabComponent') selectedTabComponent;
 
+  isFunction: boolean = false;
   breadcrumbs = [];
+  api_doc_name: string = '';
   selectedTab = 0;
   service: any = {};
   friendly_name: any;
@@ -37,26 +31,23 @@ export class EnvironmentDetailComponent implements OnInit {
   environment_obj: any;
   isLoadingService: boolean = true;
   status_inactive: boolean = false;
-  tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clear water'];
+  swagger_error: boolean = false;
+
+  tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs'];
   envSelected: string = '';
   endpoint_env: string = '';
   environment = {
     name: 'Dev'
   }
-
   baseUrl: string = '';
   swaggerUrl: string = '';
   disablingWebsiteButton: boolean = true;
-  disablingFunctionButton: boolean = true;
+  disablingFunctionButton: boolean = false;
   disablingApiButton: boolean = true;
   nonClickable: boolean = false;
-  swagger_error:boolean = false;
   message: string;
-  public assets = [];
+  public assets:any;
   public sidebar: string = '';
-
-
-
   private sub: any;
   private subscription: any;
 
@@ -71,20 +62,21 @@ export class EnvironmentDetailComponent implements OnInit {
   ) {
   }
 
-  // Disabled other tabs
-
   refreshTab() {
-    console.log(this.selectedTabComponent);
     this.selectedTabComponent.refresh();
   }
 
-  setTab(selected) {
+  onSelectedDr(selected) {
     this.selectedTab = selected;
   }
 
+  onTabSelected(i) {
+
+    this.selectedTab = i;
+  };
+
   EnvLoad(event) {
     this.environment_obj = event.environment[0];
-    // this.envStatus=this.environment_obj.status.replace("_"," ")
     this.status_val = parseInt(status[this.environment_obj.status]);
     if ((this.status_val < 2) || (this.status_val == 4)) {
       this.disablingApiButton = false;
@@ -96,7 +88,6 @@ export class EnvironmentDetailComponent implements OnInit {
   env(event) {
     this.endpoint_env = event;
     if (this.endpoint_env != undefined) {
-      // this.disablingWebsiteButton=false;
     }
   }
 
@@ -109,10 +100,9 @@ export class EnvironmentDetailComponent implements OnInit {
       'link': 'services/' + this.service['id']
     },
       {
-        // 'name' : this.envSelected,
         'name': this.friendly_name,
         'link': ''
-      }]
+      }];
   }
 
   processService(service) {
@@ -127,64 +117,67 @@ export class EnvironmentDetailComponent implements OnInit {
         status: service.status,
         domain: service.domain,
         repository: service.repository
-        //   endpoints: service.endpoints
       }
     }
   };
 
   onDataFetched(service) {
 
-    if (service !== undefined && service !== '') {
+    if (service !== undefined && service !== "") {
       this.service = this.processService(service);
+      if (this.service.serviceType == "function") this.isFunction = true;
       if (this.friendly_name != undefined) {
-        // this.envSelected = this.friendly_name;
       }
-      // Update breadcrumbs
       this.breadcrumbs = [{
         'name': this.service['name'],
         'link': 'services/' + this.service['id']
       },
         {
-          // 'name' : this.envSelected,
           'name': this.friendly_name,
           'link': ''
         }]
       this.isLoadingService = false;
     } else {
       this.isLoadingService = false;
-      let errorMessage = this.messageservice.successMessage(service, 'serviceDetail');
-      // this.tst.classList.add('toast-anim');
+      let errorMessage = this.messageservice.successMessage(service, "serviceDetail");
       this.toast_pop('error', 'Error', errorMessage)
     }
   }
 
+  tabChanged(i) {
+    this.selectedTab = i;
+  };
+
 
   fetchService(id: string) {
     this.isLoadingService = true;
-      this.subscription = this.http.get('/jazz/services/' + id).subscribe(
-        response => {
-          this.service.accounts = 'tmo-dev-ops, tmo-int';
-          this.service.regions = 'us-west-2, us-east';
-          this.service = response.data.data;
-          this.setTabs();
-          this.getAssets();
-          this.cache.set(id, this.service);
-          this.onDataFetched(this.service);
-          this.envoverview.notify(this.service);
-        }, err => {
-          this.isLoadingService = false;
-          let errorMessage = this.messageservice.errorMessage(err, 'serviceDetail');
-          this.toast_pop('error', 'Oops!', errorMessage);
-        });
+    this.subscription = this.http.get('/jazz/services/' + id).subscribe(
+      response => {
+        this.service = response.data.data;
+        if (environment.envName == 'oss') this.service = response.data;
+        this.isFunction = this.service.type === "function";
+        this.getAssets();
+        this.setTabs();
+        this.cache.set(id, this.service);
+        this.onDataFetched(this.service);
+        this.envoverview.notify(this.service);
+      },
+      err => {
+        this.isLoadingService = false;
+        let errorMessage = this.messageservice.errorMessage(err, "serviceDetail");
+        this.toast_pop('error', 'Oops!', errorMessage);
+
+      }
+    )
   };
 
   setTabs() {
     if (this.service.serviceType === 'api' || this.service.type === 'api') {
-      this.tabData = ['overview', 'deployments', 'assets', 'code quality', 'logs', 'clear water'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs', 'clear water'];
     } else if (this.service.serviceType === 'function' || this.service.type === 'function') {
-      this.tabData = ['overview', 'deployments', 'assets', 'code quality', 'logs'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs'];
     } else if (this.service.serviceType === 'website' || this.service.type === 'website') {
-      this.tabData = ['overview', 'deployments', 'assets'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics'];
     }
   }
 
@@ -198,20 +191,19 @@ export class EnvironmentDetailComponent implements OnInit {
       this.assets = assetsResponse.data;
       this.service.assets = this.assets;
     }, (err) => {
-      this.toast_pop('error', 'Oops!', 'Swagger File Not Found.');
-      this.swagger_error = true;
+      this.toast_pop('error', 'Oops!', 'Failed to load swagger file.');
     });
   }
 
-  testApi(type) {
+  testService(type) {
     switch (type) {
       case 'api':
-        // this.setSidebar('swagger');
-        let foundAsset = this.assets.find((asset) => {
+        let swaggerAsset = this.assets.find((asset) => {
           return asset.type === 'swagger_url';
         });
-        if (foundAsset) {
-          return window.open(environment.urls['swagger_editor'] + '/?url=' + foundAsset.provider_id);
+        swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://', 'https://');
+        if (swaggerAsset) {
+          return window.open(environment.urls['swagger_editor'] + swaggerAsset.provider_id);
         } else {
           return window.open('/404');
         }
@@ -221,18 +213,15 @@ export class EnvironmentDetailComponent implements OnInit {
         }
         break;
       case 'function' :
-        if (this.endpoint_env != (undefined || '')) {
-          window.open('/404');
-        }
-        break;
       case 'lambda' :
-        if (this.endpoint_env != (undefined || '')) {
-          window.open('/404');
-        }
+        window.open('/404');
         break;
     }
   }
 
+  setSidebar(sidebar) {
+    this.sidebar = sidebar;
+  }
 
   toast_pop(error, oops, errorMessage) {
     var tst = document.getElementById('toast-container');
@@ -243,25 +232,7 @@ export class EnvironmentDetailComponent implements OnInit {
     }, 3000);
   }
 
-  // sidebar(event) {
-  //   this.closeSidebar(true);
-  // }
-
-  public closeSidebar(eve) {
-    this.closed = true;
-    this.close = eve;
-  }
-
-  setSidebar(sidebarValue?) {
-    this.sidebar = sidebarValue;
-  }
-
-  close: boolean = false;
-  closed: boolean = false;
-  disabletabs: any;
-
   ngOnInit() {
-
     this.sub = this.route.params.subscribe(params => {
       let id = params['id'];
       this.serviceId = id;
@@ -276,12 +247,10 @@ export class EnvironmentDetailComponent implements OnInit {
         'link': 'services/' + this.service['id']
       },
       {
-        // 'name' : this.envSelected,
         'name': this.friendly_name,
         'link': ''
       }
     ];
-
   }
 
   ngOnChanges(x: any) {
@@ -290,13 +259,13 @@ export class EnvironmentDetailComponent implements OnInit {
 }
 
 export enum status {
-  'deployment_completed' = 0,
-  'active',
-  'deployment_started',
-  'pending_approval',
-  'deployment_failed',
-  'inactive',
-  'deletion_started',
-  'deletion_failed',
-  'archived'
+  "deployment_completed" = 0,
+  "active",
+  "deployment_started",
+  "pending_approval",
+  "deployment_failed",
+  "inactive",
+  "deletion_started",
+  "deletion_failed",
+  "archived"
 }
