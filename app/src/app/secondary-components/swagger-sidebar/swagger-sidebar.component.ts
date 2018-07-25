@@ -78,35 +78,24 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   formatJSON(){
-    this.isloaded='default'
+    this.isloaded='default';
     try{
-      let payload = JSON.parse(this.swagger_json);
       this.swagger_json = this.stringToPrettyString(this.swagger_json);
+      let payload = JSON.parse(this.swagger_json);
+      this.valid = true;
     }
     catch(e){
-      this.validityMessage = 'Input is invalid JSON';
+      this.validityMessage = 'Unable to parse JSON';
       this.valid = false;
     }
   }
 
   EvaluateJSON(){
-    // this.isloaded='loading';
+    this.formatJSON();
     var payload = {
       "swaggerDoc":this.swagger_json
     }
     this.evaluate.emit(payload);
-    // this.http.post('/jazz/apilinter',payload).subscribe(
-    //   (response) => {
-    //     this.isloaded='loaded';
-    //     this.obj=response;       
-    //     this.cw_obj = response.results;
-    //     this.cw_score=response.results.score;
-    //     this.cw_message=response.results.message;
-       
-    //       },
-    //       (error) => {
-    //         this.isloaded='error';
-    //   });
   }
 
   getassets(){

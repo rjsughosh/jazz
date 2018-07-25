@@ -13,6 +13,7 @@
             <a class='primary pointer' (click)='formatJSON()'>FORMAT JSON</a>
             <btn-jazz-primary class='primary' text='EVALUATE' (click)='EvaluateJSON()'></btn-jazz-primary>
         </div>
+        <p *ngIf="!valid" class="jz-text-error">{{validityMessage}}</p>
     </div>  
    
 </div>
