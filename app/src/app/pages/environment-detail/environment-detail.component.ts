@@ -10,6 +10,8 @@ import {Output, EventEmitter} from '@angular/core';
 import {AfterViewInit, ViewChild} from '@angular/core';
 import {DataService} from '../data-service/data.service';
 import {environment} from './../../../environments/environment';
+//import {environment as env_internal} from './../../../environments/environment.internal';
+import {environment as env_oss} from './../../../environments/environment.oss';
 
 
 // import {}
@@ -25,9 +27,12 @@ import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-de
 })
 export class EnvironmentDetailComponent implements OnInit {
   @ViewChild('envoverview') envoverview: EnvOverviewSectionComponent;
+  @ViewChild('envdeployments') envdeployments: EnvDeploymentsSectionComponent;
   @ViewChild('selectedTabComponent') selectedTabComponent;
 
+  isFunction: boolean = false;
   breadcrumbs = [];
+  api_doc_name: string = '';
   selectedTab = 0;
   service: any = {};
   friendly_name: any;
@@ -37,6 +42,8 @@ export class EnvironmentDetailComponent implements OnInit {
   environment_obj: any;
   isLoadingService: boolean = true;
   status_inactive: boolean = false;
+  swagger_error: boolean = false;
+
   tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clear water'];
   envSelected: string = '';
   endpoint_env: string = '';
@@ -47,16 +54,15 @@ export class EnvironmentDetailComponent implements OnInit {
   baseUrl: string = '';
   swaggerUrl: string = '';
   disablingWebsiteButton: boolean = true;
-  disablingFunctionButton: boolean = true;
+  disablingFunctionButton: boolean = false;
   disablingApiButton: boolean = true;
   nonClickable: boolean = false;
-  swagger_error:boolean = false;
   message: string;
-  public assets = [];
 
-
+  public sidebar: string = '';
   private sub: any;
   private subscription: any;
+  public assets;
 
   constructor(
     private toasterService: ToasterService,
@@ -76,13 +82,17 @@ export class EnvironmentDetailComponent implements OnInit {
     this.selectedTabComponent.refresh();
   }
 
-  setTab(selected) {
+  onSelectedDr(selected) {
     this.selectedTab = selected;
   }
 
+  onTabSelected(i) {
+
+    this.selectedTab = i;
+  };
+
   EnvLoad(event) {
     this.environment_obj = event.environment[0];
-    // this.envStatus=this.environment_obj.status.replace("_"," ")
     this.status_val = parseInt(status[this.environment_obj.status]);
     if ((this.status_val < 2) || (this.status_val == 4)) {
       this.disablingApiButton = false;
@@ -94,7 +104,6 @@ export class EnvironmentDetailComponent implements OnInit {
   env(event) {
     this.endpoint_env = event;
     if (this.endpoint_env != undefined) {
-      // this.disablingWebsiteButton=false;
     }
   }
 
@@ -107,10 +116,9 @@ export class EnvironmentDetailComponent implements OnInit {
       'link': 'services/' + this.service['id']
     },
       {
-        // 'name' : this.envSelected,
         'name': this.friendly_name,
         'link': ''
-      }]
+      }];
   }
 
   processService(service) {
@@ -125,36 +133,36 @@ export class EnvironmentDetailComponent implements OnInit {
         status: service.status,
         domain: service.domain,
         repository: service.repository
-        //   endpoints: service.endpoints
       }
     }
   };
 
   onDataFetched(service) {
 
-    if (service !== undefined && service !== '') {
+    if (service !== undefined && service !== "") {
       this.service = this.processService(service);
+      if (this.service.serviceType == "function") this.isFunction = true;
       if (this.friendly_name != undefined) {
-        // this.envSelected = this.friendly_name;
       }
-      // Update breadcrumbs
       this.breadcrumbs = [{
         'name': this.service['name'],
         'link': 'services/' + this.service['id']
       },
         {
-          // 'name' : this.envSelected,
           'name': this.friendly_name,
           'link': ''
         }]
       this.isLoadingService = false;
     } else {
       this.isLoadingService = false;
-      let errorMessage = this.messageservice.successMessage(service, 'serviceDetail');
-      // this.tst.classList.add('toast-anim');
+      let errorMessage = this.messageservice.successMessage(service, "serviceDetail");
       this.toast_pop('error', 'Error', errorMessage)
     }
   }
+
+  tabChanged(i) {
+    this.selectedTab = i;
+  };
 
 
   fetchService(id: string) {
@@ -169,11 +177,14 @@ export class EnvironmentDetailComponent implements OnInit {
           this.cache.set(id, this.service);
           this.onDataFetched(this.service);
           this.envoverview.notify(this.service);
-        }, err => {
+        },
+        err => {
           this.isLoadingService = false;
-          let errorMessage = this.messageservice.errorMessage(err, 'serviceDetail');
-          this.toast_pop('error', 'Oops!', errorMessage);
-        });
+          let errorMessage = this.messageservice.errorMessage(err, "serviceDetail");
+          this.toast_pop('error', 'Oops!', errorMessage)
+
+        }
+      );
   };
 
   setTabs() {
@@ -201,11 +212,11 @@ export class EnvironmentDetailComponent implements OnInit {
     });
   }
 
-  testApi(type) {
-    switch (type) {
+  testService(type){
+    switch(type){
       case 'api':
         let foundAsset = this.assets.find((asset) => {
-          return asset.type === 'swagger_url';
+          return asset.asset_type === 'swagger_url';
         });
         if (foundAsset) {
           return window.open(environment.urls['swagger_editor'] + '/?url=' + foundAsset.provider_id);
@@ -213,23 +224,20 @@ export class EnvironmentDetailComponent implements OnInit {
           return window.open('/404');
         }
       case 'website' :
-        if (this.endpoint_env != (undefined || '')) {
+        if(this.endpoint_env != (undefined || '')) {
           window.open(this.endpoint_env);
         }
         break;
       case 'function' :
-        if (this.endpoint_env != (undefined || '')) {
-          window.open('/404');
-        }
-        break;
       case 'lambda' :
-        if (this.endpoint_env != (undefined || '')) {
-          window.open('/404');
-        }
+        this.setSidebar('try-service');
         break;
     }
   }
 
+  setSidebar(sidebar) {
+    this.sidebar = sidebar;
+  }
 
   toast_pop(error, oops, errorMessage) {
     var tst = document.getElementById('toast-container');
@@ -240,9 +248,6 @@ export class EnvironmentDetailComponent implements OnInit {
     }, 3000);
   }
 
-  sidebar(event) {
-    this.closeSidebar(true);
-  }
 
   public closeSidebar(eve) {
     this.closed = true;
@@ -269,12 +274,10 @@ export class EnvironmentDetailComponent implements OnInit {
         'link': 'services/' + this.service['id']
       },
       {
-        // 'name' : this.envSelected,
         'name': this.friendly_name,
         'link': ''
       }
     ];
-
   }
 
   ngOnChanges(x: any) {

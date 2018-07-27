@@ -40,7 +40,9 @@
     "ng2-dropdown": "0.0.21",
     "ng2-ion-range-slider": "^1.0.3",
     "ng2-popover": "0.0.14",
-    "rxjs": "^5.4.1"
+    "rxjs": "^5.4.1",
+    "kotlin": "^1.2.50",
+    "really-relaxed-json": "^0.2.24"
   },
   "devDependencies": {
     "@angular/cli": "^1.0.2",

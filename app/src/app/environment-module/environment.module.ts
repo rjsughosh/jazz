@@ -18,8 +18,9 @@ import {SharedModule} from '../shared-module/shared.module';
 import {RouterModule} from '@angular/router';
 import {routes} from './environment.route';import {AdvancedFilterService} from '../advanced-filter.service';
 import { ClearWaterComponent } from '../pages/clear-water/clear-water.component';
-
-
+import {EnvTryServiceSidebarComponent} from '../secondary-components/env-try-service-sidebar/env-try-service-sidebar.component'
+import {SessionStorageService} from "../core/helpers/session-storage.service";
+import {RelaxedJsonService} from "../core/helpers/relaxed-json.service";
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import { ClearWaterComponent } from '../pages/clear-water/clear-water.component'
     ChartsModule,
     IonRangeSliderModule,
     SharedModule,
- 
+
     // ServiceModule
   ],
   declarations: [
@@ -45,12 +46,17 @@ import { ClearWaterComponent } from '../pages/clear-water/clear-water.component'
     EnvCodequalitySectionComponent,
     EnvLogsSectionComponent,
     EnvOverviewSectionComponent,
-    ClearWaterComponent
+    ClearWaterComponent,
+    EnvTryServiceSidebarComponent
   ],
-  providers:[AdvancedFilterService],
+  providers:[
+    AdvancedFilterService,
+    SessionStorageService,
+    RelaxedJsonService
+  ],
 
-    
+
     // SharedModule
-  
+
 })
 export class EnvironmentModule { }
