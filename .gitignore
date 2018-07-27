@@ -6,3 +6,4 @@ node_modules
 .cache
 __pycache__
 
+app/app
