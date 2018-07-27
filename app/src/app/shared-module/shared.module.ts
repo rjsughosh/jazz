@@ -45,7 +45,9 @@ import {environment} from '../../environments/environment';
 import {LineGraphComponent} from '../secondary-components/line-graph/line-graph.component';
 import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import {FooterComponent} from '../secondary-components/footer/footer.component';
-import {OverviewSidebarComponent} from './../secondary-components/overview-sidebar/overview-sidebar.component';
+import { OverviewSidebarComponent } from './../secondary-components/overview-sidebar/overview-sidebar.component';
+import { SwaggerSidebarComponent } from './../secondary-components/swagger-sidebar/swagger-sidebar.component';
+
 import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
 import {AdvFilters} from '../adv-filter.directive';
 import {SafeHtmlPipe} from '../core/pipes/safe-html.pipe';
@@ -118,6 +120,7 @@ for (let i in specificComponents) {
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
+    SwaggerSidebarComponent,
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent,
     AdvFilters,
@@ -162,6 +165,7 @@ for (let i in specificComponents) {
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
+    SwaggerSidebarComponent,
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent,
     AdvFilters,
@@ -179,7 +183,7 @@ for (let i in specificComponents) {
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent
   ],
-
 })
+
 export class SharedModule {
 }

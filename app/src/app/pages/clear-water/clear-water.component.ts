@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input} from '@angular/core';
+import { Component, OnInit ,Input,Output,EventEmitter} from '@angular/core';
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -10,8 +10,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ClearWaterComponent implements OnInit {
 
+@Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
 @Input() service: any = {};
 env:string;
+swagger_json;
 error:boolean=true;
 cw_score:any = {};
 cw_message:any = '';
@@ -29,11 +31,14 @@ warningSelected:boolean;
 search_bar:string;
 searchDetail_bar:string;
 detailView:boolean = true;
+slideSidebar:boolean = false;
 cw_obj:any={};
 private subscription:any;
 private http:any;
 obj:any = {};
 congratulations:boolean = false;
+close: boolean = false;
+closed: boolean = false;
 
   constructor(
     private request:RequestService,
@@ -81,6 +86,24 @@ onRowClicked(row, index) {
   }
 }
 
+openSidebar(){
+this.slideSidebar = true;
+document.getElementsByClassName('view-container')[0].classList.add('set-width');
+  // this.open_sidebar.emit('swagger');
+
+}
+closeSidebar(){
+  this.slideSidebar = false;
+  let item = document.getElementsByClassName('view-container')[0];
+  if(item){
+      item.classList.remove('set-width');
+  }
+
+}
+callapi(event){
+  this.isloaded=false;
+ this.getData(event);
+}
 onCWDetailsearch(data){
   this.searchDetail_bar = data.searchString;
 }
@@ -89,16 +112,32 @@ onCWsearch(data){
   this.search_bar = data.searchString;
 }
 
-getData(){
-    var swaggerAsset = this.service.assets.find((asset) => {
-      return asset.type === 'swagger_url';
-    });
-    var body = {
-      "url": swaggerAsset && swaggerAsset.provider_id
-    };
+getData(payload?){
+    var body;
+    if(!payload){
+      var swaggerAsset = this.service.assets.find((asset) => {
+        return asset.type === 'swagger_url';
+      });
+      swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://', 'https://');
+      this.http.get(swaggerAsset.provider_id).subscribe(
+        (response) => {
+          this.swagger_json=response;
+        },
+        (error) =>{
+          console.log('error',error)
+  
+        }
+      );
+      
+      body = {
+        "url": swaggerAsset && swaggerAsset.provider_id
+      };
+    }
+    else{
+      body = payload;
+    }
     this.subscription = this.http.post('/jazz/apilinter',body).subscribe(
     (response) => {
-      console.log('response',response);
           this.obj=response;
           if(this.obj.results.errors == 0 && this.obj.results.warnings == 0){
             this.congratulations=true;
@@ -129,6 +168,7 @@ getData(){
 
   }
 
+ 
   refresh(){
     this.isloaded=false;
     this.getData();
@@ -138,4 +178,7 @@ getData(){
     this.getData();
   }
 
+  ngOnDestroy(){
+    this.closeSidebar();
+  }
 }

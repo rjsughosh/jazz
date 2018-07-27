@@ -46,10 +46,10 @@ export class EnvironmentDetailComponent implements OnInit {
   disablingApiButton: boolean = true;
   nonClickable: boolean = false;
   message: string;
+  public assets:any;
   public sidebar: string = '';
   private sub: any;
   private subscription: any;
-  public assets;
 
   constructor(
     private toasterService: ToasterService,
@@ -195,27 +195,28 @@ export class EnvironmentDetailComponent implements OnInit {
     });
   }
 
-  testService(type){
-      switch(type){
-          case 'api':
-            let foundAsset = this.assets.find((asset) => {
-              return asset.type === 'swagger_url';
-            });
-            if (foundAsset) {
-              return window.open(environment.urls['swagger_editor'] + foundAsset.provider_id);
-            } else {
-              return window.open('/404');
-            }
-          case 'website' :
-            if(this.endpoint_env){
-              window.open(this.endpoint_env);
-            }
-          break;
-          case 'function' :
-          case 'lambda' :
-            window.open('/404');
-          break;
-      }
+  testService(type) {
+    switch (type) {
+      case 'api':
+        let swaggerAsset = this.assets.find((asset) => {
+          return asset.type === 'swagger_url';
+        });
+        swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://', 'https://');
+        if (swaggerAsset) {
+          return window.open(environment.urls['swagger_editor'] + swaggerAsset.provider_id);
+        } else {
+          return window.open('/404');
+        }
+      case 'website' :
+        if (this.endpoint_env != (undefined || '')) {
+          window.open(this.endpoint_env);
+        }
+        break;
+      case 'function' :
+      case 'lambda' :
+        window.open('/404');
+        break;
+    }
   }
 
   setSidebar(sidebar) {

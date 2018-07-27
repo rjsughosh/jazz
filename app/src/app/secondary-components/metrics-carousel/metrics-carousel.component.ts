@@ -10,6 +10,9 @@ import {UtilsService} from '../../core/services/utils.service';
 })
 export class MetricsCarouselComponent implements OnInit {
   @Input() metrics;
+  //nameProperty -> refers to name of each metric on this.metrics
+  //listProperty -> refers to list of data points on this.metrics
+  // valueProperty -> refers to the data value (y coordinate) of each datapoint in the this.metrics[listProperty]
   @Input() options = {
     nameProperty: 'name',
     listProperty: 'values',
@@ -77,7 +80,12 @@ export class MetricsCarouselComponent implements OnInit {
 
   getRecentValue(metric) {
     if (!metric[this.options.listProperty].length) return;
-    return metric[this.options.listProperty].slice(-1).pop()[this.options.valueProperty].toFixed(0).toString();
+    var _metric = metric[this.options.listProperty].slice(-1).pop()[this.options.valueProperty];
+    if(_metric && typeof _metric === 'string') {
+      return _metric;
+    } else if(_metric && typeof _metric === 'number') {
+      return _metric.toFixed();
+    }
   }
 
   metricName(metric) {

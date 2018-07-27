@@ -7,12 +7,13 @@ import {ActivatedRoute} from '@angular/router';
 import {RequestService} from '../../core/services';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
-
+declare let Promise;
 @Component({
   selector: 'service-metrics',
   templateUrl: './service-metrics.component.html',
   styleUrls: ['./service-metrics.component.scss']
 })
+
 export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   @Input() service;
   @ViewChild('filters') filters;
