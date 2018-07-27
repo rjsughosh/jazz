@@ -65,18 +65,19 @@ export class EnvTryServiceSidebarComponent implements OnInit {
         "functionARN": this.environment.endpoint,
         "inputJSON": this.inputValue
       };
-      this.subscription = this.http.post('https://dev-cloud-api.corporate.t-mobile.com/api/xny9hknknz-dev/jazz/test-lambda', payload).subscribe((response) => {
+      this.subscription = this.http.post('/jazz/test-lambda', payload).subscribe((response) => {
         this.loading = false;
         this.outputHeader = {
           statusCode: response.data.payload.StatusCode|| '',
           statusText: response.data.execStatus
         }
         this.reponse_code = response.data.payload.StatusCode;
+
         if(response.data.payload.StatusCode == 200){
           this.success=true;
           this.error=false;
         }
-        if(response.data.execStatus == 'HandledError'){
+        if(response.data.payload.StatusCode == 200 && response.data.execStatus == 'HandledError'){
           this.success=true;
           this.error=true;
         }
@@ -90,7 +91,7 @@ export class EnvTryServiceSidebarComponent implements OnInit {
         }
         if(this.outputHeader.statusCode != ''){
           this.outputHeader.statusCode+=' : ';
-        }
+        } 
 
         this.outputValue = this.stringToPrettyString(response.data.payload.Payload);
         this.lineNumbers('op');
