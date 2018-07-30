@@ -1,23 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {RequestService, DataCacheService, MessageService, AuthenticationService} from '../../core/services/index';
 import {ToasterService} from 'angular2-toaster';
 import {Router, ActivatedRoute} from '@angular/router';
 import {EnvOverviewSectionComponent} from './../environment-overview/env-overview-section.component';
-// import { ViewChild } from '@angular/core/src/metadata/di';
-import {SharedService} from '../../SharedService.service';
-import {Http, Headers, Response} from '@angular/http';
-import {Output, EventEmitter} from '@angular/core';
-import {AfterViewInit, ViewChild} from '@angular/core';
-import {DataService} from '../data-service/data.service';
+import {DataService} from "../data-service/data.service";
 import {environment} from './../../../environments/environment';
 //import {environment as env_internal} from './../../../environments/environment.internal';
 import {environment as env_oss} from './../../../environments/environment.oss';
-
-
-// import {}
 import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-deployments-section.component';
 
-// import { ViewChild } from '@angular/core/src/metadata/di';
 
 @Component({
   selector: 'environment-detail',
@@ -50,7 +41,6 @@ export class EnvironmentDetailComponent implements OnInit {
   environment = {
     name: 'Dev'
   }
-
   baseUrl: string = '';
   swaggerUrl: string = '';
   disablingWebsiteButton: boolean = true;
@@ -58,11 +48,10 @@ export class EnvironmentDetailComponent implements OnInit {
   disablingApiButton: boolean = true;
   nonClickable: boolean = false;
   message: string;
-
+  public assets:any;
   public sidebar: string = '';
   private sub: any;
   private subscription: any;
-  public assets;
 
   constructor(
     private toasterService: ToasterService,
@@ -75,10 +64,7 @@ export class EnvironmentDetailComponent implements OnInit {
   ) {
   }
 
-  // Disabled other tabs
-
   refreshTab() {
-    console.log(this.selectedTabComponent);
     this.selectedTabComponent.refresh();
   }
 
@@ -167,33 +153,33 @@ export class EnvironmentDetailComponent implements OnInit {
 
   fetchService(id: string) {
     this.isLoadingService = true;
-      this.subscription = this.http.get('/jazz/services/' + id).subscribe(
-        response => {
-          this.service.accounts = 'tmo-dev-ops, tmo-int';
-          this.service.regions = 'us-west-2, us-east';
-          this.service = response.data.data;
-          this.setTabs();
-          this.getAssets();
-          this.cache.set(id, this.service);
-          this.onDataFetched(this.service);
-          this.envoverview.notify(this.service);
-        },
-        err => {
-          this.isLoadingService = false;
-          let errorMessage = this.messageservice.errorMessage(err, "serviceDetail");
-          this.toast_pop('error', 'Oops!', errorMessage)
+    this.subscription = this.http.get('/jazz/services/' + id).subscribe(
+      response => {
+        this.service = response.data.data;
+        if (environment.envName == 'oss') this.service = response.data;
+        this.isFunction = this.service.type === "function";
+        this.getAssets();
+        this.setTabs();
+        this.cache.set(id, this.service);
+        this.onDataFetched(this.service);
+        this.envoverview.notify(this.service);
+      },
+      err => {
+        this.isLoadingService = false;
+        let errorMessage = this.messageservice.errorMessage(err, "serviceDetail");
+        this.toast_pop('error', 'Oops!', errorMessage);
 
-        }
-      );
+      }
+    )
   };
 
   setTabs() {
     if (this.service.serviceType === 'api' || this.service.type === 'api') {
-      this.tabData = ['overview', 'deployments', 'assets', 'code quality', 'logs', 'clear water'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs', 'clear water'];
     } else if (this.service.serviceType === 'function' || this.service.type === 'function') {
-      this.tabData = ['overview', 'deployments', 'assets', 'code quality', 'logs'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs'];
     } else if (this.service.serviceType === 'website' || this.service.type === 'website') {
-      this.tabData = ['overview', 'deployments', 'assets'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics'];
     }
   }
 
@@ -207,19 +193,19 @@ export class EnvironmentDetailComponent implements OnInit {
       this.assets = assetsResponse.data;
       this.service.assets = this.assets;
     }, (err) => {
-      this.toast_pop('error', 'Oops!', 'Swagger File Not Found.');
-      this.swagger_error = true;
+      this.toast_pop('error', 'Oops!', 'Failed to load swagger file.');
     });
   }
 
-  testService(type){
-    switch(type){
+  testService(type) {
+    switch (type) {
       case 'api':
-        let foundAsset = this.assets.find((asset) => {
-          return asset.asset_type === 'swagger_url';
+        let swaggerAsset = this.assets.find((asset) => {
+          return asset.type === 'swagger_url';
         });
-        if (foundAsset) {
-          return window.open(environment.urls['swagger_editor'] + '/?url=' + foundAsset.provider_id);
+        swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://', 'https://');
+        if (swaggerAsset) {
+          return window.open(environment.urls['swagger_editor'] + swaggerAsset.provider_id);
         } else {
           return window.open('/404');
         }
@@ -259,7 +245,6 @@ export class EnvironmentDetailComponent implements OnInit {
   disabletabs: any;
 
   ngOnInit() {
-
     this.sub = this.route.params.subscribe(params => {
       let id = params['id'];
       this.serviceId = id;
@@ -286,13 +271,13 @@ export class EnvironmentDetailComponent implements OnInit {
 }
 
 export enum status {
-  'deployment_completed' = 0,
-  'active',
-  'deployment_started',
-  'pending_approval',
-  'deployment_failed',
-  'inactive',
-  'deletion_started',
-  'deletion_failed',
-  'archived'
+  "deployment_completed" = 0,
+  "active",
+  "deployment_started",
+  "pending_approval",
+  "deployment_failed",
+  "inactive",
+  "deletion_started",
+  "deletion_failed",
+  "archived"
 }

@@ -29,6 +29,7 @@ import {DropdownModule} from 'ng2-dropdown';
 import {PopoverModule} from 'ng2-popover';
 import {ChartsModule} from 'ng2-charts';
 import {BrowserModule} from '@angular/platform-browser';
+// import {ToasterModule} from 'angular2-toaster';
 import {DatePickerModule} from '../primary-components/daterange-picker/ng2-datepicker';
 import {MomentModule} from 'angular2-moment';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
@@ -45,34 +46,36 @@ import {LineGraphComponent} from '../secondary-components/line-graph/line-graph.
 import {SideTileFixedComponent} from '../secondary-components/side-tile-fixed/side-tile-fixed.component';
 import {FooterComponent} from '../secondary-components/footer/footer.component';
 import { OverviewSidebarComponent } from './../secondary-components/overview-sidebar/overview-sidebar.component';
+import { SwaggerSidebarComponent } from './../secondary-components/swagger-sidebar/swagger-sidebar.component';
 
 import {AdvancedFiltersComponentOSS} from '../secondary-components/advanced-filters/OSS/advanced-filters.component';
-import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
-import { AdvFilters }            from '../adv-filter.directive';
-import {SafeUrlPipe} from "../core/pipes/safe-url.pipe";
-import {SafeHtmlPipe} from "../core/pipes/safe-html.pipe";
+import {AdvFilters} from '../adv-filter.directive';
+import {SafeHtmlPipe} from '../core/pipes/safe-html.pipe';
+import {SafeUrlPipe} from '../core/pipes/safe-url.pipe';
+import {MetricsCarouselComponent} from '../secondary-components/metrics-carousel/metrics-carousel.component';
+import {ServiceMetricsComponent} from '../pages/service-metrics/service-metrics.component';
+import {FilterModalComponent} from '../secondary-components/filter-modal/filter-modal.component';
 import {ChartjsLinegraphComponent} from '../secondary-components/chartjs-linegraph/chartjs-linegraph.component';
 import {ReportIssueComponent} from '../primary-components/report-issue/report-issue.component';
-let specificComponents:any
+import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+
+let specificComponents: any
 let specificModules: any;
-//alert(environment.envName);
-if(environment.envName == 'oss'){
+if (environment.envName == 'oss') {
   specificComponents = OssComponents;
-}else if(environment.envName == "jazz")  {
+} else if (environment.envName == "jazz") {
   specificComponents = InternalComponents;
 }
 let importsArray = [];
-let declarationsArray=[];
+let declarationsArray = [];
 
 // for(let i in specificModules){
 //  importsArray.push(specificModules[i]);
 // }
 
-for(let i in specificComponents){
- declarationsArray.push(specificComponents[i]);
+for (let i in specificComponents) {
+  declarationsArray.push(specificComponents[i]);
 }
-// console.log('imports shared  ',importsArray)
-// console.log('dec shared ',declarationsArray)
 
 //
 @NgModule({
@@ -117,13 +120,17 @@ for(let i in specificComponents){
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
+    SwaggerSidebarComponent,
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent,
     AdvFilters,
     SafeHtmlPipe,
     SafeUrlPipe,
     ReportIssueComponent,
+    MetricsCarouselComponent,
     ChartjsLinegraphComponent,
+    FilterModalComponent,
+    ServiceMetricsComponent,
     ...declarationsArray,
 
 
@@ -158,18 +165,25 @@ for(let i in specificComponents){
     SideTileFixedComponent,
     FooterComponent,
     OverviewSidebarComponent,
+    SwaggerSidebarComponent,
     AdvancedFiltersComponentOSS,
     AdvancedFiltersComponent,
     AdvFilters,
     SafeHtmlPipe,
     SafeUrlPipe,
     ReportIssueComponent,
+    MetricsCarouselComponent,
     ChartjsLinegraphComponent,
+    FilterModalComponent,
+    ServiceMetricsComponent,
     ...declarationsArray
 
   ],
-  entryComponents : [AdvancedFiltersComponentOSS, AdvancedFiltersComponent],
-
+  entryComponents: [
+    AdvancedFiltersComponentOSS,
+    AdvancedFiltersComponent
+  ],
 })
+
 export class SharedModule {
 }

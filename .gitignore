@@ -5,5 +5,4 @@ node_modules
 *.pyc
 .cache
 __pycache__
-
-app/app
+/.idea

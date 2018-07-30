@@ -1,46 +1,59 @@
 <div *ngIf='isloaded && !error'>
-    <div class='service-details row'>
-        <div class='cw-cover'>
-         <div class='cw-message'>
-           {{cw_message}}
-         </div>
-         <div class='cw-score'>
-           <div class='score-head'>CLEARWATER SCORE</div>
-           <div class='score-val'>{{cw_score.current}}</div>
-         </div>
-         <div class='cw-values'>
-           <ul>
-             <li>
-               <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
-               <div class='det-label cw-label'>Organization<br>goal</div>
-             </li>
-             <li>
-                 <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
-                 <div class='det-label cw-label'>Organization<br>Average</div>
-             </li>
-             <li>
-               <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>
-               <div class='det-label cw-label'>Total<br>warnings</div>
-             </li>
-             <li>
-               <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
-               <div class='det-label cw-label'>Total<br>errors</div>
-             </li>
+    <div class='service-details row top-section'>
+      <div>
+          <div class='cw-cover relative'>
+        
+              <div class='cw-score'>
+                <div class='score-head'>CLEARWATER SCORE</div>
+                <div class='score-val'>{{cw_score.current}}</div>
+              </div>
+              
+              <div class='cw-values'>
+                <ul>
+                  <li>
+                      <div class='det-label cw-label'>Organization<br>goal</div>
+                      <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>               
+                  </li>
+                  <li>
+                      <div class='det-label cw-label'>Organization<br>Average</div>
+                      <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
+                  </li>
+                  <li>
+                    <div class='det-label cw-label'>Total<br>warnings</div>
+                    <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>               
+                  </li>
+                  <li>
+                      <div class='det-label cw-label'>Total<br>errors</div>
+                    <div class='det-value cw-value error'>{{cw_obj.errors}}</div>               
+                  </li>
+                  <li *ngIf='!slideSidebar'>
+                      <div class='det-label cw-label'>Description</div>
+                    <div class='det-value cw-message'>{{cw_message}}</div>               
+                  </li>
+      
+                </ul>
+              </div>
+              
+              <div class='cw-button'>
+                  <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE API" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
+                  <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
+    
+              </div>
+          </div>
+      </div>
 
-           </ul>
-         </div>
-        </div>
     </div>
-    <div class="separator-row"></div>
     <div class='service-details row' *ngIf='detailView && !congratulations'>
+
+
       <div class='cw-top-part'>
+
         <div class='warning-chk custom-cb'>
             <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="warningSelected" (change)="warningSelected = !warningSelected">
             <label for="checkbox-cw"></label>
             <div class="cb-status-dets">Hide Warnings</div>
         </div>
         <div class='cw-search-wrap'>
-
             <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
             <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
             <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
@@ -77,7 +90,7 @@
                   </tr>
                 </tbody>
               </table>
-              <btn-jazz-primary text="View Details" class="view-details right" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'></btn-jazz-primary>
+              <a  class="view-details right pointer" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'>VIEW DETAILS</a>
 
             </div>
           </div>
@@ -131,6 +144,11 @@
         <div class="loading-circle"></div>
     </div>
 </div>
+
+<section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
+    <swagger-sidebar [envSelected]='env' [service]='service' (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
+
+</section>
 
 <div  *ngIf='isloaded && error' class="service-details empty-row with-refresh relative hgt">
     <div class="icon-icon-server-error">
