@@ -61,8 +61,7 @@ export class EnvironmentDetailComponent implements OnInit {
     private cache: DataCacheService,
     private router: Router,
     private data: DataService
-  ) {
-  }
+  ) {}
 
   refreshTab() {
     this.selectedTabComponent.refresh();
@@ -71,11 +70,6 @@ export class EnvironmentDetailComponent implements OnInit {
   onSelectedDr(selected) {
     this.selectedTab = selected;
   }
-
-  onTabSelected(i) {
-
-    this.selectedTab = i;
-  };
 
   EnvLoad(event) {
     this.environment_obj = event.environment[0];
@@ -124,7 +118,6 @@ export class EnvironmentDetailComponent implements OnInit {
   };
 
   onDataFetched(service) {
-
     if (service !== undefined && service !== "") {
       this.service = this.processService(service);
       if (this.service.serviceType == "function") this.isFunction = true;
@@ -233,16 +226,6 @@ export class EnvironmentDetailComponent implements OnInit {
       tst.classList.remove('toaster-anim');
     }, 3000);
   }
-
-
-  public closeSidebar(eve) {
-    this.closed = true;
-    this.close = eve;
-  }
-
-  close: boolean = false;
-  closed: boolean = false;
-  disabletabs: any;
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
