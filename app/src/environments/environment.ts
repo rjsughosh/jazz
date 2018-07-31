@@ -15,5 +15,5 @@ export const environment = {
   userJourney: {
     registrationMessage: ''
   },
-  gaTrackingId: 'UA-121896506-1'
+  gaTrackingId: ''
 };
