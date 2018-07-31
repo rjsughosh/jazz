@@ -144,6 +144,235 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   }
 
   queryMetricsData() {
+    var r = {
+      "data": {
+        "domain": "surya",
+        "service": "test-api1",
+        "environment": "prod",
+        "end_time": "2018-07-07T01:31:44.776Z",
+        "start_time": "2018-06-30T01:31:44.770Z",
+        "interval": 3600,
+        "statistics": "sum",
+        "assets": [
+          {
+            "type": "apigateway",
+            "asset_name": {
+              "ApiName": "jazz20180706-prod",
+              "Method": "GET",
+              "Resource": "/surya/test-api1",
+              "Stage": "prod"
+            },
+            "statistics": "Sum",
+            "metrics": [
+              {
+                "metric_name": "4XXError",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 0,
+                    "Unit": "Count"
+                  }
+                ]
+              },
+              {
+                "metric_name": "5XXError",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 0,
+                    "Unit": "Count"
+                  }
+                ]
+              },
+              {
+                "metric_name": "CacheMissCount",
+                "datapoints": []
+              },
+              {
+                "metric_name": "IntegrationLatency",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 583,
+                    "Unit": "Milliseconds"
+                  }
+                ]
+              },
+              {
+                "metric_name": "CacheHitCount",
+                "datapoints": []
+              },
+              {
+                "metric_name": "Count",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 9,
+                    "Unit": "Count"
+                  }
+                ]
+              },
+              {
+                "metric_name": "Latency",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 916,
+                    "Unit": "Milliseconds"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "lambda",
+            "asset_name": {
+              "FunctionName": "jazz20180706-surya-test-api1-prod"
+            },
+            "statistics": "Sum",
+            "metrics": [
+              {
+                "metric_name": "Invocations",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 9,
+                    "Unit": "Count"
+                  }
+                ]
+              },
+              {
+                "metric_name": "Throttles",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 0,
+                    "Unit": "Count"
+                  }
+                ]
+              },
+              {
+                "metric_name": "IteratorAge",
+                "datapoints": []
+              },
+              {
+                "metric_name": "Errors",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 0,
+                    "Unit": "Count"
+                  }
+                ]
+              },
+              {
+                "metric_name": "Dead Letter Error",
+                "datapoints": []
+              },
+              {
+                "metric_name": "Duration",
+                "datapoints": [
+                  {
+                    "Timestamp": "2018-07-06T22:31:00.000Z",
+                    "Sum": 54.59,
+                    "Unit": "Milliseconds"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "apigateway",
+            "asset_name": {
+              "ApiName": "jazz20180706-prod",
+              "Method": "OPTIONS",
+              "Resource": "/surya/test-api1",
+              "Stage": "prod"
+            },
+            "statistics": "Sum",
+            "metrics": [
+              {
+                "metric_name": "4XXError",
+                "datapoints": []
+              },
+              {
+                "metric_name": "5XXError",
+                "datapoints": []
+              },
+              {
+                "metric_name": "CacheHitCount",
+                "datapoints": []
+              },
+              {
+                "metric_name": "Latency",
+                "datapoints": []
+              },
+              {
+                "metric_name": "IntegrationLatency",
+                "datapoints": []
+              },
+              {
+                "metric_name": "CacheMissCount",
+                "datapoints": []
+              },
+              {
+                "metric_name": "Count",
+                "datapoints": []
+              }
+            ]
+          },
+          {
+            "type": "apigateway",
+            "asset_name": {
+              "ApiName": "jazz20180706-prod",
+              "Method": "POST",
+              "Resource": "/surya/test-api1",
+              "Stage": "prod"
+            },
+            "statistics": "Sum",
+            "metrics": [
+              {
+                "metric_name": "Latency",
+                "datapoints": []
+              },
+              {
+                "metric_name": "4XXError",
+                "datapoints": []
+              },
+              {
+                "metric_name": "CacheHitCount",
+                "datapoints": []
+              },
+              {
+                "metric_name": "Count",
+                "datapoints": []
+              },
+              {
+                "metric_name": "5XXError",
+                "datapoints": []
+              },
+              {
+                "metric_name": "CacheMissCount",
+                "datapoints": []
+              },
+              {
+                "metric_name": "IntegrationLatency",
+                "datapoints": []
+              }
+            ]
+          }
+        ]
+      },
+      "input": {
+        "domain": "surya",
+        "service": "test-api1",
+        "environment": "prod",
+        "start_time": "2018-06-30T01:31:44.770Z",
+        "end_time": "2018-07-07T01:31:44.776Z",
+        "interval": 3600,
+        "statistics": "sum"
+      }
+    }
     this.sectionStatus = 'loading';
     let request = {
       url: '/jazz/metrics',
@@ -157,7 +386,8 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
         statistics: this.filters.getFieldValueOfLabel('AGGREGATION')
       }
     };
-    return this.http.post(request.url, request.body)
+    return Observable.of(r)
+    // return this.http.post(request.url, request.body)
       .toPromise()
       .then((response) => {
         this.sectionStatus = 'empty';

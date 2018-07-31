@@ -8,9 +8,9 @@
            (click)="selectCard(metric)">
         <div class='metrics-name'>{{metricName(metric)}}</div>
         <div class="metrics-card-content">
-            {{getRecentValue(metric) || 'No Data'}}
+            {{getRecentValue(metric) || '-'}}
         </div>
-        <div class="metrics-footer" *ngIf="getRecentValue(metric)">
+        <div class="metrics-footer" *ngIf="getRecentValue(metric) && options.footerProperty">
           {{metric[options.listProperty][0][options.footerProperty]}}
         </div>
       </div>
