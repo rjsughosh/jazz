@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService, MessageService, RequestService } from '../../core/services/index';
 import { ToasterService} from 'angular2-toaster';
+import {environment} from "../../../environments/environment";
 
 @Component({
     selector: 'jazz-header',
@@ -73,6 +74,10 @@ export class JazzHeaderComponent implements OnInit {
       return this.router.navigate(['/user-journey']);
     }
 
+    openDocs() {
+      window.open(environment.urls['docs_link'], '_blank');
+    }
+
     onNavigate(){
         window.open('https://docs.jazz.corporate.t-mobile.com')
     }
@@ -80,6 +85,7 @@ export class JazzHeaderComponent implements OnInit {
     goToLanding(){
         this.router.navigateByUrl('');// Route to landing page
     }
+
     openSection(){
         var el = document.getElementById("mobileLinks");
         if(el.offsetHeight == 0)
@@ -118,8 +124,7 @@ export class JazzHeaderComponent implements OnInit {
 
     }
 
-    toast_pop(error,oops,errorMessage)
-    {
+    toast_pop(error,oops,errorMessage) {
         var tst = document.getElementById('toast-container');
   
          tst.classList.add('toaster-anim');                            
@@ -133,6 +138,7 @@ export class JazzHeaderComponent implements OnInit {
     preventDefault(e){
         e.preventDefault();
     }
+
     openFeedbackForm(){
         this.isFeedback=true;
         this.model.userFeedback='';
@@ -142,6 +148,7 @@ export class JazzHeaderComponent implements OnInit {
         this.isLoading = false;
         this.buttonText='SUBMIT';
     }
+
     mailTo(){
         location.href='mailto:serverless@t-mobile.com?subject=Jazz: Feedback/Issue&body=' + this.model.userFeedback;
     }
