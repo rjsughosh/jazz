@@ -178,6 +178,10 @@ $break-small         : 840px;
     @media screen and (max-width: $break-small ) {
          display: none;	
 	}
+    .logged-in-docs {
+      font-family: Lato;
+      font-size: 13px;
+    }
     .header-profile-section{
         margin-top: 0;
     }
@@ -185,6 +189,8 @@ $break-small         : 840px;
         display: list-item;
         height: initial;
         color: grey;
+
+
         :hover{
             background-color: #ed008c;
             color: #fff;

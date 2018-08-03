@@ -157,6 +157,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
         statistics: this.filters.getFieldValueOfLabel('AGGREGATION')
       }
     };
+
     return this.http.post(request.url, request.body)
       .toPromise()
       .then((response) => {
@@ -225,6 +226,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
     }
 
     if (this.selectedAsset) {
+      this.sortAssetData(this.selectedAsset);
       this.setMetric();
       this.sectionStatus = 'resolved';
     } else {
@@ -292,5 +294,14 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  sortAssetData(asset) {
+    asset.metrics.forEach((metric) => {
+      let datapoints = metric.datapoints
+        .sort((pointA, pointB) => {
+          return moment(pointA.Timestamp).diff(moment(pointB.Timestamp));
+        });
+      metric.datapoints = datapoints;
+    })
+  }
 
 }
