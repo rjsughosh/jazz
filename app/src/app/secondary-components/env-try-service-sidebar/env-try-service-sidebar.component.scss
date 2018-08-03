@@ -78,8 +78,8 @@ textarea {
 }
 
 .line-numbers {
+  text-align:center;
   border-radius: 5px 0 0 5px;
-  text-align: center;
   width: 4rem;
   background-color: #EEEEEE;
   padding: 2px 2px 2px 2px;
@@ -136,6 +136,7 @@ button {
   padding: 2px;
   font-size: 12px;
   color: #d0021b;
+  margin:1rem 0;
 }
 
 .warning-chk-wrp{
@@ -184,6 +185,9 @@ button {
   padding:0.5rem 0;
 }
 .dropdown-hdr{
-  margin-bottom: 1rem;
+  margin-bottom: 0.4rem;
   display: block;
-  }
+}
+.cb-status-dets{
+  padding-left: 1rem;
+}
