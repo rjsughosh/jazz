@@ -151,8 +151,10 @@ export class EnvironmentDetailComponent implements OnInit {
         this.service = response.data.data;
         if (environment.envName == 'oss') this.service = response.data;
         this.isFunction = this.service.type === "function";
-        this.getAssets();
         this.setTabs();
+        // if(this.service.serviceType === 'api' || this.service.type === 'api' && this.selectedTab == 6)
+          this.getAssets();
+
         this.cache.set(id, this.service);
         this.onDataFetched(this.service);
         this.envoverview.notify(this.service);
@@ -186,7 +188,7 @@ export class EnvironmentDetailComponent implements OnInit {
       this.assets = assetsResponse.data;
       this.service.assets = this.assets;
     }, (err) => {
-      this.toast_pop('error', 'Oops!', 'Failed to load swagger file.');
+      this.toast_pop('error', 'Oops!', 'Failed to load Assets');
     });
   }
 

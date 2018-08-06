@@ -64,7 +64,7 @@ export class EnvTryServiceSidebarComponent implements OnInit {
       this.loading = true;
       let payload = {
         "functionARN": this.environment.endpoint,
-        "inputJSON": this.inputValue
+        "inputJSON": JSON.parse(this.inputValue)
       };
       this.subscription = this.http.post('/jazz/test-lambda', payload).subscribe((response) => {
         this.loading = false;
@@ -117,7 +117,10 @@ export class EnvTryServiceSidebarComponent implements OnInit {
   clearInputbox(){
     this.inputValue='';
     this.lineNumbers("ip");
+    this.outputValue="";
+    this.lineNumbers("op");
     this.valid = true;
+    this.outputHeader=false;
   }
 
   inputIsValid() {
