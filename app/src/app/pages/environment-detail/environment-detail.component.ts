@@ -5,6 +5,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {EnvOverviewSectionComponent} from './../environment-overview/env-overview-section.component';
 import {DataService} from "../data-service/data.service";
 import {environment} from './../../../environments/environment';
+//import {environment as env_internal} from './../../../environments/environment.internal';
+import {environment as env_oss} from './../../../environments/environment.oss';
 import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-deployments-section.component';
 
 
@@ -33,7 +35,7 @@ export class EnvironmentDetailComponent implements OnInit {
   status_inactive: boolean = false;
   swagger_error: boolean = false;
 
-  tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs'];
+  tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clear water'];
   envSelected: string = '';
   endpoint_env: string = '';
   environment = {
@@ -59,8 +61,7 @@ export class EnvironmentDetailComponent implements OnInit {
     private cache: DataCacheService,
     private router: Router,
     private data: DataService
-  ) {
-  }
+  ) {}
 
   refreshTab() {
     this.selectedTabComponent.refresh();
@@ -69,11 +70,6 @@ export class EnvironmentDetailComponent implements OnInit {
   onSelectedDr(selected) {
     this.selectedTab = selected;
   }
-
-  onTabSelected(i) {
-
-    this.selectedTab = i;
-  };
 
   EnvLoad(event) {
     this.environment_obj = event.environment[0];
@@ -122,7 +118,6 @@ export class EnvironmentDetailComponent implements OnInit {
   };
 
   onDataFetched(service) {
-
     if (service !== undefined && service !== "") {
       this.service = this.processService(service);
       if (this.service.serviceType == "function") this.isFunction = true;
@@ -156,8 +151,10 @@ export class EnvironmentDetailComponent implements OnInit {
         this.service = response.data.data;
         if (environment.envName == 'oss') this.service = response.data;
         this.isFunction = this.service.type === "function";
-        this.getAssets();
         this.setTabs();
+        // if(this.service.serviceType === 'api' || this.service.type === 'api' && this.selectedTab == 6)
+          this.getAssets();
+
         this.cache.set(id, this.service);
         this.onDataFetched(this.service);
         this.envoverview.notify(this.service);
@@ -191,7 +188,7 @@ export class EnvironmentDetailComponent implements OnInit {
       this.assets = assetsResponse.data;
       this.service.assets = this.assets;
     }, (err) => {
-      this.toast_pop('error', 'Oops!', 'Failed to load swagger file.');
+      this.toast_pop('error', 'Oops!', 'Failed to load Assets');
     });
   }
 
@@ -208,13 +205,13 @@ export class EnvironmentDetailComponent implements OnInit {
           return window.open('/404');
         }
       case 'website' :
-        if (this.endpoint_env != (undefined || '')) {
+        if(this.endpoint_env != (undefined || '')) {
           window.open(this.endpoint_env);
         }
         break;
       case 'function' :
       case 'lambda' :
-        window.open('/404');
+        this.setSidebar('try-service');
         break;
     }
   }

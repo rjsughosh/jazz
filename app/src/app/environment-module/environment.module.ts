@@ -20,7 +20,7 @@ import {ChartsModule} from "ng2-charts";
 import {SessionStorageService} from "../core/helpers/session-storage.service";
 import {RelaxedJsonService} from "../core/helpers/relaxed-json.service";
 import {ClearWaterComponent} from "../pages/clear-water/clear-water.component";
-
+import {EnvTryServiceSidebarComponent} from '../secondary-components/env-try-service-sidebar/env-try-service-sidebar.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +41,8 @@ import {ClearWaterComponent} from "../pages/clear-water/clear-water.component";
     EnvCodequalitySectionComponent,
     EnvLogsSectionComponent,
     EnvOverviewSectionComponent,
-    ClearWaterComponent
+    ClearWaterComponent,
+    EnvTryServiceSidebarComponent
   ],
   providers: [
     AdvancedFilterService,
