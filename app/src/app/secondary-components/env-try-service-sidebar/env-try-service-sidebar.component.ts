@@ -75,25 +75,13 @@ export class EnvTryServiceSidebarComponent implements OnInit {
         this.reponse_code = response.data.payload.StatusCode;
         if(response.data.payload.StatusCode === 200){
           this.success=true;
-          this.error=false;
         }
-
-        if(response.data.execStatus === 'HandledError'){
-          this.success=true;
-          this.error=true;
-        }
-        if(response.data.execStatus === 'UnhandledError'){
-          this.success=true;
-          this.error=true;
-        }
-        if(response.data.execStatus === 'TimeoutError'){
+        else{
           this.success=false;
-          this.error=true;
         }
         if(response.data.execStatus === 'FunctionInvocationError'){
           this.FunctionInvocationError = true;
           this.success=false;
-          this.error=true;
         }
         if(this.outputHeader.statusCode != ''){
           this.outputHeader.statusCode+=' : ';
@@ -129,6 +117,7 @@ export class EnvTryServiceSidebarComponent implements OnInit {
   clearInputbox(){
     this.inputValue='';
     this.lineNumbers("ip");
+    this.valid = true;
   }
 
   inputIsValid() {
