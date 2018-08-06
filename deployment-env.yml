@@ -1,5 +1,5 @@
-service : webapp
-domain : jazz
+service: webapp
+domain: jazz
 type: angular
-owner: aanand12
+owner: Smalire
 create_cloudfront_url: true
