@@ -21,9 +21,10 @@ export class EnvAssetsSectionComponent implements OnInit {
 	 state: string = 'default';
    showPaginationtable: boolean = true;
    currentlyActive: number = 1;
-	 totalPageNum: number = 12;
+	 totalPageNum: number;
 	 offset:number = 0;
-	 offsetval:number = 0;
+   offsetval:number = 0;
+   _pageCount:number;
 
 	private env:any;
 	private http:any;
@@ -68,13 +69,13 @@ export class EnvAssetsSectionComponent implements OnInit {
 	}
 
 	assetsList: any = [];
-	
+
 	accList=['tmodevops','tmonpe'];
   regList=['us-west-2', 'us-east-1'];
 	accSelected:string = 'tmodevops';
   regSelected:string = 'us-west-2';
 	type: any = [];
-	
+
 	length: any;
 	// image: any = [];
 	slNumber: any = [];
@@ -108,7 +109,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 	lastCommitted: any;
 	islink:boolean = false;
 	count: any = [];
-	relativeUrl:string = '/jazz/assets/search';
+	relativeUrl:string = '/jazz/assets';
 
   @Input() service: any = {};
 
@@ -119,7 +120,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 		private cache: DataCacheService,
 		private authenticationservice: AuthenticationService ,
 		@Inject(ComponentFactoryResolver) componentFactoryResolver,private advancedFilters: AdvancedFilterService ,
-		
+
   ) {
 		this.http = request;
 		this.componentFactoryResolver = componentFactoryResolver;
@@ -158,7 +159,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 		// });
 
 	}
-  
+
    onaccSelected(event){
     this.FilterTags.notify('filter-Account',event);
     this.accSelected=event;
@@ -172,41 +173,41 @@ export class EnvAssetsSectionComponent implements OnInit {
    onFilterSelect(event){
 	// alert('key: '+event.key+'  value: '+event.value);
 	switch(event.key){
-	  
-	  
+
+
 	  case 'account':{
 		  this.FilterTags.notify('filter-Account',event.value);
 		this.accSelected=event.value;
 		break;
 	  }
-	  case 'region':{ 
+	  case 'region':{
 		this.FilterTags.notify('filter-Region',event.value);
 		this.regSelected=event.value;
 		break;
-			
+
 	  }
 
-   
+
 	}
-	
+
 }
 
    cancelFilter(event){
 		// // console.log('event',event);
 		// switch(event){
-			
+
 		// 	case 'account':{this.onaccSelected('Acc 1');
-		
+
 		// 	break;
 		// 	}
 		// 	case 'region':{this.onregSelected('reg 1');
-		
+
 		// 	break;
 		// 	}
-			
-				
-		// 	case 'all':{ 
-		// 	this.onaccSelected('Acc 1');   
+
+
+		// 	case 'all':{
+		// 	this.onaccSelected('Acc 1');
 		// 	this.onregSelected('reg 1');
 		// 		break;
 		// 	}
@@ -222,13 +223,14 @@ export class EnvAssetsSectionComponent implements OnInit {
 				domain: this.service.domain,
 				environment: this.env,
 				limit:10,
-				
+
 				};
 				if(this.offsetval > 0){
 					payload["offset"] = this.offsetval;
 				}
-				
-				this.subscription = this.http.post(this.relativeUrl, payload).subscribe(
+        // +this.offsetval
+				this.subscription = this.http.get('https://dev-cloud-api.corporate.t-mobile.com/api/g338sqltls-dev/jazz/assets?service='+this.service.name+'&domain='+this.service.domain+'&environement='+this.env+'&limit='+this.limitValue+'&offset=1').subscribe(
+          // https://cloud-api.corporate.t-mobile.com/api/jazz/assets?service=assets&domain=jazz&environement=prod&limit=10&offset=0
 					// this.subscription = this.http.get("https://api.myjson.com/bins/1ccgh3").subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
 
@@ -240,37 +242,42 @@ export class EnvAssetsSectionComponent implements OnInit {
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
-					// response.data.push.apply(response.data,response.data);
-					var res = response.data || response.data.items;
+          // response.data.push.apply(response.data,response.data);
+          var res = response.data.assets;
+          this._pageCount = response.data.count;
+          console.log('this.assrts res',res)
 					if((res == undefined) || (res.length == 0)){
             this.envResponseEmpty = true;
 						this.isLoading = false;
 					}
 					else
 					{
-            var pageCount = res.length;
+            var pageCount = this._pageCount;
 
-          
+
+
           if(pageCount){
             this.totalPageNum = Math.ceil(pageCount/this.limitValue);
           }
           else{
             this.totalPageNum = 0;
           }
+          // debugger
 					this.envResponseEmpty = false;
 					this.isLoading = false;
-						
+
 					this.envResponseTrue = true;
 					// console.log('response.data ',response.data );
-					this.length = res.length;
+          this.length = res.length;
+
 					// console.log('length ',this.length );
 
 					// this.length = 21;
 					this.assetsList = res;
-					
+
 					for(var i=0; i < this.length ; i++){
 						this.type[i] = res[i].type;
-						
+
 						this.slNumber[i] = (i+1);
 						if( res[i].provider == undefined ){
 							this.Provider[i] = "-"
@@ -300,7 +307,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 
 						this.lastCommitted = res[i].timestamp;
 						var commit = this.lastCommitted.substring(0,19);
-						var lastCommit = new Date(commit);						
+						var lastCommit = new Date(commit);
 						var now = new Date();
 						var todays = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
@@ -322,9 +329,9 @@ export class EnvAssetsSectionComponent implements OnInit {
 							}
 						  }
 						}
-						
+
 						}
-						
+
 
 					}
         },
@@ -339,18 +346,18 @@ export class EnvAssetsSectionComponent implements OnInit {
 					this.errorRequest = payload;
 					this.errorUser = this.authenticationservice.getUserId();
 					this.errorResponse = JSON.parse(error._body);
-	
+
 				// let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
 							// this.popToast('error', 'Oops!', errorMessage);
 			})
-		};	
+		};
 		getTime() {
 			var now = new Date();
 			this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 			+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
 			// console.log(this.errorTime);
 			}
-	
+
 		feedbackRes:boolean=false;
 		openModal:boolean=false;
 			feedbackMsg:string='';
@@ -366,7 +373,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 		djson:any={};
 		// isLoading:boolean=false;
 		reportIssue(){
-			
+
 					this.json = {
 						"user_reported_issue" : this.model.userFeedback,
 						"API": this.errorAPI,
@@ -376,14 +383,14 @@ export class EnvAssetsSectionComponent implements OnInit {
 						"TIME OF ERROR":this.errorTime,
 						"LOGGED IN USER":this.errorUser
 				}
-				
+
 					this.openModal=true;
 					this.errorChecked=true;
 					this.isLoading=false;
 					this.errorInclude = JSON.stringify(this.djson);
 					this.sjson = JSON.stringify(this.json);
 				}
-			
+
 				openFeedbackForm(){
 					this.isFeedback=true;
 					this.model.userFeedback='';
@@ -398,9 +405,9 @@ export class EnvAssetsSectionComponent implements OnInit {
 				}
 				errorIncluded(){
 				}
-			 
+
 				submitFeedback(action){
-			
+
 					this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
 					if( this.errorChecked == true ){
 						this.json = {
@@ -416,14 +423,14 @@ export class EnvAssetsSectionComponent implements OnInit {
 						this.json = this.model.userFeedback ;
 					}
 					this.sjson = JSON.stringify(this.json);
-			
+
 					this.isLoading = true;
-			
+
 					if(action == 'DONE'){
 						this.openModal=false;
 						return;
 					}
-			
+
 					var payload={
 						"title" : "Jazz: Issue reported by "+ this.authenticationservice.getUserId(),
 						"project_id": "CAPI",
@@ -443,7 +450,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 							this.feedbackResSuccess= true;
 							if(respData != undefined && respData != null && respData != ""){
 								this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
-							} 
+							}
 						},
 						error => {
 							this.buttonText='DONE';
@@ -459,9 +466,9 @@ export class EnvAssetsSectionComponent implements OnInit {
 		//  console.log("url = ",url)
 		 window.open(url , '_blank');
 	 }
-	 
+
 	 ngOnInit() {
-		// this.callServiceEnvAssets() 
+		// this.callServiceEnvAssets()
 		// let cachedData = this.cache.get(this.model.username);
 	}
 	limitValue : number = 10;
@@ -472,10 +479,10 @@ export class EnvAssetsSectionComponent implements OnInit {
       this.prevActivePage = currentlyActivePage;
       // this.pageSelected = currentlyActivePage;
       this.assetsList = [];
-     
+
 
 			this.offsetval = (this.limitValue * (currentlyActivePage-1));
-		
+
 			this.callServiceEnvAssets();
 
     }
@@ -518,7 +525,7 @@ export class EnvAssetsSectionComponent implements OnInit {
     this.callServiceEnvAssets();
 }
 
-refreshCostData(event){ 
+refreshCostData(event){
   this.callServiceEnvAssets();
 }
 public goToAbout(hash){

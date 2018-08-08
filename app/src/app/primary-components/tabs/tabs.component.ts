@@ -20,6 +20,7 @@ export class TabsComponent implements OnInit {
   @Input() public tabChanged: Function;
   @Output() onSelected: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() service;
+  @Input() beforeEnv: boolean = true;
 
   disableobj: any = {
     'overview': true,
