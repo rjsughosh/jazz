@@ -222,20 +222,23 @@ export class EnvAssetsSectionComponent implements OnInit {
 				service: this.service.name,
 				domain: this.service.domain,
 				environment: this.env,
-				limit:10,
+				// limit:10,
 
 				};
 				if(this.offsetval > 0){
 					payload["offset"] = this.offsetval;
 				}
         // +this.offsetval
-				this.subscription = this.http.get('https://dev-cloud-api.corporate.t-mobile.com/api/g338sqltls-dev/jazz/assets?service='+this.service.name+'&domain='+this.service.domain+'&environement='+this.env+'&limit='+this.limitValue+'&offset=1').subscribe(
+        // https://dev-cloud-api.corporate.t-mobile.com/api/g338sqltls-dev/
+        this.subscription = this.http.post('/jazz/assets/search',payload).subscribe(
+        // ?service='+this.service.name+'&domain='+this.service.domain+'&environement='+this.env+'&limit='+this.limitValue+'&offset=1').subscribe(
           // https://cloud-api.corporate.t-mobile.com/api/jazz/assets?service=assets&domain=jazz&environement=prod&limit=10&offset=0
 					// this.subscription = this.http.get("https://api.myjson.com/bins/1ccgh3").subscribe(
 					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
 
       // this.subscription = this.http.get('/jazz/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
         (response) => {
+          debugger
 					// console.log("response  = ",response);
 					// console.log("response data  = ",response.data);
 					// response.data.push.apply(response.data,response.data);
@@ -243,7 +246,7 @@ export class EnvAssetsSectionComponent implements OnInit {
 					// response.data.push.apply(response.data,response.data);
 					// response.data.push.apply(response.data,response.data);
           // response.data.push.apply(response.data,response.data);
-          var res = response.data.assets;
+          var res = response.data;
           this._pageCount = response.data.count;
           console.log('this.assrts res',res)
 					if((res == undefined) || (res.length == 0)){

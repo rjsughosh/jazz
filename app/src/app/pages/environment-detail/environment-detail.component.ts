@@ -182,12 +182,13 @@ export class EnvironmentDetailComponent implements OnInit {
   }
 
   getAssets() {
-    this.http.get('https://dev-cloud-api.corporate.t-mobile.com/api/g338sqltls-dev/jazz/assets', {
+    // https://dev-cloud-api.corporate.t-mobile.com/api/g338sqltls-dev
+    this.http.post('/jazz/assets/search', {
       service: this.service.service || this.service.name,
       domain: this.service.domain,
       environment: this.envSelected,
     }).subscribe((assetsResponse) => {
-      this.assets = assetsResponse.data.assets;
+      this.assets = assetsResponse.data;
       this.service.assets = this.assets;
       this.disablingApiButton = false;
       if(this.assets.count == 0){
@@ -204,7 +205,7 @@ export class EnvironmentDetailComponent implements OnInit {
   testService(type) {
     switch (type) {
       case 'api':
-      debugger
+      // debugger
         let swaggerAsset = this.assets.find((asset) => {
           return asset.type === 'swagger_url';
         });
