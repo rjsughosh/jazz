@@ -25,7 +25,7 @@ import {environment} from './../../../../environments/environment';
 
 export class ServiceDetailComponent implements OnInit {
     constructor(
-        
+
         private toasterService: ToasterService,
         private route: ActivatedRoute,
         private router: Router,
@@ -43,7 +43,7 @@ export class ServiceDetailComponent implements OnInit {
     @Output() deleteServiceStatus:EventEmitter<boolean> = new EventEmitter<boolean>();
     @ViewChild('selectedTabComponent') selectedTabComponent;
 
-
+    isENVavailable:boolean = true;
     disblebtn:boolean = true;
     ServiceName:string;
     deleteServiceVal:boolean;
@@ -238,7 +238,7 @@ export class ServiceDetailComponent implements OnInit {
         this.showPopUp = true;
         this.success = false;
     };
-    refreshServ()    
+    refreshServ()
     {
     this.isGraphLoading=true;
     this.fetchService(this.id);
@@ -352,7 +352,7 @@ export class ServiceDetailComponent implements OnInit {
         }
     }
 
-    
+
     changeTabIndex(index){
         this.thisIndex = index;
     }
@@ -376,7 +376,7 @@ export class ServiceDetailComponent implements OnInit {
         this.refreshTabClicked=true;
         if(this.selectedTab == 0){
             this.refreshServ();
-            
+
         }
         else{
             this.selectedTabComponent.refresh();
@@ -394,7 +394,7 @@ export class ServiceDetailComponent implements OnInit {
             this.fetchService(this.id);
         });
         // this.MetricsInstance.notifyByEnv("sist");
-       
+
         //erase action
         // $( document ).ready(function() {
         //     $('#redux').eraser();
@@ -402,6 +402,6 @@ export class ServiceDetailComponent implements OnInit {
 
     }
     ngOnChanges(x:any){
-         
+
     }
 }

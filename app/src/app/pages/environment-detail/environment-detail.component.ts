@@ -43,6 +43,7 @@ export class EnvironmentDetailComponent implements OnInit {
   }
   baseUrl: string = '';
   swaggerUrl: string = '';
+  errAssets:boolean = false;
   disablingWebsiteButton: boolean = true;
   disablingFunctionButton: boolean = false;
   disablingApiButton: boolean = true;
@@ -52,6 +53,7 @@ export class EnvironmentDetailComponent implements OnInit {
   public sidebar: string = '';
   private sub: any;
   private subscription: any;
+  isENVavailable:boolean = false;
 
   constructor(
     private toasterService: ToasterService,
@@ -73,9 +75,10 @@ export class EnvironmentDetailComponent implements OnInit {
 
   EnvLoad(event) {
     this.environment_obj = event.environment[0];
+    this.isENVavailable = true;
     this.status_val = parseInt(status[this.environment_obj.status]);
     if ((this.status_val < 2) || (this.status_val == 4)) {
-      this.disablingApiButton = false;
+      this.disablingApiButton = (false && this.errAssets);
     }
 
     this.status_inactive = true;
@@ -179,16 +182,23 @@ export class EnvironmentDetailComponent implements OnInit {
   }
 
   getAssets() {
-    this.http.post('/jazz/assets/search', {
+    this.http.get('/jazz/assets', {
       service: this.service.service || this.service.name,
       domain: this.service.domain,
       environment: this.envSelected,
-      limit: undefined
+      limit:undefined
     }).subscribe((assetsResponse) => {
-      this.assets = assetsResponse.data;
+      this.assets = assetsResponse.data.assets;
       this.service.assets = this.assets;
+      this.disablingApiButton = false;
+      if(this.assets.count == 0){
+        this.disablingApiButton = true;
+        this.errAssets = true;
+      }
     }, (err) => {
       this.toast_pop('error', 'Oops!', 'Failed to load Assets');
+      this.disablingApiButton = true;
+      this.errAssets = true;
     });
   }
 
