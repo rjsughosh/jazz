@@ -222,121 +222,100 @@ export class EnvAssetsSectionComponent implements OnInit {
 				service: this.service.name,
 				domain: this.service.domain,
 				environment: this.env,
-				// limit:10,
-
-				};
-				if(this.offsetval > 0){
-					payload["offset"] = this.offsetval;
-				}
-        // +this.offsetval
-        // https://dev-cloud-api.corporate.t-mobile.com/api/g338sqltls-dev/
-        this.subscription = this.http.post('/jazz/assets/search', payload).subscribe(
-        // ?service='+this.service.name+'&domain='+this.service.domain+'&environement='+this.env+'&limit='+this.limitValue+'&offset=1').subscribe(
-          // https://cloud-api.corporate.t-mobile.com/api/jazz/assets?service=assets&domain=jazz&environement=prod&limit=10&offset=0
-					// this.subscription = this.http.get("https://api.myjson.com/bins/1ccgh3").subscribe(
-					// this.subscription = this.http.get('https://api.myjson.com/bins/16ydw5').subscribe(
-
-      // this.subscription = this.http.get('/jazz/assets/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
+        limit:10,
+        offset:this.offsetval
+        };
+        this.subscription = this.http.get('/jazz/assets', payload).subscribe(
         (response) => {
-          debugger
-					// console.log("response  = ",response);
-					// console.log("response data  = ",response.data);
-					// response.data.push.apply(response.data,response.data);
-					// response.data.push.apply(response.data,response.data);
-					// response.data.push.apply(response.data,response.data);
-					// response.data.push.apply(response.data,response.data);
-          // response.data.push.apply(response.data,response.data);
-          var res = response.data;
+          var res = response.data.assets;
           this._pageCount = response.data.count;
-          console.log('this.assrts res',res)
-					if((res == undefined) || (res.length == 0)){
+					if ((res === undefined) || (res.length === 0)){
             this.envResponseEmpty = true;
 						this.isLoading = false;
 					}
 					else
 					{
             var pageCount = this._pageCount;
+            if(pageCount){
+              this.totalPageNum = Math.ceil(pageCount/this.limitValue);
+            }
+            else{
+              this.totalPageNum = 0;
+            }
+            this.envResponseEmpty = false;
+            this.isLoading = false;
+            this.envResponseTrue = true;
+            this.length = res.length;
+            this.assetsList = res;
+            for(var i=0; i < this.length ; i++)
+            {
+              this.type[i] = res[i].type;
+              this.slNumber[i] = this.offsetval + (i+1);
+              if( res[i].provider == undefined )
+              {
+                this.Provider[i] = "-"
+              }
+              else
+              {
+              this.Provider[i] = res[i].provider;
+              }
+              if( res[i].status == undefined )
+              {
+                this.status[i] = "-"
+              }
+              else
+              {
+              this.status[i] = res[i].status;
+              }
+              if( res[i].endpoint_url == undefined ){
+                this.endpoint[i] = "-"
+              }
+              else{
+              this.endpoint[i] = res[i].endpoint_url;;
+              }
+              if( res[i].swagger_url == undefined ){
+                this.url[i] = "-"
+              }
+              else{
+              this.url[i] = res[i].swagger_url;
+              }
+              if( res[i].provider_id == undefined ){
+                this.arn[i] = "-"
+              }
+              else{
+              this.arn[i] = res[i].provider_id;
+              }
 
+              this.lastCommitted = res[i].timestamp;
+              var commit = this.lastCommitted.substring(0,19);
+              var lastCommit = new Date(commit);
+              var now = new Date();
+              var todays = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
-
-          if(pageCount){
-            this.totalPageNum = Math.ceil(pageCount/this.limitValue);
-          }
-          else{
-            this.totalPageNum = 0;
-          }
-          // debugger
-					this.envResponseEmpty = false;
-					this.isLoading = false;
-
-					this.envResponseTrue = true;
-					// console.log('response.data ',response.data );
-          this.length = res.length;
-
-					// console.log('length ',this.length );
-
-					// this.length = 21;
-					this.assetsList = res;
-
-					for(var i=0; i < this.length ; i++){
-						this.type[i] = res[i].type;
-
-						this.slNumber[i] = (i+1);
-						if( res[i].provider == undefined ){
-							this.Provider[i] = "-"
-						}else{
-						this.Provider[i] = res[i].provider;
-						}
-						if( res[i].status == undefined ){
-							this.status[i] = "-"
-						}else{
-						this.status[i] = res[i].status;
-						}
-						if( res[i].endpoint_url == undefined ){
-							this.endpoint[i] = "-"
-						}else{
-						this.endpoint[i] = res[i].endpoint_url;;
-						}
-						if( res[i].swagger_url == undefined ){
-							this.url[i] = "-"
-						}else{
-						this.url[i] = res[i].swagger_url;
-						}
-						if( res[i].provider_id == undefined ){
-							this.arn[i] = "-"
-						}else{
-						this.arn[i] = res[i].provider_id;
-						}
-
-						this.lastCommitted = res[i].timestamp;
-						var commit = this.lastCommitted.substring(0,19);
-						var lastCommit = new Date(commit);
-						var now = new Date();
-						var todays = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-
-						this.count[i] = 3;
-						this.commitDiff[i] = Math.floor(Math.abs((todays.getTime() - lastCommit.getTime())/(1000*60*60*24)));
-						if( this.commitDiff[i] > 30){
-							this.count[i] = 4;
-							this.commitDiff[i] = Math.floor(this.commitDiff[i]/30)
-						}else
-						if( this.commitDiff[i] == 0 ){
-							this.count[i] = 2;
-							this.commitDiff[i] = Math.floor(Math.abs((todays.getHours() - lastCommit.getHours())));
-						  if( this.commitDiff[i] == 0 ){
-							this.count[i] = 1;
-							this.commitDiff[i] = Math.floor(Math.abs((todays.getMinutes() - lastCommit.getMinutes())));
-							if( this.commitDiff[i] == 0 ){
-								this.count[i] = 0;
-							  this.commitDiff[i] = "Just now";
-							}
+              this.count[i] = 3;
+              this.commitDiff[i] = Math.floor(Math.abs((todays.getTime() - lastCommit.getTime())/(1000*60*60*24)));
+              if( this.commitDiff[i] > 30){
+                this.count[i] = 4;
+                this.commitDiff[i] = Math.floor(this.commitDiff[i]/30)
+              }
+              else
+                if( this.commitDiff[i] == 0 )
+                {
+                  this.count[i] = 2;
+                  this.commitDiff[i] = Math.floor(Math.abs((todays.getHours() - lastCommit.getHours())));
+                  if( this.commitDiff[i] == 0 )
+                  {
+                    this.count[i] = 1;
+                    this.commitDiff[i] = Math.floor(Math.abs((todays.getMinutes() - lastCommit.getMinutes())));
+                    if( this.commitDiff[i] == 0 )
+                    {
+								      this.count[i] = 0;
+							        this.commitDiff[i] = "Just now";
+							      }
+						      }
+						    }
 						  }
-						}
-
-						}
-
-
-					}
+					  }
         },
         (error) => {
 					this.envResponseTrue = false;
@@ -350,15 +329,12 @@ export class EnvAssetsSectionComponent implements OnInit {
 					this.errorUser = this.authenticationservice.getUserId();
 					this.errorResponse = JSON.parse(error._body);
 
-				// let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
-							// this.popToast('error', 'Oops!', errorMessage);
 			})
 		};
 		getTime() {
 			var now = new Date();
 			this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
 			+ ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-			// console.log(this.errorTime);
 			}
 
 		feedbackRes:boolean=false;
