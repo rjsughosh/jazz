@@ -218,12 +218,12 @@ export class EnvAssetsSectionComponent implements OnInit {
     if ( this.subscription ) {
       this.subscription.unsubscribe();
 		}
-				var payload = {
-				service: this.service.name,
-				domain: this.service.domain,
-				environment: this.env,
-        limit:10,
-        offset:this.offsetval
+        var payload = {
+          service: this.service.name,
+          domain: this.service.domain,
+          environment: this.env,
+          limit:10,
+          offset:this.offsetval
         };
         this.subscription = this.http.get('/jazz/assets', payload).subscribe(
         (response) => {
