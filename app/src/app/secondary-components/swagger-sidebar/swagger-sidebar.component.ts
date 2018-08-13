@@ -1,6 +1,6 @@
-/** 
-  * @type Component 
-  * @desc 
+/**
+  * @type Component
+  * @desc
   * @author sughosh
 */
 
@@ -20,10 +20,10 @@ import {ToasterService} from 'angular2-toaster';
 export class SwaggerSidebarComponent implements OnInit {
 
   @Input() service: any = {};
-  @Input() envSelected: any = {};  
-  @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();  
+  @Input() envSelected: any = {};
+  @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
-  
+
   swaggerAsset:any;
   swagger_json:any;
   validityMessage:string;
@@ -45,15 +45,15 @@ export class SwaggerSidebarComponent implements OnInit {
     private toasterService: ToasterService,
     private route: ActivatedRoute,
     private router: Router,
-    private request:RequestService,  
+    private request:RequestService,
     private relaxedJson: RelaxedJsonService,
   ) {
     this.http = request;
 
    }
 
- 
- 
+
+
 
   ngOnInit() {
 
@@ -99,24 +99,24 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   getassets(){
-    this.http.post('/jazz/assets/search', {
+    this.http.get('/jazz/assets', {
       service: this.service.service || this.service.name,
       domain: this.service.domain,
       environment: this.envSelected,
       limit: undefined
     }).subscribe((assetsResponse) => {
-      this.assets = assetsResponse.data;
+      this.assets = assetsResponse.data.assets;
       this.service.assets = this.assets;
       if(this.assets[0].hasOwnProperty('type')){
         this.foundAsset = this.assets.find((asset) => {
           return asset.type === 'swagger_url';
         });
         if(this.foundAsset){
-          this.getdata(); 
-        }   
+          this.getdata();
+        }
 
       }
-      
+
     }, (err) => {
       this.toast_pop('error', 'Oops!', 'Swagger File Not Found.');
     });
@@ -132,8 +132,8 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   lineNumbers() {
-    let lines  = this.swagger_json.split(/\r*\n/);    
-    let line_numbers = lines.length;    
+    let lines  = this.swagger_json.split(/\r*\n/);
+    let line_numbers = lines.length;
     this.lineNumberCount = new Array(line_numbers).fill('');
   }
 
@@ -157,16 +157,16 @@ export class SwaggerSidebarComponent implements OnInit {
       (error) =>{
         try{
           var err =JSON.parse(error)
-          console.log('error',err)         
+          console.log('error',err)
         }
         catch(e){
           console.log(e)
-        }        
+        }
 
       }
     )
-         
-    
+
+
   }
   goback(){
     this.isloaded='default';
@@ -178,6 +178,6 @@ export class SwaggerSidebarComponent implements OnInit {
 
     }
   }
-   
+
 
 }
