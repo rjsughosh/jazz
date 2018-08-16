@@ -118,7 +118,7 @@ getData(payload?){
       var swaggerAsset = this.service.assets.find((asset) => {
         return asset.type === 'swagger_url';
       });
-      swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://', 'https://');
+      swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://cloud-api-doc.corporate.t-mobile.com', 'https://cloud-api-doc.corporate.t-mobile.com');
       this.http.get(swaggerAsset.provider_id).subscribe(
         (response) => {
           this.swagger_json=response;
