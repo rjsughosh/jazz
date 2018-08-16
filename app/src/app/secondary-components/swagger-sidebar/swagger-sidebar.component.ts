@@ -146,7 +146,7 @@ export class SwaggerSidebarComponent implements OnInit {
     }
 
   getdata(){
-    this.foundAsset.provider_id=this.foundAsset.provider_id.replace('http','https');
+    this.foundAsset.provider_id=this.foundAsset.provider_id.replace('http://', 'https://');
     console.log('swagger url, ',this.foundAsset.provider_id)
     this.http.get(this.foundAsset.provider_id).subscribe(
       (response) => {
