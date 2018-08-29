@@ -208,8 +208,6 @@ export class EnvironmentDetailComponent implements OnInit {
         let swaggerAsset = this.assets.find((asset) => {
           return asset.type === 'swagger_url';
         });
-
-        swaggerAsset.provider_id = swaggerAsset.provider_id.replace('http://cloud-api-doc.corporate.t-mobile.com', 'https://cloud-api-doc.corporate.t-mobile.com');
         if (swaggerAsset) {
           return window.open(environment.urls['swagger_editor'] + swaggerAsset.provider_id);
         } else {
