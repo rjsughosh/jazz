@@ -11,7 +11,10 @@ import { ToasterService} from 'angular2-toaster';
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceDetailComponent } from '../../service-detail/internal/service-detail.component'
+import { ServiceDetailComponent } from '../../service-detail/internal/service-detail.component';
+import { ServiceFormData, RateExpression, CronObject, EventExpression } from './../../../secondary-components/create-service/service-form-data';
+import { CronParserService } from '../../../core/helpers';
+
 // import  $  from 'jquery';
 import { environment } from './../../../../environments/environment';
 
@@ -25,15 +28,17 @@ declare var $:any;
 })
 
 export class ServiceOverviewComponent implements OnInit {
-    
+
     @Output() onload:EventEmitter<any> = new EventEmitter<any>();
     @Output() onEnvGet:EventEmitter<any> = new EventEmitter<any>();
     @Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
+    @Output() refresh:EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('env') envComponent;
 
     flag:boolean=false;
     @Input() service: any = {};
     @Input() isLoadingService: boolean = false;
+    @Input() application_arr:any;
     private subscription:any;
 
     multiENV:boolean = true;
@@ -44,7 +49,8 @@ export class ServiceOverviewComponent implements OnInit {
     hide_email_error:boolean = true;
     hide_slack_error:boolean = true;
     service_error:boolean = true;
-    disp_show:boolean = false;
+    disp_show:boolean = true;
+    disp_show2:boolean = true;
     err404:boolean = false;
     disable_button:boolean = false;
     email_valid:boolean;
@@ -123,13 +129,32 @@ export class ServiceOverviewComponent implements OnInit {
     showbar:boolean=false;
     friendly_name:any;
     list:any={};
-
+    selected: string = "Minutes";
+    eventSchedule: string = 'fixedRate';
+    cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
+    rateExpression = new RateExpression(undefined, undefined, 'none', '5', this.selected, '');
+    eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
+    viewMode:boolean = true;
+    cronFieldValidity: any;
+    publicSelected: boolean = this.service.is_public_endpoint;
+    publicInitial: boolean = this.service.is_public_endpoint;
+    cdnConfigSelected: boolean = this.service.create_cloudfront_url;
+    cdnConfigInitial: boolean = this.service.create_cloudfront_url;
+    saveClicked:boolean = false;
+    showApplicationList:boolean = false;
+    selectedApplications=[];
+    oneSelected:boolean=false;
+    app_placeH:string = 'Start typing...';
+    applc:string;
+    isSlackAvailable:boolean = true;
+    isPUTLoading:boolean = false;
 
     constructor(
-        
+
         private router: Router,
         private request: RequestService,
         private messageservice:MessageService,
+        private cronParserService: CronParserService,
         private cache: DataCacheService,
         private toasterService: ToasterService,
         private serviceDetail:ServiceDetailComponent,
@@ -217,7 +242,7 @@ export class ServiceOverviewComponent implements OnInit {
                 // 'status': 'good'
             }
         }
-        
+
     ];
 
     branches = [
@@ -256,7 +281,7 @@ export class ServiceOverviewComponent implements OnInit {
         // }
     ];
     copy_link(id)
-    {  
+    {
         var element = null; // Should be <textarea> or <input>
         element = document.getElementById(id);
         element.select();
@@ -271,20 +296,43 @@ export class ServiceOverviewComponent implements OnInit {
             document.getSelection().removeAllRanges;
         }
     }
-    
 
+    onEventScheduleChange(val) {
+      this.rateExpression.type = val;
+    }
+    onAWSEventChange(val) {
+      this.eventExpression.type = val;
+    }
+    public focusDynamo = new EventEmitter<boolean>();
+  public focusKinesis = new EventEmitter<boolean>();
+  public focusS3 = new EventEmitter<boolean>();
+
+  chkDynamodb() {
+    this.focusDynamo.emit(true);
+    return this.eventExpression.type === 'dynamodb';
+  }
+
+  chkfrKinesis() {
+    this.focusKinesis.emit(true);
+    return this.eventExpression.type === 'kinesis';
+  }
+
+  chkS3() {
+    this.focusS3.emit(true);
+    return this.eventExpression.type === 's3';
+  }
     openLink(link){
         if (link) {
             window.open(link, "_blank");
-            
+
         }
     }
 
     stageClicked(stg){
-        
+
             let url = '/services/' + this.service['id'] + '/' + stg
             this.router.navigateByUrl(url);
-        
+
     }
     ValidURL(str) {
         var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -300,7 +348,7 @@ export class ServiceOverviewComponent implements OnInit {
       }
       loadPlaceholders()
       {
-          
+
         if(this.service.tags != undefined) this.tags_temp=this.service.tags.join();
         this.desc_temp=this.service.description;
         this.email_temp=this.service.email;
@@ -309,8 +357,8 @@ export class ServiceOverviewComponent implements OnInit {
       updateTags(){
           var payloag_tags;
         payloag_tags =this.tags_temp.split(',');
-        payloag_tags.forEach(function(item,index){                
-            payloag_tags[index]=item.trim(); 
+        payloag_tags.forEach(function(item,index){
+            payloag_tags[index]=item.trim();
         });
         this.update_payload.tags=payloag_tags;
 
@@ -320,73 +368,330 @@ export class ServiceOverviewComponent implements OnInit {
           this.open_sidebar.emit(true);
 
       }
-      onEditClick(){
-          
 
-       var email_temporary = this.email_temp;
-        var slack_temporary = this.slackChannel_temp;
-        this.check_empty_fields();
-        if(this.service.status && this.service.status != 'deletion_completed' && this.service.status != 'deletion_started'){
-        };
-        if(!this.disp_show)
-        {//set edit view to true ---> switch to edit mode
-            this.disp_edit=false;
-            this.disp_show=true;
-            this.edit_save='SAVE';
-            this.showCancel=true;
-            this.loadPlaceholders();
-             
+      private isCronObjValid(cronObj) {
+        var cronValidity = this.cronParserService.validateCron(cronObj);
+        this.cronFieldValidity = cronValidity;
+        if (cronValidity.isValid === true) {
+          return true;
         }
-        else{//set display view to true ---> save and switch to view mode
-            this.isLoadingService=true;            
-            this.check_email_valid()
-            this.validateChannelName();
-             // var payload = {               
-            //     "email": email_temporary || "",
-            //     "slack_channel": slack_temporary || "",
-            //     "tags": payloag_tags || "",
-            //     "description": this.desc_temp  || ""
-            // };
-            // this.update_payload.accounts=["tmodevops"];
-            this.http.put('/jazz/services/'+this.service.id, this.update_payload)
+        return false;
+      };
+
+
+      onApplicationChange(newVal) {
+        if (!newVal) {
+          this.showApplicationList = false;
+        } else {
+          this.showApplicationList = true;
+        }
+      }
+
+      focusInputApplication(event) {
+        document.getElementById('applc').focus();
+      }
+
+      blurApplication(){
+        setTimeout(() => {
+          this.applc='';
+          this.showApplicationList=false;
+        }, 200);
+
+      }
+
+      keypressApplication(hash){
+        if (hash.key == 'ArrowDown') {
+          this.focusindex++;
+          if (this.focusindex > 0) {
+            var pinkElements = document.getElementsByClassName("pinkfocusapplication")[0];
+            if (pinkElements == undefined) {
+              this.focusindex = 0;
+            }
+            // var id=pinkElements.children[0].innerHTML;
+          }
+          if (this.focusindex > 2) {
+            this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+
+          }
+        }
+        else if (hash.key == 'ArrowUp') {
+          if (this.focusindex > -1) {
+            this.focusindex--;
+
+            if (this.focusindex > 1) {
+              this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+            }
+          }
+          if (this.focusindex == -1) {
+            this.focusindex = -1;
+
+
+          }
+        }
+        else if (hash.key == 'Enter' && this.focusindex > -1) {
+          if(this.accounts.length == 0){
+            this.showApplicationList = false;
+          }
+          event.preventDefault();
+          var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
+
+          var appobj = {
+            "issueID":pinkElement[0].attributes[3].value,
+            "appName": pinkElement[0].attributes[2].value
+          }
+
+          this.selectApplication(appobj);
+          this.showApplicationList = false;
+          this.focusindex = -1;
+        } else {
+          this.focusindex = -1;
+        }
+      }
+
+      selectApp;
+      selectApplication(app) {
+        this.oneSelected=true;
+        this.app_placeH='';
+        this.selectApp = app;
+        let thisclass: any = this;
+        this.showApplicationList = false;
+        thisclass.applc = '';
+        this.selectedApplications.push(app);
+        for (var i = 0; i < this.application_arr.length; i++) {
+          if (this.application_arr[i].appName === app.appName) {
+            this.application_arr.splice(i, 1);
+            return;
+          }
+        }
+
+      }
+
+      removeApplication(index, approver) {
+        this.oneSelected=false;
+        this.selectApp={};
+        this.app_placeH='Start typing...';
+        this.application_arr.push(approver);
+        this.selectedApplications.splice(index, 1);
+      }
+
+      generateExpression(rateExpression) {
+        if (this.rateExpression !== undefined) {
+          this.rateExpression.error = undefined;
+        }
+        if (rateExpression === undefined || rateExpression['type'] === 'none') {
+          this.rateExpression.isValid = undefined;
+        } else if (rateExpression['type'] == 'rate') {
+          var duration, interval;
+          duration = rateExpression['duration'];
+          interval = rateExpression['interval'];
+
+          if (duration === undefined || duration === null || duration <= 0) {
+            this.rateExpression.isValid = false;
+            this.rateExpression.error = 'Please enter a valid duration';
+          } else {
+            if (interval == 'Minutes') {
+              this.cronObj = new CronObject(('0/' + duration), '*', '*', '*', '?', '*');
+            } else if (interval == 'Hours') {
+              this.cronObj = new CronObject('0', ('0/' + duration), '*', '*', '?', '*');
+            } else if (interval == 'Days') {
+              this.cronObj = new CronObject('0', '0', ('1/' + duration), '*', '?', '*');
+            }
+            this.rateExpression.isValid = true;
+            this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+          }
+        } else if (rateExpression['type'] == 'cron') {
+          var cronExpression;
+          var cronObj = this.cronObj;
+          var cronObjFields = this.cronParserService.cronObjFields;
+          var _isCronObjValid = this.isCronObjValid(cronObj)
+
+          if (_isCronObjValid === false) {
+            this.rateExpression.isValid = false;
+            this.rateExpression.error = 'Please enter a valid cron expression';
+          } else {
+            this.rateExpression.isValid = true;
+            this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+          }
+        }
+
+        if (this.rateExpression.isValid === undefined) {
+          return undefined;
+        } else if (this.rateExpression.isValid === false) {
+          return 'invalid';
+        } else if (this.rateExpression.isValid === true) {
+          return this.rateExpression.cronStr;
+        }
+      }
+
+      editClick(){
+        console.log('this.service',this.service)
+        this.viewMode = !this.viewMode;
+      }
+      onEditClick(){
+        console.log('this.service',this.service)
+
+        this.disp_show=false;
+      }
+      onEditClickAdvanced(){
+        this.disp_show2=false;
+      }
+      onCompleteClick(){
+        this.isPUTLoading = true;
+        let payload = {};
+        if(this.desc_temp){
+          payload["description"]=this.desc_temp;
+        }
+        if(this.slackChannel_temp){
+          payload["slack_channel"]=this.slackChannel_temp;
+        }
+        if (this.rateExpression.type != 'none') {
+          this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+          if (this.rateExpression.cronStr == 'invalid') {
+            return;
+          } else if (this.rateExpression.cronStr !== undefined) {
+            payload["rateExpression"] = this.rateExpression.cronStr;
+          }
+        }
+
+        if (this.eventExpression.type !== "awsEventsNone") {
+          var event = {};
+          event["type"] = this.eventExpression.type;
+          if (this.eventExpression.type === "dynamodb") {
+            event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+            event["action"] = "PutItem";
+          } else if (this.eventExpression.type === "kinesis") {
+            event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+            event["action"] = "PutRecord";
+          } else if (this.eventExpression.type === "s3") {
+            event["source"] = this.eventExpression.S3BucketName;
+            event["action"] = "s3:ObjectCreated:*";
+          }
+          payload["events"] = [];
+          payload["events"].push(event);
+        }
+
+        if(this.publicSelected !== this.publicInitial){
+          payload["is_public_endpoint"] = this.publicSelected;
+        }
+        if(this.cdnConfigSelected !== this.cdnConfigInitial){
+          payload["create_cloudfront_url"] = this.cdnConfigSelected;
+        }
+        if(this.selectedApplications.length > 0){
+          payload["appName"]=this.selectApp.appName;
+          payload["appID"]=this.selectApp.appID.toLowerCase();
+        }
+        this.http.put('/jazz/services/'+this.service.id,payload)
             .subscribe(
                 (Response)=>{
+                  this.isPUTLoading = false;
+                  this.disp_show = true;
+                  setTimeout(() => {
+                    this.refresh.emit();
+                  }, 3000);
 
-                    this.service.description = this.desc_temp;
-                    this.service.tags = this.tags_temp.split(',');
-                    var this2=this;
-                    this.service.tags.forEach(function(item,index){
-                        this2.service.tags[index]=item.trim();
-                    });
-                    this.service.email = email_temporary;
-                    this.service.slackChannel = slack_temporary;
 
-                    this.isLoadingService=false;
-                    this.disp_edit=true;
-                    this.showCancel=false;
-                    this.disp_show=false;
-                    this.edit_save='EDIT';
+
+                    // this.service.description = this.desc_temp;
+
+                    // // this.service.email = email_temporary;
+                    // this.service.slackChannel = slack_temporary;
+
+                    // this.isLoadingService=false;
+                    // this.disp_edit=true;
+                    // this.showCancel=false;
+                    this.disp_show=true;
+                    // this.edit_save='EDIT';
+                    this.saveClicked = false;
                     let successMessage = this.toastmessage.successMessage(Response,"updateService");
                     this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
-                    this.check_empty_fields();
+                    // this.check_empty_fields();
                 },
                 (Error)=>{
-                    this.isLoadingService=false; 
-                    this.disp_edit=false;
+                    this.isLoadingService=false;
+                    this.isPUTLoading = false;
                     this.disp_show=true;
+                    this.saveClicked = false;
                     this.edit_save='SAVE';
                     let errorMessage = this.toastmessage.errorMessage(Error,"updateService");
                     this.toast_pop('error', 'Oops!', errorMessage)
                     // this.toast_pop('error','Oops!', "Data cannot be updated. Service Error.");
                 });
-        }
-    }
+
+
+      }
+      onAdvancedSaveClick(){
+        this.saveClicked = true;
+      }
+
+      onSaveClick(){
+        this.saveClicked = true;
+      }
+        // var email_temporary = this.email_temp;
+        // var slack_temporary = this.slackChannel_temp;
+        // this.check_empty_fields();
+        // if(this.service.status && this.service.status != 'deletion_completed' && this.service.status != 'deletion_started'){
+        // };
+        // if(!this.disp_show)
+        // {//set edit view to true ---> switch to edit mode
+        //     this.disp_edit=false;
+        //     this.disp_show=true;
+        //     this.edit_save='SAVE';
+        //     this.showCancel=true;
+        //     this.loadPlaceholders();
+
+        // }
+        // else{//set display view to true ---> save and switch to view mode
+        //     this.isLoadingService=true;
+        //     this.check_email_valid()
+        //     this.validateChannelName();
+        //      // var payload = {
+        //     //     "email": email_temporary || "",
+        //     //     "slack_channel": slack_temporary || "",
+        //     //     "tags": payloag_tags || "",
+        //     //     "description": this.desc_temp  || ""
+        //     // };
+        //     // this.update_payload.accounts=["tmodevops"];
+        //     this.http.put('/jazz/services/'+this.service.id, this.update_payload)
+        //     .subscribe(
+        //         (Response)=>{
+
+        //             this.service.description = this.desc_temp;
+        //             this.service.tags = this.tags_temp.split(',');
+        //             var this2=this;
+        //             this.service.tags.forEach(function(item,index){
+        //                 this2.service.tags[index]=item.trim();
+        //             });
+        //             this.service.email = email_temporary;
+        //             this.service.slackChannel = slack_temporary;
+
+        //             this.isLoadingService=false;
+        //             this.disp_edit=true;
+        //             this.showCancel=false;
+        //             this.disp_show=false;
+        //             this.edit_save='EDIT';
+        //             let successMessage = this.toastmessage.successMessage(Response,"updateService");
+        //             this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
+        //             this.check_empty_fields();
+        //         },
+        //         (Error)=>{
+        //             this.isLoadingService=false;
+        //             this.disp_edit=false;
+        //             this.disp_show=true;
+        //             this.edit_save='SAVE';
+        //             let errorMessage = this.toastmessage.errorMessage(Error,"updateService");
+        //             this.toast_pop('error', 'Oops!', errorMessage)
+        //             // this.toast_pop('error','Oops!', "Data cannot be updated. Service Error.");
+        //         });
+        // }
+    // }
 
     onCancelClick()
     {
         this.update_payload={};
-        this.disp_edit=true;
-        this.disp_show=false;
+        this.selectedApplications=[];
+        this.oneSelected = false;
+        this.disp_show=true;
+        this.disp_show2=true;
         this.edit_save='EDIT';
         this.showCancel=false;
         this.hide_email_error= true;
@@ -427,14 +732,21 @@ export class ServiceOverviewComponent implements OnInit {
           var ele = document.getElementById(id);
           ele.classList.remove('endp-visible');
         }
-        
+
       }
     checkSlackNameAvailability()
     {
-
-        this.validateChannelName();
-        return;
+      debugger
+      if(this.slackChannel_temp == ''){
+        this.hide_slack_error=true;
+        this.isSlackAvailable = true;
+        return
+      }
+      this.validateChannelName();
+      return;
     }
+
+
 
     check_email_valid()
     {
@@ -449,8 +761,8 @@ export class ServiceOverviewComponent implements OnInit {
         {
             if(!regex.test(this.email_temp))//if it doesnt match with email pattern
             {
-                this.hide_email_error=false;
-               this.email_valid=false;
+              this.hide_email_error=false;
+              this.email_valid=false;
             }
             else//email matches
                 {
@@ -461,16 +773,16 @@ export class ServiceOverviewComponent implements OnInit {
 
                 }
         }
-        
+
     }
 
 
     public validateChannelName() {
 
-        
+
         this.show_loader=true;
         if(this.slackChannel_temp == '' || this.slackChannel_temp == null){
-            
+
             this.hide_slack_error=true;
             this.show_loader=false;
         }
@@ -487,17 +799,19 @@ export class ServiceOverviewComponent implements OnInit {
                     // var output_body = JSON.parse(this.response_json._body);
                     // console.log(output_body);
                     // var is_slack_valid = output_body.data.is_available;
+                    this.isSlackAvailable = isAvailable;
                     if(isAvailable)//if valid
                     {
                         this.hide_slack_error=true;
-                        
+                        debugger
+
                         // this.service.slackChannel=this.slackChannel_temp;
 
                     }
                     else
                     {
                         this.hide_slack_error=false;
-                        
+
                     }
                     this.show_loader=false;
                 },
@@ -510,7 +824,7 @@ export class ServiceOverviewComponent implements OnInit {
 
             );
         }
-        
+
      }
 
      disableSaveBtn(){
@@ -586,7 +900,7 @@ export class ServiceOverviewComponent implements OnInit {
             this.tags_empty = false;
         }
     }
- 
+
 
     serviceCreationStatus(){
         this.statusprogress = 20;
@@ -596,7 +910,7 @@ export class ServiceOverviewComponent implements OnInit {
         .switchMap((response) => this.http.get('/jazz/request-status?id='+this.service_request_id))
         .subscribe(
             response => {
-                
+
                 let dataResponse = <any>{};
                 dataResponse.list = response;
                 var respStatus = dataResponse.list.data;
@@ -661,10 +975,10 @@ export class ServiceOverviewComponent implements OnInit {
                     });
                 }
                 document.getElementById('current-status-val').setAttribute("style","width:"+this.statusprogress+'%');
-               
+
             },
             error => {
-                
+
                 this.service_error = false;
                 this.serviceCreationStatus();
               }
@@ -688,26 +1002,26 @@ export class ServiceOverviewComponent implements OnInit {
                     continue;
                 }
                 else
-                {    this.Environments[j]=this.environ_arr[i];   
+                {    this.Environments[j]=this.environ_arr[i];
                     // console.log('--->><<---',this.environ_arr[i]);
-                    this.envList[k]=this.environ_arr[i].logical_id; 
+                    this.envList[k]=this.environ_arr[i].logical_id;
                     if(this.environ_arr[i].friendly_name != undefined){
-                        this.friendlist[k++]=this.environ_arr[i].friendly_name;   
+                        this.friendlist[k++]=this.environ_arr[i].friendly_name;
                     }else{
                         this.friendlist[k++]=this.environ_arr[i].logical_id;
                     }
-                            
+
                     j++;
-                    
+
                 }
-                
+
 
             }
             this.list = {
                 env : this.envList,
                 friendly_name : this.friendlist
             }
-            
+
 
         if(this.Environments.length==0){
             this.noSubEnv=true;
@@ -718,21 +1032,21 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.stgEnv.logical_id==undefined){
             this.noStg=true;
         }
-      
-        // this.envList        
+
+        // this.envList
         this.cache.set('envList',this.list);
-       
+
 
     }
-    
+
     sortEnvArr(){
         var j=0;
         var k=0;
-        
+
         for(var i=0;i<this.environ_arr.length;i++){
             if(this.environ_arr[i].status != 'inactive'){
                 this.list_env[j] = this.environ_arr[i];
-                
+
                 // this.list_env[i]
                 j++;
 
@@ -743,21 +1057,21 @@ export class ServiceOverviewComponent implements OnInit {
                 k++;
 
             }
-                
+
         }
         this.environ_arr = this.list_env.slice(0,this.list_env.length);
 
         this.environ_arr.push.apply(this.environ_arr,this.list_inactive_env);
 
-      
 
-        
+
+
     }
     getenvData(){
         this.isenvLoading=true;
         this.ErrEnv=false;
         if(this.service==undefined){return}
-        // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(            
+        // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
         this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
             response => {
                 // console.log("response == ", response);
@@ -771,12 +1085,12 @@ export class ServiceOverviewComponent implements OnInit {
                 // this.friendly_name = response
                 this.isenvLoading=false;
                   this.environ_arr=response.data.environment;
-                  if(this.environ_arr!=undefined)    
+                  if(this.environ_arr!=undefined)
                     if(this.environ_arr.length==0 || response.data==''){
-                            this.noEnv=true;   
-                    }             
+                            this.noEnv=true;
+                    }
                   this.ErrEnv=false;
-                  
+
                 //   var obj1={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"dev"}
                 //   var obj2={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"feature"}
                 //   var obj3={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"stg"}
@@ -784,11 +1098,11 @@ export class ServiceOverviewComponent implements OnInit {
                 //   this.environ_arr[2]=obj2;
                 //   this.environ_arr[3]=obj3;
                   this.modifyEnvArr();
-                  
+
               },
               err => {
                 this.isenvLoading=false;
-                
+
                   console.log('error',err);
                   this.ErrEnv=true;
                   if(err.status == 404) this.err404=true;
@@ -804,7 +1118,7 @@ export class ServiceOverviewComponent implements OnInit {
                   this.errorRequest = payload;
                   this.errorUser = this.authenticationservice.getUserId();
                   this.errorResponse = JSON.parse(err._body);
-    
+
                 // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
                 // this.popToast('error', 'Oops!', errorMessage);
             })
@@ -815,7 +1129,7 @@ export class ServiceOverviewComponent implements OnInit {
             + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
             // console.log(this.errorTime);
           }
-    
+
         feedbackRes:boolean=false;
         openModal:boolean=false;
         feedbackMsg:string='';
@@ -832,7 +1146,7 @@ export class ServiceOverviewComponent implements OnInit {
 		djson:any={};
 		// isLoading:boolean=false;
 		reportIssue(){
-			
+
 					this.json = {
 						"user_reported_issue" : this.model.userFeedback,
 						"API": this.errorAPI,
@@ -842,14 +1156,14 @@ export class ServiceOverviewComponent implements OnInit {
 						"TIME OF ERROR":this.errorTime,
 						"LOGGED IN USER":this.errorUser
 				}
-				
+
 					this.openModal=true;
 					this.errorChecked=true;
 					this.isLoading=false;
 					this.errorInclude = JSON.stringify(this.djson);
 					this.sjson = JSON.stringify(this.json);
 				}
-			
+
 				openFeedbackForm(){
 					this.isFeedback=true;
 					this.model.userFeedback='';
@@ -864,9 +1178,9 @@ export class ServiceOverviewComponent implements OnInit {
 				}
 				errorIncluded(){
 				}
-			 
+
 				submitFeedback(action){
-			
+
 					this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
 					if( this.errorChecked == true ){
 						this.json = {
@@ -882,14 +1196,14 @@ export class ServiceOverviewComponent implements OnInit {
 						this.json = this.model.userFeedback ;
 					}
 					this.sjson = JSON.stringify(this.json);
-			
+
 					this.isLoading = true;
-			
+
 					if(action == 'DONE'){
 						this.openModal=false;
 						return;
 					}
-			
+
 					var payload={
 						"title" : "Jazz: Issue reported by "+ this.authenticationservice.getUserId(),
 						"project_id": "CAPI",
@@ -909,7 +1223,7 @@ export class ServiceOverviewComponent implements OnInit {
 							this.feedbackResSuccess= true;
 							if(respData != undefined && respData != null && respData != ""){
 								this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
-							} 
+							}
 						},
 						error => {
 							this.buttonText='DONE';
@@ -940,14 +1254,14 @@ export class ServiceOverviewComponent implements OnInit {
                         this.showcanvas = false;
                     }
                     this.showCancel=false;
-            
+
                     if(this.service.status == 'creation started' || this.service.status == 'deletion started'){
                         try{
                             this.reqJson = JSON.parse(localStorage.getItem('request_id'+"_"+this.service.name+"_"+this.service.domain));
-                            
+
                             this.service_request_id = this.reqJson.request_id;
                         }catch(e){console.log(e)}
-                       
+
                     }else{
                         localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
                     }
@@ -960,7 +1274,7 @@ export class ServiceOverviewComponent implements OnInit {
         setInterval(() => {
         this.onload.emit(this.service.status);
         },500);
-        
+
     }
     transform_env_oss(data){
         var arrEnv = data.data.environment
@@ -1011,12 +1325,12 @@ export class ServiceOverviewComponent implements OnInit {
                 // this.friendly_name = response
                 // this.isenvLoading=false;
                 //   this.environ_arr=response.data.environment;
-                //   if(this.environ_arr!=undefined)    
+                //   if(this.environ_arr!=undefined)
                 //     if(this.environ_arr.length==0 || response.data==''){
-                //             this.noEnv=true;   
-                //     }             
+                //             this.noEnv=true;
+                //     }
                 //   this.ErrEnv=false;
-                  
+
                 //   var obj1={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"dev"}
                 //   var obj2={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"feature"}
                 //   var obj3={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"stg"}
@@ -1024,11 +1338,11 @@ export class ServiceOverviewComponent implements OnInit {
                 //   this.environ_arr[2]=obj2;
                 //   this.environ_arr[3]=obj3;
                 //   this.modifyEnvArr();
-                  
+
               },
               err => {
                 // this.isenvLoading=false;
-                
+
                   console.log('oss error',err);
                 //   this.ErrEnv=true;
                 //   if(err.status == 404) this.err404=true;
@@ -1044,16 +1358,16 @@ export class ServiceOverviewComponent implements OnInit {
                 //   this.errorRequest = payload;
                 //   this.errorUser = this.authenticationservice.getUserId();
                 //   this.errorResponse = JSON.parse(err._body);
-    
+
                 // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
                 // this.popToast('error', 'Oops!', errorMessage);
             });
-        
+
         // va
         console.log('env file,',environment)
-        
-        
-    
+
+
+
     }
 
     public getJSON(): Observable<any> {
@@ -1082,13 +1396,13 @@ export class ServiceOverviewComponent implements OnInit {
 
         this.prodEnv={};
         this.stgEnv={};
-        
+
         if(!this.internal_build){
             this.envfoross();
         }
-        
-        
-     
+
+
+
         this.check_empty_fields();
 
        setTimeout(() =>  {
@@ -1114,17 +1428,17 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.service.status == 'creation started' || this.service.status == 'deletion started'){
             try{
                 this.reqJson = JSON.parse(localStorage.getItem('request_id'+"_"+this.service.name+"_"+this.service.domain));
-                
+
                 this.service_request_id = this.reqJson.request_id;
             }catch(e){console.log(e)}
-           
+
         }else{
             localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
         }
         this.creation_status = this.service.status;
         this.animatingDots = "...";
         this.testingStatus();
-        
+
         // request status api call
         if(this.service.status === 'creation started' && !this.serviceStatusCompleted && this.service_request_id != undefined){
             this.serviceCreationStatus();
@@ -1142,10 +1456,10 @@ export class ServiceOverviewComponent implements OnInit {
 
 
 serviceDeletionStatus(){
-    
+
     this.creating = false;
     this.deleting = true;
-    
+
     this.intervalSubscription = Observable.interval(5000)
     .switchMap((response) => this.http.get('/jazz/request-status?id='+this.service_request_id))
     .subscribe(
@@ -1160,7 +1474,7 @@ serviceDeletionStatus(){
                 this.serviceStatusCompleted = true;
                 this.serviceStatusPermission = true;
                 this.serviceStatusRepo = true;
-                this.serviceStatusValidate = true;  
+                this.serviceStatusValidate = true;
                 this.DelstatusInfo = 'Wrapping things up';
                 this.statusprogress = 100;
                 this.service.status ="deletion completed";
@@ -1264,11 +1578,11 @@ serviceDeletionStatus(){
           this.showAccountList = true;
         }
       }
-    
+
       focusInputAccount(event) {
         document.getElementById('AccountInput').focus();
       }
-    
+
       focusInputRegion(event) {
         document.getElementById('regionInput').focus();
       }
@@ -1346,7 +1660,7 @@ keypressAccount(hash){
     var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
     var approverObj = pinkElement[0].attributes[2].value;
-    
+
     this.selectAccount(approverObj);
 
     this.focusindex = -1;
@@ -1369,33 +1683,33 @@ keypressRegion(hash){
         // console.log(this.focusindex);
         if (this.focusindex > 2) {
           this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
-    
+
         }
       }
       else if (hash.key == 'ArrowUp') {
         if (this.focusindex > -1) {
           this.focusindex--;
-    
+
           if (this.focusindex > 1) {
             this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
           }
         }
         if (this.focusindex == -1) {
           this.focusindex = -1;
-    
-    
+
+
         }
       }
       else if (hash.key == 'Enter' && this.focusindex > -1) {
         event.preventDefault();
         var pinkElement = document.getElementsByClassName("pinkfocus2")[0].children;
-    
+
         var approverObj = pinkElement[0].attributes[2].value;
-        
+
         this.selectRegion(approverObj);
-    
+
         this.focusindex = -1;
-    
+
       } else {
         this.focusindex = -1;
       }

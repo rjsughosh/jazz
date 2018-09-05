@@ -70,6 +70,9 @@ export class ServiceDetailComponent implements OnInit {
     errorMessage: string = "";
     test:any="delete testing";
     disabled_tab:boolean=false;
+    start_at:number=0;
+    applications:any;
+    application_arr=[];
 
 
     private sub: any;
@@ -125,7 +128,12 @@ export class ServiceDetailComponent implements OnInit {
                 slackChannel: service.slack_channel,
                 repository: service.repository,
                 tags: service.tags,
-                endpoints:service.endpoints
+                endpoints:service.endpoints,
+                is_public_endpoint:service.is_public_endpoint,
+                create_cloudfront_url:service.metadata.create_cloudfront_url,
+                eventScheduleRate:service.metadata.eventScheduleRate,
+                event_source:service.metadata.event_source_dynamodb,
+                app_name:service.app_name
             };
         }
     };
@@ -153,6 +161,47 @@ export class ServiceDetailComponent implements OnInit {
         let errorMessage = this.toastmessage.successMessage(service,"serviceDetail");
         this.toast_pop('error', 'Oops!', errorMessage)
       }
+    }
+
+    getapplications(){
+      this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt='+this.start_at)
+      .subscribe((res: Response) => {
+        this.applications=res;
+
+        this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
+        this.start_at = this.start_at+100;
+        if(this.applications.data.total > this.start_at ){
+
+          this.getapplications();
+        }
+        else{
+
+          for(var i=0;i<this.application_arr.length;i++){
+            if(!this.application_arr[i].appID || !this.application_arr[i].appName){
+              this.application_arr.splice(i,1);
+            }
+            else{
+              this.application_arr[i].appName=this.application_arr[i].appName.trim();
+            }
+          }
+
+          this.application_arr.sort((a: any, b: any) => {
+            if (a.appName < b.appName) {
+              return -1;
+            } else if (a.appName > b.appName) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+          console.log('in serv detail',this.application_arr)
+
+          return;
+        }
+
+      }, error => {
+        console.log('workloads error',error)
+      });
     }
 
     fetchService(id: string){
@@ -384,6 +433,7 @@ export class ServiceDetailComponent implements OnInit {
 
     }
     ngOnInit() {
+      this.getapplications();
         this.breadcrumbs = [
         {
             'name' : this.service['name'],
