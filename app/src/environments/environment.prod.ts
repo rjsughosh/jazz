@@ -15,5 +15,10 @@ export const environment = {
   userJourney: {
     registrationMessage: ''
   },
+  createService: {
+    apiDeploymentTargets: true,
+    functionDeploymentTargets: false,
+    websiteDeploymentTargets: false
+  },
   gaTrackingId: 'UA-121896506-1'
 };

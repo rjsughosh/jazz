@@ -17,6 +17,8 @@ import { RequestService, DataCacheService, MessageService, AuthenticationService
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { ServicesListComponent } from "../../../pages/services-list/services-list.component"
+import {environment} from "../../../../environments/environment";
+
 
 @Component({
   selector: 'create-service',
@@ -31,6 +33,7 @@ export class CreateServiceComponent implements OnInit {
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
+  public buildEnvironment = environment;
   typeOfService: string = "api";
   typeOfPlatform: string = "aws";
   disablePlatform = true;
