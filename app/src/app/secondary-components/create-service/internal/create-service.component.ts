@@ -137,6 +137,10 @@ export class CreateServiceComponent implements OnInit {
   selectedAccount=[];
   AccountInput:string;
   applc:string;
+  public apiDeployment = "aws_apigateway";
+  public functionDeployment = "aws_lambda";
+  public websiteDeployment = "aws_cloudfront";
+  
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
@@ -416,11 +420,17 @@ export class CreateServiceComponent implements OnInit {
       payload["runtime"] = this.runtime;
       payload["require_internal_access"] = this.vpcSelected;
       payload["is_public_endpoint"] = this.publicSelected;
+      payload["deployment_targets"] = {
+        "api": this.apiDeployment
+      }
     }
     else if (this.typeOfService == 'function') {
       payload["runtime"] = this.runtime;
       // payload.service_type = 'lambda';
       payload["require_internal_access"] = this.vpcSelected;
+      payload["deployment_targets"] = {
+        "function": this.functionDeployment
+      }
       if (this.rateExpression.type != 'none') {
         this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
         if (this.rateExpression.cronStr == 'invalid') {
@@ -450,6 +460,9 @@ export class CreateServiceComponent implements OnInit {
     } else if (this.typeOfService == 'website') {
       payload["is_public_endpoint"] = this.publicSelected;
       payload["create_cloudfront_url"] = this.cdnConfigSelected;
+      payload["deployment_targets"] = {
+        "website": this.websiteDeployment
+      }
       console.log("website");
 
       if (this.gitCloneSelected == true) {
