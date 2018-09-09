@@ -130,7 +130,7 @@
   </div>
 </div>
 
-<section class='service-details service-metadata-wrap' [class.extra-bottom-padding]='!disp_show2'>
+<section class='service-details service-metadata-wrap relative' [class.extra-bottom-padding]='!disp_show2' hide>
   <details open>
     <summary>
       <div class='metadata-heading-wrap'>
@@ -174,7 +174,7 @@
         <ul>
           <li>
             <div class='det-label'>Creator</div>
-            <div class='det-value'>SUGHOSH</div>
+            <div class='det-value'>{{service.created_by}}</div>
           </li>
           <li *ngIf="service.serviceType != 'website' ">
             <div class="det-label">Runtime</div>
@@ -182,7 +182,7 @@
           </li>
           <li>
             <div class='det-label'>Slack</div>
-            <div *ngIf='disp_show' class='det-value'>{{service.slackChannel}}</div>
+            <div *ngIf='disp_show' class='det-value' [class.PlaceHolder]="slackChannel_empty">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
             <div *ngIf='!disp_show' class='det-value slack-relative'>
                 <input [(ngModel)]="slackChannel_temp" type='text' (blur)="checkSlackNameAvailability()" (ngModelChange)='update_payload.slack_channel=slackChannel_temp'
                 class="det-value-input" placeholder="Feeling collaborative? Add it to slack">
@@ -484,7 +484,7 @@
     </div>
   </details>
 
-  <div class='confirm-overlay' *ngIf='saveClicked'>
+  <div class='confirm-overlay' *ngIf='saveClicked || advancedSaveClicked'>
     <div class='confirm-overlay-inner-wrap'>
         <div class='overlay-header'>CONFIRMATION</div>
         <div *ngIf="isPUTLoading" class='loader-confirmation'>
@@ -494,10 +494,14 @@
         </div>
         <div *ngIf="!isPUTLoading" class='overlay-body'>Are you sure you want to permanently complete this edit?</div>
         <div class='overlay-btns'>
-          <btn-jazz-primary text="COMPLETE" (click)='onCompleteClick()'></btn-jazz-primary>
-          <a (click)='saveClicked = !saveClicked'>CANCEL</a>
+          <btn-jazz-primary text="COMPLETE" [disablePrimaryBtn]="!isPayloadAvailable" (click)='onCompleteClick()'></btn-jazz-primary>
+          <a (click)='saveClicked = false; advancedSaveClicked = false'>CANCEL</a>
         </div>
     </div>
+  </div>
+
+  <div class="loading-row-edit" [class.show]="isLoadingService">
+    <div class="loading-circle"></div>
   </div>
 </section>
 
@@ -591,7 +595,7 @@
 
       <li *ngIf='internal_build'>
         <div class="det-label">Slack Channel</div>
-        <div class="det-value" [class.link]='!slackChannel_empty' [ngClass]="{PlaceHolder:slackChannel_empty}" (click)="slack_link()">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
+        <div class="det-value" [class.link]='!slackChannel_empty' [class.PlaceHolder]="slackChannel_empty" (click)="slack_link()">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
       </li>
       <li>
         <div class="det-label">Repository</div>

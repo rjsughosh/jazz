@@ -133,7 +133,8 @@ export class ServiceDetailComponent implements OnInit {
                 create_cloudfront_url:service.metadata.create_cloudfront_url,
                 eventScheduleRate:service.metadata.eventScheduleRate,
                 event_source:service.metadata.event_source_dynamodb,
-                app_name:service.app_name
+                app_name:service.app_name,
+                created_by:service.created_by
             };
         }
     };
@@ -154,6 +155,7 @@ export class ServiceDetailComponent implements OnInit {
             'link' : ''
         }]
         this.isLoadingService = false;
+
         if(service.status == 'deletion_completed' || service.status == 'deletion_started' || service.status == 'creation_started' || service.status == 'creation_failed')
         this.canDelete = false;
       } else{

@@ -37,7 +37,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     flag:boolean=false;
     @Input() service: any = {};
-    @Input() isLoadingService: boolean = false;
+    @Input() isLoadingService: boolean;
     @Input() application_arr:any;
     private subscription:any;
 
@@ -141,6 +141,7 @@ export class ServiceOverviewComponent implements OnInit {
     cdnConfigSelected: boolean = this.service.create_cloudfront_url;
     cdnConfigInitial: boolean = this.service.create_cloudfront_url;
     saveClicked:boolean = false;
+    advancedSaveClicked:boolean = false;
     showApplicationList:boolean = false;
     selectedApplications=[];
     oneSelected:boolean=false;
@@ -148,6 +149,8 @@ export class ServiceOverviewComponent implements OnInit {
     applc:string;
     isSlackAvailable:boolean = true;
     isPUTLoading:boolean = false;
+    PutPayload:any;
+    isPayloadAvailable:boolean = false;
 
     constructor(
 
@@ -350,6 +353,7 @@ export class ServiceOverviewComponent implements OnInit {
       {
 
         if(this.service.tags != undefined) this.tags_temp=this.service.tags.join();
+
         this.desc_temp=this.service.description;
         this.email_temp=this.service.email;
         this.slackChannel_temp=this.service.slackChannel;
@@ -528,83 +532,35 @@ export class ServiceOverviewComponent implements OnInit {
         this.viewMode = !this.viewMode;
       }
       onEditClick(){
+        this.loadPlaceholders();
+
         console.log('this.service',this.service)
 
         this.disp_show=false;
       }
       onEditClickAdvanced(){
         this.disp_show2=false;
+        this.publicSelected = this.publicInitial;
+        this.cdnConfigSelected = this.cdnConfigInitial;
+
+
       }
       onCompleteClick(){
         this.isPUTLoading = true;
-        let payload = {};
-        if(this.desc_temp){
-          payload["description"]=this.desc_temp;
-        }
-        if(this.slackChannel_temp){
-          payload["slack_channel"]=this.slackChannel_temp;
-        }
-        if (this.rateExpression.type != 'none') {
-          this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
-          if (this.rateExpression.cronStr == 'invalid') {
-            return;
-          } else if (this.rateExpression.cronStr !== undefined) {
-            payload["rateExpression"] = this.rateExpression.cronStr;
-          }
-        }
 
-        if (this.eventExpression.type !== "awsEventsNone") {
-          var event = {};
-          event["type"] = this.eventExpression.type;
-          if (this.eventExpression.type === "dynamodb") {
-            event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
-            event["action"] = "PutItem";
-          } else if (this.eventExpression.type === "kinesis") {
-            event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
-            event["action"] = "PutRecord";
-          } else if (this.eventExpression.type === "s3") {
-            event["source"] = this.eventExpression.S3BucketName;
-            event["action"] = "s3:ObjectCreated:*";
-          }
-          payload["events"] = [];
-          payload["events"].push(event);
-        }
-
-        if(this.publicSelected !== this.publicInitial){
-          payload["is_public_endpoint"] = this.publicSelected;
-        }
-        if(this.cdnConfigSelected !== this.cdnConfigInitial){
-          payload["create_cloudfront_url"] = this.cdnConfigSelected;
-        }
-        if(this.selectedApplications.length > 0){
-          payload["appName"]=this.selectApp.appName;
-          payload["appID"]=this.selectApp.appID.toLowerCase();
-        }
-        this.http.put('/jazz/services/'+this.service.id,payload)
+        this.http.put('/jazz/services/'+this.service.id,this.PutPayload)
             .subscribe(
                 (Response)=>{
                   this.isPUTLoading = false;
                   this.disp_show = true;
-                  setTimeout(() => {
-                    this.refresh.emit();
-                  }, 3000);
-
-
-
-                    // this.service.description = this.desc_temp;
-
-                    // // this.service.email = email_temporary;
-                    // this.service.slackChannel = slack_temporary;
-
-                    // this.isLoadingService=false;
-                    // this.disp_edit=true;
-                    // this.showCancel=false;
-                    this.disp_show=true;
-                    // this.edit_save='EDIT';
-                    this.saveClicked = false;
-                    let successMessage = this.toastmessage.successMessage(Response,"updateService");
-                    this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
-                    // this.check_empty_fields();
+                  this.isLoadingService = true;
+                  this.serviceDetail.onDataFetched(Response.data);
+                  this.isLoadingService = false;
+                  this.loadPlaceholders()
+                  this.disp_show=true;
+                  this.saveClicked = false;
+                  let successMessage = this.toastmessage.successMessage(Response,"updateService");
+                  this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
                 },
                 (Error)=>{
                     this.isLoadingService=false;
@@ -620,11 +576,70 @@ export class ServiceOverviewComponent implements OnInit {
 
       }
       onAdvancedSaveClick(){
-        this.saveClicked = true;
+        this.saveClicked = false;
+        this.advancedSaveClicked = true;
+        let payload = {};
+
+        if( this.advancedSaveClicked){
+          if (this.rateExpression.type != 'none') {
+            this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+            if (this.rateExpression.cronStr == 'invalid') {
+              return;
+            } else if (this.rateExpression.cronStr !== undefined) {
+              payload["rateExpression"] = this.rateExpression.cronStr;
+            }
+          }
+
+          if (this.eventExpression.type !== "awsEventsNone") {
+            var event = {};
+            event["type"] = this.eventExpression.type;
+            if (this.eventExpression.type === "dynamodb") {
+              event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+              event["action"] = "PutItem";
+            } else if (this.eventExpression.type === "kinesis") {
+              event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+              event["action"] = "PutRecord";
+            } else if (this.eventExpression.type === "s3") {
+              event["source"] = this.eventExpression.S3BucketName;
+              event["action"] = "s3:ObjectCreated:*";
+            }
+            payload["events"] = [];
+            payload["events"].push(event);
+          }
+
+          if(this.publicSelected !== this.publicInitial){
+            payload["is_public_endpoint"] = this.publicSelected;
+          }
+          if(this.cdnConfigSelected !== this.cdnConfigInitial){
+            payload["create_cloudfront_url"] = this.cdnConfigSelected;
+          }
+
+        }
+        this.PutPayload = payload;
+        if(Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
       }
 
       onSaveClick(){
         this.saveClicked = true;
+        this.advancedSaveClicked = false;
+
+        let payload = {};
+        if( this.saveClicked ){
+          if(this.desc_temp){
+            payload["description"]=this.desc_temp;
+          }
+          if(this.slackChannel_temp){
+            payload["slack_channel"]=this.slackChannel_temp;
+          }
+          if(this.selectedApplications.length > 0){
+            payload["appName"]=this.selectApp.appName;
+            payload["appID"]=this.selectApp.appID.toLowerCase();
+          }
+
+        }
+        this.PutPayload = payload;
+        if(Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
+
       }
         // var email_temporary = this.email_temp;
         // var slack_temporary = this.slackChannel_temp;
@@ -736,7 +751,7 @@ export class ServiceOverviewComponent implements OnInit {
       }
     checkSlackNameAvailability()
     {
-      debugger
+
       if(this.slackChannel_temp == ''){
         this.hide_slack_error=true;
         this.isSlackAvailable = true;
@@ -803,9 +818,6 @@ export class ServiceOverviewComponent implements OnInit {
                     if(isAvailable)//if valid
                     {
                         this.hide_slack_error=true;
-                        debugger
-
-                        // this.service.slackChannel=this.slackChannel_temp;
 
                     }
                     else
@@ -1238,6 +1250,7 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 is_multi_env:boolean = false;
                 ngOnInit() {
+
                     if(environment.envName == 'oss')
                         if(environment.multi_env == false)
                             this.multiENV = false;
@@ -1247,6 +1260,7 @@ export class ServiceOverviewComponent implements OnInit {
 
                     this.service.accounts="tmo-dev-ops, tmo-int";
                     this.service.regions="us-west-2, us-east";
+
                     this.createloader = true;
                     if(this.service.status == "deletion completed" || this.service.status == "deletion started"){
                         this.showcanvas = true;
@@ -1392,11 +1406,13 @@ export class ServiceOverviewComponent implements OnInit {
         // console.log('got config,,,,,',obj)
         // let test = require(environment.configFile);
         // console.log('test = ',test)
-
+        this.loadPlaceholders();
 
         this.prodEnv={};
         this.stgEnv={};
 
+        this.publicInitial = this.service.is_public_endpoint;
+        this.cdnConfigInitial = this.service.create_cloudfront_url;
         if(!this.internal_build){
             this.envfoross();
         }
