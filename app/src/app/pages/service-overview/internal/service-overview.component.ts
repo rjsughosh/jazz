@@ -144,6 +144,7 @@ export class ServiceOverviewComponent implements OnInit {
     advancedSaveClicked:boolean = false;
     showApplicationList:boolean = false;
     selectedApplications=[];
+    initialselectedApplications = [];
     oneSelected:boolean=false;
     app_placeH:string = 'Start typing...';
     applc:string;
@@ -460,6 +461,8 @@ export class ServiceOverviewComponent implements OnInit {
         let thisclass: any = this;
         this.showApplicationList = false;
         thisclass.applc = '';
+        if(!app.appID)
+          this.initialselectedApplications.push(app);
         this.selectedApplications.push(app);
         for (var i = 0; i < this.application_arr.length; i++) {
           if (this.application_arr[i].appName === app.appName) {
@@ -467,6 +470,7 @@ export class ServiceOverviewComponent implements OnInit {
             return;
           }
         }
+        // debugger
 
       }
 
@@ -527,17 +531,20 @@ export class ServiceOverviewComponent implements OnInit {
         }
       }
 
-      editClick(){
-        console.log('this.service',this.service)
-        this.viewMode = !this.viewMode;
-      }
+
       onEditClick(){
         this.loadPlaceholders();
-
-        console.log('this.service',this.service)
-
+        var appobj = {
+          "issueID":'',
+          "appName": this.service.app_name
+        };
+        if(this.service.app_name && this.selectedApplications.length == 0)
+          this.selectApplication(appobj);
         this.disp_show=false;
+        // debugger
+
       }
+
       onEditClickAdvanced(){
         this.disp_show2=false;
         this.publicSelected = this.publicInitial;
@@ -625,16 +632,18 @@ export class ServiceOverviewComponent implements OnInit {
 
         let payload = {};
         if( this.saveClicked ){
-          if(this.desc_temp){
+          if(this.desc_temp != this.service.description){
             payload["description"]=this.desc_temp;
           }
-          if(this.slackChannel_temp){
+          if(this.slackChannel_temp != this.service.slackChannel){
             payload["slack_channel"]=this.slackChannel_temp;
           }
-          if(this.selectedApplications.length > 0){
+          if((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName) ){
             payload["appName"]=this.selectApp.appName;
-            payload["appID"]=this.selectApp.appID.toLowerCase();
+            if( this.selectApp.appID )
+              payload["appID"]=this.selectApp.appID.toLowerCase();
           }
+          debugger
 
         }
         this.PutPayload = payload;
@@ -810,10 +819,7 @@ export class ServiceOverviewComponent implements OnInit {
             .subscribe(
                 (Response) => {
                     let isAvailable = Response.data.is_available;
-                    // this.response_json = Response;
-                    // var output_body = JSON.parse(this.response_json._body);
-                    // console.log(output_body);
-                    // var is_slack_valid = output_body.data.is_available;
+
                     this.isSlackAvailable = isAvailable;
                     if(isAvailable)//if valid
                     {
@@ -1086,15 +1092,7 @@ export class ServiceOverviewComponent implements OnInit {
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
         this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
             response => {
-                // console.log("response == ", response);
-                // var spoon = response.data.environment;
-                // console.log("spoon == ", spoon[1])
-                // for(var i=0 ; i < spoon.length ; i++ ){
-                //    if(spoon[i].friendly_name != undefined){
-                //        this.friendly_name = spoon[i].friendly_name;
-                //    }
-                // }
-                // this.friendly_name = response
+
                 this.isenvLoading=false;
                   this.environ_arr=response.data.environment;
                   if(this.environ_arr!=undefined)
@@ -1103,12 +1101,6 @@ export class ServiceOverviewComponent implements OnInit {
                     }
                   this.ErrEnv=false;
 
-                //   var obj1={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"dev"}
-                //   var obj2={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"feature"}
-                //   var obj3={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"stg"}
-                //   this.environ_arr[1]=obj1;
-                //   this.environ_arr[2]=obj2;
-                //   this.environ_arr[3]=obj3;
                   this.modifyEnvArr();
 
               },
@@ -1254,7 +1246,6 @@ export class ServiceOverviewComponent implements OnInit {
                     if(environment.envName == 'oss')
                         if(environment.multi_env == false)
                             this.multiENV = false;
-                    console.log('internabuild?? ',this.internal_build)
                     if(environment.multi_env) this.is_multi_env=true;
                     if(environment.envName == 'oss') this.internal_build = false;
 
@@ -1311,7 +1302,6 @@ export class ServiceOverviewComponent implements OnInit {
             }
         }
         arrEnv[0].status.replace("_"," ");
-        console.log('arrenv ',arrEnv)
     }
     envfoross(){
         var url_multi_env = 'https://api.myjson.com/bins/k6qvn';
@@ -1327,7 +1317,6 @@ export class ServiceOverviewComponent implements OnInit {
 
         this.http.get(chosen_url).subscribe(
             response => {
-                console.log("oss response == ", response);
                 this.transform_env_oss(response);
                 // var spoon = response.data.environment;
                 // console.log("spoon == ", spoon[1])
@@ -1358,28 +1347,8 @@ export class ServiceOverviewComponent implements OnInit {
                 // this.isenvLoading=false;
 
                   console.log('oss error',err);
-                //   this.ErrEnv=true;
-                //   if(err.status == 404) this.err404=true;
-                //   this.errMessage="Something went wrong while fetching your data";
-                //   this.errMessage=this.toastmessage.errorMessage(err,"environment");
-                //   var payload = {
-                //       "domain" : +this.service.domain,
-                //       "service" : this.service.name
-                //   }
-                //   this.getTime();
-                //   this.errorURL = window.location.href;
-                //   this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
-                //   this.errorRequest = payload;
-                //   this.errorUser = this.authenticationservice.getUserId();
-                //   this.errorResponse = JSON.parse(err._body);
 
-                // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
-                // this.popToast('error', 'Oops!', errorMessage);
             });
-
-        // va
-        console.log('env file,',environment)
-
 
 
     }
@@ -1413,6 +1382,8 @@ export class ServiceOverviewComponent implements OnInit {
 
         this.publicInitial = this.service.is_public_endpoint;
         this.cdnConfigInitial = this.service.create_cloudfront_url;
+
+        // this.selectedApplications[0] = this.service.app_name;
         if(!this.internal_build){
             this.envfoross();
         }

@@ -1382,3 +1382,12 @@ input{
 .s3-fields.arrow_box:after {
   left: 86%;
 }
+.application-drop-wrap{
+  width: calc( 100% - 11rem );
+
+  .each-app{
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -196,7 +196,6 @@ export class ServiceDetailComponent implements OnInit {
               return 0;
             }
           });
-          console.log('in serv detail',this.application_arr)
 
           return;
         }
@@ -242,8 +241,7 @@ export class ServiceDetailComponent implements OnInit {
                     errorMessage = this.toastmessage.errorMessage(err,"serviceDetail");
                     this.errMessage = errorMessage;
                     this.err_flag=true;
-                    // console.log(err.status,'ssssssssssssss');
-                    // this.toast_pop('error', 'Oops!', errorMessage)
+
                 }
             )
         }
