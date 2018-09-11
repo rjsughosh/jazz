@@ -643,7 +643,6 @@ export class ServiceOverviewComponent implements OnInit {
             if( this.selectApp.appID )
               payload["appID"]=this.selectApp.appID.toLowerCase();
           }
-          debugger
 
         }
         this.PutPayload = payload;
