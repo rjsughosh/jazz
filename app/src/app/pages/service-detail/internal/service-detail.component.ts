@@ -115,6 +115,7 @@ export class ServiceDetailComponent implements OnInit {
         if (service === undefined) {
             return {};
         } else{
+            service = this.fixMetadata(service)
             return {
                 id: service.id,
                 name: service.service,
@@ -140,6 +141,15 @@ export class ServiceDetailComponent implements OnInit {
             };
         }
     };
+
+    fixMetadata(service){
+      if(!service.metadata.create_cloudfront_url.BOOL){
+        return service;
+      }
+      service.metadata.create_cloudfront_url = service.metadata.create_cloudfront_url.BOOL;
+      service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+      return service
+    }
 
     onDataFetched(service) {
 
