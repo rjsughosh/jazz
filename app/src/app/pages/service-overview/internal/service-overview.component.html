@@ -137,16 +137,17 @@
         <div class='metadata-heading'>
           General
         </div>
-        <div *ngIf="disp_show" class='metadata-buttons-wrap'>
-          <btn-jazz-secondary text="EDIT" (click)='onEditClick()'></btn-jazz-secondary>
-        </div>
+
       </div>
     </summary>
     <div *ngIf='!disp_show' class='down-btn-wrap'>
       <btn-jazz-primary  [disablePrimaryBtn]="!isSlackAvailable" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
       <a (click)="onCancelClick()">CANCEL</a>
     </div>
-    <div class='metadata-body metadata-body-border'>
+    <div class='metadata-body relative metadata-body-border'>
+      <div *ngIf="disp_show" class='metadata-buttons-wrap'>
+        <btn-jazz-secondary [disablebtn]="service.status != 'creation completed'" text="EDIT" (click)='onEditClick()'></btn-jazz-secondary>
+      </div>
 
       <div class='metadata-column'>
         <ul>
@@ -156,11 +157,11 @@
           </li>
           <li>
             <div class="det-label">Service</div>
-            <div class="det-value service-type">{{service.name}}</div>
+            <div class="det-value">{{service.name}}</div>
           </li>
           <li>
             <div class="det-label">Service Type</div>
-            <div class="det-value service-type">{{service.serviceType || 'Pick your service type'}}</div>
+            <div class="det-value">{{service.serviceType || 'Pick your service type'}}</div>
           </li>
           <li>
             <div class="det-label">Description</div>
@@ -240,6 +241,7 @@
           </li>
         </ul>
       </div>
+
     </div>
 
   </details>
@@ -249,9 +251,6 @@
       <div class='metadata-heading-wrap'>
         <div class='metadata-heading'>
           Advanced
-        </div>
-        <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
-          <btn-jazz-secondary text="EDIT" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
         </div>
       </div>
     </summary>
@@ -263,8 +262,11 @@
       <btn-jazz-primary text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
       <a (click)='onCancelClick()'>CANCEL</a>
     </div>
-    <div class='metadata-body-advanced'>
-      <div class='metadata-row'>
+    <div class='metadata-body-advanced relative'>
+      <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
+        <btn-jazz-secondary text="EDIT" [disablebtn]="service.status != 'creation completed'" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
+      </div>
+      <div class='metadata-row top-margin'>
         <ul>
           <li *ngIf="service.serviceType == 'function'">
               <div class="det-label">Event Schedule</div>

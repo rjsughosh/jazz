@@ -1127,13 +1127,16 @@ background-color: orange;
 }
 
 summary{
+  &:hover{
+    color:#ed008c;
+  }
   display: flex;
   outline:none;
   margin-bottom: 1rem;
   cursor:pointer
 }
 .summary-last-child{
-  margin: 2rem 0 1rem 0;
+  margin: 15px 0 0rem 0;
 }
 
 details summary::-webkit-details-marker {
@@ -1142,7 +1145,7 @@ details summary::-webkit-details-marker {
   margin:7px 1rem 0 0;
 }
 .metadata-body-border{
-    border-bottom: solid 1px #d7d7d7;
+
     padding-bottom:1rem
 }
 
@@ -1159,14 +1162,22 @@ details summary::-webkit-details-marker {
     font-weight: bold;
   }
 
-  .metadata-buttons-wrap{
-    /deep/.btnT-radial-in{
-      margin:0;
-      padding: 0.4rem 1.5rem;
-      border: 1px solid;
-    }
-  }
 
+}
+.metadata-buttons-wrap{
+  position: absolute;
+  top:-3.5rem;
+  right: 0;
+  /deep/.btnT-radial-in{
+    margin: 0px;
+    border-radius: 30px;
+    padding: 7px 16px;
+    letter-spacing: .3px;
+    font-size: 12px;
+    vertical-align: middle;
+    font-weight: 700;
+    border: 1px solid;
+  }
 }
 
 .metadata-body{
@@ -1240,14 +1251,20 @@ details summary::-webkit-details-marker {
 }
 details{
   position: relative;
+  &:first-child{
+    border-bottom: solid 1px #d7d7d7;
+  }
 }
 .down-btn-wrap{
   display: flex;
+  flex-direction: row-reverse;
   position: absolute;
+  z-index: 1;
   bottom: -1rem;
-  right: 1rem;
+  right: -2rem;
   padding: 1rem;
   btn-jazz-primary,a{
+    cursor: pointer;
     padding:1rem
   }
   a{
@@ -1269,6 +1286,10 @@ details{
     }
   }
 }
+}
+
+.top-margin{
+  margin-top: 1rem;
 }
 .warn-msg{
   display:inline-flex;
@@ -1317,10 +1338,15 @@ details{
   }
   .overlay-btns{
     display:flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+
     padding: 0 0 2.5rem 0;
     a{
       align-self: center;
+    }
+    btn-jazz-primary{
+      margin:0 3rem;
     }
   }
 }

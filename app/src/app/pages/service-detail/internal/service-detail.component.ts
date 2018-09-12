@@ -143,16 +143,24 @@ export class ServiceDetailComponent implements OnInit {
     };
 
     fixMetadata(service){
-      if(!service.metadata.create_cloudfront_url.BOOL){
+      if(service.type == "website" ){
+        if(typeof service.metadata.create_cloudfront_url !== "object"){
+          return service;
+        }
+        service.metadata.create_cloudfront_url = service.metadata.create_cloudfront_url.BOOL;
         return service;
       }
-      service.metadata.create_cloudfront_url = service.metadata.create_cloudfront_url.BOOL;
-      service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
-      return service
+      else if(service.type != "website"){
+        if(typeof service.metadata.require_internal_access !== "object"){
+          return service;
+        }
+        service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+        return service;
+      }
+
     }
 
     onDataFetched(service) {
-
       if (service !== undefined && service !== "") {
         if (!service.id && service.data){
             service = service.data;

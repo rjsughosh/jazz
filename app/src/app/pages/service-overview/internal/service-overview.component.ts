@@ -14,8 +14,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { ServiceDetailComponent } from '../../service-detail/internal/service-detail.component';
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './../../../secondary-components/create-service/service-form-data';
 import { CronParserService } from '../../../core/helpers';
-
-// import  $  from 'jquery';
 import { environment } from './../../../../environments/environment';
 
 declare var $:any;
@@ -33,9 +31,11 @@ export class ServiceOverviewComponent implements OnInit {
     @Output() onEnvGet:EventEmitter<any> = new EventEmitter<any>();
     @Output() open_sidebar:EventEmitter<any> = new EventEmitter<any>();
     @Output() refresh:EventEmitter<any> = new EventEmitter<any>();
+
     @ViewChild('env') envComponent;
 
     flag:boolean=false;
+
     @Input() service: any = {};
     @Input() isLoadingService: boolean;
     @Input() application_arr:any;
@@ -110,17 +110,17 @@ export class ServiceOverviewComponent implements OnInit {
     deleting:boolean = false;
     showcanvas:boolean=false;
     errBody: any;
-	parsedErrBody: any;
-	errorTime:any;
-	errorURL:any;
-	errorAPI:any;
-	errorRequest:any={};
-	errorResponse:any={};
+    parsedErrBody: any;
+    errorTime:any;
+    errorURL:any;
+    errorAPI:any;
+    errorRequest:any={};
+    errorResponse:any={};
     errorUser:any;
     envList=['prod','stg'];
     friendlist=['prod','stg'];
-	errorChecked:boolean=true;
-	errorInclude:any="";
+    errorChecked:boolean=true;
+    errorInclude:any="";
     json:any={};
     errorcase:boolean=false;
     Nerrorcase:boolean=true;
@@ -154,23 +154,6 @@ export class ServiceOverviewComponent implements OnInit {
     isPUTLoading:boolean = false;
     PutPayload:any;
     isPayloadAvailable:boolean = false;
-
-    constructor(
-
-        private router: Router,
-        private request: RequestService,
-        private messageservice:MessageService,
-        private cronParserService: CronParserService,
-        private cache: DataCacheService,
-        private toasterService: ToasterService,
-        private serviceDetail:ServiceDetailComponent,
-        private authenticationservice: AuthenticationService
-    ) {
-        this.http = request;
-        this.toastmessage = messageservice;
-    }
-
-    email_temp:string;
     isenvLoading:boolean=false;
     token:string;
     noSubEnv:boolean=false;
@@ -181,7 +164,8 @@ export class ServiceOverviewComponent implements OnInit {
     activeEnv:string = 'dev';
     Environments=[];
     environ_arr=[];
-    endpList = [{
+    endpList = [
+      {
         name:'tmo-dev-ops',
         arn:'arn:aws:lambda:us-east-1:1:192837283062537',
         type:'Account',
@@ -250,7 +234,7 @@ export class ServiceOverviewComponent implements OnInit {
         }
 
     ];
-
+    email_temp:string;
     branches = [
         {
             title:'DEV',
@@ -273,19 +257,22 @@ export class ServiceOverviewComponent implements OnInit {
             stage:'dev'
         },
 
-        // {
-        //     title:'BRANCH4',
-        //     stage:'dev'
-        // },
-        // {
-        //     title:'BRANCH4',
-        //     stage:'dev'
-        // },
-        // {
-        //     title:'BRANCH4',
-        //     stage:'dev'
-        // }
     ];
+
+    constructor(
+        private router: Router,
+        private request: RequestService,
+        private messageservice:MessageService,
+        private cronParserService: CronParserService,
+        private cache: DataCacheService,
+        private toasterService: ToasterService,
+        private serviceDetail:ServiceDetailComponent,
+        private authenticationservice: AuthenticationService
+    ) {
+        this.http = request;
+        this.toastmessage = messageservice;
+    }
+
     copy_link(id)
     {
         var element = null; // Should be <textarea> or <input>
@@ -310,23 +297,24 @@ export class ServiceOverviewComponent implements OnInit {
       this.eventExpression.type = val;
     }
     public focusDynamo = new EventEmitter<boolean>();
-  public focusKinesis = new EventEmitter<boolean>();
-  public focusS3 = new EventEmitter<boolean>();
+    public focusKinesis = new EventEmitter<boolean>();
+    public focusS3 = new EventEmitter<boolean>();
 
-  chkDynamodb() {
-    this.focusDynamo.emit(true);
-    return this.eventExpression.type === 'dynamodb';
-  }
+    chkDynamodb() {
+      this.focusDynamo.emit(true);
+      return this.eventExpression.type === 'dynamodb';
+    }
 
-  chkfrKinesis() {
-    this.focusKinesis.emit(true);
-    return this.eventExpression.type === 'kinesis';
-  }
+    chkfrKinesis() {
+      this.focusKinesis.emit(true);
+      return this.eventExpression.type === 'kinesis';
+    }
 
-  chkS3() {
-    this.focusS3.emit(true);
-    return this.eventExpression.type === 's3';
-  }
+    chkS3() {
+      this.focusS3.emit(true);
+      return this.eventExpression.type === 's3';
+    }
+
     openLink(link){
         if (link) {
             window.open(link, "_blank");
@@ -335,382 +323,324 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     stageClicked(stg){
+      let url = '/services/' + this.service['id'] + '/' + stg
+      this.router.navigateByUrl(url);
+    }
 
-            let url = '/services/' + this.service['id'] + '/' + stg
-            this.router.navigateByUrl(url);
+    ValidURL(str) {
+      var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+      if(!regex .test(str)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    showService(s){
 
     }
-    ValidURL(str) {
-        var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-        if(!regex .test(str)) {
-          return false;
-        } else {
-          return true;
-        }
+
+    loadPlaceholders()
+    {
+
+      if(this.service.tags != undefined) this.tags_temp=this.service.tags.join();
+
+      this.desc_temp=this.service.description;
+      this.email_temp=this.service.email;
+      this.slackChannel_temp=this.service.slackChannel;
+    }
+
+    updateTags(){
+        var payloag_tags;
+      payloag_tags =this.tags_temp.split(',');
+      payloag_tags.forEach(function(item,index){
+          payloag_tags[index]=item.trim();
+      });
+      this.update_payload.tags=payloag_tags;
+    }
+
+    openSidebar(){
+      this.open_sidebar.emit(true);
+    }
+
+    private isCronObjValid(cronObj) {
+      var cronValidity = this.cronParserService.validateCron(cronObj);
+      this.cronFieldValidity = cronValidity;
+      if (cronValidity.isValid === true) {
+        return true;
       }
-
-      showService(s){
-
-      }
-      loadPlaceholders()
-      {
-
-        if(this.service.tags != undefined) this.tags_temp=this.service.tags.join();
-
-        this.desc_temp=this.service.description;
-        this.email_temp=this.service.email;
-        this.slackChannel_temp=this.service.slackChannel;
-      }
-      updateTags(){
-          var payloag_tags;
-        payloag_tags =this.tags_temp.split(',');
-        payloag_tags.forEach(function(item,index){
-            payloag_tags[index]=item.trim();
-        });
-        this.update_payload.tags=payloag_tags;
-
-      }
-
-      openSidebar(){
-          this.open_sidebar.emit(true);
-
-      }
-
-      private isCronObjValid(cronObj) {
-        var cronValidity = this.cronParserService.validateCron(cronObj);
-        this.cronFieldValidity = cronValidity;
-        if (cronValidity.isValid === true) {
-          return true;
-        }
-        return false;
-      };
+      return false;
+    };
 
 
-      onApplicationChange(newVal) {
-        if (!newVal) {
-          this.showApplicationList = false;
-        } else {
-          this.showApplicationList = true;
-        }
-      }
-
-      focusInputApplication(event) {
-        document.getElementById('applc').focus();
-      }
-
-      blurApplication(){
-        setTimeout(() => {
-          this.applc='';
-          this.showApplicationList=false;
-        }, 200);
-
-      }
-
-      keypressApplication(hash){
-        if (hash.key == 'ArrowDown') {
-          this.focusindex++;
-          if (this.focusindex > 0) {
-            var pinkElements = document.getElementsByClassName("pinkfocusapplication")[0];
-            if (pinkElements == undefined) {
-              this.focusindex = 0;
-            }
-            // var id=pinkElements.children[0].innerHTML;
-          }
-          if (this.focusindex > 2) {
-            this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
-
-          }
-        }
-        else if (hash.key == 'ArrowUp') {
-          if (this.focusindex > -1) {
-            this.focusindex--;
-
-            if (this.focusindex > 1) {
-              this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
-            }
-          }
-          if (this.focusindex == -1) {
-            this.focusindex = -1;
-
-
-          }
-        }
-        else if (hash.key == 'Enter' && this.focusindex > -1) {
-          if(this.accounts.length == 0){
-            this.showApplicationList = false;
-          }
-          event.preventDefault();
-          var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
-
-          var appobj = {
-            "issueID":pinkElement[0].attributes[3].value,
-            "appName": pinkElement[0].attributes[2].value
-          }
-
-          this.selectApplication(appobj);
-          this.showApplicationList = false;
-          this.focusindex = -1;
-        } else {
-          this.focusindex = -1;
-        }
-      }
-
-      selectApp;
-      selectApplication(app) {
-        this.oneSelected=true;
-        this.app_placeH='';
-        this.selectApp = app;
-        let thisclass: any = this;
+    onApplicationChange(newVal) {
+      if (!newVal) {
         this.showApplicationList = false;
-        thisclass.applc = '';
-        if(!app.appID)
-          this.initialselectedApplications.push(app);
-        this.selectedApplications.push(app);
-        for (var i = 0; i < this.application_arr.length; i++) {
-          if (this.application_arr[i].appName === app.appName) {
-            this.application_arr.splice(i, 1);
-            return;
-          }
-        }
-        // debugger
-
+      } else {
+        this.showApplicationList = true;
       }
+    }
 
-      removeApplication(index, approver) {
-        this.oneSelected=false;
-        this.selectApp={};
-        this.app_placeH='Start typing...';
-        this.application_arr.push(approver);
-        this.selectedApplications.splice(index, 1);
-      }
+    focusInputApplication(event) {
+      document.getElementById('applc').focus();
+    }
 
-      generateExpression(rateExpression) {
-        if (this.rateExpression !== undefined) {
-          this.rateExpression.error = undefined;
-        }
-        if (rateExpression === undefined || rateExpression['type'] === 'none') {
-          this.rateExpression.isValid = undefined;
-        } else if (rateExpression['type'] == 'rate') {
-          var duration, interval;
-          duration = rateExpression['duration'];
-          interval = rateExpression['interval'];
+    blurApplication(){
+      setTimeout(() => {
+        this.applc='';
+        this.showApplicationList=false;
+      }, 200);
 
-          if (duration === undefined || duration === null || duration <= 0) {
-            this.rateExpression.isValid = false;
-            this.rateExpression.error = 'Please enter a valid duration';
-          } else {
-            if (interval == 'Minutes') {
-              this.cronObj = new CronObject(('0/' + duration), '*', '*', '*', '?', '*');
-            } else if (interval == 'Hours') {
-              this.cronObj = new CronObject('0', ('0/' + duration), '*', '*', '?', '*');
-            } else if (interval == 'Days') {
-              this.cronObj = new CronObject('0', '0', ('1/' + duration), '*', '?', '*');
-            }
-            this.rateExpression.isValid = true;
-            this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+    }
+
+    keypressApplication(hash){
+      if (hash.key == 'ArrowDown') {
+        this.focusindex++;
+        if (this.focusindex > 0) {
+          var pinkElements = document.getElementsByClassName("pinkfocusapplication")[0];
+          if (pinkElements == undefined) {
+            this.focusindex = 0;
           }
-        } else if (rateExpression['type'] == 'cron') {
-          var cronExpression;
-          var cronObj = this.cronObj;
-          var cronObjFields = this.cronParserService.cronObjFields;
-          var _isCronObjValid = this.isCronObjValid(cronObj)
-
-          if (_isCronObjValid === false) {
-            this.rateExpression.isValid = false;
-            this.rateExpression.error = 'Please enter a valid cron expression';
-          } else {
-            this.rateExpression.isValid = true;
-            this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
-          }
+          // var id=pinkElements.children[0].innerHTML;
         }
+        if (this.focusindex > 2) {
+          this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
-        if (this.rateExpression.isValid === undefined) {
-          return undefined;
-        } else if (this.rateExpression.isValid === false) {
-          return 'invalid';
-        } else if (this.rateExpression.isValid === true) {
-          return this.rateExpression.cronStr;
         }
       }
+      else if (hash.key == 'ArrowUp') {
+        if (this.focusindex > -1) {
+          this.focusindex--;
+
+          if (this.focusindex > 1) {
+            this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+          }
+        }
+        if (this.focusindex == -1) {
+          this.focusindex = -1;
 
 
-      onEditClick(){
-        this.loadPlaceholders();
+        }
+      }
+      else if (hash.key == 'Enter' && this.focusindex > -1) {
+        if(this.accounts.length == 0){
+          this.showApplicationList = false;
+        }
+        event.preventDefault();
+        var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
+
         var appobj = {
-          "issueID":'',
-          "appName": this.service.app_name
-        };
-        if(this.service.app_name && this.selectedApplications.length == 0)
-          this.selectApplication(appobj);
-        this.disp_show=false;
-        // debugger
+          "issueID":pinkElement[0].attributes[3].value,
+          "appName": pinkElement[0].attributes[2].value
+        }
 
+        this.selectApplication(appobj);
+        this.showApplicationList = false;
+        this.focusindex = -1;
+      } else {
+        this.focusindex = -1;
+      }
+    }
+
+    selectApp;
+    selectApplication(app) {
+      this.oneSelected=true;
+      this.app_placeH='';
+      this.selectApp = app;
+      let thisclass: any = this;
+      this.showApplicationList = false;
+      thisclass.applc = '';
+      if(!app.appID)
+        this.initialselectedApplications.push(app);
+      this.selectedApplications.push(app);
+      for (var i = 0; i < this.application_arr.length; i++) {
+        if (this.application_arr[i].appName === app.appName) {
+          this.application_arr.splice(i, 1);
+          return;
+        }
+      }
+      // debugger
+
+    }
+
+    removeApplication(index, approver) {
+      this.oneSelected=false;
+      this.selectApp={};
+      this.app_placeH='Start typing...';
+      this.application_arr.push(approver);
+      this.selectedApplications.splice(index, 1);
+    }
+
+    generateExpression(rateExpression) {
+      if (this.rateExpression !== undefined) {
+        this.rateExpression.error = undefined;
+      }
+      if (rateExpression === undefined || rateExpression['type'] === 'none') {
+        this.rateExpression.isValid = undefined;
+      } else if (rateExpression['type'] == 'rate') {
+        var duration, interval;
+        duration = rateExpression['duration'];
+        interval = rateExpression['interval'];
+
+        if (duration === undefined || duration === null || duration <= 0) {
+          this.rateExpression.isValid = false;
+          this.rateExpression.error = 'Please enter a valid duration';
+        } else {
+          if (interval == 'Minutes') {
+            this.cronObj = new CronObject(('0/' + duration), '*', '*', '*', '?', '*');
+          } else if (interval == 'Hours') {
+            this.cronObj = new CronObject('0', ('0/' + duration), '*', '*', '?', '*');
+          } else if (interval == 'Days') {
+            this.cronObj = new CronObject('0', '0', ('1/' + duration), '*', '?', '*');
+          }
+          this.rateExpression.isValid = true;
+          this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+        }
+      } else if (rateExpression['type'] == 'cron') {
+        var cronExpression;
+        var cronObj = this.cronObj;
+        var cronObjFields = this.cronParserService.cronObjFields;
+        var _isCronObjValid = this.isCronObjValid(cronObj)
+
+        if (_isCronObjValid === false) {
+          this.rateExpression.isValid = false;
+          this.rateExpression.error = 'Please enter a valid cron expression';
+        } else {
+          this.rateExpression.isValid = true;
+          this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+        }
       }
 
-      onEditClickAdvanced(){
-        this.disp_show2=false;
-        this.publicSelected = this.publicInitial;
-        this.cdnConfigSelected = this.cdnConfigInitial;
-
-
+      if (this.rateExpression.isValid === undefined) {
+        return undefined;
+      } else if (this.rateExpression.isValid === false) {
+        return 'invalid';
+      } else if (this.rateExpression.isValid === true) {
+        return this.rateExpression.cronStr;
       }
-      onCompleteClick(){
-        this.isPUTLoading = true;
+    }
 
-        this.http.put('/jazz/services/'+this.service.id,this.PutPayload)
-            .subscribe(
-                (Response)=>{
+
+    onEditClick(){
+      this.loadPlaceholders();
+      var appobj = {
+        "issueID":'',
+        "appName": this.service.app_name
+      };
+      if(this.service.app_name && this.selectedApplications.length == 0)
+        this.selectApplication(appobj);
+      this.disp_show=false;
+      // debugger
+
+    }
+
+    onEditClickAdvanced(){
+      this.disp_show2=false;
+      this.publicSelected = this.publicInitial;
+      this.cdnConfigSelected = this.cdnConfigInitial;
+
+
+    }
+    onCompleteClick(){
+      this.isPUTLoading = true;
+
+      this.http.put('/jazz/services/'+this.service.id,this.PutPayload)
+          .subscribe(
+              (Response)=>{
+                this.isPUTLoading = false;
+                this.disp_show = true;
+                this.isLoadingService = true;
+                this.serviceDetail.onDataFetched(Response.data);
+                this.isLoadingService = false;
+                this.loadPlaceholders()
+                this.disp_show=true;
+                this.saveClicked = false;
+                let successMessage = this.toastmessage.successMessage(Response,"updateService");
+                this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
+              },
+              (Error)=>{
+                  this.isLoadingService=false;
                   this.isPUTLoading = false;
-                  this.disp_show = true;
-                  this.isLoadingService = true;
-                  this.serviceDetail.onDataFetched(Response.data);
-                  this.isLoadingService = false;
-                  this.loadPlaceholders()
                   this.disp_show=true;
                   this.saveClicked = false;
-                  let successMessage = this.toastmessage.successMessage(Response,"updateService");
-                  this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
-                },
-                (Error)=>{
-                    this.isLoadingService=false;
-                    this.isPUTLoading = false;
-                    this.disp_show=true;
-                    this.saveClicked = false;
-                    this.edit_save='SAVE';
-                    let errorMessage = this.toastmessage.errorMessage(Error,"updateService");
-                    this.toast_pop('error', 'Oops!', errorMessage)
-                    // this.toast_pop('error','Oops!', "Data cannot be updated. Service Error.");
-                });
+                  this.edit_save='SAVE';
+                  let errorMessage = this.toastmessage.errorMessage(Error,"updateService");
+                  this.toast_pop('error', 'Oops!', errorMessage)
+                  // this.toast_pop('error','Oops!', "Data cannot be updated. Service Error.");
+              });
 
 
-      }
-      onAdvancedSaveClick(){
-        this.saveClicked = false;
-        this.advancedSaveClicked = true;
-        let payload = {};
+    }
+    onAdvancedSaveClick(){
+      this.saveClicked = false;
+      this.advancedSaveClicked = true;
+      let payload = {};
 
-        if( this.advancedSaveClicked){
-          if (this.rateExpression.type != 'none') {
-            this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
-            if (this.rateExpression.cronStr == 'invalid') {
-              return;
-            } else if (this.rateExpression.cronStr !== undefined) {
-              payload["rateExpression"] = this.rateExpression.cronStr;
-            }
+      if( this.advancedSaveClicked){
+        if (this.rateExpression.type != 'none') {
+          this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+          if (this.rateExpression.cronStr == 'invalid') {
+            return;
+          } else if (this.rateExpression.cronStr !== undefined) {
+            payload["rateExpression"] = this.rateExpression.cronStr;
           }
-
-          if (this.eventExpression.type !== "awsEventsNone") {
-            var event = {};
-            event["type"] = this.eventExpression.type;
-            if (this.eventExpression.type === "dynamodb") {
-              event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
-              event["action"] = "PutItem";
-            } else if (this.eventExpression.type === "kinesis") {
-              event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
-              event["action"] = "PutRecord";
-            } else if (this.eventExpression.type === "s3") {
-              event["source"] = this.eventExpression.S3BucketName;
-              event["action"] = "s3:ObjectCreated:*";
-            }
-            payload["events"] = [];
-            payload["events"].push(event);
-          }
-          if(this.vpcInitial !== this.vpcSelected){
-            payload["require_internal_access"] = this.vpcSelected;
-          }
-          if(this.publicSelected !== this.publicInitial){
-            payload["is_public_endpoint"] = this.publicSelected;
-          }
-          if(this.cdnConfigSelected !== this.cdnConfigInitial){
-            payload["create_cloudfront_url"] = this.cdnConfigSelected;
-          }
-
         }
-        this.PutPayload = payload;
-        if(Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
-      }
 
-      onSaveClick(){
-        this.saveClicked = true;
-        this.advancedSaveClicked = false;
-
-        let payload = {};
-        if( this.saveClicked ){
-          if(this.desc_temp != this.service.description){
-            payload["description"]=this.desc_temp;
+        if (this.eventExpression.type !== "awsEventsNone") {
+          var event = {};
+          event["type"] = this.eventExpression.type;
+          if (this.eventExpression.type === "dynamodb") {
+            event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+            event["action"] = "PutItem";
+          } else if (this.eventExpression.type === "kinesis") {
+            event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+            event["action"] = "PutRecord";
+          } else if (this.eventExpression.type === "s3") {
+            event["source"] = this.eventExpression.S3BucketName;
+            event["action"] = "s3:ObjectCreated:*";
           }
-          if(this.slackChannel_temp != this.service.slackChannel){
-            payload["slack_channel"]=this.slackChannel_temp;
-          }
-          if((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName) ){
-            payload["appName"]=this.selectApp.appName;
-            if( this.selectApp.appID )
-              payload["appID"]=this.selectApp.appID.toLowerCase();
-          }
-
+          payload["events"] = [];
+          payload["events"].push(event);
         }
-        this.PutPayload = payload;
-        if(Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
+        if(this.vpcInitial !== this.vpcSelected){
+          payload["require_internal_access"] = this.vpcSelected;
+        }
+        if(this.publicSelected !== this.publicInitial){
+          payload["is_public_endpoint"] = this.publicSelected;
+        }
+        if(this.cdnConfigSelected !== this.cdnConfigInitial){
+          payload["create_cloudfront_url"] = this.cdnConfigSelected;
+        }
 
       }
-        // var email_temporary = this.email_temp;
-        // var slack_temporary = this.slackChannel_temp;
-        // this.check_empty_fields();
-        // if(this.service.status && this.service.status != 'deletion_completed' && this.service.status != 'deletion_started'){
-        // };
-        // if(!this.disp_show)
-        // {//set edit view to true ---> switch to edit mode
-        //     this.disp_edit=false;
-        //     this.disp_show=true;
-        //     this.edit_save='SAVE';
-        //     this.showCancel=true;
-        //     this.loadPlaceholders();
+      this.PutPayload = payload;
+      if(Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
+    }
 
-        // }
-        // else{//set display view to true ---> save and switch to view mode
-        //     this.isLoadingService=true;
-        //     this.check_email_valid()
-        //     this.validateChannelName();
-        //      // var payload = {
-        //     //     "email": email_temporary || "",
-        //     //     "slack_channel": slack_temporary || "",
-        //     //     "tags": payloag_tags || "",
-        //     //     "description": this.desc_temp  || ""
-        //     // };
-        //     // this.update_payload.accounts=["tmodevops"];
-        //     this.http.put('/jazz/services/'+this.service.id, this.update_payload)
-        //     .subscribe(
-        //         (Response)=>{
+    onSaveClick(){
+      this.saveClicked = true;
+      this.advancedSaveClicked = false;
 
-        //             this.service.description = this.desc_temp;
-        //             this.service.tags = this.tags_temp.split(',');
-        //             var this2=this;
-        //             this.service.tags.forEach(function(item,index){
-        //                 this2.service.tags[index]=item.trim();
-        //             });
-        //             this.service.email = email_temporary;
-        //             this.service.slackChannel = slack_temporary;
+      let payload = {};
+      if( this.saveClicked ){
+        if(this.desc_temp != this.service.description){
+          payload["description"]=this.desc_temp;
+        }
+        if(this.slackChannel_temp != this.service.slackChannel){
+          payload["slack_channel"]=this.slackChannel_temp;
+        }
+        if((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName) ){
+          payload["appName"]=this.selectApp.appName;
+          if( this.selectApp.appID )
+            payload["appID"]=this.selectApp.appID.toLowerCase();
+        }
 
-        //             this.isLoadingService=false;
-        //             this.disp_edit=true;
-        //             this.showCancel=false;
-        //             this.disp_show=false;
-        //             this.edit_save='EDIT';
-        //             let successMessage = this.toastmessage.successMessage(Response,"updateService");
-        //             this.toast_pop('success',"", "Data for service: "+this.service.name +" "+successMessage);
-        //             this.check_empty_fields();
-        //         },
-        //         (Error)=>{
-        //             this.isLoadingService=false;
-        //             this.disp_edit=false;
-        //             this.disp_show=true;
-        //             this.edit_save='SAVE';
-        //             let errorMessage = this.toastmessage.errorMessage(Error,"updateService");
-        //             this.toast_pop('error', 'Oops!', errorMessage)
-        //             // this.toast_pop('error','Oops!', "Data cannot be updated. Service Error.");
-        //         });
-        // }
-    // }
+      }
+      this.PutPayload = payload;
+      if(Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
+
+    }
+
 
     onCancelClick()
     {
@@ -731,25 +661,13 @@ export class ServiceOverviewComponent implements OnInit {
     toast_pop(error,oops,errorMessage)
     {
       var tst = document.getElementById('toast-container');
-         tst.classList.add('toaster-anim');
+        tst.classList.add('toaster-anim');
         this.toasterService.pop(error,oops,errorMessage);
         setTimeout(() => {
             tst.classList.remove('toaster-anim');
           }, 3000);
     }
-    // testApi(type,stg){
-    //     switch(type){
-    //         case 'api':
-    //         this.baseUrl="http://jazz-training-api-doc.s3-website-us-east-1.amazonaws.com"
-    //         this.swaggerUrl = "http://editor.swagger.io/?url="+this.baseUrl+"/"+this.service.domain +"/"+ this.service.name +"/"+stg+"/swagger.json"
-    //         window.open(this.swaggerUrl);
-    //         // window.open('/test-api?service=' + this.service.name + '&domain='+ this.service.domain + '&env=' +stg);
-    //                     break;
 
-    //         case 'website' : window.open(this.service.endpoints[stg]);
-    //                         break;
-    //     }
-    // }
     popup(state,id){
         if(state == 'enter'){
           var ele = document.getElementById(id);
@@ -760,10 +678,10 @@ export class ServiceOverviewComponent implements OnInit {
           ele.classList.remove('endp-visible');
         }
 
-      }
+    }
+
     checkSlackNameAvailability()
     {
-
       if(this.slackChannel_temp == ''){
         this.hide_slack_error=true;
         this.isSlackAvailable = true;
@@ -772,8 +690,6 @@ export class ServiceOverviewComponent implements OnInit {
       this.validateChannelName();
       return;
     }
-
-
 
     check_email_valid()
     {
@@ -802,7 +718,6 @@ export class ServiceOverviewComponent implements OnInit {
         }
 
     }
-
 
     public validateChannelName() {
 
@@ -846,9 +761,9 @@ export class ServiceOverviewComponent implements OnInit {
             );
         }
 
-     }
+    }
 
-     disableSaveBtn(){
+    disableSaveBtn(){
 
         if(!this.hide_slack_error){
             return true;
@@ -859,8 +774,8 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.show_loader){
             return true;
         }
-         return false;
-     }
+        return false;
+    }
 
     slack_link(){
 
@@ -921,7 +836,6 @@ export class ServiceOverviewComponent implements OnInit {
             this.tags_empty = false;
         }
     }
-
 
     serviceCreationStatus(){
         this.statusprogress = 20;
@@ -1005,6 +919,7 @@ export class ServiceOverviewComponent implements OnInit {
               }
         )
     }
+
     modifyEnvArr(){
         var j=0;
         var k=2;
@@ -1088,202 +1003,205 @@ export class ServiceOverviewComponent implements OnInit {
 
 
     }
+
     getenvData(){
-        this.isenvLoading=true;
-        this.ErrEnv=false;
-        if(this.service==undefined){return}
-        // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
-        this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
-            response => {
+      this.isenvLoading=true;
+      this.ErrEnv=false;
+      if(this.service==undefined){return}
+      // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
+      this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
+      response => {
 
-                this.isenvLoading=false;
-                  this.environ_arr=response.data.environment;
-                  if(this.environ_arr!=undefined)
-                    if(this.environ_arr.length==0 || response.data==''){
-                            this.noEnv=true;
-                    }
-                  this.ErrEnv=false;
+        this.isenvLoading=false;
+          this.environ_arr=response.data.environment;
+          if(this.environ_arr!=undefined)
+            if(this.environ_arr.length==0 || response.data==''){
+                    this.noEnv=true;
+            }
+          this.ErrEnv=false;
 
-                  this.modifyEnvArr();
+          this.modifyEnvArr();
 
-              },
-              err => {
-                this.isenvLoading=false;
-
-                  console.log('error',err);
-                  this.ErrEnv=true;
-                  if(err.status == 404) this.err404=true;
-                  this.errMessage="Something went wrong while fetching your data";
-                  this.errMessage=this.toastmessage.errorMessage(err,"environment");
-                  var payload = {
-                      "domain" : +this.service.domain,
-                      "service" : this.service.name
-                  }
-                  this.getTime();
-                  this.errorURL = window.location.href;
-                  this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
-                  this.errorRequest = payload;
-                  this.errorUser = this.authenticationservice.getUserId();
-                  this.errorResponse = JSON.parse(err._body);
-
-                // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
-                // this.popToast('error', 'Oops!', errorMessage);
-            })
-        };
-        getTime() {
-            var now = new Date();
-            this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
-            + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-            // console.log(this.errorTime);
+      },
+      err => {
+        this.isenvLoading=false;
+        console.log('error',err);
+        this.ErrEnv=true;
+        if(err.status == 404) this.err404=true;
+        this.errMessage="Something went wrong while fetching your data";
+        this.errMessage=this.toastmessage.errorMessage(err,"environment");
+        var payload = {
+            "domain" : +this.service.domain,
+            "service" : this.service.name
           }
+        this.getTime();
+        this.errorURL = window.location.href;
+        this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
+        this.errorRequest = payload;
+        this.errorUser = this.authenticationservice.getUserId();
+        this.errorResponse = JSON.parse(err._body);
+      })
+    }
 
-        feedbackRes:boolean=false;
-        openModal:boolean=false;
-        feedbackMsg:string='';
-        feedbackResSuccess:boolean=false;
-        feedbackResErr:boolean=false;
-        isFeedback:boolean=false;
-        toast:any;
-        model:any={
-            userFeedback : ''
-        };
-        buttonText:string='SUBMIT';
-        isLoading:boolean=false;
-        sjson:any={};
-		djson:any={};
-		// isLoading:boolean=false;
+    getTime() {
+      var now = new Date();
+      this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
+      + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
+    }
+
+    feedbackRes:boolean=false;
+    openModal:boolean=false;
+    feedbackMsg:string='';
+    feedbackResSuccess:boolean=false;
+    feedbackResErr:boolean=false;
+    isFeedback:boolean=false;
+    toast:any;
+    model:any={
+        userFeedback : ''
+    };
+    buttonText:string='SUBMIT';
+    isLoading:boolean=false;
+    sjson:any={};
+    djson:any={};
+
 		reportIssue(){
 
-					this.json = {
-						"user_reported_issue" : this.model.userFeedback,
-						"API": this.errorAPI,
-						"REQUEST":this.errorRequest,
-						"RESPONSE":this.errorResponse,
-						"URL": this.errorURL,
-						"TIME OF ERROR":this.errorTime,
-						"LOGGED IN USER":this.errorUser
-				}
+      this.json = {
+        "user_reported_issue" : this.model.userFeedback,
+        "API": this.errorAPI,
+        "REQUEST":this.errorRequest,
+        "RESPONSE":this.errorResponse,
+        "URL": this.errorURL,
+        "TIME OF ERROR":this.errorTime,
+        "LOGGED IN USER":this.errorUser
+      }
 
-					this.openModal=true;
-					this.errorChecked=true;
-					this.isLoading=false;
-					this.errorInclude = JSON.stringify(this.djson);
-					this.sjson = JSON.stringify(this.json);
-				}
+      this.openModal=true;
+      this.errorChecked=true;
+      this.isLoading=false;
+      this.errorInclude = JSON.stringify(this.djson);
+      this.sjson = JSON.stringify(this.json);
+		}
 
-				openFeedbackForm(){
-					this.isFeedback=true;
-					this.model.userFeedback='';
-					this.feedbackRes=false;
-					this.feedbackResSuccess=false;
-					this.feedbackResErr=false;
-					this.isLoading = false;
-					this.buttonText='SUBMIT';
-				}
-				mailTo(){
-					location.href='mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by'+" "+ this.authenticationservice.getUserId() +'&body='+this.sjson;
-				}
-				errorIncluded(){
-				}
+    openFeedbackForm(){
+      this.isFeedback=true;
+      this.model.userFeedback='';
+      this.feedbackRes=false;
+      this.feedbackResSuccess=false;
+      this.feedbackResErr=false;
+      this.isLoading = false;
+      this.buttonText='SUBMIT';
+    }
 
-				submitFeedback(action){
+    mailTo(){
+      location.href='mailto:serverless@t-mobile.com?subject=Jazz : Issue reported by'+" "+ this.authenticationservice.getUserId() +'&body='+this.sjson;
+    }
 
-					this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
-					if( this.errorChecked == true ){
-						this.json = {
-								"user_reported_issue" : this.model.userFeedback,
-								"API": this.errorAPI,
-								"REQUEST":this.errorRequest,
-								"RESPONSE":this.errorResponse,
-								"URL": this.errorURL,
-								"TIME OF ERROR":this.errorTime,
-								"LOGGED IN USER":this.errorUser
-						}
-					}else{
-						this.json = this.model.userFeedback ;
-					}
-					this.sjson = JSON.stringify(this.json);
+    errorIncluded(){
+    }
 
-					this.isLoading = true;
+    submitFeedback(action){
+      this.errorChecked = (<HTMLInputElement>document.getElementById("checkbox-slack")).checked;
+      if( this.errorChecked == true ){
+        this.json = {
+            "user_reported_issue" : this.model.userFeedback,
+            "API": this.errorAPI,
+            "REQUEST":this.errorRequest,
+            "RESPONSE":this.errorResponse,
+            "URL": this.errorURL,
+            "TIME OF ERROR":this.errorTime,
+            "LOGGED IN USER":this.errorUser
+        }
+      }else{
+        this.json = this.model.userFeedback ;
+      }
+      this.sjson = JSON.stringify(this.json);
 
-					if(action == 'DONE'){
-						this.openModal=false;
-						return;
-					}
+      this.isLoading = true;
 
-					var payload={
-						"title" : "Jazz: Issue reported by "+ this.authenticationservice.getUserId(),
-						"project_id": "CAPI",
-						"priority": "P4",
-						"description": this.json,
-						"created_by": this.authenticationservice.getUserId(),
-						"issue_type" :"bug"
-					}
-					this.http.post('/platform/jira-issues', payload).subscribe(
-						response => {
-							this.buttonText='DONE';
-							// console.log(response);
-							this.isLoading = false;
-							this.model.userFeedback='';
-							var respData = response.data;
-							this.feedbackRes = true;
-							this.feedbackResSuccess= true;
-							if(respData != undefined && respData != null && respData != ""){
-								this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
-							}
-						},
-						error => {
-							this.buttonText='DONE';
-							this.isLoading = false;
-							this.feedbackResErr = true;
-							this.feedbackRes = true;
-							this.feedbackMsg = this.toastmessage.errorMessage(error, 'jiraTicket');
-						  }
-					);
-                }
-                frndload(event){
-                }
-                is_multi_env:boolean = false;
-                ngOnInit() {
+      if(action == 'DONE'){
+        this.openModal=false;
+        return;
+      }
 
-                    if(environment.envName == 'oss')
-                        if(environment.multi_env == false)
-                            this.multiENV = false;
-                    if(environment.multi_env) this.is_multi_env=true;
-                    if(environment.envName == 'oss') this.internal_build = false;
+      var payload={
+        "title" : "Jazz: Issue reported by "+ this.authenticationservice.getUserId(),
+        "project_id": "CAPI",
+        "priority": "P4",
+        "description": this.json,
+        "created_by": this.authenticationservice.getUserId(),
+        "issue_type" :"bug"
+      }
+      this.http.post('/platform/jira-issues', payload).subscribe(
+        response => {
+          this.buttonText='DONE';
+          // console.log(response);
+          this.isLoading = false;
+          this.model.userFeedback='';
+          var respData = response.data;
+          this.feedbackRes = true;
+          this.feedbackResSuccess= true;
+          if(respData != undefined && respData != null && respData != ""){
+            this.feedbackMsg = "Thanks for reporting the issue. We’ll use your input to improve Jazz experience for everyone!";
+          }
+        },
+        error => {
+          this.buttonText='DONE';
+          this.isLoading = false;
+          this.feedbackResErr = true;
+          this.feedbackRes = true;
+          this.feedbackMsg = this.toastmessage.errorMessage(error, 'jiraTicket');
+          }
+      );
+    }
 
-                    this.service.accounts="tmo-dev-ops, tmo-int";
-                    this.service.regions="us-west-2, us-east";
+    frndload(event){
+    }
 
-                    this.createloader = true;
-                    if(this.service.status == "deletion completed" || this.service.status == "deletion started"){
-                        this.showcanvas = true;
-                    }else{
-                        this.showcanvas = false;
-                    }
-                    this.showCancel=false;
+    is_multi_env:boolean = false;
 
-                    if(this.service.status == 'creation started' || this.service.status == 'deletion started'){
-                        try{
-                            this.reqJson = JSON.parse(localStorage.getItem('request_id'+"_"+this.service.name+"_"+this.service.domain));
+    ngOnInit() {
 
-                            this.service_request_id = this.reqJson.request_id;
-                        }catch(e){console.log(e)}
+        if(environment.envName == 'oss')
+            if(environment.multi_env == false)
+                this.multiENV = false;
+        if(environment.multi_env) this.is_multi_env=true;
+        if(environment.envName == 'oss') this.internal_build = false;
 
-                    }else{
-                        localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
-                    }
-                    this.creation_status = this.service.status;
-                    this.animatingDots = "...";
-                    this.testingStatus();
-                }
+        this.service.accounts="tmo-dev-ops, tmo-int";
+        this.service.regions="us-west-2, us-east";
+
+        this.createloader = true;
+        if(this.service.status == "deletion completed" || this.service.status == "deletion started"){
+            this.showcanvas = true;
+        }else{
+            this.showcanvas = false;
+        }
+        this.showCancel=false;
+
+        if(this.service.status == 'creation started' || this.service.status == 'deletion started'){
+            try{
+                this.reqJson = JSON.parse(localStorage.getItem('request_id'+"_"+this.service.name+"_"+this.service.domain));
+
+                this.service_request_id = this.reqJson.request_id;
+            }catch(e){console.log(e)}
+
+        }else{
+            localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
+        }
+        this.creation_status = this.service.status;
+        this.animatingDots = "...";
+        this.testingStatus();
+
+
+    }
 
     testingStatus(){
         setInterval(() => {
         this.onload.emit(this.service.status);
         },500);
-
     }
+
     transform_env_oss(data){
         var arrEnv = data.data.environment
         if(environment.multi_env){
@@ -1306,6 +1224,7 @@ export class ServiceOverviewComponent implements OnInit {
         }
         arrEnv[0].status.replace("_"," ");
     }
+
     envfoross(){
         var url_multi_env = 'https://api.myjson.com/bins/k6qvn';
         var url_dev_prod = 'https://api.myjson.com/bins/vhzdf';
@@ -1445,226 +1364,184 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
 
-serviceDeletionStatus(){
+    serviceDeletionStatus(){
 
-    this.creating = false;
-    this.deleting = true;
+        this.creating = false;
+        this.deleting = true;
 
-    this.intervalSubscription = Observable.interval(5000)
-    .switchMap((response) => this.http.get('/jazz/request-status?id='+this.service_request_id))
-    .subscribe(
-        response => {
-            this.createloader = false;
-            // console.log("status = ", response);
-            let dataResponse = <any>{};
-            dataResponse.list = response;
-            var respStatus = dataResponse.list.data;
-            if(respStatus.status.toLowerCase() === 'completed'){
-                this.statusCompleted = true;
-                this.serviceStatusCompleted = true;
-                this.serviceStatusPermission = true;
-                this.serviceStatusRepo = true;
-                this.serviceStatusValidate = true;
-                this.DelstatusInfo = 'Wrapping things up';
-                this.statusprogress = 100;
-                this.service.status ="deletion completed";
-                localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
-                setTimeout(() => {
-                    this.service_error = false;
-                    this.router.navigateByUrl('services');
-                }, 5000);
+        this.intervalSubscription = Observable.interval(5000)
+        .switchMap((response) => this.http.get('/jazz/request-status?id='+this.service_request_id))
+        .subscribe(
+            response => {
+                this.createloader = false;
+                // console.log("status = ", response);
+                let dataResponse = <any>{};
+                dataResponse.list = response;
+                var respStatus = dataResponse.list.data;
+                if(respStatus.status.toLowerCase() === 'completed'){
+                    this.statusCompleted = true;
+                    this.serviceStatusCompleted = true;
+                    this.serviceStatusPermission = true;
+                    this.serviceStatusRepo = true;
+                    this.serviceStatusValidate = true;
+                    this.DelstatusInfo = 'Wrapping things up';
+                    this.statusprogress = 100;
+                    this.service.status ="deletion completed";
+                    localStorage.removeItem('request_id'+"_"+this.service.name+"_"+this.service.domain);
+                    setTimeout(() => {
+                        this.service_error = false;
+                        this.router.navigateByUrl('services');
+                    }, 5000);
+                    this.intervalSubscription.unsubscribe();
+                }else if(respStatus.status.toLowerCase() === 'failed'){
+                    this.statusCompleted = false;
+                    this.statusFailed = true;
+                    this.serviceStatusStarted = false;
+                    this.serviceStatusStartedD = true;
+                    this.serviceStatusCompletedD = true;
+                    this.serviceStatusPermissionD = true;
+                    this.serviceStatusRepoD = true;
+                    this.serviceStatusValidateD = true;
+                    this.DelstatusInfo = 'Deletion failed';
+                    this.service.status ="deletion failed";
+                    setTimeout(() => {
+                        this.service_error = false;
+                    }, 5000);
+                    // this.intervalSubscription.unsubscribe();
+                } else {
+                    this.statusCompleted = false;
+                    respStatus.events.forEach(element => {
+                        if(element.name === 'DELETE_PROJECT' && element.status === 'COMPLETED'){
+                            this.serviceStatusPermission = true;
+                            this.DelstatusInfo = 'Wrapping things up';
+                            this.statusprogress = 100;
+                            localStorage.removeItem('request_id'+this.service.name+this.service.domain);
+                        } else if(element.name === 'BACKUP_PROJECT' && element.status === 'COMPLETED'){
+                            this.serviceStatusRepo = true;
+                            this.DelstatusInfo = 'Finishing up';8
+                            this.statusprogress = 81;
+                        } else if((element.name === 'UNDEPLOY_WEBSITE' && element.status === 'COMPLETED') && (this.service.serviceType == "website")){
+                            this.serviceStatusValidate = true;
+                            this.DelstatusInfo = 'Backing up code';
+                            this.statusprogress = 48;
+                        } else if((element.name === 'DELETE_API_DOC' && element.status === 'COMPLETED') && (this.service.serviceType == "api")){
+                            this.serviceStatusValidate = true;
+                            this.DelstatusInfo = 'Backing up code';
+                            this.statusprogress = 48;
+                        } else if((element.name === 'UNDEPLOY_LAMBDA' && element.status === 'COMPLETED') && (this.service.serviceType == "function")){
+                            this.serviceStatusValidate = true;
+                            this.DelstatusInfo = 'Backing up code';
+                            this.statusprogress = 48;
+                        } else if(element.name === 'CALL_DELETE_WORKFLOW' && element.status === 'COMPLETED'){
+                            this.serviceStatusStarted = true;
+                            this.DelstatusInfo = 'Deleting assets';
+                            this.statusprogress = 20;
+                        }
+                    });
+                }
+                document.getElementById('current-status-val').setAttribute("style","width:"+this.statusprogress+'%');
+            },
+            error => {
+                if( error.status == "404"){
+                    this.statusCompleted = false;
+                    this.statusFailed = true;
+                    this.serviceStatusStarted = false;
+                    this.serviceStatusStartedD = true;
+                    this.serviceStatusCompletedD = true;
+                    this.serviceStatusPermissionD = true;
+                    this.serviceStatusRepoD = true;
+                    this.serviceStatusValidateD = true;
+                    setTimeout(() => {
+                        this.service_error = false;
+                    }, 5000);
+                }
+                this.service_error = false;
                 this.intervalSubscription.unsubscribe();
-            }else if(respStatus.status.toLowerCase() === 'failed'){
-                this.statusCompleted = false;
-                this.statusFailed = true;
-                this.serviceStatusStarted = false;
-                this.serviceStatusStartedD = true;
-                this.serviceStatusCompletedD = true;
-                this.serviceStatusPermissionD = true;
-                this.serviceStatusRepoD = true;
-                this.serviceStatusValidateD = true;
-                this.DelstatusInfo = 'Deletion failed';
-                this.service.status ="deletion failed";
-                setTimeout(() => {
-                    this.service_error = false;
-                }, 5000);
-                // this.intervalSubscription.unsubscribe();
-            } else {
-                this.statusCompleted = false;
-                respStatus.events.forEach(element => {
-                    if(element.name === 'DELETE_PROJECT' && element.status === 'COMPLETED'){
-                        this.serviceStatusPermission = true;
-                        this.DelstatusInfo = 'Wrapping things up';
-                        this.statusprogress = 100;
-                        localStorage.removeItem('request_id'+this.service.name+this.service.domain);
-                    } else if(element.name === 'BACKUP_PROJECT' && element.status === 'COMPLETED'){
-                        this.serviceStatusRepo = true;
-                        this.DelstatusInfo = 'Finishing up';8
-                        this.statusprogress = 81;
-                    } else if((element.name === 'UNDEPLOY_WEBSITE' && element.status === 'COMPLETED') && (this.service.serviceType == "website")){
-                        this.serviceStatusValidate = true;
-                        this.DelstatusInfo = 'Backing up code';
-                        this.statusprogress = 48;
-                    } else if((element.name === 'DELETE_API_DOC' && element.status === 'COMPLETED') && (this.service.serviceType == "api")){
-                        this.serviceStatusValidate = true;
-                        this.DelstatusInfo = 'Backing up code';
-                        this.statusprogress = 48;
-                    } else if((element.name === 'UNDEPLOY_LAMBDA' && element.status === 'COMPLETED') && (this.service.serviceType == "function")){
-                        this.serviceStatusValidate = true;
-                        this.DelstatusInfo = 'Backing up code';
-                        this.statusprogress = 48;
-                    } else if(element.name === 'CALL_DELETE_WORKFLOW' && element.status === 'COMPLETED'){
-                        this.serviceStatusStarted = true;
-                        this.DelstatusInfo = 'Deleting assets';
-                        this.statusprogress = 20;
-                    }
-                });
-            }
-            document.getElementById('current-status-val').setAttribute("style","width:"+this.statusprogress+'%');
-        },
-        error => {
-            if( error.status == "404"){
-                this.statusCompleted = false;
-                this.statusFailed = true;
-                this.serviceStatusStarted = false;
-                this.serviceStatusStartedD = true;
-                this.serviceStatusCompletedD = true;
-                this.serviceStatusPermissionD = true;
-                this.serviceStatusRepoD = true;
-                this.serviceStatusValidateD = true;
-                setTimeout(() => {
-                    this.service_error = false;
-                }, 5000);
-            }
-            this.service_error = false;
-            this.intervalSubscription.unsubscribe();
-            // this.serviceDeletionStatus();
-          }
-    )
-}
+                // this.serviceDeletionStatus();
+              }
+        )
+    }
 
     public goToAbout(hash){
         this.router.navigateByUrl('landing');
         this.cache.set('scroll_flag',true);
         this.cache.set('scroll_id',hash);
     }
+
     focusindex:number;
     showRegionList:boolean;
     showAccountList:boolean;
     selectedAccount=[];
     selectedRegion=[];
     scrollList:any;
+
     onRegionChange(newVal) {
-        if (!newVal) {
-          this.showRegionList = false;
-        } else {
-          this.showRegionList = true;
+      if (!newVal) {
+        this.showRegionList = false;
+      } else {
+        this.showRegionList = true;
+      }
+    }
+
+    onAccountChange(newVal) {
+      if (!newVal) {
+        this.showAccountList = false;
+      } else {
+        this.showAccountList = true;
+      }
+    }
+
+    focusInputAccount(event) {
+      document.getElementById('AccountInput').focus();
+    }
+
+    focusInputRegion(event) {
+      document.getElementById('regionInput').focus();
+    }
+
+    selRegion:any;
+    selApprover:any;
+    selectAccount(account){
+        this.selApprover = account;
+        let thisclass: any = this;
+        this.showAccountList = false;
+        thisclass.AccountInput = '';
+        this.selectedAccount.push(account);
+        this.update_payload.accounts=this.selectedAccount;
+        for (var i = 0; i < this.accounts.length; i++) {
+          if (this.accounts[i] === account) {
+            this.accounts.splice(i, 1);
+            return;
+          }
         }
-      }
-      onAccountChange(newVal) {
-        if (!newVal) {
-          this.showAccountList = false;
-        } else {
-          this.showAccountList = true;
+    }
+    removeAccount(index, account) {
+      this.accounts.push(account);
+      this.selectedAccount.splice(index, 1);
+    }
+    selectRegion(region){
+      this.selApprover = region;
+        let thisclass: any = this;
+        this.showRegionList = false;
+        thisclass.regionInput = '';
+        this.selectedRegion.push(region);
+        this.update_payload.regions=this.selectedRegion;
+        for (var i = 0; i < this.regions.length; i++) {
+          if (this.regions[i] === region) {
+            this.regions.splice(i, 1);
+            return;
+          }
         }
-      }
-
-      focusInputAccount(event) {
-        document.getElementById('AccountInput').focus();
-      }
-
-      focusInputRegion(event) {
-        document.getElementById('regionInput').focus();
-      }
-
-      selRegion:any;
-      selApprover:any;
-selectAccount(account){
-  this.selApprover = account;
-    let thisclass: any = this;
-    this.showAccountList = false;
-    thisclass.AccountInput = '';
-    this.selectedAccount.push(account);
-    this.update_payload.accounts=this.selectedAccount;
-    for (var i = 0; i < this.accounts.length; i++) {
-      if (this.accounts[i] === account) {
-        this.accounts.splice(i, 1);
-        return;
-      }
     }
-}
-removeAccount(index, account) {
-  this.accounts.push(account);
-  this.selectedAccount.splice(index, 1);
-}
-selectRegion(region){
-  this.selApprover = region;
-    let thisclass: any = this;
-    this.showRegionList = false;
-    thisclass.regionInput = '';
-    this.selectedRegion.push(region);
-    this.update_payload.regions=this.selectedRegion;
-    for (var i = 0; i < this.regions.length; i++) {
-      if (this.regions[i] === region) {
-        this.regions.splice(i, 1);
-        return;
-      }
+    removeRegion(index, region) {
+      this.regions.push(region);
+      this.selectedRegion.splice(index, 1);
     }
-}
-removeRegion(index, region) {
-  this.regions.push(region);
-  this.selectedRegion.splice(index, 1);
-}
-keypressAccount(hash){
-  if (hash.key == 'ArrowDown') {
-    this.focusindex++;
-    if (this.focusindex > 0) {
-      var pinkElements = document.getElementsByClassName("pinkfocus")[0];
-      if (pinkElements == undefined) {
-        this.focusindex = 0;
-      }
-      // var id=pinkElements.children[0].innerHTML;
-    }
-    // console.log(this.focusindex);
-    if (this.focusindex > 2) {
-      this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
-
-    }
-  }
-  else if (hash.key == 'ArrowUp') {
-    if (this.focusindex > -1) {
-      this.focusindex--;
-
-      if (this.focusindex > 1) {
-        this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
-      }
-    }
-    if (this.focusindex == -1) {
-      this.focusindex = -1;
-
-
-    }
-  }
-  else if (hash.key == 'Enter' && this.focusindex > -1) {
-    event.preventDefault();
-    var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
-
-    var approverObj = pinkElement[0].attributes[2].value;
-
-    this.selectAccount(approverObj);
-
-    this.focusindex = -1;
-
-  } else {
-    this.focusindex = -1;
-  }
-}
-
-keypressRegion(hash){
-    if (hash.key == 'ArrowDown') {
+    keypressAccount(hash){
+      if (hash.key == 'ArrowDown') {
         this.focusindex++;
         if (this.focusindex > 0) {
-          var pinkElements = document.getElementsByClassName("pinkfocus2")[0];
+          var pinkElements = document.getElementsByClassName("pinkfocus")[0];
           if (pinkElements == undefined) {
             this.focusindex = 0;
           }
@@ -1692,16 +1569,61 @@ keypressRegion(hash){
       }
       else if (hash.key == 'Enter' && this.focusindex > -1) {
         event.preventDefault();
-        var pinkElement = document.getElementsByClassName("pinkfocus2")[0].children;
+        var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
         var approverObj = pinkElement[0].attributes[2].value;
 
-        this.selectRegion(approverObj);
+        this.selectAccount(approverObj);
 
         this.focusindex = -1;
 
       } else {
         this.focusindex = -1;
       }
-}
+    }
+
+    keypressRegion(hash){
+        if (hash.key == 'ArrowDown') {
+            this.focusindex++;
+            if (this.focusindex > 0) {
+              var pinkElements = document.getElementsByClassName("pinkfocus2")[0];
+              if (pinkElements == undefined) {
+                this.focusindex = 0;
+              }
+              // var id=pinkElements.children[0].innerHTML;
+            }
+            // console.log(this.focusindex);
+            if (this.focusindex > 2) {
+              this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+
+            }
+          }
+          else if (hash.key == 'ArrowUp') {
+            if (this.focusindex > -1) {
+              this.focusindex--;
+
+              if (this.focusindex > 1) {
+                this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+              }
+            }
+            if (this.focusindex == -1) {
+              this.focusindex = -1;
+
+
+            }
+          }
+          else if (hash.key == 'Enter' && this.focusindex > -1) {
+            event.preventDefault();
+            var pinkElement = document.getElementsByClassName("pinkfocus2")[0].children;
+
+            var approverObj = pinkElement[0].attributes[2].value;
+
+            this.selectRegion(approverObj);
+
+            this.focusindex = -1;
+
+          } else {
+            this.focusindex = -1;
+          }
+    }
 }
