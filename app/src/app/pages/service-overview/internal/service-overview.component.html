@@ -193,7 +193,7 @@
           </li>
           <p class='email-err-msg' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>
 
-          <li>
+          <li class="hide">
             <div class='det-label'>Approvers</div>
             <div class='det-value'>{{service.approvers}}</div>
           </li>
@@ -203,8 +203,8 @@
         <ul>
           <li>
             <div class='det-label'>App Name</div>
-            <div *ngIf='disp_show' class='det-value'>{{service.app_name}}</div>
-            <div *ngIf='!disp_show' class="det-value application-drop-wrap">
+            <div *ngIf='disp_show || true' class='det-value'>{{service.app_name || "NA"}}</div>
+            <div *ngIf='!disp_show && false' class="det-value application-drop-wrap">
                 <div class="flex-col">
                     <section class="pad-left0">
                         <div class="input-field-container">
@@ -277,7 +277,7 @@
                               <label for="none"><span></span><span class="background"></span>None</label>
                           </div>
                       </section>
-                      <section class="   pad-left0">
+                      <section class="fixed-rate pad-left0">
                           <div class="radio-container">
                               <input type="radio" name="EventSchedule" id="fixedRate" [value]="rate" [checked]="rateExpression.type == 'rate'" (click)="onEventScheduleChange('rate')">
                               <label for="fixedRate"><span></span><span class="background"></span>Fixed Rate of</label>
@@ -440,7 +440,7 @@
       </div>
       <div class='metadata-row'>
         <ul class='advanced-ul'>
-          <li>
+          <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Publicly Accessible</div>
             <div *ngIf='disp_show2' class="det-value">{{service.is_public_endpoint}}</div>
             <div *ngIf='!disp_show2'class='det-value'>
@@ -457,9 +457,9 @@
               </div>
             </div>
           </li>
-          <li>
+          <li *ngIf="service.serviceType == 'api'">
             <div class='det-label'>Security Enabled</div>
-            <div class='det-value'>-</div>
+            <div class='det-value'>{{service.enable_api_security || "NA"}}</div>
           </li>
           <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Cloudfront Enabled</div>
@@ -478,6 +478,24 @@
                 </div>
             </div>
           </li>
+          <li *ngIf="service.serviceType != 'website'">
+              <div class='det-label'>Internal Access</div>
+              <div *ngIf='disp_show2' class='det-value'>{{service.require_internal_access}}</div>
+              <div *ngIf='!disp_show2' class='det-value'>
+                <div class="">
+                    <section class="pad-left0">
+                        <div class="input-field-container">
+                            <div class="slack-checkbox custom-cb">
+                                <input type="checkbox" id="checkbox-vpc" [disabled]="publicSelected" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected && !publicSelected" (change)="vpcSelected = !vpcSelected">
+                                <label for="checkbox-vpc" [class.disableCb]="publicSelected"></label>
+                                <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
+                            </div>
+                        </div>
+                    </section>
+                  </div>
+              </div>
+
+          </li>
         </ul>
       </div>
 
@@ -494,7 +512,7 @@
         </div>
         <div *ngIf="!isPUTLoading" class='overlay-body'>Are you sure you want to permanently complete this edit?</div>
         <div class='overlay-btns'>
-          <btn-jazz-primary text="COMPLETE" [disablePrimaryBtn]="!isPayloadAvailable || selectedApplications.length == 0" (click)='onCompleteClick()'></btn-jazz-primary>
+          <btn-jazz-primary text="COMPLETE" [disablePrimaryBtn]="!isPayloadAvailable" (click)='onCompleteClick()'></btn-jazz-primary>
           <a (click)='saveClicked = false; advancedSaveClicked = false'>CANCEL</a>
         </div>
     </div>

@@ -133,8 +133,10 @@ export class ServiceDetailComponent implements OnInit {
                 create_cloudfront_url:service.metadata.create_cloudfront_url,
                 eventScheduleRate:service.metadata.eventScheduleRate,
                 event_source:service.metadata.event_source_dynamodb,
-                app_name:service.app_name,
-                created_by:service.created_by
+                app_name:service.metadata.application,
+                created_by:service.created_by,
+                require_internal_access:service.metadata.require_internal_access,
+                enable_api_security:service.metadata.enable_api_security
             };
         }
     };

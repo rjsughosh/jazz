@@ -136,6 +136,8 @@ export class ServiceOverviewComponent implements OnInit {
     eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
     viewMode:boolean = true;
     cronFieldValidity: any;
+    vpcSelected: boolean = this.service.require_internal_access;
+    vpcInitial: boolean = this.service.require_internal_access;
     publicSelected: boolean = this.service.is_public_endpoint;
     publicInitial: boolean = this.service.is_public_endpoint;
     cdnConfigSelected: boolean = this.service.create_cloudfront_url;
@@ -613,7 +615,9 @@ export class ServiceOverviewComponent implements OnInit {
             payload["events"] = [];
             payload["events"].push(event);
           }
-
+          if(this.vpcInitial !== this.vpcSelected){
+            payload["require_internal_access"] = this.vpcSelected;
+          }
           if(this.publicSelected !== this.publicInitial){
             payload["is_public_endpoint"] = this.publicSelected;
           }
