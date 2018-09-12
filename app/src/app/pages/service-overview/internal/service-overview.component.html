@@ -515,7 +515,7 @@
         <div *ngIf="!isPUTLoading" class='overlay-body'>Are you sure you want to permanently complete this edit?</div>
         <div class='overlay-btns'>
           <btn-jazz-primary text="COMPLETE" [disablePrimaryBtn]="!isPayloadAvailable" (click)='onCompleteClick()'></btn-jazz-primary>
-          <a (click)='saveClicked = false; advancedSaveClicked = false'>CANCEL</a>
+          <a class="jz-pointer" (click)='saveClicked = false; advancedSaveClicked = false'>CANCEL</a>
         </div>
     </div>
   </div>
