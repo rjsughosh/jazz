@@ -1,6 +1,6 @@
-@import './../../../../main-styles.scss';
-@import './../../service-detail/internal/service-detail.component.scss';
-@import './../../../secondary-components/create-service/internal/create-service.component.scss';
+$screen-sm:                  768px !default;
+$screen-md:                  992px !default;
+$screen-lg:                  1200px !default;
 
 @keyframes blink {
 
