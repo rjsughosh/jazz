@@ -1204,24 +1204,24 @@ details summary::-webkit-details-marker {
     &:nth-child(1){
       li{
         &:nth-child(1){
-          max-width:40%;
-          width:40%;
+          // max-width:40%;
+          // width:40%;
         }
         &:nth-child(2){
-          width:59%;
+          // width:59%;
         }
       }
     }
   }
   li{
     &:nth-child(1){
-      width:40%;
+      // width:40%;
     }
     &:nth-child(2){
-      min-width:40%;
+      // min-width:40%;
     }
     &:nth-child(3){
-      width:20%;
+      // width:20%;
     }
     display: flex;
     margin:1rem;
@@ -1280,10 +1280,10 @@ details{
   /deep/li{
     &:nth-child(2){
       // width:20% !important;
-      min-width:20%
+      // min-width:20%
     }
     &:nth-child(3){
-      width:40%;
+      // width:40%;
     }
   }
 }
@@ -1401,14 +1401,14 @@ input{
   padding:4rem 3rem;
 }
 .dynamodb-fields.arrow_box:after {
-  left: 32%;
+  left: 14%;
 }
 
 .kinesis-fields.arrow_box:after {
-  left: 59%;
+  left: 33%;
 }
 .s3-fields.arrow_box:after {
-  left: 86%;
+  left: 61%;
 }
 .application-drop-wrap{
   width: calc( 100% - 11rem );
@@ -1421,4 +1421,43 @@ input{
 }
 .fixed-rate{
   padding-right: 2.5rem
+}
+
+.first-row{
+  li{
+    width:31%
+  }
+}
+
+.second-row{
+  li{
+    width:31%;
+  }
+}
+
+.third-row{
+  li{
+    width:auto;
+  }
+}
+.top-shift{
+  position: absolute;
+  top: -1rem;
+  left: 31%;
+}
+.rate-field.arrow_box:after{
+  left: 14.5%;
+}
+
+.cron-fields.arrow_box:after {
+  left: 30.5%;
+}
+.cron-field {
+  margin-left: 0;
+}
+.internal-access{
+  width:41% !important;
+  .det-value{
+    margin-left: 1.5rem;
+  }
 }

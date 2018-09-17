@@ -254,7 +254,7 @@
         </div>
       </div>
     </summary>
-    <div class='flex-center'>
+    <div class='flex-center top-shift'>
       <div *ngIf="!disp_show2" class="warn-msg">
         <div>!</div>
         <div>Any saved changes will trigger a deployment for the service.</div>
@@ -268,11 +268,85 @@
       <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
         <btn-jazz-secondary text="EDIT" [disablebtn]="service.status != 'creation completed'" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
       </div>
-      <div class='metadata-row top-margin'>
+      <div class='metadata-row first-row top-margin'>
+        <ul class='advanced-ul'>
+          <li *ngIf="service.serviceType == 'website'">
+            <div class='det-label'>Publicly Accessible</div>
+            <div *ngIf='disp_show2' class="det-value">{{service.is_public_endpoint}}</div>
+            <div *ngIf='!disp_show2'class='det-value'>
+                <div class="">
+                  <section class=" pad-left0">
+                      <div class="input-field-container">
+                          <div class="slack-checkbox custom-cb">
+                              <input type="checkbox" [disabled]="service.serviceType != 'website'" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
+                              <label for="checkbox-public" [class.disableCb]="service.serviceType != 'website'"></label>
+                              <div class="cb-status-dets" [class.grey]="service.serviceType != 'website'" >The {{service.serviceType}} should be publicly accessible</div>
+                          </div>
+                      </div>
+                  </section>
+              </div>
+            </div>
+          </li>
+          <li *ngIf="service.serviceType == 'api'">
+            <div class='det-label'>Security Enabled</div>
+            <div class='det-value'>{{service.enable_api_security || "NA"}}</div>
+          </li>
+          <li *ngIf="service.serviceType == 'website'">
+            <div class='det-label'>Cloudfront Enabled</div>
+            <div *ngIf='disp_show2' class="det-value">{{service.create_cloudfront_url}}</div>
+            <div *ngIf='!disp_show2' class='det-value'>
+                <div class="">
+                    <section class="pad-left0">
+                        <div class="input-field-container">
+                            <div class="slack-checkbox custom-cb">
+                                <input type="checkbox" id="checkbox-cdnconfig" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="cdnConfigSelected" (change)="cdnConfigSelected = !cdnConfigSelected">
+                                <label for="checkbox-cdnconfig"></label>
+                                <div class="cb-status-dets">Do you need CDN configured for your website?</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+          </li>
+          <li *ngIf="service.serviceType != 'website'" [class.internal-access]="service.serviceType == 'function' && !disp_show2">
+              <div class='det-label'>Internal Access</div>
+              <div *ngIf='disp_show2' class='det-value'>{{service.require_internal_access}}</div>
+              <div *ngIf='!disp_show2' class='det-value'>
+                <div class="">
+                    <section class="pad-left0">
+                        <div class="input-field-container">
+                            <div class="slack-checkbox custom-cb">
+                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected" (change)="vpcSelected = !vpcSelected">
+                                <label for="checkbox-vpc"></label>
+                                <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
+                            </div>
+                        </div>
+                    </section>
+                  </div>
+              </div>
+
+          </li>
+        </ul>
+      </div>
+      <div *ngIf='disp_show2' class='metadata-row second-row'>
         <ul>
           <li *ngIf="service.serviceType == 'function'">
               <div class="det-label">Event Schedule</div>
               <div *ngIf='disp_show2' class="det-value">{{service.eventScheduleRate || "NONE"}}</div>
+
+          </li>
+          <li *ngIf="service.serviceType == 'function'">
+            <div class='det-label'>AWS events</div>
+            <div *ngIf='disp_show2' class="det-value">{{service.event_source || "NONE"}}</div>
+
+          </li>
+
+        </ul>
+      </div>
+      <div *ngIf='!disp_show2' class='metadata-row third-row'>
+        <ul>
+          <li *ngIf="service.serviceType == 'function'">
+              <div class="det-label">Event Schedule</div>
               <div *ngIf='!disp_show2' class="det-value">
                   <div class="input-field-container event-schedule-radio row zero-margin">
                       <section class="   pad-left0">
@@ -294,7 +368,7 @@
                           </div>
                       </section>
                   </div>
-                  <div class="event-schedule-fields cron-field" [ngClass]="{'zero-padding': rateExpression.type == 'none'}">
+                  <div class="col-lg-8 col-md-8 event-schedule-fields cron-field" [ngClass]="{'zero-padding': rateExpression.type == 'none'}">
                       <div class='clearfix'>
                           <div class="cron-fields row zero-margin arrow_box" *ngIf="rateExpression.type == 'cron'">
                               <div class="col-lg-2">
@@ -355,30 +429,31 @@
                   </div>
               </div>
           </li>
+        </ul>
+        <ul>
           <li *ngIf="service.serviceType == 'function'">
             <div class='det-label'>AWS events</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.event_source || "NONE"}}</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="input-field-container event-schedule-radio row zero-margin">
-                    <section class="col-lg-3 col-md-3  pad-left0">
+                    <section class="pad-left0">
                         <div class="radio-container">
                             <input type="radio" name="AWSEvents" id="awsEventsNone" [value]="awsEventsNone" [checked]="eventExpression.type == 'awsEventsNone'" (click)="onAWSEventChange('awsEventsNone')">
                             <label for="awsEventsNone"><span></span><span class="background"></span>None</label>
                         </div>
                     </section>
-                    <section class="col-lg-3 col-md-3  pad-left0">
+                    <section class="pad-left0">
                         <div class="radio-container">
                             <input type="radio" name="AWSEvents" id="dynamodb" [value]="dynamodb" [checked]="eventExpression.type == 'dynamodb'" (click)="onAWSEventChange('dynamodb')">
                             <label for="dynamodb"><span></span><span class="background"></span>DynamoDB</label>
                         </div>
                     </section>
-                    <section class="col-lg-3 col-md-3  pad-left0">
+                    <section class="pad-left0">
                         <div class="radio-container">
                             <input type="radio" name="AWSEvents" id="kinesis" [value]="kinesis" [checked]="eventExpression.type == 'kinesis'" (click)="onAWSEventChange('kinesis')">
                             <label for="kinesis"><span></span><span class="background"></span>Kinesis</label>
                         </div>
                     </section>
-                    <section class="col-lg-3 col-md-3  pad-left0">
+                    <section class="pad-left0">
                         <div class="radio-container">
                             <input type="radio" name="AWSEvents" id="s3" [value]="s3" [checked]="eventExpression.type == 's3'" (click)="onAWSEventChange('s3')">
                             <label for="s3"><span></span><span class="background"></span>S3</label>
@@ -439,69 +514,12 @@
                 </div>
             </div>
           </li>
-
         </ul>
       </div>
-      <div class='metadata-row'>
-        <ul class='advanced-ul'>
-          <li *ngIf="service.serviceType == 'website'">
-            <div class='det-label'>Publicly Accessible</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.is_public_endpoint}}</div>
-            <div *ngIf='!disp_show2'class='det-value'>
-                <div class="">
-                  <section class="col-lg-12  pad-left0">
-                      <div class="input-field-container">
-                          <div class="slack-checkbox custom-cb">
-                              <input type="checkbox" [disabled]="service.serviceType != 'website'" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
-                              <label for="checkbox-public" [class.disableCb]="service.serviceType != 'website'"></label>
-                              <div class="cb-status-dets" [class.grey]="service.serviceType != 'website'" >The {{service.serviceType}} should be publicly accessible</div>
-                          </div>
-                      </div>
-                  </section>
-              </div>
-            </div>
-          </li>
-          <li *ngIf="service.serviceType == 'api'">
-            <div class='det-label'>Security Enabled</div>
-            <div class='det-value'>{{service.enable_api_security || "NA"}}</div>
-          </li>
-          <li *ngIf="service.serviceType == 'website'">
-            <div class='det-label'>Cloudfront Enabled</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.create_cloudfront_url}}</div>
-            <div *ngIf='!disp_show2' class='det-value'>
-                <div class="">
-                    <section class="pad-left0">
-                        <div class="input-field-container">
-                            <div class="slack-checkbox custom-cb">
-                                <input type="checkbox" id="checkbox-cdnconfig" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="cdnConfigSelected" (change)="cdnConfigSelected = !cdnConfigSelected">
-                                <label for="checkbox-cdnconfig"></label>
-                                <div class="cb-status-dets">Do you need CDN configured for your website?</div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-          </li>
-          <li *ngIf="service.serviceType != 'website'">
-              <div class='det-label'>Internal Access</div>
-              <div *ngIf='disp_show2' class='det-value'>{{service.require_internal_access}}</div>
-              <div *ngIf='!disp_show2' class='det-value'>
-                <div class="">
-                    <section class="pad-left0">
-                        <div class="input-field-container">
-                            <div class="slack-checkbox custom-cb">
-                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected" (change)="vpcSelected = !vpcSelected">
-                                <label for="checkbox-vpc"></label>
-                                <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
-                            </div>
-                        </div>
-                    </section>
-                  </div>
-              </div>
 
-          </li>
-        </ul>
-      </div>
+
+
+
 
     </div>
   </details>
