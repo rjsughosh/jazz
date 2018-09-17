@@ -14,6 +14,7 @@ import { RequestService, DataCacheService, MessageService, AuthenticationService
 import 'rxjs/Rx';
 import {Observable} from 'rxjs/Rx';
 import {ServicesListComponent} from "../../../pages/services-list/services-list.component"
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'create-service',
@@ -78,7 +79,7 @@ export class CreateServiceComponent implements OnInit {
   errMessage: any;
   invalidServiceName:boolean=false;
   invalidDomainName:boolean=false;
-  
+
 
   constructor (
     private toasterService: ToasterService,
@@ -292,6 +293,7 @@ export class CreateServiceComponent implements OnInit {
     else if(this.typeOfService == 'function'){
       payload["runtime"] = this.runtime;
       payload["require_internal_access"] = this.vpcSelected;
+
       if(this.rateExpression.type != 'none'){
         this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
         if (this.rateExpression.cronStr == 'invalid') {

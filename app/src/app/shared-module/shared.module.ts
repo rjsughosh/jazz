@@ -58,6 +58,7 @@ import {FilterModalComponent} from '../secondary-components/filter-modal/filter-
 import {ChartjsLinegraphComponent} from '../secondary-components/chartjs-linegraph/chartjs-linegraph.component';
 import {ReportIssueComponent} from '../primary-components/report-issue/report-issue.component';
 import {AdvancedFiltersComponent} from '../secondary-components/advanced-filters/advanced-filters.component';
+import {RadioCheckboxComponent} from "../primary-components/radio-checkbox/radio-checkbox.component";
 
 let specificComponents: any
 let specificModules: any;
@@ -131,6 +132,7 @@ for (let i in specificComponents) {
     ChartjsLinegraphComponent,
     FilterModalComponent,
     ServiceMetricsComponent,
+    RadioCheckboxComponent,
     ...declarationsArray,
 
 
@@ -176,6 +178,7 @@ for (let i in specificComponents) {
     ChartjsLinegraphComponent,
     FilterModalComponent,
     ServiceMetricsComponent,
+    RadioCheckboxComponent,
     ...declarationsArray
 
   ],
