@@ -55,11 +55,6 @@ export const environment = {
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content",
     swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com/?url='
   },
-  createService: {
-    apiDeploymentTargets: true,
-    functionDeploymentTargets: false,
-    websiteDeploymentTargets: false
-  },
   userJourney: {
     registrationMessage: ''
   },
