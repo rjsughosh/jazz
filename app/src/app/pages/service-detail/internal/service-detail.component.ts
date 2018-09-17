@@ -115,8 +115,9 @@ export class ServiceDetailComponent implements OnInit {
     if (service === undefined) {
       return {};
     } else {
-      service = this.fixMetadata(service)
-      return {
+      service = this.fixMetadata(service);
+      service.id;
+      var returnObject = {
         id: service.id,
         name: service.service,
         serviceType: service.type,
@@ -131,40 +132,56 @@ export class ServiceDetailComponent implements OnInit {
         tags: service.tags,
         endpoints: service.endpoints,
         is_public_endpoint: service.is_public_endpoint,
-        create_cloudfront_url: service.metadata.create_cloudfront_url,
-        eventScheduleRate: service.metadata.eventScheduleRate,
-        event_source_dynamodb: service.metadata.event_source_dynamodb,
-        event_source_kinesis: service.metadata.event_source_kinesis,
-        event_source_s3: service.metadata.event_source_s3,
-        app_name: service.metadata.application,
-        created_by: service.created_by,
-        require_internal_access: service.metadata.require_internal_access,
-        enable_api_security: service.metadata.enable_api_security
-      };
+        created_by: service.created_by
+      }
+      if (service.metadata) {
+        returnObject["create_cloudfront_url"] = service.metadata.create_cloudfront_url;
+        returnObject["eventScheduleRate"] = service.metadata.eventScheduleRate;
+        returnObject["event_source_dynamodb"] = service.metadata.event_source_dynamodb;
+        returnObject["event_source_kinesis"] = service.metadata.event_source_kinesis;
+        returnObject["event_source_s3"] = service.metadata.event_source_s3;
+        returnObject["app_name"] = service.metadata.app_name;
+        returnObject["require_internal_access"] = service.metadata.require_internal_access;
+        returnObject["enable_api_security"] = service.metadata.enable_api_security;
+      }
+      return returnObject;
+
     }
   };
 
   fixMetadata(service) {
-    if (service.type == "website") {
-      if (typeof service.metadata.create_cloudfront_url !== "object") {
+    if (service.metadata) {
+      if (service.type == "website") {
+        if (typeof service.metadata.create_cloudfront_url !== "object") {
+          return service;
+        }
+        service.metadata.create_cloudfront_url = service.metadata.create_cloudfront_url.BOOL;
         return service;
       }
-      service.metadata.create_cloudfront_url = service.metadata.create_cloudfront_url.BOOL;
-      return service;
-    }
-    else if (service.type != "website") {
-      if (typeof service.metadata.require_internal_access !== "object") {
-        return service;
-      }
-      service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
-      return service;
-    }
+      else if (service.type != "website") {
 
+        if (service.metadata.require_internal_access) {
+          if (typeof service.metadata.require_internal_access !== "object") {
+            return service;
+          }
+          service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+          return service;
+        }
+        else {
+          return service;
+        }
+      }
+    }
+    else {
+      return service;
+    }
   }
 
   onDataFetched(service) {
     if (service !== undefined && service !== "") {
+
       if (!service.id && service.data) {
+
         service = service.data;
       }
 

@@ -1293,10 +1293,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(environment.multi_env) this.is_multi_env=true;
         if(environment.envName == 'oss') this.internal_build = false;
         var obj;
-        // this.getJSON().subscribe(data => obj=data, error => console.log(error));
-        // console.log('got config,,,,,',obj)
-        // let test = require(environment.configFile);
-        // console.log('test = ',test)
+
         this.loadPlaceholders();
 
         this.prodEnv={};
@@ -1304,6 +1301,8 @@ export class ServiceOverviewComponent implements OnInit {
 
         this.publicInitial = this.service.is_public_endpoint;
         this.cdnConfigInitial = this.service.create_cloudfront_url;
+        this.vpcInitial = this.service.require_internal_access;
+        this.vpcSelected = this.service.require_internal_access;
 
         // this.selectedApplications[0] = this.service.app_name;
         if(!this.internal_build){

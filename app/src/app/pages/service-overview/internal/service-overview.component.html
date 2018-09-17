@@ -254,9 +254,11 @@
         </div>
       </div>
     </summary>
-    <div *ngIf="!disp_show2" class="warn-msg">
-      <div>!</div>
-      <div>Any saved changes will trigger a deployment for the service.</div>
+    <div class='flex-center'>
+      <div *ngIf="!disp_show2" class="warn-msg">
+        <div>!</div>
+        <div>Any saved changes will trigger a deployment for the service.</div>
+      </div>
     </div>
     <div *ngIf='!disp_show2' class='down-btn-wrap down-btn-wrap-advanced'>
       <btn-jazz-primary text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
@@ -488,8 +490,8 @@
                     <section class="pad-left0">
                         <div class="input-field-container">
                             <div class="slack-checkbox custom-cb">
-                                <input type="checkbox" id="checkbox-vpc" [disabled]="publicSelected" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected && !publicSelected" (change)="vpcSelected = !vpcSelected">
-                                <label for="checkbox-vpc" [class.disableCb]="publicSelected"></label>
+                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected" (change)="vpcSelected = !vpcSelected">
+                                <label for="checkbox-vpc"></label>
                                 <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
                             </div>
                         </div>
