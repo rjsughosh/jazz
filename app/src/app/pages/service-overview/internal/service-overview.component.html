@@ -272,7 +272,7 @@
         <ul class='advanced-ul'>
           <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Publicly Accessible</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.is_public_endpoint}}</div>
+            <div *ngIf='disp_show2' class="det-value">{{(service.is_public_endpoint !== undefined)? service.is_public_endpoint : "NA"}}</div>
             <div *ngIf='!disp_show2'class='det-value'>
                 <div class="">
                   <section class=" pad-left0">
@@ -293,7 +293,7 @@
           </li>
           <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Cloudfront Enabled</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.create_cloudfront_url}}</div>
+            <div *ngIf='disp_show2' class="det-value">{{(service.create_cloudfront_url !== undefined)?service.create_cloudfront_url : "NA"}}</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="">
                     <section class="pad-left0">
@@ -532,7 +532,7 @@
                 <div class="loading-circle"></div>
             </div>
         </div>
-        <div *ngIf="!isPUTLoading" class='overlay-body'>Are you sure you want to complete this edit?</div>
+        <div *ngIf="!isPUTLoading" class='overlay-body'>Are you sure you want to make this edit?</div>
         <div class='overlay-btns'>
           <btn-jazz-primary text="COMPLETE" [disablePrimaryBtn]="!isPayloadAvailable" (click)='onCompleteClick()'></btn-jazz-primary>
           <a class="jz-pointer" (click)='saveClicked = false; advancedSaveClicked = false'>CANCEL</a>
