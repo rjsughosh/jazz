@@ -81,7 +81,6 @@ export class ServiceDetailComponentOss implements OnInit {
     };
 
     processService(service){
-        // console.log('service   ',service)
         if (service === undefined) {
             return {};
         } else{
@@ -98,7 +97,8 @@ export class ServiceDetailComponentOss implements OnInit {
                 slackChannel: service.slack_channel,
                 repository: service.repository,
                 tags: service.tags,
-                endpoints:service.endpoints
+                endpoints:service.endpoints,
+
             };
         }
     };
@@ -165,7 +165,7 @@ export class ServiceDetailComponentOss implements OnInit {
     }
 
     tabChanged (i) {
-       
+
             this.selectedTab = i;
     };
 
