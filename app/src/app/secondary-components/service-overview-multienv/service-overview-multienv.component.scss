@@ -11,7 +11,7 @@
     20% {
       opacity: 1;
     }
-  
+
     100% {
       opacity: .2;
     }
@@ -26,28 +26,28 @@
                 transform: rotate(-45deg);
 }
 .saving span {
-  
+
     animation-name: blink;
-   
+
     animation-duration: 1.5s;
-   
+
     animation-iteration-count: infinite;
-   
+
     animation-fill-mode: both;
 }
 
 .saving span:nth-child(1) {
-    
+
       animation-delay: 0.25s;
   }
 
 .saving span:nth-child(2) {
-  
+
     animation-delay: 0.5s;
 }
 
 .saving span:nth-child(3) {
-  
+
     animation-delay: 0.75s;
 }
 
@@ -97,7 +97,7 @@
     .icon-icon-good, .icon-icon-bad{
         font-size: 2rem;
     }
-    
+
 }
 .repository-link{
     text-overflow: ellipsis;
@@ -152,9 +152,9 @@
         transform: rotate(180deg);
         border-style: solid;
         border-color: #D5D7D9 transparent transparent transparent;
-        
+
     }
-   
+
 }
 .popup-endp::after{
 
@@ -200,8 +200,8 @@
 .service-details.row {
     margin: 0;
     position: relative;
-    
-    
+
+
 }
 
 .eraser-container{
@@ -239,7 +239,7 @@
     @media (max-width: $screen-lg) {
         background-size: 15rem auto;
     }
-} 
+}
 
 .right-arow{
     opacity:0
@@ -248,17 +248,17 @@
     border-radius:5px;
     border:1px solid #ccc;
     &:hover{
-        border:1px solid #ed008c; 
+        border:1px solid #ed008c;
         .stageDisp{
             color:#ed008c;
-         
-        }  
+
+        }
         .right-arow{
             opacity:1;
             &:before{
                 color:#ed008c;
             }
-        }     
+        }
     }
     .mask-wrap{
         background-size: 15rem auto;
@@ -269,7 +269,7 @@
     right: 0px;
     top:0px;
     z-index: 1;
-    padding:0.5rem 1rem; 
+    padding:0.5rem 1rem;
 }
 
 .det-value-input
@@ -344,18 +344,18 @@
     border: none;
     border: 1px solid #ccc;
     height: 70px;
-    
+
 }
 
 .det-value-input-txtarea:focus
 {
-    
+
     outline:none;
 
 }
 
 .edit-service-overview
-{  
+{
     display: flex;
     /deep/ input[type="text"]{
         padding:0 !important;
@@ -421,7 +421,7 @@ section:focus
             margin: 0.5rem 0.5rem 0.5rem 1.5rem;
             font-size: 1rem;
             line-height: 2;
-            &:active, 
+            &:active,
             &:focus{
                 background-color: transparent;
                 color:#c62770;
@@ -465,12 +465,12 @@ section:focus
     margin: 0 1rem;
 
 }
- 
+
 .PlaceHolder
 {
     color: rgb(220,220,220) !important;
     transform: skew(-20deg);
-    
+
 }
 .current-status-wrap{
     z-index: 101!important;
@@ -687,7 +687,7 @@ section:focus
     .status-lable{
         color:red!important;
    }
-} 
+}
 
 .deletion-status{
     background-color: red !important;
@@ -721,7 +721,7 @@ section:focus
         // color: #c62770;
         // border-color: pink;
         // box-shadow: none;
-        
+
         &:hover, &:active, &:focus{
             // color: #fff;
         }
@@ -757,7 +757,7 @@ section:focus
 
 .det-wrp{
     display:flex;
-    
+
 }
 
 .endpoint-url{
@@ -785,7 +785,7 @@ section:focus
     padding-bottom:2rem;
 }
 .eachBranch{
-   
+
     display: inline-block;
     cursor:pointer;
     background:white;
@@ -798,7 +798,7 @@ section:focus
     min-width:173px;
     width:17.6%;
     border:1px solid #ccc;
-    
+
     .overview-label{
         padding:0 0;
     }
@@ -806,17 +806,17 @@ section:focus
         padding-bottom:1.5rem;
     }
     &:hover{
-        border:1px solid #ed008c; 
+        border:1px solid #ed008c;
         .stageDisp{
             color:#ed008c;
-         
-        }  
+
+        }
         .right-arow{
             opacity:1;
             &:before{
                 color:#ed008c;
             }
-        }     
+        }
     }
 
 }
@@ -824,7 +824,7 @@ section:focus
     color:#999;
     text-align:center;
     span{
-        
+
     }
 }
 
@@ -835,7 +835,7 @@ section:focus
     margin-right:2rem;
     position: relative;
     background: #fff;
-    
+
     cursor: pointer;
     flex-grow: 1;
     @media (max-width: $screen-lg) {
@@ -849,17 +849,17 @@ section:focus
     border-radius:5px;
     border:1px solid #ccc;
     &:hover{
-        border:1px solid #ed008c; 
+        border:1px solid #ed008c;
         .stageDisp{
             color:#ed008c;
-         
-        }  
+
+        }
         .right-arow{
             opacity:1;
             &:before{
                 color:#ed008c;
             }
-        }     
+        }
     }
     .mask-wrap{
         background-size: 15rem auto;
@@ -877,6 +877,9 @@ section:focus
     font-weight: bold;
     color: #aaaaaa;
     text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .ErrEnv{
     width:100%;
@@ -888,7 +891,7 @@ section:focus
     padding:3rem 3rem;
 
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
-    
+
 }
 
 .empty-row{
@@ -968,7 +971,7 @@ background-color: orange;
 .decap{
     text-transform: none;
     }
-    
+
 .in-active-def:before{
     color:#666;
 
@@ -1041,7 +1044,7 @@ background-color: orange;
             height: 100px !important;
 
         }
-        
+
     }
     .feedback-text-wrap.feedbackRes{
         position: absolute;
@@ -1049,7 +1052,7 @@ background-color: orange;
         top: 46%;
         left: 0;
         .show{
-            &.feedbackResSuccess{   
+            &.feedbackResSuccess{
                 // margin:4rem 0;
                 div{
                     // padding-top: 2rem;
@@ -1099,7 +1102,7 @@ background-color: orange;
     color:#555;
     b{
         font-weight: 900;
-    
+
     }
     p{
         margin-top:1rem;
@@ -1119,8 +1122,8 @@ background-color: orange;
     right:0;
     top:0;
     z-index:2;
-    background: black; 
-}   
+    background: black;
+}
 .wrap{
     width: 100%;
     word-break: break-all;
