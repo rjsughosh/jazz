@@ -266,7 +266,7 @@
     </div>
     <div class='metadata-body-advanced relative'>
       <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
-        <btn-jazz-secondary text="EDIT" [disablebtn]="service.status != 'creation completed'" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
+        <btn-jazz-secondary text="EDIT" [disablebtn]="true" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
       </div>
       <div class='metadata-row first-row top-margin'>
         <ul class='advanced-ul'>
@@ -289,7 +289,7 @@
           </li>
           <li *ngIf="service.serviceType == 'api'">
             <div class='det-label'>Security Enabled</div>
-            <div class='det-value'>{{service.enable_api_security || "NA"}}</div>
+            <div class='det-value'>{{(service.enable_api_security !== undefined)?service.enable_api_security : "NA"}}</div>
           </li>
           <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Cloudfront Enabled</div>
@@ -310,7 +310,7 @@
           </li>
           <li *ngIf="service.serviceType != 'website'" [class.internal-access]="service.serviceType == 'function' && !disp_show2">
               <div class='det-label'>Internal Access</div>
-              <div *ngIf='disp_show2' class='det-value'>{{service.require_internal_access}}</div>
+              <div *ngIf='disp_show2' class='det-value'>{{(service.require_internal_access !== undefined)? service.require_internal_access : "NA"}}</div>
               <div *ngIf='!disp_show2' class='det-value'>
                 <div class="">
                     <section class="pad-left0">
@@ -332,12 +332,12 @@
         <ul>
           <li *ngIf="service.serviceType == 'function'">
               <div class="det-label">Event Schedule</div>
-              <div *ngIf='disp_show2' class="det-value">{{service.eventScheduleRate || "NONE"}}</div>
+              <div *ngIf='disp_show2' class="det-value">{{service.eventScheduleRate || "NA"}}</div>
 
           </li>
           <li *ngIf="service.serviceType == 'function'">
             <div class='det-label'>AWS events</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.event_source || "NONE"}}</div>
+            <div *ngIf='disp_show2' class="det-value">{{service.event_source || "NA"}}</div>
 
           </li>
 
