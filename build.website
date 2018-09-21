@@ -2,6 +2,4 @@ cd app
 cp -rf . ..
 cd ..
 rm -rf app
-npm install -g @angular/cli@1.7.3
-npm install --save
 ng build --prod --aot=false --output-path=app
