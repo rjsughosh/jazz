@@ -214,9 +214,15 @@ export class CreateServiceComponent implements OnInit {
   // function called on event schedule change(radio)
   onEventScheduleChange(val) {
     this.rateExpression.type = val;
+    if(val !== `none`){
+      this.eventExpression.type = 'awsEventsNone';
+    }
   }
   onAWSEventChange(val) {
     this.eventExpression.type = val;
+    if(val !== `none`){
+      this.rateExpression.type = 'none';
+    }
   }
   onSelectedDr(selected) {
     this.rateExpression.interval = selected;
@@ -361,7 +367,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceAvailable = false;
     this.serviceNotAvailable = false;
   }
- 
+
   onRegionChange(newVal) {
     if (!newVal) {
       this.showRegionList = false;
@@ -528,8 +534,7 @@ export class CreateServiceComponent implements OnInit {
         this.notMyApp=false;
         this.oneSelected=false;
         this.selectApp={};
-        this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
-        this.rateExpression.error = undefined;
+        this.resetEvents();
         // this.toasterService.pop('success', 'Success!!', output.data.create_service.data);
         //this.toasterService.pop('success', resMessage);
       },
@@ -553,6 +558,15 @@ export class CreateServiceComponent implements OnInit {
       );
   }
 
+  resetEvents(){
+    this.eventExpression.dynamoTable = "";
+    this.eventExpression.streamARN = "";
+    this.eventExpression.S3BucketName = "";
+    this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
+    this.rateExpression.error = undefined;
+    this.rateExpression.type = 'none';
+    this.rateExpression.duration = "5";
+  }
   // function to navigate from success or error screen to create service screen
   backToCreateService() {
     this.approversList.push(this.selApprover);
@@ -688,7 +702,7 @@ keypressAccount(hash){
     var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
     var approverObj = pinkElement[0].attributes[2].value;
-    
+
     this.selectAccount(approverObj);
 
     this.showApproversList = false;
@@ -738,7 +752,7 @@ keypressRegion(hash){
     var pinkElement = document.getElementsByClassName("pinkfocus")[0].children;
 
     var approverObj = pinkElement[0].attributes[2].value;
-    
+
     this.selectRegion(approverObj);
 
     this.showApproversList = false;
@@ -755,7 +769,7 @@ blurAccount(){
   setTimeout(() => {
     this.showAccountList=false;
   }, 500);
-  
+
 }
 
 blurRegion(){
@@ -763,19 +777,19 @@ blurRegion(){
   setTimeout(() => {
     this.showRegionList=false;
   }, 500);
-  
+
 }
 
-blurApplication(){  
+blurApplication(){
   setTimeout(() => {
     this.applc='';
     this.showApplicationList=false;
   }, 200);
-  
+
 }
   //function for selecting approvers from dropdown//
   selectApprovers(approver) {
-    
+
     this.selApprover = approver;
     let thisclass: any = this;
     this.showApproversList = false;
@@ -999,11 +1013,11 @@ blurApplication(){
       // {
       //   var p_ele = document.getElementsByClassName('pinkfocus')[2];
       //   if(p_ele == undefined){
-          
+
       //   }
       //   else pinkElement = document.getElementsByClassName('pinkfocus')[2].children;
-        
-      // }  
+
+      // }
       // else
       //   pinkElement = pinkElementS.children;
       var approverObj = {
@@ -1063,12 +1077,12 @@ blurApplication(){
       // if(pink_ele != undefined){
       //   alert('not undefined')
       //   pinkElement = document.getElementsByClassName("pinkfocus")[2].children;
-        
+
       // }
       // else{
       //   alert('undefined')
-       
-        
+
+
 
       // }
 
@@ -1158,7 +1172,7 @@ blurApplication(){
     }
     this.selectedApprovers2 = [];
   }
-  selectAccountsRegions(){    
+  selectAccountsRegions(){
 
     this.selectAccount('tmodevops');
     this.selectRegion('us-west-2');
@@ -1176,21 +1190,21 @@ blurApplication(){
       }
       if (this.focusindex > 2) {
         this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
-  
+
       }
     }
     else if (hash.key == 'ArrowUp') {
       if (this.focusindex > -1) {
         this.focusindex--;
-  
+
         if (this.focusindex > 1) {
           this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
         }
       }
       if (this.focusindex == -1) {
         this.focusindex = -1;
-  
-  
+
+
       }
     }
     else if (hash.key == 'Enter' && this.focusindex > -1) {
@@ -1199,16 +1213,16 @@ blurApplication(){
       }
       event.preventDefault();
       var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
-  
+
       var appobj = {
         "issueID":pinkElement[0].attributes[3].value,
         "appName": pinkElement[0].attributes[2].value
       }
 
-      this.selectApplication(appobj);  
+      this.selectApplication(appobj);
       this.showApplicationList = false;
       this.approverName2 = '';
-      this.focusindex = -1;  
+      this.focusindex = -1;
     } else {
       this.focusindex = -1;
     }
@@ -1238,7 +1252,7 @@ blurApplication(){
     this.selectedApplications.splice(index, 1);
   }
   start_at:number=0;
-  getapplications(){    
+  getapplications(){
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt='+this.start_at)
     .subscribe((res: Response) => {
       this.applications=res;
@@ -1246,7 +1260,7 @@ blurApplication(){
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
       this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
-        
+
         this.getapplications();
       }
       else{
@@ -1258,7 +1272,7 @@ blurApplication(){
           else{
             this.application_arr[i].appName=this.application_arr[i].appName.trim();
           }
-        }       
+        }
 
         this.application_arr.sort((a: any, b: any) => {
           if (a.appName < b.appName) {
@@ -1271,10 +1285,10 @@ blurApplication(){
         });
 
         return;
-      } 
+      }
 
     }, error => {
-     
+
     });
   }
 
