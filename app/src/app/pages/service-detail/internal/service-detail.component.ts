@@ -181,11 +181,17 @@ export class ServiceDetailComponent implements OnInit {
       }
       else if (service.type != "website") {
 
-        if (service.metadata.require_internal_access) {
+        if (service.metadata.require_internal_access ) {
           if (typeof service.metadata.require_internal_access !== "object") {
-            return service;
           }
-          service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+          else{
+            service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+          }
+          if (typeof service.metadata.eventScheduleRate !== "object") {
+          }
+          else{
+            service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S;
+          }
           return service;
         }
         else {
