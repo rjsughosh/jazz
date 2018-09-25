@@ -154,6 +154,9 @@ export class ServiceDetailComponent implements OnInit {
         returnObject["require_internal_access"] = service.metadata.require_internal_access;
         returnObject["enable_api_security"] = service.metadata.enable_api_security;
       }
+      if(typeof returnObject["event_source_arn"] == "object"){
+        returnObject["event_source_arn"] = returnObject["event_source_arn"].S;
+      }
 
       return returnObject;
 
