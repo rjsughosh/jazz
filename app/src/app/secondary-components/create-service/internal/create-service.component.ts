@@ -534,9 +534,7 @@ export class CreateServiceComponent implements OnInit {
         this.notMyApp=false;
         this.oneSelected=false;
         this.selectApp={};
-        this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
-        this.rateExpression.error = undefined;
-        this.rateExpression.type = 'none';
+        this.resetEvents();
         // this.toasterService.pop('success', 'Success!!', output.data.create_service.data);
         //this.toasterService.pop('success', resMessage);
       },
@@ -560,6 +558,15 @@ export class CreateServiceComponent implements OnInit {
       );
   }
 
+  resetEvents(){
+    this.eventExpression.dynamoTable = "";
+    this.eventExpression.streamARN = "";
+    this.eventExpression.S3BucketName = "";
+    this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
+    this.rateExpression.error = undefined;
+    this.rateExpression.type = 'none';
+    this.rateExpression.duration = "5";
+  }
   // function to navigate from success or error screen to create service screen
   backToCreateService() {
     this.approversList.push(this.selApprover);
