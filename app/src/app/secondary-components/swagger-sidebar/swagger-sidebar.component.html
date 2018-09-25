@@ -1,11 +1,16 @@
 <div class='bar-cover relative' [class.removepadding]="isloaded == 'popup'">
   <div *ngIf='isloaded == "default"'>
     <div class='relative'>
+      <div class='service-name'>{{service.name}}</div>
       <div class='icon-icon-close closeicon pointer' (click)='closeBar()'></div>
     </div>
-    <details open>
-      <summary>Evaluate</summary>
-      <div class=''>
+
+    <section class="sidebar-details">
+      <div class='sidebar-summary' (click)="summaryClicked('top')">
+        <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody1"></div>
+        <div class="summary-text">Evaluate</div>
+      </div>
+      <div class='publish-body'  [class.bodyshow]="publishBody1">
         <div class='json-cover' *ngIf='isloaded == "default"'>
           <div readonly id="target" class="line-numbers">
             <div *ngFor="let value of lineNumberCount; let i = index">{{i + 1}}</div>
@@ -19,14 +24,44 @@
         </div>
         <p *ngIf="!valid" class="jz-text-error">{{validityMessage}}</p>
       </div>
-    </details>
+    </section>
+    <section class="sidebar-details">
+        <div class='sidebar-summary' (click)="summaryClicked('bottom')">
+            <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody2"></div>
+            <div class="summary-text">Publish</div>
+        </div>
+        <div class="publish-body" [class.bodyshow]="publishBody2">
+          <div class='publish-sections'>
+            <div class="publish-sections-header  summary-2nd">
+              Application
+            </div>
+            <div class="publish-sections-textinput">
+              <input placeholder="Enter Application" type="text" class="det-value-input" [(ngModel)]='applicationInput'>
+            </div>
+          </div>
+          <div class='publish-sections'>
+            <div class="publish-sections-header">
+              Foobar
+            </div>
+            <div class="publish-sections-textinput">
+              <input placeholder="Enter foobar" type="text" class="det-value-input" [(ngModel)]='foobarInput'>
+            </div>
+          </div>
+          <div class='publish-sections'>
+            <div class="publish-sections-header">
+              Notes
+            </div>
+            <div class="publish-sections-textinput">
+              <textarea placeholder="Enter Notes" rows="5" type="text" class="det-value-input det-text-area" [(ngModel)]='notesInput'></textarea>
+            </div>
+          </div>
+          <div class='publish-sections'>
+            <btn-jazz-primary class='primary' text='PUBLISH' (click)='publish()'></btn-jazz-primary>
+          </div>
 
-    <details>
-      <summary>Publish</summary>
-      <div class=''>
+        </div>
+    </section>
 
-      </div>
-    </details>
   </div>
 
 </div>

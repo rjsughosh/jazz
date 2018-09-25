@@ -153,9 +153,8 @@ btn-jazz-primary {
 
 .json-cover {
   display: flex;
-  max-height: 75vh;
+  max-height: 50vh;
   margin: 1rem 0;
-  padding-top: 2rem;
 
   >div {
     background: #2b343e;
@@ -178,8 +177,103 @@ btn-jazz-primary {
   color: #ddd;
 }
 
-.details summary::-webkit-details-marker {
-  color: #ed008c;
-  font-size: 120%;
-  margin: 7px 1rem 0 0;
+.details {
+  border:1px solid #333;
+  summary::-webkit-details-marker {
+    color: #ed008c !important;
+    font-size: 120% !important;
+    margin: 7px 1rem 0 0 !important;
+  }
 }
+.sidebar-summary{
+  &:hover{
+    color:#ed008c;
+  }
+
+  display: flex;
+  align-items:center;
+  outline:none;
+  cursor:pointer;
+  font-size: 1.4rem;
+}
+.summary-last-child{
+  // margin: 15px 0 0rem 0;
+}
+
+// .det-value-input
+// {
+//     width:70%;
+//     border: none;
+//     border-bottom: 1px solid #ccc;
+//     height: 20px !important ;
+//     margin:0;
+//     text-overflow: ellipsis;
+// }
+.publish-body{
+  margin-bottom: 1rem;
+  visibility: hidden;
+  display:none;
+  height: 0;
+  opacity:0;
+  max-height: 0;
+  .publish-sections{
+    &:last-child{
+      display:flex;
+      justify-content: flex-end;
+    }
+
+    .publish-sections-header{
+      margin:0.5rem 0;
+      font-weight: bold;
+
+    }
+    .summary-2nd{
+      margin-top:1.5rem;
+    }
+    .publish-sections-textinput{
+      .det-value-input{
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        width:100%;
+      }
+      .det-text-area{
+        height: 8rem;
+      }
+
+    }
+  }
+}
+.icon-icon-up{
+  margin-right: 1rem;
+  color:#ed008c;
+
+}
+.bodyshow{
+  display: block;
+  visibility: visible;
+  height: auto;
+  opacity:1;
+  max-height:1000px;
+  transition:all 0.3s;
+
+}
+.rotate-90{
+  transform: rotate(90deg);
+  transition: all 0.3s;
+  font-size:1rem;
+}
+.rotate-180{
+  transform: rotate(180deg);
+  transition: all 0.3s;
+  font-size:1rem;
+}
+.sidebar-details{
+  border-top:1px solid #bbb;
+  padding: 1rem 0;
+}
+.service-name{
+  font-size:2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+

@@ -37,6 +37,11 @@ export class SwaggerSidebarComponent implements OnInit {
   obj:any = {};
   assets;
   foundAsset;
+  applicationInput:any = "";
+  foobarInput:any = "";
+  notesInput:any = "";
+  publishBody1:boolean = true;
+  publishBody2:boolean = false;
   public lineNumberCount: any = new Array(40).fill('');
 
 
@@ -169,6 +174,30 @@ export class SwaggerSidebarComponent implements OnInit {
   goback(){
     this.isloaded='default';
   }
+
+  summaryClicked(position){
+    // debugger
+    if(position === "top"){
+      this.publishBody1 = !this.publishBody1;
+    }
+    else{
+      this.publishBody2 = !this.publishBody2;
+      if(this.publishBody2){
+        this.publishBody1 = false;
+      }
+    }
+  }
+
+  publish(){
+    let payload = {
+      id: this.service.id
+    }
+    this.http.post('/jazz/publish-to-clearwater', payload).subscribe((assetsResponse) => {
+    },
+    (err) => {
+    });
+  }
+
   ngOnChanges(){
     if(this.service.hasOwnProperty('id')){
       this.getassets();

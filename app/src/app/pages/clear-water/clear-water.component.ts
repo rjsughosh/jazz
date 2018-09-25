@@ -1,6 +1,8 @@
 import { Component, OnInit ,Input,Output,EventEmitter} from '@angular/core';
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -39,6 +41,18 @@ obj:any = {};
 congratulations:boolean = false;
 close: boolean = false;
 closed: boolean = false;
+options:any = {
+  "fromDateISO": "2018-09-19T11:26:32.065Z",
+  "fromDateValue": 1537356392065,
+  "stepSize": 900000,
+  "toDateISO": "2018-09-20T11:26:34.543Z",
+  "toDateValue": 1537442794543,
+  "tooltipXFormat": "MMM DD YYYY, h:mm a",
+  "xAxisFormat": "h:mm a",
+  "yMax": 100,
+  "yMin": 0,
+}
+datasets:any = [];
 
   constructor(
     private request:RequestService,
@@ -118,19 +132,21 @@ getData(payload?){
       var swaggerAsset = this.service.assets.find((asset) => {
         return asset.type === 'swagger_url';
       });
-      this.http.get(swaggerAsset.provider_id).subscribe(
-        (response) => {
-          this.swagger_json=response;
-        },
-        (error) =>{
-          console.log('error',error)
-  
-        }
-      );
-      
-      body = {
-        "url": swaggerAsset && swaggerAsset.provider_id
-      };
+      if(swaggerAsset){
+        this.http.get(swaggerAsset.provider_id).subscribe(
+          (response) => {
+            this.swagger_json=response;
+          },
+          (error) =>{
+            console.log('error',error)
+
+          }
+        );
+
+        body = {
+          "url": swaggerAsset && swaggerAsset.provider_id
+        };
+      }
     }
     else{
       body = payload;
@@ -167,7 +183,7 @@ getData(payload?){
 
   }
 
- 
+
   refresh(){
     this.isloaded=false;
     this.getData();
@@ -180,4 +196,111 @@ getData(payload?){
   ngOnDestroy(){
     this.closeSidebar();
   }
+
+  progressCompleted:boolean = false;
+  creating: boolean = true;
+  statusprogress: number = 5;
+  animatingDots: any;
+  deleting: boolean = false;
+  private intervalSubscription: Subscription;
+  service_request_id: any;
+  statusCompleted: boolean = false;
+  serviceStatusCompleted: boolean = false;
+  // serviceStatusPermission: boolean = false;
+  // serviceStatusRepo: boolean = false;
+  // serviceStatusValidate: boolean = false;
+  serviceStatusCompletedD: boolean = false;
+  serviceStatusPermissionD: boolean = false;
+  serviceStatusRepoD: boolean = false;
+  serviceStatusValidateD: boolean = false;
+  serviceStatusStarted: boolean = true;
+  serviceStatusStartedD: boolean = false;
+  statusFailed: boolean = false;
+  statusInfo: string = 'Service Creation started';
+  service_error: boolean = true;
+
+
+  serviceCreationStatus() {
+    this.statusprogress = 5;
+    this.creating = true;
+    this.deleting = false;
+    // this.intervalSubscription = Observable.interval(5000)
+    //   .switchMap((response) => this.http.get('/jazz/request-status?id=' + this.service_request_id))
+    //   .subscribe(
+    //       response => {
+
+    //           let dataResponse = <any>{};
+    //           dataResponse.list = response;
+    //           var respStatus = dataResponse.list.data;
+    //           if (respStatus.status.toLowerCase() === 'completed') {
+    //               this.statusCompleted = true;
+    //               this.serviceStatusCompleted = true;
+    //               // this.serviceStatusPermission = true;
+    //               // this.serviceStatusRepo = true;
+    //               // this.serviceStatusValidate = true;
+    //               this.statusInfo = 'Wrapping things up';
+    //               this.statusprogress = 100;
+    //               localStorage.removeItem('request_id' + "_" + this.service.name + "_" + this.service.domain);
+    //               // alert('last stage');
+    //               this.http.get('/jazz/services/' + this.service.id).subscribe(
+    //                   (response) => {
+    //                       // this.serviceDetail.onDataFetched(response.data);
+    //                   }
+    //               )
+    //               this.intervalSubscription.unsubscribe();
+    //               setTimeout(() => {
+    //                   this.service_error = false;
+    //               }, 5000);
+    //           } else if (respStatus.status.toLowerCase() === 'failed') {
+    //               this.statusCompleted = false;
+    //               this.statusFailed = true;
+    //               this.serviceStatusStarted = false;
+    //               this.serviceStatusStartedD = true;
+    //               this.serviceStatusCompletedD = true;
+    //               this.serviceStatusPermissionD = true;
+    //               this.serviceStatusRepoD = true;
+    //               this.serviceStatusValidateD = true;
+    //               this.statusInfo = 'Creation failed';
+    //               setTimeout(() => {
+    //                   this.service_error = false;
+    //               }, 5000);
+
+    //           } else {
+    //               this.statusCompleted = false;
+    //               // respStatus.events.forEach(element => {
+    //               //     if (element.name === 'TRIGGER_FOLDERINDEX' && element.status === 'COMPLETED') {
+    //               //         this.serviceStatusCompleted = true;
+    //               //         this.statusInfo = 'Wrapping things up';
+    //               //         this.statusprogress = 100;
+    //               //         localStorage.removeItem('request_id' + this.service.name + this.service.domain);
+    //               //     } else if (element.name === 'ADD_WRITE_PERMISSIONS_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
+    //               //         // this.serviceStatusPermission = true;
+    //               //         // this.statusInfo = 'Adding required permissions';
+    //               //         this.statusprogress = 85;
+    //               //     } else if (element.name === 'PUSH_TEMPLATE_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
+    //               //         this.serviceStatusRepo = true;
+    //               //         this.statusInfo = 'Getting your code ready';
+    //               //         this.statusprogress = 60;
+    //               //     } else if (element.name === 'VALIDATE_INPUT' && element.status === 'COMPLETED') {
+    //               //         this.serviceStatusValidate = true;
+    //               //         this.statusInfo = 'Validating your request';
+    //               //         this.statusprogress = 35;
+    //               //     } else if (element.name === 'CALL_ONBOARDING_WORKFLOW' && element.status === 'COMPLETED') {
+    //               //         this.serviceStatusStarted = true;
+    //               //         this.statusInfo = 'Service Creation started';
+    //               //         this.statusprogress = 20;
+    //               //     }
+    //               // });
+    //           }
+    //           document.getElementById('current-status-val').setAttribute("style", "width:" + this.statusprogress + '%');
+
+    //       },
+    //       error => {
+
+    //           this.service_error = false;
+    //           this.serviceCreationStatus();
+    //       }
+    //   )
+  }
+
 }
