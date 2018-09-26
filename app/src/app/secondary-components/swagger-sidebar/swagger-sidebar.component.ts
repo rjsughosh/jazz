@@ -43,6 +43,9 @@ export class SwaggerSidebarComponent implements OnInit {
   publishBody1:boolean = true;
   publishBody2:boolean = false;
   public lineNumberCount: any = new Array(40).fill('');
+  requestId:string;
+  publishBtnText:string = "PUBLISH";
+  ispublishing:boolean = false;
 
 
   private http:any;
@@ -182,19 +185,23 @@ export class SwaggerSidebarComponent implements OnInit {
     }
     else{
       this.publishBody2 = !this.publishBody2;
-      if(this.publishBody2){
-        this.publishBody1 = false;
-      }
     }
   }
 
   publish(){
+    this.ispublishing = true;
+    this.publishBtnText = "PUBSLISHING";
     let payload = {
       id: this.service.id
     }
-    this.http.post('/jazz/publish-to-clearwater', payload).subscribe((assetsResponse) => {
+    this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
+      this.requestId = Response.data.requestId;
+      this.publishBtnText = "PUBLISH";
+      this.ispublishing = false;
     },
     (err) => {
+      this.publishBtnText = "PUBLISH";
+      this.ispublishing = false;
     });
   }
 

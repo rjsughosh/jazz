@@ -276,6 +276,8 @@ search-box{
     right: 0;
     top:0;
     overflow-y: scroll !important;
+    height: 100vh;
+    overflow-x: hidden;
 }
 .slide-in{
     transform: translateX(0%);

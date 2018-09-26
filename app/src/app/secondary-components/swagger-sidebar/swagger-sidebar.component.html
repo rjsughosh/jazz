@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class='publish-sections'>
-            <btn-jazz-primary class='primary' text='PUBLISH' (click)='publish()'></btn-jazz-primary>
+            <btn-jazz-primary class='primary' [disablePrimaryBtn]="ispublishing" text='{{publishBtnText}}' (click)='publish()'></btn-jazz-primary>
           </div>
 
         </div>
