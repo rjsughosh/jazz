@@ -98,6 +98,7 @@ export class EnvCodequalitySectionComponent implements OnInit {
   selectMetric(index) {
     this.metricsIndex = index;
     this.selectedMetric = this.graphDataRaw.metrics[index];
+    // debugger
     this.selectedMetricGraphData = this.formatGraphData(this.selectedMetric, this.filterData);
   }
 

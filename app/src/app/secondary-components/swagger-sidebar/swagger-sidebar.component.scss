@@ -155,6 +155,7 @@ btn-jazz-primary {
   display: flex;
   max-height: 50vh;
   margin: 1rem 0;
+  font-size: 1rem;
 
   >div {
     background: #2b343e;
@@ -175,6 +176,7 @@ btn-jazz-primary {
   width: 4rem;
   padding: 2px 2px 2.5rem 2px;
   color: #ddd;
+  text-align: right;
 }
 
 .details {
@@ -223,7 +225,7 @@ btn-jazz-primary {
     }
 
     .publish-sections-header{
-      margin:0.5rem 0;
+      margin:1.5rem 0 0.5rem 0;
       font-weight: bold;
 
     }
@@ -277,3 +279,7 @@ btn-jazz-primary {
   margin-bottom: 1rem;
 }
 
+.textForm-area{
+  height:5rem !important;
+  padding:10px;
+}

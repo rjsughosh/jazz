@@ -3,7 +3,9 @@ import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
-
+import * as _ from "lodash";
+import * as moment from 'moment';
+import { environment } from './../../../environments/environment';
 
 @Component({
   selector: 'clear-water',
@@ -52,7 +54,65 @@ options:any = {
   "yMax": 100,
   "yMin": 0,
 }
-datasets:any = [];
+datasets;
+
+graphPointsata = [{
+
+  "Timestamp": "2018-06-22T17:03:18.239Z",
+  "Sum": 0,
+},
+{
+  "Timestamp": "2018-06-22T17:18:37.707Z",
+  "Sum": 67,
+},
+{
+  "Timestamp": "2018-06-27T15:15:23.985Z",
+  "Sum": 62,
+},
+{
+  "Timestamp": "2018-06-28T21:07:05.160Z",
+  "Sum": 62,
+},
+{
+  "Timestamp": "2018-07-02T16:14:47.094Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-07-05T14:53:43.135Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-07-06T17:33:59.536Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-07-17T21:36:29.604Z",
+  "Sum": 50,
+},
+{
+  "Timestamp": "2018-07-25T21:29:25.983Z",
+  "Sum": 50,
+},
+{
+  "Timestamp": "2018-07-28T19:37:29.123Z",
+  "Sum": 46,
+},
+{
+  "Timestamp": "2018-07-31T18:28:17.367Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-08-02T14:43:01.762Z",
+  "Sum": 46,
+},
+{
+  "Timestamp": "2018-08-14T21:55:38.705Z",
+  "Sum": 50,
+},
+{
+  "Timestamp": "2018-08-17T18:25:08.614Z",
+  "Sum": 50,
+}];
 
   constructor(
     private request:RequestService,
@@ -97,6 +157,55 @@ onRowClicked(row, index) {
     if (i == index) {
       rowData['expanded'] = !rowData['expanded'];
     }
+  }
+}
+
+
+formatGraphData(metricData) {
+  let valueProperty = "Sum";
+
+  let values = metricData
+    .sort((pointA, pointB) => {
+      return moment(pointA.Timestamp).diff(moment(pointB.Timestamp));
+    })
+    .map((dataPoint) => {
+      return {
+        x: moment(dataPoint.Timestamp).valueOf(),
+        y: parseInt(dataPoint[valueProperty])
+      };
+    });
+
+  let timeRange = {
+    format: "h:mm a",
+    range: "2018-09-27T11:22:16.477Z"
+  }
+  let options = {
+    tooltipXFormat: 'MMM DD YYYY, h:mm a',
+    fromDateISO: timeRange.range,
+    fromDateValue: moment(timeRange.range).valueOf(),
+    toDateISO: moment().toISOString(),
+    toDateValue: moment().valueOf(),
+    xAxisFormat: timeRange.format,
+    stepSize: 1000,
+    yMin: values.length ?
+      .9 * (values.map((point) => {
+        return point.y;
+      })
+        .reduce((a, b) => {
+          return Math.min(a, b);
+        })) : 0,
+    yMax: values.length ?
+      1.1 * (values.map((point) => {
+        return point.y;
+      })
+        .reduce((a, b) => {
+          return Math.max(a, b);
+        })) : 100
+  };
+
+  return {
+    datasets: [values],
+    options: options
   }
 }
 
@@ -183,14 +292,36 @@ getData(payload?){
 
   }
 
+  historicalChangeTrendURI:string;
+  getGraphData(){
+    this.subscription = this.http.post(environment.urls.swaggerApiUrl,{
+      "url": "https://bitbucket.service.edp.t-mobile.com/projects/EITCODEDOC/repos/flow-documentation/browse/swagger/cf.loan.origination/CFS-createLoan.json"
+    })
+    .subscribe(
+    (response) => {
+      this.historicalChangeTrendURI = response.data.changeHistory.historicalChangeTrendURI;
+      this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
+        // this.formatGraphData(response.data)
+      },
+      (error) => {
+        console.log('error',error)
+      });
+    },
+    (error) => {
+      console.log('error',error)
+    });
+  }
 
   refresh(){
     this.isloaded=false;
     this.getData();
   }
   ngOnInit() {
+
     this.env=this.route.snapshot.params['env'];
     this.getData();
+    this.getGraphData();
+    this.datasets = this.formatGraphData(this.graphPointsata);
   }
 
   ngOnDestroy(){

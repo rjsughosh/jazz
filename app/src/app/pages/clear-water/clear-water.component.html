@@ -56,7 +56,9 @@
 
               <div class='cw-score'>
                 <div class='score-head'>CLEARWATER SCORE</div>
-                <div class='score-val'>{{cw_score.current}}</div>
+                <div class='score-val'>
+                  <div>{{cw_score.current}}</div>
+                </div>
               </div>
 
               <div class='cw-values'>
@@ -86,7 +88,7 @@
               </div>
 
               <div class='cw-button'>
-                  <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE API" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
+                  <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE / PUBLISH" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
                   <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
 
               </div>
@@ -128,9 +130,9 @@
 
             </div>
             <div class="jz-chart-content">
-              <!-- <chartjs-linegraph
-                  [datasets]="datasets"
-                  [options]="options"></chartjs-linegraph> -->
+              <chartjs-linegraph
+                  [datasets]="datasets.datasets"
+                  [options]="options"></chartjs-linegraph>
             </div>
           </div>
         </div>

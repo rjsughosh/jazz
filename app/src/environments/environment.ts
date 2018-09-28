@@ -10,7 +10,8 @@ export const environment = {
   urls:{
     docs_link:"https://docs.jazz.corporate.t-mobile.com",
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content",
-    swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com/?url='
+    swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com/?url=',
+    swaggerApiUrl: "https://swagger-lint-UI-DLAB03.dev.px-npe01.cf.t-mobile.com/api-center-of-excellence/v1/swagger-lint"
   },
   userJourney: {
     registrationMessage: ''

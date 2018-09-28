@@ -192,7 +192,8 @@ export class SwaggerSidebarComponent implements OnInit {
     this.ispublishing = true;
     this.publishBtnText = "PUBSLISHING";
     let payload = {
-      id: this.service.id
+      id: this.service.id,
+      description: this.notesInput
     }
     this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
       this.requestId = Response.data.requestId;
