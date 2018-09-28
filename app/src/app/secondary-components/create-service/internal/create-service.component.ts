@@ -422,11 +422,17 @@ export class CreateServiceComponent implements OnInit {
       payload["runtime"] = this.runtime;
       payload["require_internal_access"] = this.vpcSelected;
       payload["is_public_endpoint"] = this.publicSelected;
+      payload["deployment_targets"] = {
+        "api": this.selectedDeploymentTarget
+      }
     }
     else if (this.typeOfService == 'function') {
       payload["runtime"] = this.runtime;
       // payload.service_type = 'lambda';
       payload["require_internal_access"] = this.vpcSelected;
+      payload["deployment_targets"] = {
+        "function": this.selectedDeploymentTarget
+      }
       if (this.rateExpression.type != 'none') {
         this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
         if (this.rateExpression.cronStr == 'invalid') {
@@ -456,7 +462,18 @@ export class CreateServiceComponent implements OnInit {
     } else if (this.typeOfService == 'website') {
       payload["is_public_endpoint"] = this.publicSelected;
       payload["create_cloudfront_url"] = this.cdnConfigSelected;
-      console.log("website");
+
+      //Abhishek: temp for Apigee-release
+      if(this.cdnConfigSelected){
+        this.selectedDeploymentTarget = "aws_cloudfront";
+      }else{
+        this.selectedDeploymentTarget = "aws_s3";
+      }
+      //Abhishek: END: temp for Apigee-release
+
+      payload["deployment_targets"] = {
+        "website": this.selectedDeploymentTarget
+      }
 
       if (this.gitCloneSelected == true) {
         payload["git_repository"] = {};
@@ -503,9 +520,9 @@ export class CreateServiceComponent implements OnInit {
       payload["appName"]=this.selectApp.appName;
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
-    if (this.selectedDeploymentTarget){
-      payload["deployment_targets"]=this.selectedDeploymentTarget;
-    }
+    console.log("payload is", payload );
+    debugger;
+    
     this.isLoading = true;
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
