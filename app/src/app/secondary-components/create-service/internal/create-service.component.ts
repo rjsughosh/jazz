@@ -521,7 +521,7 @@ export class CreateServiceComponent implements OnInit {
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
     this.isLoading = true;
-    debugger;
+    
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
       (Response) => {
