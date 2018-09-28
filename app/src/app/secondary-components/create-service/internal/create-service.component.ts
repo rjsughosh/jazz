@@ -437,7 +437,7 @@ export class CreateServiceComponent implements OnInit {
       // payload.service_type = 'lambda';
       payload["require_internal_access"] = this.vpcSelected;
       payload["deployment_targets"] = {
-        "function": this.selectedDeploymentTarget
+        "function": "aws_lambda"
       }
       if (this.rateExpression.type != 'none') {
         this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
@@ -527,6 +527,7 @@ export class CreateServiceComponent implements OnInit {
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
     this.isLoading = true;
+    
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
       (Response) => {
