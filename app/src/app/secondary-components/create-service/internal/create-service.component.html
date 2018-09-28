@@ -71,7 +71,19 @@
                 </div>
             </div>
         </section>
-        <section class="each-step-wrap run-time" *ngIf="typeOfService != 'website'">
+        <section class="each-step-wrap form-row deployment-targets" *ngIf="typeOfService == 'api'">
+          <div class="row">
+            <div class="col-lg-4 col-md-4">
+              <p class="step-title">Choose your deployment target<span>*</span></p>
+            </div>
+            <div class="col-lg-8">
+              <radio-checkbox
+                  [options]="deploymentTargets[typeOfService.toUpperCase()].options"
+                  [(selected)]="selectedDeploymentTarget"></radio-checkbox>
+            </div>
+          </div>
+        </section>
+        <section class="each-step-wrap run-time" *ngIf="typeOfService == 'api' || typeOfService == 'function'">
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <p class="step-title">Choose your runtime<span>*</span></p>

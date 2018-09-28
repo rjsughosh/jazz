@@ -17,6 +17,7 @@ import { RequestService, DataCacheService, MessageService, AuthenticationService
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { ServicesListComponent } from "../../../pages/services-list/services-list.component"
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'create-service',
@@ -31,6 +32,7 @@ export class CreateServiceComponent implements OnInit {
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
+  public buildEnvironment = environment;
   typeOfService: string = "api";
   typeOfPlatform: string = "aws";
   disablePlatform = true;
@@ -137,6 +139,9 @@ export class CreateServiceComponent implements OnInit {
   selectedAccount=[];
   AccountInput:string;
   applc:string;
+  public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
+  public selectedDeploymentTarget = "";
+
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
@@ -180,6 +185,7 @@ export class CreateServiceComponent implements OnInit {
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
+    this.selectedDeploymentTarget = '';
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
@@ -422,11 +428,17 @@ export class CreateServiceComponent implements OnInit {
       payload["runtime"] = this.runtime;
       payload["require_internal_access"] = this.vpcSelected;
       payload["is_public_endpoint"] = this.publicSelected;
+      payload["deployment_targets"] = {
+        "api": this.selectedDeploymentTarget
+      }
     }
     else if (this.typeOfService == 'function') {
       payload["runtime"] = this.runtime;
       // payload.service_type = 'lambda';
       payload["require_internal_access"] = this.vpcSelected;
+      payload["deployment_targets"] = {
+        "function": this.selectedDeploymentTarget
+      }
       if (this.rateExpression.type != 'none') {
         this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
         if (this.rateExpression.cronStr == 'invalid') {
@@ -456,7 +468,18 @@ export class CreateServiceComponent implements OnInit {
     } else if (this.typeOfService == 'website') {
       payload["is_public_endpoint"] = this.publicSelected;
       payload["create_cloudfront_url"] = this.cdnConfigSelected;
-      console.log("website");
+
+      //Abhishek: temp for Apigee-release
+      if(this.cdnConfigSelected){
+        this.selectedDeploymentTarget = "aws_cloudfront";
+      }else{
+        this.selectedDeploymentTarget = "aws_s3";
+      }
+      //Abhishek: END: temp for Apigee-release
+
+      payload["deployment_targets"] = {
+        "website": this.selectedDeploymentTarget
+      }
 
       if (this.gitCloneSelected == true) {
         payload["git_repository"] = {};
@@ -503,7 +526,6 @@ export class CreateServiceComponent implements OnInit {
       payload["appName"]=this.selectApp.appName;
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
-
     this.isLoading = true;
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
