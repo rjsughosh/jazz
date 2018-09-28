@@ -116,8 +116,9 @@ export class ServiceDetailComponent implements OnInit {
       return {};
     } else {
       service = this.fixMetadata(service);
-      service.metadata = this.addEventSource(service.metadata);
-      service.id;
+      if (service.metadata) {
+        service.metadata = this.addEventSource(service.metadata);
+      }
       var returnObject = {
         id: service.id,
         name: service.service,
