@@ -31,8 +31,6 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
     this.render();
     this._datasets = this.datasets.map(this.modifyDataSet);
     this._options = this.getOptions(this.options);
-    // debugger
-
   }
 
   modifyDataSet(data) {

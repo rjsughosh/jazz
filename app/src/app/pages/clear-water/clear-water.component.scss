@@ -504,3 +504,24 @@ search-box{
     }
   }
 }
+
+.graph-cover {
+  background-color: white;
+  margin: 1rem;
+  position: relative;
+  width: 65%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11);
+  border-radius: 3px;
+
+  @media(max-width: $screen-sm) {
+    width: 100%;
+  }
+}
+
+.jz-chart-content {
+  position: relative;
+}
+
+.graph-title {
+  padding: 1.6rem 0;
+}
