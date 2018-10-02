@@ -101,6 +101,20 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.serviceType = this.service.type || this.service.serviceType;
+    this.setPeriodFilters();
+  }
+
+  setPeriodFilters() {
+    if (this.service.deployment_targets === 'gcp_apigee'){
+      const periodFilterIndex = this.formFields.findIndex(formField => formField.label === 'PERIOD');
+      this.formFields[periodFilterIndex].options =  ['1 Minutes', '1 Hour', '1 Day', '7 Days', '30 Days'];
+      this.formFields[periodFilterIndex].values = [moment(0).add(1, 'minute').valueOf() / 1000,
+        moment(0).add(1, 'hour').valueOf() / 1000,
+        moment(0).add(1, 'day').valueOf() / 1000,
+        moment(0).add(7, 'day').valueOf() / 1000,
+        moment(0).add(30, 'day').valueOf() / 1000];
+      this.formFields[periodFilterIndex].selected =  '1 Minutes';
+    }
   }
 
   refresh() {
@@ -178,9 +192,13 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   filterAssetType(data) {
     return data.assets.filter((asset) => {
       if (this.serviceType === 'api') {
-        return asset.type === 'apigateway';
+        if (this.service.deployment_targets === "gcp_apigee") {
+          return asset.type === 'apigee_proxy';
+        }else{
+          return asset.type === 'apigateway';
+        }
       } else if (this.serviceType === 'function') {
-        return asset.type === 'lambda'
+        return asset.type === 'lambda';
       } else if (this.serviceType === 'website') {
         return (asset.type === 's3') || (asset.type === 'cloudfront');
       }

@@ -136,6 +136,9 @@ export class ServiceDetailComponent implements OnInit {
         is_public_endpoint: service.is_public_endpoint,
         created_by: service.created_by
       }
+      if (service.deployment_targets && service.deployment_targets[service.type]){
+        returnObject["deployment_targets"] = service.deployment_targets[service.type].S || service.deployment_targets[service.type];
+      }
       if (service.metadata) {
         returnObject["create_cloudfront_url"] = service.metadata.create_cloudfront_url;
         returnObject["eventScheduleRate"] = service.metadata.eventScheduleRate;
@@ -158,7 +161,6 @@ export class ServiceDetailComponent implements OnInit {
       if(typeof returnObject["event_source_arn"] == "object"){
         returnObject["event_source_arn"] = returnObject["event_source_arn"].S;
       }
-
       return returnObject;
 
     }
