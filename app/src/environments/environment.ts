@@ -6,8 +6,8 @@ export const environment = {
         "API": {
           "active": true,
           "options": [
-            {"label": "AWS API Gateway", "value": "aws_apigateway"}
-            // {"label": "APIGEE", "value": "gcp_apigee"}
+            {"label": "AWS API Gateway", "value": "aws_apigateway"},
+            {"label": "APIGEE", "value": "gcp_apigee"}
           ]
         },
         "WEBSITE": {
