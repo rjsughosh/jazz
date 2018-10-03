@@ -215,7 +215,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
         let paths = _(this.queryDataRaw.assets)
           .map('asset_name.Resource')
           .uniq().value();
-        this.filters.addField('Filter By:', 'METHOD', methods, null, 'GET');
+        this.filters.addField('Filter By:', 'METHOD', methods, null);
         this.filters.addField('Filter By:', 'PATH', paths);
         break;
       case 'website':
