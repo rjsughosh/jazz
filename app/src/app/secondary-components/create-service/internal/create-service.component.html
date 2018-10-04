@@ -71,7 +71,19 @@
                 </div>
             </div>
         </section>
-        <section class="each-step-wrap run-time" *ngIf="typeOfService != 'website'">
+        <section class="each-step-wrap form-row deployment-targets" *ngIf="typeOfService == 'api'">
+          <div class="row">
+            <div class="col-lg-4 col-md-4">
+              <p class="step-title">Choose your deployment target<span>*</span></p>
+            </div>
+            <div class="col-lg-8">
+              <radio-checkbox
+                  [options]="deploymentTargets[typeOfService.toUpperCase()].options"
+                  [(selected)]="selectedDeploymentTarget"></radio-checkbox>
+            </div>
+          </div>
+        </section>
+        <section class="each-step-wrap run-time" *ngIf="typeOfService == 'api' || typeOfService == 'function'">
             <div class="row">
                 <div class="col-lg-4 col-md-4">
                     <p class="step-title">Choose your runtime<span>*</span></p>
@@ -171,7 +183,7 @@
                     </div>
                     <div class="col-lg-8 col-md-8 flex-col">
                         <section class="col-lg-12  pad-left0">
-                            <div class="input-field-container">                                
+                            <div class="input-field-container">
                                 <div class="selected-approvers">
                                     <ul (click)='focusInputApplication($event)'>
                                         <li *ngFor="let selected of selectedApplications;let i=index"   >
@@ -198,11 +210,11 @@
                         </div>
                         <input *ngIf='notMyApp' placeholder="Name your application" autocomplete="off" name='poc_appname' type="text" class="textForm textForm-app" [(ngModel)]="poc_appname">
 
-                    </div>                   
-                    
+                    </div>
+
                 </div>
-                
-    
+
+
             </section>
             <section class="each-step-wrap accounts hide" *ngIf="typeOfService == 'function'">
                 <div class="row">
@@ -550,7 +562,7 @@
                                     <label for="kinesis"><span></span><span class="background"></span>Kinesis</label>
                                 </div>
                             </section>
-                            <section class="col-lg-3 col-md-3  pad-left0">
+                            <section class="col-lg-3 col-md-3  pad-left0 disable-event">
                                 <div class="radio-container">
                                     <input type="radio" name="AWSEvents" id="s3" [value]="s3" [checked]="eventExpression.type == 's3'" (click)="onAWSEventChange('s3')">
                                     <label for="s3"><span></span><span class="background"></span>S3</label>
@@ -572,7 +584,7 @@
                                         <input id="dynamoTable" name="dynamoTable" type="text" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Table Name" required>
                                   </div>
                                 </div>
-                                <p class="learn-more">Function would be triggered whenever the corresponding DynamoDB table is modified (e.g. a new entry is added)</p>
+                                <p class="learn-more">Function would be triggered whenever a new entry is added to the table. Note that the DynamoDB table should exist already and Jazz creates a new stream for this table</p>
                             </div>
 
                             <div class="kinesis-fields row zero-margin arrow_box" *ngIf="chkfrKinesis()">
@@ -605,7 +617,7 @@
                                         <input id="S3BucketName" name="S3BucketName" type="text" [(ngModel)]="eventExpression.S3BucketName" [focus]="focusS3" class="inline-input aws-events-left-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Bucket Name" required autofocus>
                                   </div>
                                 </div>
-                                <p class="learn-more">Function would be triggered when an object is added or modified inside the bucket</p>
+                                <p class="learn-more">Function would be triggered when an object is added or modified inside the bucket. Creating this lambda trigger will override any previously created triggers on this bucket for any ObjectCreated:*</p>
                             </div>
 
                         </div>
@@ -636,7 +648,7 @@
             <section class="each-step-wrap cloudfront-url" *ngIf="typeOfService == 'website'">
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
-                        <p class="step-title">Clone Repository from Git</p>
+                        <p class="step-title grey">Clone Repository from Git</p>
                         <!-- <p class="step-details">Donec facilisis tortor ut augue lacinia, at viverra est semper. Sed sapien metus, scelerisque nec pharetra id.</p> -->
                     </div>
 
@@ -645,9 +657,9 @@
 
                             <div class="input-field-container">
                                 <div class="slack-checkbox custom-cb">
-                                    <input  type="checkbox" id="checkbox-gitclone" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="gitCloneSelected" (change)="gitChange()">
-                                    <label for="checkbox-gitclone"></label>
-                                    <div class="cb-status-dets">Import from an existing git repository?</div>
+                                    <input  type="checkbox" id="checkbox-gitclone" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="gitCloneSelected" (change)="gitChange()" [disabled]="typeOfService == 'website'">
+                                    <label for="checkbox-gitclone" class="disableCb"></label>
+                                    <div class="cb-status-dets grey">Import from an existing git repository?</div>
                                 </div>
                             </div>
 

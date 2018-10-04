@@ -116,7 +116,9 @@ export class ServiceDetailComponent implements OnInit {
       return {};
     } else {
       service = this.fixMetadata(service);
-      service.id;
+      if (service.metadata) {
+        service.metadata = this.addEventSource(service.metadata);
+      }
       var returnObject = {
         id: service.id,
         name: service.service,
@@ -137,17 +139,40 @@ export class ServiceDetailComponent implements OnInit {
       if (service.metadata) {
         returnObject["create_cloudfront_url"] = service.metadata.create_cloudfront_url;
         returnObject["eventScheduleRate"] = service.metadata.eventScheduleRate;
-        returnObject["event_source_dynamodb"] = service.metadata.event_source_dynamodb;
-        returnObject["event_source_kinesis"] = service.metadata.event_source_kinesis;
-        returnObject["event_source_s3"] = service.metadata.event_source_s3;
+        if(service.metadata.event_source){
+          returnObject["event_source"] = service.metadata.event_source;
+        }
+        if(service.metadata.event_source_dynamodb){
+          returnObject["event_source_arn"] = service.metadata.event_source_dynamodb;
+        }
+        if(service.metadata.event_source_kinesis){
+          returnObject["event_source_arn"] = service.metadata.event_source_kinesis;
+        }
+        if(service.metadata.event_source_s3){
+          returnObject["event_source_arn"] = service.metadata.event_source_s3;
+        }
         returnObject["app_name"] = service.metadata.app_name;
         returnObject["require_internal_access"] = service.metadata.require_internal_access;
         returnObject["enable_api_security"] = service.metadata.enable_api_security;
       }
+      if(typeof returnObject["event_source_arn"] == "object"){
+        returnObject["event_source_arn"] = returnObject["event_source_arn"].S;
+      }
+
       return returnObject;
 
     }
   };
+
+  addEventSource(obj){
+    let keysList = Object.keys(obj);
+    for(let i =0; i < keysList.length ; i++){
+      if(keysList[i].includes("event_source_")) {
+        obj.event_source = keysList[i].replace("event_source_","");
+      }
+    }
+    return obj;
+  }
 
   fixMetadata(service) {
     if (service.metadata) {
@@ -160,11 +185,17 @@ export class ServiceDetailComponent implements OnInit {
       }
       else if (service.type != "website") {
 
-        if (service.metadata.require_internal_access) {
+        if (service.metadata.require_internal_access ) {
           if (typeof service.metadata.require_internal_access !== "object") {
-            return service;
           }
-          service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+          else{
+            service.metadata.require_internal_access = service.metadata.require_internal_access.BOOL;
+          }
+          if (typeof service.metadata.eventScheduleRate !== "object") {
+          }
+          else{
+            service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S;
+          }
           return service;
         }
         else {
