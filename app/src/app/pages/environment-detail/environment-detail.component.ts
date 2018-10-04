@@ -108,15 +108,17 @@ export class EnvironmentDetailComponent implements OnInit {
     if (service === undefined) {
       return {};
     } else {
-      return {
+      let _service = {
         id: service.id,
         name: service.service,
         serviceType: service.type,
         runtime: service.runtime,
         status: service.status,
         domain: service.domain,
-        repository: service.repository
+        repository: service.repository,
+        created_by: service.created_by
       }
+      return _service;
     }
   };
 

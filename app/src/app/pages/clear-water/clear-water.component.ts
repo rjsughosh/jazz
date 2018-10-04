@@ -235,6 +235,10 @@ graphPointsata = [{
     this.search_bar = data.searchString;
   }
 
+  onRequestId(requestID){
+    this.servicePublishStatus(requestID);
+  }
+
   getData(payload?) {
     let body;
     if (!payload) {
@@ -363,7 +367,7 @@ graphPointsata = [{
   serviceStatusStarted: boolean = true;
   serviceStatusStartedD: boolean = false;
   statusFailed: boolean = false;
-  statusInfo: string = 'Service Creation started';
+  statusInfo: string = 'CLEARWATER INITIALIZATION';
   service_error: boolean = true;
 
   servicePublishStatus(message) {
@@ -376,11 +380,9 @@ graphPointsata = [{
       .switchMap((response) => this.http.get('/jazz/request-status?id='+message))
       .subscribe(
           response => {
-              console.log(response);
-              console.log(this.creating)
-                console.log(this.service_error)
-                console.log(!this.progressCompleted)
-                console.log(this.hidden)
+
+              // this.statusInfo = response.data.events[response.data.events.length - 1].name;
+              // debugger
               let dataResponse = <any>{};
               dataResponse.list = response;
               var respStatus = dataResponse.list.data;
@@ -393,13 +395,6 @@ graphPointsata = [{
                   this.statusInfo = 'Wrapping things up';
                   this.statusprogress = 100;
                   this.hidden = true;
-                  // localStorage.removeItem('request_id' + "_" + this.service.name + "_" + this.service.domain);
-                  // alert('last stage');
-                  // this.http.get('/jazz/services/' + this.service.id).subscribe(
-                  //     (response) => {
-                  //         // this.serviceDetail.onDataFetched(response.data);
-                  //     }
-                  // )
                   this.intervalSubscription.unsubscribe();
                   setTimeout(() => {
                       this.service_error = false;
@@ -421,28 +416,30 @@ graphPointsata = [{
               } else {
                   this.statusCompleted = false;
                   respStatus.events.forEach(element => {
-                      if (element.name === 'TRIGGER_FOLDERINDEX' && element.status === 'COMPLETED') {
+                    debugger
+
+                      if (element.name === 'CLEARWATER_SEND_NOTIFICATION') {
                           this.serviceStatusCompleted = true;
-                          this.statusInfo = 'Triggering Folderindex';
+                          this.statusInfo = 'Sending Notification';
                           this.statusprogress = 100;
                           localStorage.removeItem('request_id' + this.service.name + this.service.domain);
-                      } else if (element.name === 'ADD_WRITE_PERMISSIONS_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
+                      } else if (element.name === 'CLEARWATER_RAISE_PR') {
                           this.serviceStatusPermissionD = true;
-                          this.statusInfo = 'Adding write permissions to the services';
+                          this.statusInfo = 'Raising PR';
                           this.statusprogress = 85;
-                      } else if (element.name === 'PUSH_TEMPLATE_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
+                      } else if (element.name === 'CLEARWATER_FORK_REPO') {
                           this.serviceStatusRepoD = true;
-                          this.statusInfo = 'pushing templdate to service repo';
+                          this.statusInfo = 'Forking Repository';
                           this.statusprogress = 60;
-                      } else if (element.name === 'VALIDATE_INPUT' && element.status === 'COMPLETED') {
+                      } else if (element.name === 'CLEARWATER_GET_ARTIFACTS') {
                           this.serviceStatusValidateD = true;
-                          this.statusInfo = 'Validating your request';
+                          this.statusInfo = 'Getting Artifacts';
                           this.statusprogress = 35;
-                      } else if (element.name === 'CALL_ONBOARDING_WORKFLOW' && element.status === 'COMPLETED') {
+                      } else if (element.name === 'CLEARWATER_INITIALIZATION') {
                           this.serviceStatusStartedD = true;
-                          this.statusInfo = 'Managing Workflow started';
+                          this.statusInfo = 'Initializing Clear Water';
                           this.statusprogress = 20;
-                      }else if (element.name === 'CALL_CLEARWATER_PUBLISH_WORKFLOW' && element.status === 'COMPLETED') {
+                      }else if (element.name === 'CALL_CLEARWATER_PUBLISH_WORKFLOW') {
                         this.serviceStatusStartedD = true;
                         this.statusInfo = 'Publishing Service';
                         this.statusprogress = 10;

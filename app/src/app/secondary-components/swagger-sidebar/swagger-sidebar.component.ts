@@ -24,6 +24,7 @@ export class SwaggerSidebarComponent implements OnInit {
   @Input() envSelected: any = {};
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onRequestId: EventEmitter<any> = new EventEmitter<any>();
 
   swaggerAsset:any;
   swagger_json:any;
@@ -192,16 +193,17 @@ export class SwaggerSidebarComponent implements OnInit {
     this.publishBtnText = "PUBSLISHING";
     let payload = {
       service_id : this.service.id,
-      service_name : "clear-water-pub-test",
+      service_name : this.service.name,
       domain : this.service.domain,
       description: this.notesInput,
-      username : "vbansal1"
+      username : this.service.created_by
     }
     this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
       this.publishBtnText = "PUBLISH";
       this.ispublishing = true;
-      console.log(Response.data)
-      this.data.changeMessage(Response.data.request_id)
+      console.log(Response.data);
+      debugger
+      this.onRequestId.emit(Response.data.request_id);
     },
     (err) => {
       this.publishBtnText = "PUBLISH";

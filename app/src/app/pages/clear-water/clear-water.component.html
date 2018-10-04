@@ -118,26 +118,26 @@
       </div>
     </div>
 
-    <div class="graph-section-cover">
+    <!-- <div class="graph-section-cover">
       <div class="graph-title">
         Warning Metrics
       </div>
       <div class="jz-height-full">
         <div class="jz-chart">
-          <!-- <div class="jz-chart-header">
+          <div class="jz-chart-header">
                   <div class="width-30"></div>
                   <div class="width-30 jz-text-center">
                     <p class="graphtitle">TITLE</p>
                     <p class="graphtitlefilter">Message</p>
                   </div>
 
-                </div> -->
+                </div>
           <div class="jz-chart-content">
             <chartjs-linegraph *ngIf='graphData' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class='cw-errors-cover'>
       <table-template class="table-container log-table-container clear-water relative" [message]="errMessage" [state]="loadingState"
@@ -234,7 +234,7 @@
 </div>
 
 <section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-  <swagger-sidebar [envSelected]='env' [service]='service' (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
+  <swagger-sidebar [envSelected]='env' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
 
 </section>
 
