@@ -527,7 +527,7 @@ export class CreateServiceComponent implements OnInit {
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
     this.isLoading = true;
-    
+
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
       (Response) => {
@@ -1238,9 +1238,8 @@ blurApplication(){
       }
       event.preventDefault();
       var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
-
       var appobj = {
-        "issueID":pinkElement[0].attributes[3].value,
+        "appID":pinkElement[0].attributes[3].value,
         "appName": pinkElement[0].attributes[2].value
       }
 

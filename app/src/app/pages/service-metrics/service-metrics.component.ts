@@ -215,7 +215,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
         let paths = _(this.queryDataRaw.assets)
           .map('asset_name.Resource')
           .uniq().value();
-        this.filters.addField('Filter By:', 'METHOD', methods, null, 'GET');
+        this.filters.addField('Filter By:', 'METHOD', methods, null);
         this.filters.addField('Filter By:', 'PATH', paths);
         break;
       case 'website':
@@ -275,10 +275,16 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
         return moment(pointA.Timestamp).diff(moment(pointB.Timestamp));
       })
       .map((dataPoint) => {
-        return {
+
+        let obj = {
           x: moment(dataPoint.Timestamp).valueOf(),
           y: parseInt(dataPoint[valueProperty])
         };
+
+        if(!obj['y']){
+          obj['y'] = parseInt(dataPoint[valueProperty.toLowerCase()])
+        }
+        return obj;
       });
 
     let timeRange = this.filters.getFieldValueOfLabel('TIME RANGE');
@@ -305,7 +311,6 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
             return Math.max(a, b);
           })) : 100
     };
-
     return {
       datasets: [values],
       options: options
