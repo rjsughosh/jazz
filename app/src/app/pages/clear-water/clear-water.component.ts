@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as _ from "lodash";
 import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
+import { DataService } from '../data-service/data.service';
 
 @Component({
   selector: 'clear-water',
@@ -43,6 +44,7 @@ export class ClearWaterComponent implements OnInit {
   congratulations: boolean = false;
   close: boolean = false;
   closed: boolean = false;
+  hidden:boolean = true;
   options: any = {
     "fromDateISO": "2018-09-19T11:26:32.065Z",
     "fromDateValue": 1537356392065,
@@ -57,11 +59,73 @@ export class ClearWaterComponent implements OnInit {
   public graphData;
   historicalChangeTrendURI: string;
 
+datasets;
+
+graphPointsata = [{
+
+  "Timestamp": "2018-06-22T17:03:18.239Z",
+  "Sum": 0,
+},
+{
+  "Timestamp": "2018-06-22T17:18:37.707Z",
+  "Sum": 67,
+},
+{
+  "Timestamp": "2018-06-27T15:15:23.985Z",
+  "Sum": 62,
+},
+{
+  "Timestamp": "2018-06-28T21:07:05.160Z",
+  "Sum": 62,
+},
+{
+  "Timestamp": "2018-07-02T16:14:47.094Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-07-05T14:53:43.135Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-07-06T17:33:59.536Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-07-17T21:36:29.604Z",
+  "Sum": 50,
+},
+{
+  "Timestamp": "2018-07-25T21:29:25.983Z",
+  "Sum": 50,
+},
+{
+  "Timestamp": "2018-07-28T19:37:29.123Z",
+  "Sum": 46,
+},
+{
+  "Timestamp": "2018-07-31T18:28:17.367Z",
+  "Sum": 48,
+},
+{
+  "Timestamp": "2018-08-02T14:43:01.762Z",
+  "Sum": 46,
+},
+{
+  "Timestamp": "2018-08-14T21:55:38.705Z",
+  "Sum": 50,
+},
+{
+  "Timestamp": "2018-08-17T18:25:08.614Z",
+  "Sum": 50,
+}];
+
   constructor(
     private request: RequestService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
+    private data : DataService
+  )
+  {
     this.http = request;
   }
 
@@ -269,7 +333,16 @@ export class ClearWaterComponent implements OnInit {
 
   ngOnDestroy() {
     this.closeSidebar();
-  };
+  // };
+    this.hidden=true;
+    this.env=this.route.snapshot.params['env'];
+    this.getData();
+    this.getGraphData(this.swagger_json);
+    this.datasets = this.formatGraphData(this.graphPointsata);
+    this.data.currentMessage.subscribe(message=> message?this.servicePublishStatus(message): null)
+  }
+
+
 
   progressCompleted: boolean = false;
   creating: boolean = true;
@@ -293,88 +366,102 @@ export class ClearWaterComponent implements OnInit {
   statusInfo: string = 'Service Creation started';
   service_error: boolean = true;
 
+  servicePublishStatus(message) {
 
-  serviceCreationStatus() {
+    this.service_error = true;
+    if(message || message===null){
     this.statusprogress = 5;
-    this.creating = true;
-    this.deleting = false;
-    // this.intervalSubscription = Observable.interval(5000)
-    //   .switchMap((response) => this.http.get('/jazz/request-status?id=' + this.service_request_id))
-    //   .subscribe(
-    //       response => {
+    this.hidden = false;
+    this.intervalSubscription = Observable.interval(3000)
+      .switchMap((response) => this.http.get('/jazz/request-status?id='+message))
+      .subscribe(
+          response => {
+              console.log(response);
+              console.log(this.creating)
+                console.log(this.service_error)
+                console.log(!this.progressCompleted)
+                console.log(this.hidden)
+              let dataResponse = <any>{};
+              dataResponse.list = response;
+              var respStatus = dataResponse.list.data;
+              if (respStatus.status.toLowerCase() === 'completed') {
+                  this.statusCompleted = true;
+                  this.serviceStatusCompleted = true;
+                  this.serviceStatusPermissionD = true;
+                  this.serviceStatusRepoD = true;
+                  this.serviceStatusValidateD = true;
+                  this.statusInfo = 'Wrapping things up';
+                  this.statusprogress = 100;
+                  this.hidden = true;
+                  // localStorage.removeItem('request_id' + "_" + this.service.name + "_" + this.service.domain);
+                  // alert('last stage');
+                  // this.http.get('/jazz/services/' + this.service.id).subscribe(
+                  //     (response) => {
+                  //         // this.serviceDetail.onDataFetched(response.data);
+                  //     }
+                  // )
+                  this.intervalSubscription.unsubscribe();
+                  setTimeout(() => {
+                      this.service_error = false;
+                  }, 5000);
+              } else if (respStatus.status.toLowerCase() === 'failed') {
+                  this.statusCompleted = false;
+                  this.statusFailed = true;
+                  this.serviceStatusStarted = false;
+                  this.serviceStatusStartedD = true;
+                  this.serviceStatusCompletedD = true;
+                  this.serviceStatusPermissionD = true;
+                  this.serviceStatusRepoD = true;
+                  this.serviceStatusValidateD = true;
+                  this.statusInfo = 'Creation failed';
+                  setTimeout(() => {
+                      this.service_error = false;
+                  }, 5000);
 
-    //           let dataResponse = <any>{};
-    //           dataResponse.list = response;
-    //           var respStatus = dataResponse.list.data;
-    //           if (respStatus.status.toLowerCase() === 'completed') {
-    //               this.statusCompleted = true;
-    //               this.serviceStatusCompleted = true;
-    //               // this.serviceStatusPermission = true;
-    //               // this.serviceStatusRepo = true;
-    //               // this.serviceStatusValidate = true;
-    //               this.statusInfo = 'Wrapping things up';
-    //               this.statusprogress = 100;
-    //               localStorage.removeItem('request_id' + "_" + this.service.name + "_" + this.service.domain);
-    //               // alert('last stage');
-    //               this.http.get('/jazz/services/' + this.service.id).subscribe(
-    //                   (response) => {
-    //                       // this.serviceDetail.onDataFetched(response.data);
-    //                   }
-    //               )
-    //               this.intervalSubscription.unsubscribe();
-    //               setTimeout(() => {
-    //                   this.service_error = false;
-    //               }, 5000);
-    //           } else if (respStatus.status.toLowerCase() === 'failed') {
-    //               this.statusCompleted = false;
-    //               this.statusFailed = true;
-    //               this.serviceStatusStarted = false;
-    //               this.serviceStatusStartedD = true;
-    //               this.serviceStatusCompletedD = true;
-    //               this.serviceStatusPermissionD = true;
-    //               this.serviceStatusRepoD = true;
-    //               this.serviceStatusValidateD = true;
-    //               this.statusInfo = 'Creation failed';
-    //               setTimeout(() => {
-    //                   this.service_error = false;
-    //               }, 5000);
+              } else {
+                  this.statusCompleted = false;
+                  respStatus.events.forEach(element => {
+                      if (element.name === 'TRIGGER_FOLDERINDEX' && element.status === 'COMPLETED') {
+                          this.serviceStatusCompleted = true;
+                          this.statusInfo = 'Triggering Folderindex';
+                          this.statusprogress = 100;
+                          localStorage.removeItem('request_id' + this.service.name + this.service.domain);
+                      } else if (element.name === 'ADD_WRITE_PERMISSIONS_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
+                          this.serviceStatusPermissionD = true;
+                          this.statusInfo = 'Adding write permissions to the services';
+                          this.statusprogress = 85;
+                      } else if (element.name === 'PUSH_TEMPLATE_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
+                          this.serviceStatusRepoD = true;
+                          this.statusInfo = 'pushing templdate to service repo';
+                          this.statusprogress = 60;
+                      } else if (element.name === 'VALIDATE_INPUT' && element.status === 'COMPLETED') {
+                          this.serviceStatusValidateD = true;
+                          this.statusInfo = 'Validating your request';
+                          this.statusprogress = 35;
+                      } else if (element.name === 'CALL_ONBOARDING_WORKFLOW' && element.status === 'COMPLETED') {
+                          this.serviceStatusStartedD = true;
+                          this.statusInfo = 'Managing Workflow started';
+                          this.statusprogress = 20;
+                      }else if (element.name === 'CALL_CLEARWATER_PUBLISH_WORKFLOW' && element.status === 'COMPLETED') {
+                        this.serviceStatusStartedD = true;
+                        this.statusInfo = 'Publishing Service';
+                        this.statusprogress = 10;
+                    }
 
-    //           } else {
-    //               this.statusCompleted = false;
-    //               // respStatus.events.forEach(element => {
-    //               //     if (element.name === 'TRIGGER_FOLDERINDEX' && element.status === 'COMPLETED') {
-    //               //         this.serviceStatusCompleted = true;
-    //               //         this.statusInfo = 'Wrapping things up';
-    //               //         this.statusprogress = 100;
-    //               //         localStorage.removeItem('request_id' + this.service.name + this.service.domain);
-    //               //     } else if (element.name === 'ADD_WRITE_PERMISSIONS_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
-    //               //         // this.serviceStatusPermission = true;
-    //               //         // this.statusInfo = 'Adding required permissions';
-    //               //         this.statusprogress = 85;
-    //               //     } else if (element.name === 'PUSH_TEMPLATE_TO_SERVICE_REPO' && element.status === 'COMPLETED') {
-    //               //         this.serviceStatusRepo = true;
-    //               //         this.statusInfo = 'Getting your code ready';
-    //               //         this.statusprogress = 60;
-    //               //     } else if (element.name === 'VALIDATE_INPUT' && element.status === 'COMPLETED') {
-    //               //         this.serviceStatusValidate = true;
-    //               //         this.statusInfo = 'Validating your request';
-    //               //         this.statusprogress = 35;
-    //               //     } else if (element.name === 'CALL_ONBOARDING_WORKFLOW' && element.status === 'COMPLETED') {
-    //               //         this.serviceStatusStarted = true;
-    //               //         this.statusInfo = 'Service Creation started';
-    //               //         this.statusprogress = 20;
-    //               //     }
-    //               // });
-    //           }
-    //           document.getElementById('current-status-val').setAttribute("style", "width:" + this.statusprogress + '%');
+                  });
+              }
+              document.getElementById('current-status-val').setAttribute("style", "width:" + this.statusprogress + '%');
 
-    //       },
-    //       error => {
+          },
+          error => {
 
-    //           this.service_error = false;
-    //           this.serviceCreationStatus();
-    //       }
-    //   )
+              this.service_error = false;
+              this.servicePublishStatus(undefined);
+          }
+      )
   }
+}
+
+
 
 }

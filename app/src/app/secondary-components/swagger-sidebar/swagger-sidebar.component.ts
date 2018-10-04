@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService ,MessageService} from "../../core/services";
 import {RelaxedJsonService} from "../../core/helpers/relaxed-json.service";
 import {ToasterService} from 'angular2-toaster';
+import { DataService } from '../../pages/data-service/data.service';
 
 
 @Component({
@@ -55,13 +56,11 @@ export class SwaggerSidebarComponent implements OnInit {
     private router: Router,
     private request:RequestService,
     private relaxedJson: RelaxedJsonService,
+    private data : DataService
   ) {
     this.http = request;
 
    }
-
-
-
 
   ngOnInit() {
 
@@ -192,13 +191,17 @@ export class SwaggerSidebarComponent implements OnInit {
     this.ispublishing = true;
     this.publishBtnText = "PUBSLISHING";
     let payload = {
-      id: this.service.id,
-      description: this.notesInput
+      service_id : this.service.id,
+      service_name : "clear-water-pub-test",
+      domain : this.service.domain,
+      description: this.notesInput,
+      username : "vbansal1"
     }
     this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
-      this.requestId = Response.data.requestId;
       this.publishBtnText = "PUBLISH";
-      this.ispublishing = false;
+      this.ispublishing = true;
+      console.log(Response.data)
+      this.data.changeMessage(Response.data.request_id)
     },
     (err) => {
       this.publishBtnText = "PUBLISH";
