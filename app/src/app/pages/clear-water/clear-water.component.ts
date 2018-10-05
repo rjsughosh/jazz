@@ -382,14 +382,13 @@ graphPointsata = [{
   serviceStatusStarted: boolean = true;
   serviceStatusStartedD: boolean = false;
   statusFailed: boolean = false;
-  statusInfo: string = 'CLEARWATER INITIALIZATION';
+  statusInfo: string = 'Starting';
   service_error: boolean = true;
 
   servicePublishStatus(message) {
     this.statusCompleted = false;
     this.serviceStatusCompleted = false;
     this.statusCompleted = false;
-    // document.getElementById('current-status-val').setAttribute("style", "width:0%");
     this.progressCompleted = false;
     this.service_error = true;
     if(message || message===null){
@@ -414,6 +413,7 @@ graphPointsata = [{
                 this.statusprogress = 100;
                 this.hidden = true;
                 this.intervalSubscription.unsubscribe();
+                this.statusInfo = "Completed";
                 setTimeout(() => {
                     this.service_error = false;
                 }, 5000);
