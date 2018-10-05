@@ -200,9 +200,8 @@ export class SwaggerSidebarComponent implements OnInit {
     }
     this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
       this.publishBtnText = "PUBLISH";
-      this.ispublishing = true;
+      this.ispublishing = false;
       console.log(Response.data);
-      debugger
       this.onRequestId.emit(Response.data.request_id);
     },
     (err) => {

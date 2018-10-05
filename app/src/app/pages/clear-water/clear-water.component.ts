@@ -58,6 +58,8 @@ export class ClearWaterComponent implements OnInit {
   }
   public graphData;
   historicalChangeTrendURI: string;
+  isSlidebarLoading:boolean = false;
+  isGraphloaded:boolean = false;
 
 datasets;
 
@@ -211,12 +213,19 @@ graphPointsata = [{
 
   openSidebar() {
     this.slideSidebar = true;
+    this.isGraphloaded = false;
+    setTimeout(() => {
+      this.isGraphloaded = true;
+    },600)
     document.getElementsByClassName('view-container')[0].classList.add('set-width');
-    // this.open_sidebar.emit('swagger');
 
   }
   closeSidebar() {
     this.slideSidebar = false;
+    this.isGraphloaded = false;
+    setTimeout(() => {
+      this.isGraphloaded = true;
+    },600)
     let item = document.getElementsByClassName('view-container')[0];
     if (item) {
       item.classList.remove('set-width');
@@ -305,7 +314,9 @@ graphPointsata = [{
   getGraphData(swagger_json) {
     const swaggerLintPayload = {
       'serviceId': `${this.service.domain}_${this.service.name}`,
-      'swaggerDoc': swagger_json
+      'swaggerDoc': swagger_json,
+      'ntid': 'jazz',
+      'swaggerdId': `${this.service.domain}_${this.service.name}_${this.env}`
     };
     this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
       .subscribe(
@@ -313,6 +324,10 @@ graphPointsata = [{
           this.historicalChangeTrendURI = response.links.historicalChangeTrendURI;
           this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
             this.graphData = this.formatGraphData(response.changeHistory);
+            setTimeout(() => {
+              this.isGraphloaded = true;
+            },1000)
+
           },
             (error) => {
               console.log('error', error)
@@ -348,7 +363,7 @@ graphPointsata = [{
 
 
 
-  progressCompleted: boolean = false;
+  progressCompleted: boolean = true;
   creating: boolean = true;
   statusprogress: number = 5;
   animatingDots: any;
@@ -371,7 +386,11 @@ graphPointsata = [{
   service_error: boolean = true;
 
   servicePublishStatus(message) {
-
+    this.statusCompleted = false;
+    this.serviceStatusCompleted = false;
+    this.statusCompleted = false;
+    // document.getElementById('current-status-val').setAttribute("style", "width:0%");
+    this.progressCompleted = false;
     this.service_error = true;
     if(message || message===null){
     this.statusprogress = 5;
@@ -380,75 +399,69 @@ graphPointsata = [{
       .switchMap((response) => this.http.get('/jazz/request-status?id='+message))
       .subscribe(
           response => {
+            let dataResponse = <any>{};
+            dataResponse.list = response;
+            var respStatus = dataResponse.list.data;
+            let currentStatus = respStatus.events[respStatus.events.length - 1].name;
+            console.log('current status => ',currentStatus);
+            if (respStatus.status.toLowerCase() === 'completed' && currentStatus === 'CLEARWATER_SEND_NOTIFICATION') {
+                this.statusCompleted = true;
+                this.serviceStatusCompleted = true;
+                this.serviceStatusPermissionD = true;
+                this.serviceStatusRepoD = true;
+                this.serviceStatusValidateD = true;
+                this.statusInfo = 'Wrapping things up';
+                this.statusprogress = 100;
+                this.hidden = true;
+                this.intervalSubscription.unsubscribe();
+                setTimeout(() => {
+                    this.service_error = false;
+                }, 5000);
+            } else if (respStatus.status.toLowerCase() === 'failed') {
+                this.statusCompleted = false;
+                this.statusFailed = true;
+                this.serviceStatusStarted = false;
+                this.serviceStatusStartedD = true;
+                this.serviceStatusCompletedD = true;
+                this.serviceStatusPermissionD = true;
+                this.serviceStatusRepoD = true;
+                this.serviceStatusValidateD = true;
+                this.statusInfo = 'Creation failed';
+                setTimeout(() => {
+                    this.service_error = false;
+                }, 5000);
 
-              // this.statusInfo = response.data.events[response.data.events.length - 1].name;
-              // debugger
-              let dataResponse = <any>{};
-              dataResponse.list = response;
-              var respStatus = dataResponse.list.data;
-              if (respStatus.status.toLowerCase() === 'completed') {
-                  this.statusCompleted = true;
-                  this.serviceStatusCompleted = true;
-                  this.serviceStatusPermissionD = true;
-                  this.serviceStatusRepoD = true;
-                  this.serviceStatusValidateD = true;
-                  this.statusInfo = 'Wrapping things up';
-                  this.statusprogress = 100;
-                  this.hidden = true;
-                  this.intervalSubscription.unsubscribe();
-                  setTimeout(() => {
-                      this.service_error = false;
-                  }, 5000);
-              } else if (respStatus.status.toLowerCase() === 'failed') {
-                  this.statusCompleted = false;
-                  this.statusFailed = true;
-                  this.serviceStatusStarted = false;
+            } else {
+                this.statusCompleted = false;
+
+                if (currentStatus === 'CLEARWATER_SEND_NOTIFICATION') {
+                    // this.serviceStatusCompleted = true;
+                    this.statusInfo = 'Sending Notification';
+                    this.statusprogress = 95;
+                    localStorage.removeItem('request_id' + this.service.name + this.service.domain);
+                } else if (currentStatus === 'CLEARWATER_RAISE_PR') {
+                    this.serviceStatusPermissionD = true;
+                    this.statusInfo = 'Raising PR';
+                    this.statusprogress = 85;
+                } else if (currentStatus === 'CLEARWATER_FORK_REPO') {
+                    this.serviceStatusRepoD = true;
+                    this.statusInfo = 'Forking Repository';
+                    this.statusprogress = 60;
+                } else if (currentStatus === 'CLEARWATER_GET_ARTIFACTS') {
+                    this.serviceStatusValidateD = true;
+                    this.statusInfo = 'Getting Artifacts';
+                    this.statusprogress = 35;
+                } else if (currentStatus === 'CLEARWATER_INITIALIZATION') {
+                    this.serviceStatusStartedD = true;
+                    this.statusInfo = 'Initializing Clear Water';
+                    this.statusprogress = 20;
+                }else if (currentStatus === 'CALL_CLEARWATER_PUBLISH_WORKFLOW') {
                   this.serviceStatusStartedD = true;
-                  this.serviceStatusCompletedD = true;
-                  this.serviceStatusPermissionD = true;
-                  this.serviceStatusRepoD = true;
-                  this.serviceStatusValidateD = true;
-                  this.statusInfo = 'Creation failed';
-                  setTimeout(() => {
-                      this.service_error = false;
-                  }, 5000);
-
-              } else {
-                  this.statusCompleted = false;
-                  respStatus.events.forEach(element => {
-                    debugger
-
-                      if (element.name === 'CLEARWATER_SEND_NOTIFICATION') {
-                          this.serviceStatusCompleted = true;
-                          this.statusInfo = 'Sending Notification';
-                          this.statusprogress = 100;
-                          localStorage.removeItem('request_id' + this.service.name + this.service.domain);
-                      } else if (element.name === 'CLEARWATER_RAISE_PR') {
-                          this.serviceStatusPermissionD = true;
-                          this.statusInfo = 'Raising PR';
-                          this.statusprogress = 85;
-                      } else if (element.name === 'CLEARWATER_FORK_REPO') {
-                          this.serviceStatusRepoD = true;
-                          this.statusInfo = 'Forking Repository';
-                          this.statusprogress = 60;
-                      } else if (element.name === 'CLEARWATER_GET_ARTIFACTS') {
-                          this.serviceStatusValidateD = true;
-                          this.statusInfo = 'Getting Artifacts';
-                          this.statusprogress = 35;
-                      } else if (element.name === 'CLEARWATER_INITIALIZATION') {
-                          this.serviceStatusStartedD = true;
-                          this.statusInfo = 'Initializing Clear Water';
-                          this.statusprogress = 20;
-                      }else if (element.name === 'CALL_CLEARWATER_PUBLISH_WORKFLOW') {
-                        this.serviceStatusStartedD = true;
-                        this.statusInfo = 'Publishing Service';
-                        this.statusprogress = 10;
-                    }
-
-                  });
-              }
-              document.getElementById('current-status-val').setAttribute("style", "width:" + this.statusprogress + '%');
-
+                  this.statusInfo = 'Publishing Service';
+                  this.statusprogress = 10;
+                }
+            }
+            document.getElementById('current-status-val').setAttribute("style", "width:" + this.statusprogress + '%');
           },
           error => {
 

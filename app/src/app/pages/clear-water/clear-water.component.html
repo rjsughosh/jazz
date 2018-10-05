@@ -1,8 +1,8 @@
 <div *ngIf='isloaded && !error'>
   <section class="progress-bar-section relative">
 
-    <div class='current-status-wrap' *ngIf="creating && service_error && !progressCompleted">
-      <div class='icon-icon-close closeicon' (click)="progressCompleted = true"></div>
+    <div class='current-status-wrap' *ngIf="!progressCompleted">
+      <div class='icon-icon-close closeicon' (click)="progressCompleted = true" *ngIf='!service_error'></div>
       <div class="current-meter-bar">
         <span id='current-status-val' [ngClass]="statusCompleted || serviceStatusCompleted ? 'completed-bar':'under-progress-bar'"
           [class.deletion-bar]='statusFailed'></span>
@@ -13,24 +13,7 @@
           <div class='status-icon icon-icon-close' *ngIf=' serviceStatusStartedD '></div>
           <div class='status-lable'>Creation</div>
         </div>
-        <!-- <div class='status-result' [ngClass]="serviceStatusValidate ? 'under-progress-bar':'under-progress'" [class.completed-bar]='statusCompleted'
-            [class.deletion-status]='statusFailed'>
-            <div class='status-icon icon-icon-confirmcheck' *ngIf='serviceStatusValidate'></div>
-            <div class='status-icon icon-icon-close' *ngIf=' serviceStatusValidateD '></div>
-            <div class='status-lable'>Validation</div>
-          </div>
-          <div class='status-result' [ngClass]="serviceStatusRepo ? 'under-progress-bar':'under-progress'" [class.completed-bar]='statusCompleted'
-            [class.deletion-status]='statusFailed'>
-            <div class='status-icon icon-icon-confirmcheck' *ngIf='serviceStatusRepo'></div>
-            <div class='status-icon icon-icon-close' *ngIf=' serviceStatusRepoD '></div>
-            <div class='status-lable repoCreation'>Repository Creation</div>
-          </div>
-          <div class='status-result' [ngClass]="serviceStatusPermission ? 'under-progress-bar':'under-progress'" [class.completed-bar]='statusCompleted'
-            [class.deletion-status]='statusFailed'>
-            <div class='status-icon icon-icon-confirmcheck' *ngIf='serviceStatusPermission'></div>
-            <div class='status-icon icon-icon-close' *ngIf=' serviceStatusPermissionD '></div>
-            <div class='status-lable'>Permissions</div>
-          </div> -->
+
         <div class='status-result' [ngClass]="serviceStatusCompleted ? 'under-progress-bar':'under-progress'"
           [class.completed-bar]='statusCompleted' [class.deletion-status]='statusFailed'>
           <div class='status-icon icon-icon-confirmcheck' *ngIf='serviceStatusCompleted'></div>
@@ -118,26 +101,21 @@
       </div>
     </div>
 
-    <!-- <div class="graph-section-cover">
+    <div class="graph-section-cover">
       <div class="graph-title">
         Warning Metrics
       </div>
       <div class="jz-height-full">
         <div class="jz-chart">
-          <div class="jz-chart-header">
-                  <div class="width-30"></div>
-                  <div class="width-30 jz-text-center">
-                    <p class="graphtitle">TITLE</p>
-                    <p class="graphtitlefilter">Message</p>
-                  </div>
-
-                </div>
-          <div class="jz-chart-content">
-            <chartjs-linegraph *ngIf='graphData' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
+          <div class="loading-row" [class.show]="!isGraphloaded">
+            <div class="loading-circle"></div>
+          </div>
+          <div class="jz-chart-content" *ngIf='graphData && isGraphloaded'>
+            <chartjs-linegraph *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
 
     <div class='cw-errors-cover'>
       <table-template class="table-container log-table-container clear-water relative" [message]="errMessage" [state]="loadingState"
