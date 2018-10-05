@@ -148,6 +148,44 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter(changedFilter?) {
+
+    if(changedFilter){
+
+      switch(changedFilter.selected){
+
+        case 'Week':{
+          this.formFields[2].options =  ['1 Hour','6 Hours', '1 Day', '7 Days', '30 Days'];
+          this.formFields[2].values =  [
+              moment(0).add(1, 'hour').valueOf() / 1000,
+              moment(0).add(6, 'hour').valueOf() / 1000,
+              moment(0).add(1, 'day').valueOf() / 1000,
+              moment(0).add(7, 'day').valueOf() / 1000,
+              moment(0).add(30, 'day').valueOf() / 1000];
+          this.filters.changeFilter('1 Hour',this.formFields[2]);
+          break;
+        }
+        case 'Month':{
+          this.formFields[2].options =  ['6 Hours','1 Day', '7 Days', '30 Days'];
+          this.formFields[2].values =  [
+              moment(0).add(6, 'hour').valueOf() / 1000,
+              moment(0).add(1, 'day').valueOf() / 1000,
+              moment(0).add(7, 'day').valueOf() / 1000,
+              moment(0).add(30, 'day').valueOf() / 1000];
+          this.filters.changeFilter('6 Hours',this.formFields[2]);
+          break;
+        }
+        case 'Year':{
+          this.formFields[2].options =  ['1 Day', '7 Days', '30 Days'];
+          this.formFields[2].values =  [
+              moment(0).add(1, 'day').valueOf() / 1000,
+              moment(0).add(7, 'day').valueOf() / 1000,
+              moment(0).add(30, 'day').valueOf() / 1000];
+          this.filters.changeFilter('1 Day',this.formFields[2]);
+          break;
+        }
+      }
+    }
+
     if (changedFilter && (changedFilter.label === 'ASSET' ||
       changedFilter.label === 'METHOD' ||
       changedFilter.label === 'PATH')) {
