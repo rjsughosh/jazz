@@ -1,7 +1,7 @@
 <div *ngIf='isloaded && !error'>
   <section class="progress-bar-section relative">
 
-    <div class='current-status-wrap' *ngIf="!progressCompleted">
+    <div class='current-status-wrap' *ngIf="!progressCompleted && !statusCompleted">
       <div class='icon-icon-close closeicon' (click)="progressCompleted = true" *ngIf='!service_error'></div>
       <div class="current-meter-bar">
         <span id='current-status-val' [ngClass]="statusCompleted || serviceStatusCompleted ? 'completed-bar':'under-progress-bar'"
@@ -101,7 +101,7 @@
       </div>
     </div>
 
-    <div class="graph-section-cover">
+    <div class="graph-section-cover" [class.hide]="graphError">
       <div class="graph-title">
         Warning Metrics
       </div>
@@ -111,7 +111,7 @@
             <div class="loading-circle"></div>
           </div>
           <div class="jz-chart-content" *ngIf='graphData && isGraphloaded'>
-            <chartjs-linegraph *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
+            <chartjs-linegraph [class.hide]="graphError" *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
           </div>
         </div>
       </div>
@@ -212,7 +212,7 @@
 </div>
 
 <section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-  <swagger-sidebar [envSelected]='env' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
+  <swagger-sidebar #swaggerSidebar [envSelected]='env' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
 
 </section>
 

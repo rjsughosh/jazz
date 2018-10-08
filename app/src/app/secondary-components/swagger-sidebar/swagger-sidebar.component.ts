@@ -67,6 +67,11 @@ export class SwaggerSidebarComponent implements OnInit {
 
   }
 
+  enableButton(event){
+    this.ispublishing = false;
+    this.publishBtnText = "PUBLISH";
+  }
+
   closeBar(){
     this.onClose.emit();
   }
@@ -199,8 +204,6 @@ export class SwaggerSidebarComponent implements OnInit {
       username : this.service.created_by
     }
     this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
-      this.publishBtnText = "PUBLISH";
-      this.ispublishing = false;
       console.log(Response.data);
       this.onRequestId.emit(Response.data.request_id);
     },

@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input,Output,EventEmitter} from '@angular/core';
+import { Component, OnInit ,Input,Output,EventEmitter, ViewChild} from '@angular/core';
 import { RequestService ,MessageService} from "../../core/services";
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
@@ -7,6 +7,7 @@ import * as _ from "lodash";
 import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { DataService } from '../data-service/data.service';
+import { SwaggerSidebarComponent } from './../../secondary-components/swagger-sidebar/swagger-sidebar.component';
 
 @Component({
   selector: 'clear-water',
@@ -17,6 +18,7 @@ export class ClearWaterComponent implements OnInit {
 
   @Output() open_sidebar: EventEmitter<any> = new EventEmitter<any>();
   @Input() service: any = {};
+  @ViewChild('swaggerSidebar') swaggerSidebar : SwaggerSidebarComponent;
   env: string;
   swagger_json;
   error: boolean = true;
@@ -60,6 +62,7 @@ export class ClearWaterComponent implements OnInit {
   historicalChangeTrendURI: string;
   isSlidebarLoading:boolean = false;
   isGraphloaded:boolean = false;
+  graphError:boolean = false;
 
 datasets;
 
@@ -234,7 +237,7 @@ graphPointsata = [{
   }
   callapi(event) {
     this.isloaded = false;
-    this.getData(event);
+    // this.getData(event);
   }
   onCWDetailsearch(data) {
     this.searchDetail_bar = data.searchString;
@@ -316,11 +319,34 @@ graphPointsata = [{
       'serviceId': `${this.service.domain}_${this.service.name}`,
       'swaggerDoc': swagger_json,
       'ntid': 'jazz',
-      'swaggerdId': `${this.service.domain}_${this.service.name}_${this.env}`
+      'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
     };
+    // debugger
     this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
       .subscribe(
         (response) => {
+          this.obj = response;
+          debugger
+          if (this.obj.results.errors == 0 && this.obj.results.warnings == 0) {
+            this.congratulations = true;
+          }
+
+          this.cw_obj = response.results;
+          this.cw_score = response.results.score;
+          this.cw_message = response.results.message;
+          var arr = response.results.details;
+          this.isloaded = true;
+          this.error = false;
+          this.cw_keysList = Object.keys(arr).map(key => {
+            return key;
+          });
+          this.cw_results = Object.keys(arr).map(key => {
+            return arr[key];
+          });
+          for (var i = 0; i < this.cw_results.length; i++) {
+            this.cw_results[i]["heading"] = this.cw_keysList[i];
+            this.cw_results[i].score = Math.abs(this.cw_results[i].score);
+          }
           this.historicalChangeTrendURI = response.links.historicalChangeTrendURI;
           this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
             this.graphData = this.formatGraphData(response.changeHistory);
@@ -331,16 +357,19 @@ graphPointsata = [{
           },
             (error) => {
               console.log('error', error)
+              this.graphError = true;
             });
         },
         (error) => {
-          console.log('error', error)
+          // this.isloaded = true;
+          // this.error = true;
         });
   }
 
   refresh() {
     this.isloaded = false;
-    this.getData();
+    // this.getData();
+    this.getSwaggerUrl(this.service.assets);
   }
   ngOnInit() {
 
@@ -355,7 +384,7 @@ graphPointsata = [{
   // };
     this.hidden=true;
     this.env=this.route.snapshot.params['env'];
-    this.getData();
+    // this.getData();
     this.getGraphData(this.swagger_json);
     this.datasets = this.formatGraphData(this.graphPointsata);
     this.data.currentMessage.subscribe(message=> message?this.servicePublishStatus(message): null)
@@ -387,6 +416,7 @@ graphPointsata = [{
 
   servicePublishStatus(message) {
     this.statusCompleted = false;
+    this.statusInfo = "Starting";
     this.serviceStatusCompleted = false;
     this.statusCompleted = false;
     this.progressCompleted = false;
@@ -404,7 +434,6 @@ graphPointsata = [{
             let currentStatus = respStatus.events[respStatus.events.length - 1].name;
             console.log('current status => ',currentStatus);
             if (respStatus.status.toLowerCase() === 'completed' && currentStatus === 'CLEARWATER_SEND_NOTIFICATION') {
-                this.statusCompleted = true;
                 this.serviceStatusCompleted = true;
                 this.serviceStatusPermissionD = true;
                 this.serviceStatusRepoD = true;
@@ -416,6 +445,8 @@ graphPointsata = [{
                 this.statusInfo = "Completed";
                 setTimeout(() => {
                     this.service_error = false;
+                    this.statusCompleted = true;
+                    this.swaggerSidebar.enableButton(true);
                 }, 5000);
             } else if (respStatus.status.toLowerCase() === 'failed') {
                 this.statusCompleted = false;
@@ -437,7 +468,7 @@ graphPointsata = [{
                 if (currentStatus === 'CLEARWATER_SEND_NOTIFICATION') {
                     // this.serviceStatusCompleted = true;
                     this.statusInfo = 'Sending Notification';
-                    this.statusprogress = 95;
+                    this.statusprogress = 93;
                     localStorage.removeItem('request_id' + this.service.name + this.service.domain);
                 } else if (currentStatus === 'CLEARWATER_RAISE_PR') {
                     this.serviceStatusPermissionD = true;
