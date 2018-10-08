@@ -238,6 +238,7 @@ graphPointsata = [{
   callapi(event) {
     this.isloaded = false;
     // this.getData(event);
+    this.getGraphData(event);
   }
   onCWDetailsearch(data) {
     this.searchDetail_bar = data.searchString;
@@ -249,51 +250,6 @@ graphPointsata = [{
 
   onRequestId(requestID){
     this.servicePublishStatus(requestID);
-  }
-
-  getData(payload?) {
-    let body;
-    if (!payload) {
-      var swaggerAsset = this.service.assets.find((asset) => {
-        return asset.type === 'swagger_url';
-      });
-      body = {
-        "url": swaggerAsset && swaggerAsset.provider_id
-      };
-      // }
-    } else {
-      body = payload;
-    }
-    this.subscription = this.http.post('/jazz/apilinter', body).subscribe(
-      (response) => {
-        this.obj = response;
-        if (this.obj.results.errors == 0 && this.obj.results.warnings == 0) {
-          this.congratulations = true;
-        }
-
-        this.cw_obj = response.results;
-        this.cw_score = response.results.score;
-        this.cw_message = response.results.message;
-        var arr = response.results.details;
-        this.isloaded = true;
-        this.error = false;
-        this.cw_keysList = Object.keys(arr).map(key => {
-          return key;
-        });
-        this.cw_results = Object.keys(arr).map(key => {
-          return arr[key];
-        });
-        for (var i = 0; i < this.cw_results.length; i++) {
-          this.cw_results[i]["heading"] = this.cw_keysList[i];
-          this.cw_results[i].score = Math.abs(this.cw_results[i].score);
-        }
-
-      },
-      (error) => {
-        this.isloaded = true;
-        this.error = true;
-      });
-
   }
 
   getSwaggerUrl(serviceAssets) {
@@ -321,12 +277,10 @@ graphPointsata = [{
       'ntid': 'jazz',
       'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
     };
-    // debugger
     this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
       .subscribe(
         (response) => {
           this.obj = response;
-          debugger
           if (this.obj.results.errors == 0 && this.obj.results.warnings == 0) {
             this.congratulations = true;
           }
@@ -361,20 +315,18 @@ graphPointsata = [{
             });
         },
         (error) => {
-          // this.isloaded = true;
-          // this.error = true;
+          this.isloaded = true;
+          this.error = true;
         });
   }
 
   refresh() {
     this.isloaded = false;
-    // this.getData();
     this.getSwaggerUrl(this.service.assets);
   }
   ngOnInit() {
 
     this.env = this.route.snapshot.params['env'];
-    this.getData();
     this.getSwaggerUrl(this.service.assets);
   }
 
@@ -384,7 +336,6 @@ graphPointsata = [{
   // };
     this.hidden=true;
     this.env=this.route.snapshot.params['env'];
-    // this.getData();
     this.getGraphData(this.swagger_json);
     this.datasets = this.formatGraphData(this.graphPointsata);
     this.data.currentMessage.subscribe(message=> message?this.servicePublishStatus(message): null)
@@ -401,9 +352,6 @@ graphPointsata = [{
   service_request_id: any;
   statusCompleted: boolean = false;
   serviceStatusCompleted: boolean = false;
-  // serviceStatusPermission: boolean = false;
-  // serviceStatusRepo: boolean = false;
-  // serviceStatusValidate: boolean = false;
   serviceStatusCompletedD: boolean = false;
   serviceStatusPermissionD: boolean = false;
   serviceStatusRepoD: boolean = false;
