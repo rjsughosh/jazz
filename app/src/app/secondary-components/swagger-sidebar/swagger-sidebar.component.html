@@ -7,10 +7,10 @@
 
     <section class="sidebar-details">
       <div class='sidebar-summary' (click)="summaryClicked('top')">
-        <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody1"></div>
+        <div class='icon-icon-up rotate-90' [class.rotate-180]="evaluateBody"></div>
         <div class="summary-text">Evaluate</div>
       </div>
-      <div class='publish-body'  [class.bodyshow]="publishBody1">
+      <div class='publish-body'  [class.bodyshow]="evaluateBody">
         <div class='json-cover' *ngIf='isloaded == "default"'>
           <div readonly id="target" class="line-numbers">
             <div *ngFor="let value of lineNumberCount; let i = index">{{i + 1}}</div>
@@ -27,10 +27,10 @@
     </section>
     <section class="sidebar-details" *ngIf="envSelected == 'prod'">
         <div class='sidebar-summary' (click)="summaryClicked('bottom')">
-            <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody2"></div>
+            <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody"></div>
             <div class="summary-text">Publish</div>
         </div>
-        <div class="publish-body" [class.bodyshow]="publishBody2">
+        <div class="publish-body" [class.bodyshow]="publishBody">
           <div class='publish-sections'>
             <div class="publish-sections-header">
               Description

@@ -530,8 +530,10 @@ min-height: 22rem;
 padding:0rem 0.5rem 2.5rem 0.5rem;
 }
 
-
-/deep/.chartjs-render-monitor{
-  height: 25rem !important;
+.graph-section-cover{
+  /deep/.chartjs-render-monitor{
+    height: 25rem !important;
+  }
 }
+
 

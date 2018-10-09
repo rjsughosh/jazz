@@ -266,6 +266,8 @@ graphPointsata = [{
         },
         (error) => {
           console.log('error', error);
+          this.isloaded = true;
+          this.error = true;
 
         }
       );
@@ -313,17 +315,23 @@ graphPointsata = [{
             this.cw_results[i].score = Math.abs(this.cw_results[i].score);
           }
           this.historicalChangeTrendURI = response.links.historicalChangeTrendURI;
-          this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
-            this.graphData = this.formatGraphData(response.changeHistory);
-            setTimeout(() => {
-              this.isGraphloaded = true;
-            },1000)
+          if(!sidebar){
+            this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
+              this.graphData = this.formatGraphData(response.changeHistory);
+              setTimeout(() => {
+                this.isGraphloaded = true;
+              },1000)
 
-          },
+            },
             (error) => {
               console.log('error', error)
               this.graphError = true;
             });
+          }
+          else{
+            this.swaggerSidebar.enableButton(true);
+          }
+
         },
         (error) => {
           this.isloaded = true;

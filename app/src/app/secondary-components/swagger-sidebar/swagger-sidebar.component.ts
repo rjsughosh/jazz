@@ -42,8 +42,8 @@ export class SwaggerSidebarComponent implements OnInit {
   applicationInput:any = "";
   foobarInput:any = "";
   notesInput:any = "";
-  publishBody1:boolean = true;
-  publishBody2:boolean = false;
+  evaluateBody:boolean = true;
+  publishBody:boolean = false;
   public lineNumberCount: any = new Array(40).fill('');
   requestId:string;
   publishBtnText:string = "PUBLISH";
@@ -106,6 +106,7 @@ export class SwaggerSidebarComponent implements OnInit {
   EvaluateJSON(){
     this.formatJSON();
     var payload = JSON.parse(this.swagger_json);
+    this.ispublishing = true;
     this.evaluate.emit(payload);
   }
 
@@ -182,12 +183,11 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   summaryClicked(position){
-    // debugger
     if(position === "top"){
-      this.publishBody1 = !this.publishBody1;
+      this.evaluateBody = !this.evaluateBody;
     }
     else{
-      this.publishBody2 = !this.publishBody2;
+      this.publishBody = !this.publishBody;
     }
   }
 
