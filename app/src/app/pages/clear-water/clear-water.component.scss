@@ -526,5 +526,12 @@ search-box{
   padding: 1.6rem 0;
 }
 .jz-chart{
-min-height: 17.5rem;
+min-height: 22rem;
+padding:0rem 0.5rem 2.5rem 0.5rem;
 }
+
+
+/deep/.chartjs-render-monitor{
+  height: 25rem !important;
+}
+
