@@ -29,6 +29,7 @@ export class ClearWaterComponent implements OnInit {
   oneObject: any;
   isloaded: boolean = false;
   expandText: string = 'Expand all';
+  evaluatePublish:string = 'EVALUATE';
   tableHeader = [];
   errMessage;
   search_text: string;
@@ -238,7 +239,7 @@ graphPointsata = [{
   callapi(event) {
     this.isloaded = false;
     // this.getData(event);
-    this.getGraphData(event);
+    this.getGraphData(event, 'sidebar');
   }
   onCWDetailsearch(data) {
     this.searchDetail_bar = data.searchString;
@@ -251,6 +252,7 @@ graphPointsata = [{
   onRequestId(requestID){
     this.servicePublishStatus(requestID);
   }
+
 
   getSwaggerUrl(serviceAssets) {
     const swaggerAsset = serviceAssets.find((asset) => {
@@ -270,13 +272,22 @@ graphPointsata = [{
     }
   }
 
-  getGraphData(swagger_json) {
-    const swaggerLintPayload = {
-      'serviceId': `${this.service.domain}_${this.service.name}`,
-      'swaggerDoc': swagger_json,
-      'ntid': 'jazz',
-      'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
-    };
+  getGraphData(swagger_json , sidebar?) {
+    let swaggerLintPayload;
+    if(sidebar === "sidebar"){
+      swaggerLintPayload = {
+        'swaggerDoc': swagger_json,
+      };
+    }
+    else{
+      swaggerLintPayload = {
+        'serviceId': `${this.service.domain}_${this.service.name}`,
+        'swaggerDoc': swagger_json,
+        'ntid': 'jazz',
+        'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
+      };
+    }
+
     this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
       .subscribe(
         (response) => {
@@ -328,6 +339,9 @@ graphPointsata = [{
 
     this.env = this.route.snapshot.params['env'];
     this.getSwaggerUrl(this.service.assets);
+    if(this.env == 'prod'){
+      this.evaluatePublish = 'EVALUATE / PUBLISH';
+    }
   }
 
 

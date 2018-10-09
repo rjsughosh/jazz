@@ -193,7 +193,7 @@ export class SwaggerSidebarComponent implements OnInit {
 
   publish(){
     this.ispublishing = true;
-    this.publishBtnText = "PUBSLISHING";
+    this.publishBtnText = "PUBLISHING";
     let payload = {
       service_id : this.service.id,
       service_name : this.service.name,

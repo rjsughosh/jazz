@@ -35,7 +35,7 @@ export class EnvironmentDetailComponent implements OnInit {
   status_inactive: boolean = false;
   swagger_error: boolean = false;
 
-  tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clear water'];
+  tabData = ['overview', 'deployments', 'code quality', 'assets', 'logs', 'clearwater'];
   envSelected: string = '';
   endpoint_env: string = '';
   environment = {
@@ -175,7 +175,7 @@ export class EnvironmentDetailComponent implements OnInit {
 
   setTabs() {
     if (this.service.serviceType === 'api' || this.service.type === 'api') {
-      this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs', 'clear water'];
+      this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs', 'clearwater'];
     } else if (this.service.serviceType === 'function' || this.service.type === 'function') {
       this.tabData = ['overview', 'deployments', 'assets', 'metrics', 'code quality', 'logs'];
     } else if (this.service.serviceType === 'website' || this.service.type === 'website') {

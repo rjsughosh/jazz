@@ -49,7 +49,7 @@ export const environment = {
   envName: "jazz",
   multi_env: false,
   serviceTabs: ['overview', 'access control', 'metrics', 'logs'],
-  environmentTabs: ['overview', 'deployments', 'code quality', 'assets', 'metrics', 'logs', 'clear water'],
+  environmentTabs: ['overview', 'deployments', 'code quality', 'assets', 'metrics', 'logs', 'clearwater'],
   urls: {
     docs_link: "https://docs.jazz.corporate.t-mobile.com",
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content",

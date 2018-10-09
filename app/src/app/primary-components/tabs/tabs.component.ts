@@ -31,7 +31,7 @@ export class TabsComponent implements OnInit {
     'deployments': true,
     'code quality': true,
     'assets': true,
-    'clear water': true
+    'clearwater': true
   };
 
   constructor() {
@@ -65,7 +65,7 @@ export class TabsComponent implements OnInit {
       if (tabs[i] == 'metrics') this.disableobj['metrics'] = false;
       if (tabs[i] == 'assets') this.disableobj['assets'] = false;
       if (tabs[i] == 'logs') this.disableobj['logs'] = false;
-      if (tabs[i] == 'clear water') this.disableobj['clear water'] = false;
+      if (tabs[i] == 'clearwater') this.disableobj['clearwater'] = false;
 
     }
   }

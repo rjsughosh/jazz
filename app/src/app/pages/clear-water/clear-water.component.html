@@ -24,10 +24,13 @@
       </div>
 
       <div class="current-meter-status saving">
-        <b>Current Status:</b> {{statusInfo}}
-        <span> .</span>
-        <span> .</span>
-        <span> .</span>
+        <span *ngIf="statusprogress === 100">Done. Please check your e-mail for PR details.</span>
+        <span *ngIf="statusprogress !== 100">
+            <b >Current Status:</b> {{statusInfo}}
+            <span> .</span>
+            <span> .</span>
+            <span> .</span>
+        </span>
       </div>
 
     </div>
@@ -71,7 +74,7 @@
         </div>
 
         <div class='cw-button'>
-          <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE / PUBLISH" class="testApiBtn" (click)='openSidebar()'
+          <btn-jazz-secondary *ngIf='!slideSidebar' text="{{evaluatePublish}}" class="testApiBtn" (click)='openSidebar()'
             [class.invisible]="isLoading"></btn-jazz-secondary>
           <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
             [class.invisible]="isLoading"></btn-jazz-secondary>
