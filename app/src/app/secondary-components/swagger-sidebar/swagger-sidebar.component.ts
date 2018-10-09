@@ -105,9 +105,7 @@ export class SwaggerSidebarComponent implements OnInit {
 
   EvaluateJSON(){
     this.formatJSON();
-    var payload = {
-      "swaggerDoc":this.swagger_json
-    }
+    var payload = JSON.parse(this.swagger_json);
     this.evaluate.emit(payload);
   }
 
