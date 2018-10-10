@@ -381,7 +381,7 @@ graphPointsata = [{
   deleting: boolean = false;
   private intervalSubscription: Subscription;
   service_request_id: any;
-  statusCompleted: boolean = false;
+  statusCompleted: boolean = true;
   serviceStatusCompleted: boolean = false;
   serviceStatusCompletedD: boolean = false;
   serviceStatusPermissionD: boolean = false;

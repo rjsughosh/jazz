@@ -215,7 +215,7 @@
 </div>
 
 <section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-  <swagger-sidebar #swaggerSidebar [envSelected]='env' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
+  <swagger-sidebar #swaggerSidebar [envSelected]='env' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
 
 </section>
 

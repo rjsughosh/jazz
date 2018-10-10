@@ -22,6 +22,7 @@ export class SwaggerSidebarComponent implements OnInit {
 
   @Input() service: any = {};
   @Input() envSelected: any = {};
+  @Input() ispublishing: boolean;
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRequestId: EventEmitter<any> = new EventEmitter<any>();
@@ -47,7 +48,6 @@ export class SwaggerSidebarComponent implements OnInit {
   public lineNumberCount: any = new Array(40).fill('');
   requestId:string;
   publishBtnText:string = "PUBLISH";
-  ispublishing:boolean = false;
 
 
   private http:any;
