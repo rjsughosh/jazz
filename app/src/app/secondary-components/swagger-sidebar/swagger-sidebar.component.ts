@@ -202,10 +202,16 @@ export class SwaggerSidebarComponent implements OnInit {
       username : this.service.created_by
     }
     this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
-      console.log(Response.data);
+      this.notesInput = '';
+      localStorage.setItem('request_id' + "_" + payload.service_name + "_" + payload.domain, JSON.stringify(
+        { service: this.service.name,
+          domain: this.service.domain,
+          request_id: Response.data.request_id
+        }));
       this.onRequestId.emit(Response.data.request_id);
     },
     (err) => {
+      this.notesInput = '';
       this.publishBtnText = "PUBLISH";
       this.ispublishing = false;
     });

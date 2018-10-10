@@ -37,6 +37,7 @@ export class ClearWaterComponent implements OnInit {
   paginationSelected: Boolean = false;
   warningSelected: boolean;
   search_bar: string;
+  reqJson:any;
   searchDetail_bar: string;
   detailView: boolean = true;
   slideSidebar: boolean = false;
@@ -350,6 +351,15 @@ graphPointsata = [{
     if(this.env == 'prod'){
       this.evaluatePublish = 'EVALUATE / PUBLISH';
     }
+    try{
+      this.reqJson = JSON.parse(localStorage.getItem('request_id'+"_"+this.service.name+"_"+this.service.domain));
+      if(this.reqJson){
+        this.servicePublishStatus(this.reqJson.request_id);
+      }
+    }
+    catch(e){
+      console.log(e)
+    }
   }
 
 
@@ -360,7 +370,6 @@ graphPointsata = [{
     this.env=this.route.snapshot.params['env'];
     this.getGraphData(this.swagger_json);
     this.datasets = this.formatGraphData(this.graphPointsata);
-    this.data.currentMessage.subscribe(message=> message?this.servicePublishStatus(message): null)
   }
 
 
@@ -413,6 +422,7 @@ graphPointsata = [{
                 this.hidden = true;
                 this.intervalSubscription.unsubscribe();
                 this.statusInfo = "Completed";
+                localStorage.removeItem('request_id_' + this.service.name + '_' + this.service.domain);
                 setTimeout(() => {
                     this.service_error = false;
                     this.statusCompleted = true;
@@ -439,7 +449,7 @@ graphPointsata = [{
                     // this.serviceStatusCompleted = true;
                     this.statusInfo = 'Sending Notification';
                     this.statusprogress = 93;
-                    localStorage.removeItem('request_id' + this.service.name + this.service.domain);
+                    localStorage.removeItem('request_id_' + this.service.name + '_' + this.service.domain);
                 } else if (currentStatus === 'CLEARWATER_RAISE_PR') {
                     this.serviceStatusPermissionD = true;
                     this.statusInfo = 'Raising PR';
