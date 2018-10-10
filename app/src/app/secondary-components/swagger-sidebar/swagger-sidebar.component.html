@@ -8,9 +8,12 @@
     <section class="sidebar-details">
       <div class='sidebar-summary' (click)="summaryClicked('top')">
         <div class='icon-icon-up rotate-90' [class.rotate-180]="evaluateBody"></div>
-        <div class="summary-text">Evaluate</div>
+        <div class="summary-text">Evaluate
+        </div>
       </div>
       <div class='publish-body'  [class.bodyshow]="evaluateBody">
+        <div class='swaggerhelp-text'>Change your swagger here and evaluate against Clearwater Linter<br> <i>Note: Changes here will not be persisted.</i></div>
+
         <div class='json-cover' *ngIf='isloaded == "default"'>
           <div readonly id="target" class="line-numbers">
             <div *ngFor="let value of lineNumberCount; let i = index">{{i + 1}}</div>
@@ -28,9 +31,12 @@
     <section class="sidebar-details" *ngIf="envSelected == 'prod'">
         <div class='sidebar-summary' (click)="summaryClicked('bottom')">
             <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody"></div>
-            <div class="summary-text">Publish</div>
+            <div class="summary-text">Publish
+
+            </div>
         </div>
         <div class="publish-body" [class.bodyshow]="publishBody">
+          <div class='swaggerhelp-text'>Publish your swagger to Clearwater repository</div>
           <div class='publish-sections'>
             <div class="publish-sections-header">
               Description
