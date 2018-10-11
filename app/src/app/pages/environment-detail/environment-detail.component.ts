@@ -108,7 +108,8 @@ export class EnvironmentDetailComponent implements OnInit {
     if (service === undefined) {
       return {};
     } else {
-      return {
+
+      let returnObject = {
         id: service.id,
         name: service.service,
         serviceType: service.type,
@@ -116,7 +117,12 @@ export class EnvironmentDetailComponent implements OnInit {
         status: service.status,
         domain: service.domain,
         repository: service.repository
+      };
+      if (service.deployment_targets && service.deployment_targets[service.type]){
+      returnObject["deployment_targets"] = service.deployment_targets[service.type].S || service.deployment_targets[service.type];
       }
+      return returnObject;
+
     }
   };
 
