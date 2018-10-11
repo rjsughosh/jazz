@@ -283,8 +283,7 @@ graphPointsata = [{
       };
     }
     else{
-      swaggerLintPayload = {
-        'serviceId': `${this.service.domain}_${this.service.name}`,
+      swaggerLintPayload ={
         'swaggerDoc': swagger_json,
         'ntid': 'jazz',
         'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`

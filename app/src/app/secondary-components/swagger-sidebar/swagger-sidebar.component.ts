@@ -24,12 +24,13 @@ export class SwaggerSidebarComponent implements OnInit {
   @Input() service: any = {};
   @Input() envSelected: any = {};
   @Input() ispublishing: boolean;
+  @Input() assets: any = [];
+  @Input() swagger_json: any;
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRequestId: EventEmitter<any> = new EventEmitter<any>();
 
   swaggerAsset:any;
-  swagger_json:any;
   validityMessage:string;
   valid:boolean = true;
   isloaded:string = 'default';
@@ -39,7 +40,6 @@ export class SwaggerSidebarComponent implements OnInit {
   cw_results;
   cw_obj:any={};
   obj:any = {};
-  assets;
   foundAsset;
   applicationInput:any = "";
   foobarInput:any = "";
@@ -66,7 +66,12 @@ export class SwaggerSidebarComponent implements OnInit {
    }
 
   ngOnInit() {
-
+  }
+  formatSwagger(){
+    if(this.swagger_json){
+      this.swagger_json = JSON.stringify(this.swagger_json);
+      this.swagger_json = this.stringToPrettyString(this.swagger_json);
+    }
   }
 
   enableButton(event){
@@ -220,12 +225,10 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   ngOnChanges(){
-    if(this.service.hasOwnProperty('id')){
+    if(this.service.hasOwnProperty('id') && !this.assets && !this.swagger_json){
       this.getassets();
-
-
+    }else{
+      this.formatSwagger();
     }
   }
-
-
 }
