@@ -290,7 +290,7 @@ graphPointsata = [{
         'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
       };
     }
-
+    
     this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
       .subscribe(
         (response) => {
@@ -400,6 +400,7 @@ graphPointsata = [{
     this.statusCompleted = false;
     this.progressCompleted = false;
     this.service_error = true;
+    this.statusFailed = false;
     if(message || message===null){
     this.statusprogress = 5;
     this.hidden = false;
@@ -411,7 +412,6 @@ graphPointsata = [{
             dataResponse.list = response;
             var respStatus = dataResponse.list.data;
             let currentStatus = respStatus.events[respStatus.events.length - 1].name;
-            console.log('current status => ',currentStatus);
             if (respStatus.status.toLowerCase() === 'completed' && currentStatus === 'CLEARWATER_SEND_NOTIFICATION') {
                 this.serviceStatusCompleted = true;
                 this.serviceStatusPermissionD = true;
@@ -429,8 +429,8 @@ graphPointsata = [{
                     this.swaggerSidebar.enableButton(true);
                 }, 5000);
             } else if (respStatus.status.toLowerCase() === 'failed') {
-                this.statusCompleted = false;
                 this.statusFailed = true;
+                this.service_error = true;
                 this.serviceStatusStarted = false;
                 this.serviceStatusStartedD = true;
                 this.serviceStatusCompletedD = true;
@@ -438,8 +438,9 @@ graphPointsata = [{
                 this.serviceStatusRepoD = true;
                 this.serviceStatusValidateD = true;
                 this.statusInfo = 'Creation failed';
+                localStorage.removeItem('cw_request_id_' + this.service.name + '_' + this.service.domain);
                 setTimeout(() => {
-                    this.service_error = false;
+                    this.statusCompleted = true;
                 }, 5000);
 
             } else {

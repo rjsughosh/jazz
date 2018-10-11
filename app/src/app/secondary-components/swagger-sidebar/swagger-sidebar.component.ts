@@ -11,6 +11,7 @@ import { RequestService ,MessageService} from "../../core/services";
 import {RelaxedJsonService} from "../../core/helpers/relaxed-json.service";
 import {ToasterService} from 'angular2-toaster';
 import { DataService } from '../../pages/data-service/data.service';
+import { environment } from './../../../environments/environment';
 
 
 @Component({
@@ -48,6 +49,7 @@ export class SwaggerSidebarComponent implements OnInit {
   public lineNumberCount: any = new Array(40).fill('');
   requestId:string;
   publishBtnText:string = "PUBLISH";
+  environmentVars = environment.urls || {};
 
 
   private http:any;

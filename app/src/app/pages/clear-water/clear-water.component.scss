@@ -430,6 +430,15 @@ search-box{
       color:#5cae01;
  }
 }
+.deletion-bar{
+    background-color: red !important;
+    box-shadow: 0px 0px 3px 1px red!important;
+    width: 100%!important;
+    // background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(88,99,34)), color-stop(1, rgb(79,98,43)) );
+    .status-lable{
+        color:red!important;
+   }
+}
 .current-status-wrap{
   z-index: 101!important;
   margin-bottom: 2rem;
