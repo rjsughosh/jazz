@@ -364,11 +364,8 @@ graphPointsata = [{
 
   ngOnDestroy() {
     this.closeSidebar();
-  // };
     this.hidden=true;
     this.env=this.route.snapshot.params['env'];
-    this.getGraphData(this.swagger_json);
-    this.datasets = this.formatGraphData(this.graphPointsata);
   }
 
 
