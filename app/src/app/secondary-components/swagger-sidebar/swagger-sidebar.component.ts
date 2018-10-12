@@ -68,7 +68,7 @@ export class SwaggerSidebarComponent implements OnInit {
   ngOnInit() {
   }
   formatSwagger(){
-    if(this.swagger_json){
+    if(this.swagger_json && typeof(this.swagger_json) !== 'string' ){
       this.swagger_json = JSON.stringify(this.swagger_json);
       this.swagger_json = this.stringToPrettyString(this.swagger_json);
     }
