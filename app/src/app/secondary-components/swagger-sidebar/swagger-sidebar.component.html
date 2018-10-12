@@ -1,20 +1,57 @@
 <div class='bar-cover relative' [class.removepadding]="isloaded == 'popup'">
-    <div *ngIf='isloaded == "default"'>
-        <div class='relative'>
-            <div class='icon-icon-close closeicon pointer' (click)='closeBar()'></div>
+  <div *ngIf='isloaded == "default"'>
+    <div class='relative'>
+      <div class='service-name'>{{service.name}}</div>
+      <div class='icon-icon-close closeicon pointer' (click)='closeBar()'></div>
+    </div>
+
+    <section class="sidebar-details">
+      <div class='sidebar-summary' (click)="summaryClicked('top')">
+        <div class='icon-icon-up rotate-90' [class.rotate-180]="evaluateBody"></div>
+        <div class="summary-text">Evaluate
         </div>
+      </div>
+      <div class='publish-body'  [class.bodyshow]="evaluateBody">
+        <div class='swaggerhelp-text'>Change your swagger here and evaluate against Clearwater Linter<br> <i>Note: Changes here will not be persisted.</i></div>
+
         <div class='json-cover' *ngIf='isloaded == "default"'>
-            <div readonly id="target" class="line-numbers">
-                <div *ngFor="let value of lineNumberCount; let i = index" >{{i + 1}}</div>
-            </div>            
-            <textarea id="source" (scroll)='ontextareaScroll()' [(ngModel)]='swagger_json' (ngModelChange)="lineNumbers()" class='json-input-area'></textarea>
+          <div readonly id="target" class="line-numbers">
+            <div *ngFor="let value of lineNumberCount; let i = index">{{i + 1}}</div>
+          </div>
+          <textarea id="source" (scroll)='ontextareaScroll()' [(ngModel)]='swagger_json' (ngModelChange)="lineNumbers()"
+            class='json-input-area'></textarea>
         </div>
         <div class='btn-cover'>
-            <a class='primary pointer' (click)='formatJSON()'>FORMAT JSON</a>
-            <btn-jazz-primary class='primary' text='EVALUATE' (click)='EvaluateJSON()'></btn-jazz-primary>
+          <a class='primary pointer' (click)='formatJSON()'>FORMAT JSON</a>
+          <btn-jazz-primary [disablePrimaryBtn]="ispublishing" class='primary' text='EVALUATE' (click)='EvaluateJSON()'></btn-jazz-primary>
         </div>
         <p *ngIf="!valid" class="jz-text-error">{{validityMessage}}</p>
-    </div>  
-   
-</div>
+      </div>
+    </section>
+    <section class="sidebar-details" *ngIf="envSelected == 'prod'">
+        <div class='sidebar-summary' (click)="summaryClicked('bottom')">
+            <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody"></div>
+            <div class="summary-text">Publish
 
+            </div>
+        </div>
+        <div class="publish-body" [class.bodyshow]="publishBody">
+          <div class='swaggerhelp-text'>Publish your swagger to <a target="_blank" href="{{environmentVars.clearwaterAppUrl}}">Clearwater</a> repository</div>
+          <div class='publish-sections'>
+            <div class="publish-sections-header">
+              Description
+            </div>
+            <div class="publish-sections-textinput">
+              <textarea placeholder="Enter Description" rows="5" type="text" class="textForm textForm-area" [(ngModel)]='notesInput'></textarea>
+            </div>
+          </div>
+          <div class='publish-sections'>
+            <btn-jazz-primary class='primary' [disablePrimaryBtn]="ispublishing" text='{{publishBtnText}}' (click)='publish()'></btn-jazz-primary>
+          </div>
+
+        </div>
+    </section>
+
+  </div>
+
+</div>

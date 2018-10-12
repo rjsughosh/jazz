@@ -10,6 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService ,MessageService} from "../../core/services";
 import {RelaxedJsonService} from "../../core/helpers/relaxed-json.service";
 import {ToasterService} from 'angular2-toaster';
+import { DataService } from '../../pages/data-service/data.service';
+import { environment } from './../../../environments/environment';
 
 
 @Component({
@@ -21,11 +23,14 @@ export class SwaggerSidebarComponent implements OnInit {
 
   @Input() service: any = {};
   @Input() envSelected: any = {};
+  @Input() ispublishing: boolean;
+  @Input() assets: any = [];
+  @Input() swagger_json: any;
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onRequestId: EventEmitter<any> = new EventEmitter<any>();
 
   swaggerAsset:any;
-  swagger_json:any;
   validityMessage:string;
   valid:boolean = true;
   isloaded:string = 'default';
@@ -35,9 +40,16 @@ export class SwaggerSidebarComponent implements OnInit {
   cw_results;
   cw_obj:any={};
   obj:any = {};
-  assets;
   foundAsset;
+  applicationInput:any = "";
+  foobarInput:any = "";
+  notesInput:any = "";
+  evaluateBody:boolean = true;
+  publishBody:boolean = false;
   public lineNumberCount: any = new Array(40).fill('');
+  requestId:string;
+  publishBtnText:string = "PUBLISH";
+  environmentVars = environment.urls || {};
 
 
   private http:any;
@@ -47,16 +59,24 @@ export class SwaggerSidebarComponent implements OnInit {
     private router: Router,
     private request:RequestService,
     private relaxedJson: RelaxedJsonService,
+    private data : DataService
   ) {
     this.http = request;
 
    }
 
-
-
-
   ngOnInit() {
+  }
+  formatSwagger(){
+    if(this.swagger_json && typeof(this.swagger_json) !== 'string' ){
+      this.swagger_json = JSON.stringify(this.swagger_json);
+      this.swagger_json = this.stringToPrettyString(this.swagger_json);
+    }
+  }
 
+  enableButton(event){
+    this.ispublishing = false;
+    this.publishBtnText = "PUBLISH";
   }
 
   closeBar(){
@@ -92,9 +112,8 @@ export class SwaggerSidebarComponent implements OnInit {
 
   EvaluateJSON(){
     this.formatJSON();
-    var payload = {
-      "swaggerDoc":this.swagger_json
-    }
+    var payload = JSON.parse(this.swagger_json);
+    this.ispublishing = true;
     this.evaluate.emit(payload);
   }
 
@@ -169,13 +188,47 @@ export class SwaggerSidebarComponent implements OnInit {
   goback(){
     this.isloaded='default';
   }
-  ngOnChanges(){
-    if(this.service.hasOwnProperty('id')){
-      this.getassets();
 
-
+  summaryClicked(position){
+    if(position === "top"){
+      this.evaluateBody = !this.evaluateBody;
+    }
+    else{
+      this.publishBody = !this.publishBody;
     }
   }
 
+  publish(){
+    this.ispublishing = true;
+    this.publishBtnText = "PUBLISHING";
+    let payload = {
+      service_id : this.service.id,
+      service_name : this.service.name,
+      domain : this.service.domain,
+      description: this.notesInput,
+      username : this.service.created_by
+    }
+    this.http.post('/jazz/publish-to-clearwater', payload).subscribe((Response) => {
+      this.notesInput = '';
+      localStorage.setItem('cw_request_id' + "_" + payload.service_name + "_" + payload.domain, JSON.stringify(
+        { service: this.service.name,
+          domain: this.service.domain,
+          request_id: Response.data.request_id
+        }));
+      this.onRequestId.emit(Response.data.request_id);
+    },
+    (err) => {
+      this.notesInput = '';
+      this.publishBtnText = "PUBLISH";
+      this.ispublishing = false;
+    });
+  }
 
+  ngOnChanges(){
+    if(this.service.hasOwnProperty('id') && !this.assets && !this.swagger_json){
+      this.getassets();
+    }else{
+      this.formatSwagger();
+    }
+  }
 }
