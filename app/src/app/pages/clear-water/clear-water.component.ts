@@ -49,82 +49,12 @@ export class ClearWaterComponent implements OnInit {
   close: boolean = false;
   closed: boolean = false;
   hidden:boolean = true;
-  options: any = {
-    "fromDateISO": "2018-09-19T11:26:32.065Z",
-    "fromDateValue": 1537356392065,
-    "stepSize": 900000,
-    "toDateISO": "2018-09-20T11:26:34.543Z",
-    "toDateValue": 1537442794543,
-    "tooltipXFormat": "MMM DD YYYY, h:mm a",
-    "xAxisFormat": "h:mm a",
-    "yMax": 100,
-    "yMin": 0,
-  }
   public graphData;
   historicalChangeTrendURI: string;
   isSlidebarLoading:boolean = false;
   isGraphloaded:boolean = false;
   graphError:boolean = false;
-
-datasets;
-
-graphPointsata = [{
-
-  "Timestamp": "2018-06-22T17:03:18.239Z",
-  "Sum": 0,
-},
-{
-  "Timestamp": "2018-06-22T17:18:37.707Z",
-  "Sum": 67,
-},
-{
-  "Timestamp": "2018-06-27T15:15:23.985Z",
-  "Sum": 62,
-},
-{
-  "Timestamp": "2018-06-28T21:07:05.160Z",
-  "Sum": 62,
-},
-{
-  "Timestamp": "2018-07-02T16:14:47.094Z",
-  "Sum": 48,
-},
-{
-  "Timestamp": "2018-07-05T14:53:43.135Z",
-  "Sum": 48,
-},
-{
-  "Timestamp": "2018-07-06T17:33:59.536Z",
-  "Sum": 48,
-},
-{
-  "Timestamp": "2018-07-17T21:36:29.604Z",
-  "Sum": 50,
-},
-{
-  "Timestamp": "2018-07-25T21:29:25.983Z",
-  "Sum": 50,
-},
-{
-  "Timestamp": "2018-07-28T19:37:29.123Z",
-  "Sum": 46,
-},
-{
-  "Timestamp": "2018-07-31T18:28:17.367Z",
-  "Sum": 48,
-},
-{
-  "Timestamp": "2018-08-02T14:43:01.762Z",
-  "Sum": 46,
-},
-{
-  "Timestamp": "2018-08-14T21:55:38.705Z",
-  "Sum": 50,
-},
-{
-  "Timestamp": "2018-08-17T18:25:08.614Z",
-  "Sum": 50,
-}];
+  datasets;
 
   constructor(
     private request: RequestService,
@@ -177,7 +107,7 @@ graphPointsata = [{
   formatGraphData(metricData) {
     let valueProperty = "score";
 
-    let values = metricData
+    let values = metricData.slice(-5) //take last 25 points only.
       .sort((pointA, pointB) => {
         return moment(pointA.dateTimeGMT).diff(moment(pointB.dateTimeGMT));
       })
@@ -189,9 +119,10 @@ graphPointsata = [{
       });
 
     let timeRange = {
-      format: 'h: mm a',
-      range: moment().subtract(1, 'day').toISOString() // setting from date as 24hrs
+      format: 'MM DD YYYY h: mm a',
+      range: moment(values[0].x).toISOString() //selecting the first date value
     };
+    
     let options = {
       tooltipXFormat: 'MM DD YYYY, h:mm a',
       fromDateISO: timeRange.range,
@@ -199,7 +130,7 @@ graphPointsata = [{
       toDateISO: moment().toISOString(),
       s: moment().valueOf(),
       xAxisFormat: timeRange.format,
-      stepSize: 1000,
+      stepSize: 3600000,
       yMin: values.length ?
         .9 * (values.map((point) => {
           return point.y;
@@ -318,6 +249,7 @@ graphPointsata = [{
           if(!sidebar){
             this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
               this.graphData = this.formatGraphData(response.changeHistory);
+              console.log("cw-data", JSON.stringify(this.graphData));
               setTimeout(() => {
                 this.isGraphloaded = true;
               },1000)
