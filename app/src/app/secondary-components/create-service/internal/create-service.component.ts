@@ -1277,7 +1277,6 @@ blurApplication(){
     this.oneSelected=false;
     this.selectApp={};
     this.app_placeH='Start typing...';
-    console.log(approver);
     // this.application_arr.push(approver);
     let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
     this.application_arr = x(this.application_arr);
