@@ -618,6 +618,7 @@ export class CreateServiceComponent implements OnInit {
       this.cdnConfigSelected = true;
       this.gitprivateSelected = false;
       this.gitCloneSelected = false;
+      this.app_placeH='Start typing...';
     }, 2000)
 
 
@@ -1261,12 +1262,13 @@ blurApplication(){
     this.showApplicationList = false;
     thisclass.applc = '';
     this.selectedApplications.push(app);
-    for (var i = 0; i < this.application_arr.length; i++) {
-      if (this.application_arr[i].appName === app.appName) {
-        this.application_arr.splice(i, 1);
-        return;
-      }
-    }
+    // for (var i = 0; i < this.application_arr.length; i++) {
+    //   if (this.application_arr[i].appName === app.appName) {
+    //     this.application_arr.splice(i, 1);
+       
+    //   }
+    // }
+    return;
 
   }
   removeApplication(index, approver) {
