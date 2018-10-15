@@ -1262,12 +1262,6 @@ blurApplication(){
     this.showApplicationList = false;
     thisclass.applc = '';
     this.selectedApplications.push(app);
-    // for (var i = 0; i < this.application_arr.length; i++) {
-    //   if (this.application_arr[i].appName === app.appName) {
-    //     this.application_arr.splice(i, 1);
-       
-    //   }
-    // }
     let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
     this.application_arr = x(this.application_arr);
     return;
