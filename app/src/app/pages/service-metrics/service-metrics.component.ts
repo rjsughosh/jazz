@@ -247,7 +247,6 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
     }
 
     this.graphData = this.formatGraphData(this.selectedMetric.datapoints);
-    console.log("metrics-data", JSON.stringify(this.graphData));
   }
 
   formatGraphData(metricData) {
