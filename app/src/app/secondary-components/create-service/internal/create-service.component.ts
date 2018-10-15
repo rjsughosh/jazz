@@ -1268,6 +1268,8 @@ blurApplication(){
        
     //   }
     // }
+    let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
+    this.application_arr = x(this.application_arr);
     return;
 
   }
@@ -1275,7 +1277,10 @@ blurApplication(){
     this.oneSelected=false;
     this.selectApp={};
     this.app_placeH='Start typing...';
-    this.application_arr.push(approver);
+    console.log(approver);
+    // this.application_arr.push(approver);
+    let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
+    this.application_arr = x(this.application_arr);
     this.selectedApplications.splice(index, 1);
   }
   start_at:number=0;
