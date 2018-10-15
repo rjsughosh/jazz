@@ -119,12 +119,12 @@ export class ClearWaterComponent implements OnInit {
       });
 
     let timeRange = {
-      format: 'MM DD YYYY h: mm a',
+      format: 'MM-DD-YYYY h:mm A',
       range: moment(values[0].x).toISOString() //selecting the first date value
     };
     
     let options = {
-      tooltipXFormat: 'MM DD YYYY, h:mm a',
+      tooltipXFormat: 'MM-DD-YYYY h:mm A',
       fromDateISO: timeRange.range,
       fromDateValue: moment(timeRange.range).valueOf(),
       toDateISO: moment().toISOString(),
