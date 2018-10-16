@@ -543,6 +543,7 @@ export class CreateServiceComponent implements OnInit {
         this.serviceRequestSuccess = true;
         this.serviceRequestFailure = false;
         this.isLoading = false;
+        this.app_placeH='Start typing...';
         // this.cache.set('request_id',output.data.request_id);
         // var index = output.data.indexOf("https://");
         // this.serviceLink = output.data.slice(index, output.data.length);
@@ -618,7 +619,6 @@ export class CreateServiceComponent implements OnInit {
       this.cdnConfigSelected = true;
       this.gitprivateSelected = false;
       this.gitCloneSelected = false;
-      this.app_placeH='Start typing...';
     }, 2000)
 
 
