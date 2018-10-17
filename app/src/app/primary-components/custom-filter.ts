@@ -9,7 +9,7 @@ export class MyFilterPipe implements PipeTransform {
     transform(items: any[], filter: any): any {
         if (!items || !filter || filter.length < 3) {
             if(items !== undefined)
-                return items.slice(0,500);//limiting number of rows in items for performance
+                return items;
             else
                 return items;
         } else if(items.length > 0){            
