@@ -112,29 +112,32 @@ export class ServiceDetailComponent implements OnInit {
   close: boolean = false;
   closed: boolean = false;
   processService(service) {
+    var meta;
     if (service === undefined) {
       return {};
     } else {
       service = this.fixMetadata(service);
       if (service.metadata) {
         service.metadata = this.addEventSource(service.metadata);
+        meta = service.metadata;
       }
+     
       var returnObject = {
         id: service.id,
-        name: service.service,
-        serviceType: service.type,
-        runtime: service.runtime,
-        status: service.status.replace('_', ' '),
-        description: service.description,
-        approvers: service.approvers,
-        domain: service.domain,
-        email: service.email,
-        slackChannel: service.slack_channel,
-        repository: service.repository,
-        tags: service.tags,
-        endpoints: service.endpoints,
-        is_public_endpoint: service.is_public_endpoint,
-        created_by: service.created_by
+        name: meta.name || service.service,
+        serviceType: meta.type || service.type,
+        runtime: meta.providerRuntime || service.runtime,
+        status: meta.status || service.status.replace('_', ' '),
+        description: meta.description || service.description,
+        approvers: meta.approvers || service.approvers,
+        domain: meta.domain || service.domain,
+        email: meta.email || service.email,
+        slackChannel: meta.slack_channel || service.slack_channel,
+        repository: meta.repository || service.repository,
+        tags: meta.tags || service.tags,
+        endpoints: meta.endpoints || service.endpoints,
+        is_public_endpoint: meta.is_public_endpoint || service.is_public_endpoint,
+        created_by: meta.created_by || service.created_by
       }
       if (service.metadata) {
         returnObject["create_cloudfront_url"] = service.metadata.create_cloudfront_url;

@@ -59,12 +59,12 @@ export class ServiceOverviewComponent implements OnInit {
     show_loader: boolean = false;
     plc_hldr: boolean = true;
     status_empty: boolean;
-    description_empty: boolean;
+    description_empty: boolean = true;
     approvers_empty: boolean;
     domain_empty: boolean;
     serviceType_empty: boolean;
     email_empty: boolean;
-    slackChannel_empty: boolean;
+    slackChannel_empty: boolean = false;
     repository_empty: boolean;
     runtime_empty: boolean = false;
     tags_empty: boolean;
@@ -150,7 +150,7 @@ export class ServiceOverviewComponent implements OnInit {
     oneSelected: boolean = false;
     app_placeH: string = 'Start typing...';
     applc: string;
-    isSlackAvailable: boolean = true;
+    isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
     PutPayload: any;
     isPayloadAvailable: boolean = false;
@@ -273,6 +273,8 @@ export class ServiceOverviewComponent implements OnInit {
     ) {
         this.http = request;
         this.toastmessage = messageservice;
+        this.description_empty = true;
+        this.isSlackAvailable = false;
     }
 
     copy_link(id) {
@@ -339,6 +341,17 @@ export class ServiceOverviewComponent implements OnInit {
 
     showService(s) {
 
+    }
+
+    onTextAreaChange(desc_temp){
+        // update_payload.description=desc_temp
+        this.update_payload.description = desc_temp;
+        if(desc_temp){
+            this.description_empty = false;
+        }
+        else{
+            this.description_empty = true;
+        }
     }
 
     loadPlaceholders() {
@@ -530,6 +543,7 @@ export class ServiceOverviewComponent implements OnInit {
         if (this.service.app_name && this.selectedApplications.length == 0)
             this.selectApplication(appobj);
         this.disp_show = false;
+        console.log(this.service);
         // debugger
 
     }
@@ -650,9 +664,10 @@ export class ServiceOverviewComponent implements OnInit {
         this.disp_show2 = true;
         this.edit_save = 'EDIT';
         this.showCancel = false;
+        this.description_empty = true;
         this.hide_email_error = true;
         this.hide_slack_error = true;
-        this.isSlackAvailable = true;
+        this.isSlackAvailable = false;
         if (this.subscription != undefined)
             this.subscription.unsubscribe();
         this.show_loader = false;
@@ -991,10 +1006,10 @@ export class ServiceOverviewComponent implements OnInit {
         this.isenvLoading = true;
         this.ErrEnv = false;
         if (this.service == undefined) { return }
+        console.log(this.service)
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
         this.http.get('/jazz/environments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
             response => {
-
                 this.isenvLoading = false;
                 this.environ_arr = response.data.environment;
                 if (this.environ_arr != undefined)

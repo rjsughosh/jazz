@@ -141,7 +141,7 @@
       </div>
     </summary>
     <div *ngIf='!disp_show' class='down-btn-wrap'>
-      <btn-jazz-primary  [disablePrimaryBtn]="!isSlackAvailable" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+      <btn-jazz-primary  [disablePrimaryBtn]="description_empty && !isSlackAvailable" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
       <a (click)="onCancelClick()">CANCEL</a>
     </div>
     <div class='metadata-body relative metadata-body-border'>
@@ -166,7 +166,7 @@
           <li>
             <div class="det-label">Description</div>
             <div *ngIf='disp_show' class="det-value wrap" [ngClass]="{PlaceHolder:description_empty}">{{service.description || 'Give details for your service'}}</div>
-            <textarea *ngIf='!disp_show' [(ngModel)]="desc_temp" (ngModelChange)='update_payload.description=desc_temp' class="det-value-input-txtarea"
+            <textarea *ngIf='!disp_show' [(ngModel)]="desc_temp" (ngModelChange)='onTextAreaChange(desc_temp)' class="det-value-input-txtarea"
               placeholder="Give the details for your service"></textarea>
           </li>
         </ul>

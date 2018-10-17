@@ -14,7 +14,6 @@ export class MyFilterPipe implements PipeTransform {
                 return items;
         } else if(items.length > 0){            
             if(items[0].appName){
-                console.log("a");
                 return items.filter(item => item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
             }
             if(items[0].heading){
