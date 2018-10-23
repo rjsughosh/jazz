@@ -131,16 +131,16 @@ export class ServiceDetailComponent implements OnInit {
         description: service.description,
         approvers: meta.approvers || service.approvers,
         domain: meta.domain || service.domain,
-        email: meta.email || service.email,
-        slackChannel: meta.slack_channel || service.slack_channel,
-        repository: meta.repository || service.repository,
+        email:  service.email,
+        slackChannel:  service.slack_channel,
+        repository:  service.repository,
         tags: meta.tags || service.tags,
         endpoints: meta.endpoints || service.endpoints,
         is_public_endpoint: meta.is_public_endpoint || service.is_public_endpoint,
         created_by: meta.created_by || service.created_by,
         approvalTimeoutInMins : meta.approvalTimeoutInMins,
         providerMemorySize : meta.providerMemorySize,
-        
+
 
       }
       if (service.metadata) {
