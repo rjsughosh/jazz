@@ -1271,8 +1271,8 @@ blurApplication(){
     this.showApplicationList = false;
     thisclass.applc = '';
     this.selectedApplications.push(app);
-    let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
-    this.application_arr = x(this.application_arr);
+    let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+    this.application_arr = nonRepeatedData(this.application_arr);
     return;
 
   }
@@ -1281,8 +1281,8 @@ blurApplication(){
     this.selectApp={};
     this.appPlaceHolder='Start typing...';
     // this.application_arr.push(approver);
-    let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
-    this.application_arr = x(this.application_arr);
+    let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+    this.application_arr = nonRepeatedData(this.application_arr);
     this.selectedApplications.splice(index, 1);
   }
   start_at:number=0;
