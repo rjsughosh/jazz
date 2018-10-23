@@ -123,12 +123,12 @@ export class ServiceDetailComponent implements OnInit {
       }
      
       var returnObject = {
-        id: service.id,
-        name: meta.name || service.service,
+        id: meta.app_id || service.id,
+        name: service.service,
         serviceType: meta.type || service.type,
         runtime: meta.providerRuntime || service.runtime,
-        status: meta.status || service.status.replace('_', ' '),
-        description: meta.description || service.description,
+        status: meta.status.replace('_', ' ') || service.status.replace('_', ' '),
+        description: service.description,
         approvers: meta.approvers || service.approvers,
         domain: meta.domain || service.domain,
         email: meta.email || service.email,
@@ -137,7 +137,11 @@ export class ServiceDetailComponent implements OnInit {
         tags: meta.tags || service.tags,
         endpoints: meta.endpoints || service.endpoints,
         is_public_endpoint: meta.is_public_endpoint || service.is_public_endpoint,
-        created_by: meta.created_by || service.created_by
+        created_by: meta.created_by || service.created_by,
+        approvalTimeoutInMins : meta.approvalTimeoutInMins,
+        providerMemorySize : meta.providerMemorySize,
+        
+
       }
       if (service.metadata) {
         returnObject["create_cloudfront_url"] = service.metadata.create_cloudfront_url;
