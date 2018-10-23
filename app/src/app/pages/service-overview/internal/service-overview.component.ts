@@ -148,7 +148,7 @@ export class ServiceOverviewComponent implements OnInit {
     selectedApplications = [];
     initialselectedApplications = [];
     oneSelected: boolean = false;
-    app_placeH: string = 'Start typing...';
+    appPlaceHolder: string = 'Start typing...';
     applc: string;
     isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
@@ -346,7 +346,9 @@ export class ServiceOverviewComponent implements OnInit {
     onTextAreaChange(desc_temp){
         // update_payload.description=desc_temp
         this.update_payload.description = desc_temp;
-        if(desc_temp){
+        this.description_empty = false;
+        //update only some changes made to 
+        if(desc_temp && this.service.description !== desc_temp ){
             this.description_empty = false;
         }
         else{
@@ -458,7 +460,7 @@ export class ServiceOverviewComponent implements OnInit {
     selectApp;
     selectApplication(app) {
         this.oneSelected = true;
-        this.app_placeH = '';
+        this.appPlaceHolder = '';
         this.selectApp = app;
         let thisclass: any = this;
         this.showApplicationList = false;
@@ -479,7 +481,7 @@ export class ServiceOverviewComponent implements OnInit {
     removeApplication(index, approver) {
         this.oneSelected = false;
         this.selectApp = {};
-        this.app_placeH = 'Start typing...';
+        this.appPlaceHolder = 'Start typing...';
         this.application_arr.push(approver);
         this.selectedApplications.splice(index, 1);
     }
@@ -535,6 +537,7 @@ export class ServiceOverviewComponent implements OnInit {
 
 
     onEditClick() {
+        this.description_empty = true;
         this.loadPlaceholders();
         var appobj = {
             "issueID": '',
@@ -552,7 +555,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.disp_show2 = false;
         this.publicSelected = this.publicInitial;
         this.cdnConfigSelected = this.cdnConfigInitial;
-
 
     }
     onCompleteClick() {
@@ -634,6 +636,7 @@ export class ServiceOverviewComponent implements OnInit {
     onSaveClick() {
         this.saveClicked = true;
         this.advancedSaveClicked = false;
+        this.description_empty = true;
 
         let payload = {};
         if (this.saveClicked) {

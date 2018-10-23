@@ -215,7 +215,7 @@
                                         {{selected.appName}}
                                         <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
                                     </li>
-                                    <input [class.hide]='oneSelected' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{app_placeH}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                    <input [class.hide]='oneSelected' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
 
                                 </ul>
                             </div>

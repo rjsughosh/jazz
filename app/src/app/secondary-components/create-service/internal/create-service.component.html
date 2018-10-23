@@ -190,7 +190,7 @@
                                             {{selected.appName}}
                                             <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input [class.application-ip]='notMyApp' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{app_placeH}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                        <input [class.application-ip]='notMyApp' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
 
                                     </ul>
                                 </div>
@@ -703,7 +703,7 @@
                                             {{selected.displayName}} ({{selected.userId}})
                                             <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypress($event)"   autocomplete="off" id="approverName" name="approverName" type="text" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
+                                        <input (keydown)="keypress($event)"   autocomplete="off" id="approverName" name="approverName" type="text" placeholder="{{approversPlaceHolder}}" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
 
                                     </ul>
                                 </div>

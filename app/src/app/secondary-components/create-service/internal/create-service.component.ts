@@ -46,6 +46,7 @@ export class CreateServiceComponent implements OnInit {
   showApplicationList:boolean = false;
   approverName: string;
   approverName2: string;
+  approversPlaceHolder : string = "Start typing...";
   currentUserSlack: boolean = false;
   git_clone: boolean = false;
   git_url: string = "";
@@ -131,7 +132,7 @@ export class CreateServiceComponent implements OnInit {
   domain: any = "";
   reqId: any = "";
   poc_appname:string;
-  app_placeH:string = 'Start typing...';
+  appPlaceHolder:string = 'Start typing...';
   accounts=['tmodevops','tmonpe'];
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
@@ -153,6 +154,7 @@ export class CreateServiceComponent implements OnInit {
     private authenticationservice: AuthenticationService
   ) {
     this.toastmessage = messageservice;
+    this.approversPlaceHolder = "Start typing...";
   }
 
   // serviceTypeData = [
@@ -186,6 +188,7 @@ export class CreateServiceComponent implements OnInit {
       this.servicelist.serviceCall();
     }
     this.selectedDeploymentTarget = '';
+    this.approversPlaceHolder = "Start typing...";
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
@@ -543,7 +546,7 @@ export class CreateServiceComponent implements OnInit {
         this.serviceRequestSuccess = true;
         this.serviceRequestFailure = false;
         this.isLoading = false;
-        this.app_placeH='Start typing...';
+        this.appPlaceHolder='Start typing...';
         // this.cache.set('request_id',output.data.request_id);
         // var index = output.data.indexOf("https://");
         // this.serviceLink = output.data.slice(index, output.data.length);
@@ -600,6 +603,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestSuccess = false;
     this.serviceRequestFailure = false;
+    this.approversPlaceHolder = "Start typing...";
   }
 
 
@@ -640,16 +644,20 @@ export class CreateServiceComponent implements OnInit {
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
     if (!newVal) {
+      this.approversPlaceHolder = "Start typing";
       this.showApproversList = false;
     } else {
+      this.approversPlaceHolder = "";
       this.showApproversList = true;
     }
   }
 
   onApproverChange2(newVal) {
     if (!newVal) {
+      this.approversPlaceHolder = "Start typing";
       this.showApproversList2 = false;
     } else {
+      this.approversPlaceHolder = "";
       this.showApproversList2 = true;
     }
   }
@@ -865,6 +873,7 @@ blurApplication(){
 
   //function for closing dropdown on outside click//
   closeDropdowns() {
+    this.approversPlaceHolder = "Start typing...";
     this.showApproversList = false;
   }
 
@@ -1256,7 +1265,7 @@ blurApplication(){
   selectApp;
   selectApplication(app) {
     this.oneSelected=true;
-    this.app_placeH='';
+    this.appPlaceHolder='';
     this.selectApp = app;
     let thisclass: any = this;
     this.showApplicationList = false;
@@ -1270,7 +1279,7 @@ blurApplication(){
   removeApplication(index, approver) {
     this.oneSelected=false;
     this.selectApp={};
-    this.app_placeH='Start typing...';
+    this.appPlaceHolder='Start typing...';
     // this.application_arr.push(approver);
     let x = (data) => data.filter((v,i) => data.indexOf(v) === i);
     this.application_arr = x(this.application_arr);
