@@ -123,7 +123,8 @@ export class ServiceDetailComponent implements OnInit {
       }
      
       var returnObject = {
-        id: meta.app_id || service.id,
+        id: service.id,
+        app_id : meta.app_id,
         name: service.service,
         serviceType: meta.type || service.type,
         runtime: meta.providerRuntime || service.runtime,
@@ -138,6 +139,7 @@ export class ServiceDetailComponent implements OnInit {
         endpoints: meta.endpoints || service.endpoints,
         is_public_endpoint: meta.is_public_endpoint || service.is_public_endpoint,
         created_by: meta.created_by || service.created_by,
+        owner : meta.owner,
         approvalTimeoutInMins : meta.approvalTimeoutInMins,
         providerMemorySize : meta.providerMemorySize,
 
