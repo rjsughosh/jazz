@@ -8,10 +8,7 @@ export class MyFilterPipe implements PipeTransform {
     
     transform(items: any[], filter: any): any {
         if (!items || !filter || filter.length < 3) {
-            if(items !== undefined)
-                return items.slice(0,600);//limiting number of rows in items for performance
-            else
-                return items;
+            return items;
         } else if(items.length > 0){            
             if(items[0].appName){
                 return items.filter(item => item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
@@ -36,7 +33,5 @@ export class MyFilterPipe implements PipeTransform {
             return items.filter(item => item.givenName.indexOf(filter) !== -1 );
 
         }
-
-        
     }
 }

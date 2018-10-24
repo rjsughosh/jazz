@@ -6,7 +6,7 @@
 
 
 import { Http, Headers, Response } from '@angular/http';
-import { Component, Input, OnInit, Output, EventEmitter, NgModule } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, NgModule, HostListener } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 // import { FORM_DIRECTIVES, ControlGroup, Control, Validators, FormBuilder, Validator, } from '@angular/common';
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './../service-form-data';
@@ -58,6 +58,7 @@ export class CreateServiceComponent implements OnInit {
   appIndex: any;
   git_err: boolean = false;
   approversList: any;
+  approversList1: any;
   approversList2: any;
   slackAvailble: boolean = false;
   slackNotAvailble: boolean = false;
@@ -95,6 +96,7 @@ export class CreateServiceComponent implements OnInit {
   focusindex: any = -1;
   scrollList: any = '';
   toast: any;
+  start: number = 0;
   gitCloneSelected: boolean = false;
   gitprivateSelected: boolean = false;
   //   model: any = {
@@ -137,11 +139,44 @@ export class CreateServiceComponent implements OnInit {
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
   regionInput:string;
+  isScrolled : boolean = false;
   selectedAccount=[];
   AccountInput:string;
+  counter: number = 0;
+  localRef : number = 0;
   applc:string;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
+
+  @HostListener('scroll', ['$event'])
+    onScroll(event) {
+      if(this.approversList !== this.approversList1){
+        if(event.target.scrollTop - this.localRef < 0){
+          this.localRef = event.target.scrollTop;
+          if(event.target.scrollTop < 50 && event.target.scrollTop > 0 && this.isScrolled){
+            this.counter = this.counter - 50;
+            if(this.approversList.length >= 10 && this.start >51){
+              this.start = this.start - 50;
+            } 
+            if(this.counter < 51){
+              this.start = 0;
+            }
+            this.approversList = this.approversList1.slice(this.start,this.counter);
+          }
+        }
+        if(event.target.scrollTop - this.localRef > 0){
+          this.localRef = event.target.scrollTop;
+          if (event.target.scrollTop + event.target.clientHeight >= (event.target.scrollHeight/2 + 500)){
+            this.isScrolled = true;
+            this.counter = this.counter + 50;
+          if(this.approversList.length >= 100){
+            this.start = this.start + 50;
+          }        
+          this.approversList = this.approversList1.slice(this.start,this.counter);
+          }
+        }
+      }
+    }
 
   constructor(
     // private http: Http,
@@ -193,6 +228,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
     this.serviceRequestSuccess = false;
+    this.approversList = this.approversList1
     this.onClose.emit(false);
   }
 
@@ -207,6 +243,7 @@ export class CreateServiceComponent implements OnInit {
   changeServiceType(serviceType) {
     this.typeOfService = serviceType;
   }
+
 
   // function for changing platform type
   changePlatformType(platformType) {
@@ -259,8 +296,9 @@ export class CreateServiceComponent implements OnInit {
     this.http.get('/platform/ad/users')
       .subscribe((res: Response) => {
         this.approversListRes = res;
-        this.approversList = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.approversList1 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.approversList = this.approversList1.splice(0,20);
         this.getUserDetails(this.approversList2);
       }, error => {
         this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
@@ -649,15 +687,18 @@ export class CreateServiceComponent implements OnInit {
     } else {
       this.approversPlaceHolder = "";
       this.showApproversList = true;
+      if(newVal.length>2)
+        this.approversList = this.approversList1;
+      else
+        if(this.approversList1)
+          this.approversList = this.approversList1.slice(0,50);
     }
   }
 
   onApproverChange2(newVal) {
     if (!newVal) {
-      this.approversPlaceHolder = "Start typing";
       this.showApproversList2 = false;
     } else {
-      this.approversPlaceHolder = "";
       this.showApproversList2 = true;
     }
   }
