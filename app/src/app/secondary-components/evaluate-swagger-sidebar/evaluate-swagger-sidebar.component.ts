@@ -15,11 +15,11 @@ import { environment } from './../../../environments/environment';
 
 
 @Component({
-  selector: 'swagger-sidebar',
-  templateUrl: './swagger-sidebar.component.html',
-  styleUrls: ['./swagger-sidebar.component.scss']
+  selector: 'evaluate-swagger-sidebar',
+  templateUrl: './evaluate-swagger-sidebar.component.html',
+  styleUrls: ['./evaluate-swagger-sidebar.component.scss']
 })
-export class SwaggerSidebarComponent implements OnInit {
+export class EvaluateSwaggerSidebarComponent implements OnInit {
 
   @Input() service: any = {};
   @Input() envSelected: any = {};

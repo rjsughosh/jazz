@@ -7,7 +7,7 @@ import * as _ from "lodash";
 import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { DataService } from '../data-service/data.service';
-import { SwaggerSidebarComponent } from './../../secondary-components/swagger-sidebar/swagger-sidebar.component';
+import { EvaluateSwaggerSidebarComponent } from './../../secondary-components/evaluate-swagger-sidebar/evaluate-swagger-sidebar.component';
 
 @Component({
   selector: 'clear-water',
@@ -18,7 +18,7 @@ export class ClearWaterComponent implements OnInit {
 
   @Output() open_sidebar: EventEmitter<any> = new EventEmitter<any>();
   @Input() service: any = {};
-  @ViewChild('swaggerSidebar') swaggerSidebar : SwaggerSidebarComponent;
+  @ViewChild('swaggerSidebar') swaggerSidebar : EvaluateSwaggerSidebarComponent;
   env: string;
   swagger_json;
   error: boolean = true;
@@ -55,6 +55,8 @@ export class ClearWaterComponent implements OnInit {
   isGraphloaded:boolean = false;
   graphError:boolean = false;
   datasets;
+  showAddService: boolean = false;
+
 
   constructor(
     private request: RequestService,
@@ -103,6 +105,9 @@ export class ClearWaterComponent implements OnInit {
     }
   }
 
+  showService(isShow){
+    this.showAddService = isShow;
+  }
 
   formatGraphData(metricData) {
     let valueProperty = "score";
@@ -122,7 +127,7 @@ export class ClearWaterComponent implements OnInit {
       format: 'MM-DD-YYYY h:mm A',
       range: moment(values[0].x).toISOString() //selecting the first date value
     };
-    
+
     let options = {
       tooltipXFormat: 'MM-DD-YYYY h:mm A',
       fromDateISO: timeRange.range,
@@ -220,7 +225,7 @@ export class ClearWaterComponent implements OnInit {
         'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
       };
     }
-    
+
     this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
       .subscribe(
         (response) => {

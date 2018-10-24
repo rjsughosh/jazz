@@ -65,23 +65,27 @@
               <div class='det-label cw-label'>Total<br>errors</div>
               <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
             </li>
-            <li *ngIf='!slideSidebar'>
+            <li>
               <div class='det-label cw-label'>Description</div>
               <div class='det-value cw-message'>{{cw_message}}</div>
+              <div class='cw-button'>
+                <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE" class="testApiBtn" (click)="showService(true)"
+                  [class.invisible]="isLoading"></btn-jazz-secondary>
+                <btn-jazz-secondary *ngIf='!slideSidebar' text="PUBLISH" class="testApiBtn" (click)='openSidebar()'
+                  [class.invisible]="isLoading"></btn-jazz-secondary>
+                <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
+                  [class.invisible]="isLoading"></btn-jazz-secondary>
+
+              </div>
             </li>
 
           </ul>
         </div>
 
-        <div class='cw-button'>
-          <btn-jazz-secondary *ngIf='!slideSidebar' text="{{evaluatePublish}}" class="testApiBtn" (click)='openSidebar()'
-            [class.invisible]="isLoading"></btn-jazz-secondary>
-          <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
-            [class.invisible]="isLoading"></btn-jazz-secondary>
-
-        </div>
       </div>
+
     </div>
+
 
   </div>
   <div class='service-details row' *ngIf='detailView && !congratulations'>
@@ -214,10 +218,14 @@
   </div>
 </div>
 
-<section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-  <swagger-sidebar #swaggerSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
-
+<section class='clearwater-sidebar' [class.slide-in]='slideSidebar'>
+  <sidebar [show]="showAddService" (onClose)="showService(false)">
+    <evaluate-swagger-sidebar #swaggerSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="showService(false)"></evaluate-swagger-sidebar>
+  </sidebar>
 </section>
+
+
+
 
 <div *ngIf='isloaded && error' class="service-details empty-row with-refresh relative hgt">
   <div class="icon-icon-server-error">

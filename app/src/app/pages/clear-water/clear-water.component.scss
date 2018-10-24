@@ -13,20 +13,24 @@
 }
 
 .cw-message{
-   font-size: 1.5rem;
-   margin-top: 3rem;
+  font-size: 1.5rem;
+  margin: 3rem 0 2rem 0;
+  text-align: center;
 }
 
 .cw-score{
-    width:21%
+    width:25%
 }
 .cw-button{
-    position: absolute;
-    top:-1rem;
-    right: 0rem;
+    // display: flex;
+    // justify-content: flex-end;
+    padding:0 1rem;
+    btn-jazz-secondary{
+      margin:0 1rem;
+    }
 }
 .cw-values{
-    width:65%;
+    width:75%;
     ul{
         display: flex;
         justify-content: space-around;
@@ -545,4 +549,8 @@ padding:0rem 0.5rem 2.5rem 0.5rem;
   }
 }
 
-
+.clearwater-sidebar{
+  /deep/.sidebar-wrp{
+    position: fixed;
+  }
+}
