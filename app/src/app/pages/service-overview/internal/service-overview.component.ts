@@ -654,6 +654,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.saveClicked = true;
         this.advancedSaveClicked = false;
         this.description_empty = true;
+        this.isEnvChanged = false;
 
         let payload = {};
         if (this.saveClicked) {
