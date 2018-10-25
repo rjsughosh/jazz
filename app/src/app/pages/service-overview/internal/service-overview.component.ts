@@ -60,7 +60,8 @@ export class ServiceOverviewComponent implements OnInit {
     show_loader: boolean = false;
     plc_hldr: boolean = true;
     status_empty: boolean;
-    description_empty: boolean = true;
+    descriptionChanged : boolean = true;
+    description_empty: boolean;
     approvers_empty: boolean;
     domain_empty: boolean;
     serviceType_empty: boolean;
@@ -276,7 +277,7 @@ export class ServiceOverviewComponent implements OnInit {
     ) {
         this.http = request;
         this.toastmessage = messageservice;
-        this.description_empty = true;
+        this.descriptionChanged = true;
         this.isSlackAvailable = false;
         this.environList = environment.envLists;
         this.accSelected = this.service.runtime || environment.envLists[0];
@@ -366,10 +367,10 @@ export class ServiceOverviewComponent implements OnInit {
         this.update_payload.description = desc_temp;
         //update only some changes made to 
         if(this.service.description !== desc_temp ){
-            this.description_empty = false;
+            this.descriptionChanged = false;
         }
         else{
-            this.description_empty = true;
+            this.descriptionChanged = true;
         }
     }
 
@@ -554,7 +555,7 @@ export class ServiceOverviewComponent implements OnInit {
 
 
     onEditClick() {
-        this.description_empty = true;
+        this.descriptionChanged = true;
         this.loadPlaceholders();
         var appobj = {
             "issueID": '',
@@ -653,7 +654,7 @@ export class ServiceOverviewComponent implements OnInit {
     onSaveClick() {
         this.saveClicked = true;
         this.advancedSaveClicked = false;
-        this.description_empty = true;
+        this.descriptionChanged = true;
         this.isEnvChanged = false;
 
         let payload = {};
@@ -690,7 +691,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.disp_show2 = true;
         this.edit_save = 'EDIT';
         this.showCancel = false;
-        this.description_empty = true;
+        this.descriptionChanged = true;
         this.hide_email_error = true;
         this.hide_slack_error = true;
         this.isSlackAvailable = false;

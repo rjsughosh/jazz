@@ -141,7 +141,7 @@
       </div>
     </summary>
     <div *ngIf='!disp_show' class='down-btn-wrap'>
-      <btn-jazz-primary  [disablePrimaryBtn]="description_empty && !isSlackAvailable && !isEnvChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+      <btn-jazz-primary  [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !isEnvChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
       <a (click)="onCancelClick()">CANCEL</a>
     </div>
     <div class='metadata-body relative metadata-body-border'>
