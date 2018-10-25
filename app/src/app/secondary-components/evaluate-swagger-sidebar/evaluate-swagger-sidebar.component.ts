@@ -12,6 +12,8 @@ import {RelaxedJsonService} from "../../core/helpers/relaxed-json.service";
 import {ToasterService} from 'angular2-toaster';
 import { DataService } from '../../pages/data-service/data.service';
 import { environment } from './../../../environments/environment';
+import { Subscription } from 'rxjs/Subscription';
+
 
 
 @Component({
@@ -30,6 +32,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRequestId: EventEmitter<any> = new EventEmitter<any>();
 
+  private subscription: any;
   swaggerAsset:any;
   validityMessage:string;
   valid:boolean = true;
@@ -49,7 +52,14 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   public lineNumberCount: any = new Array(40).fill('');
   requestId:string;
   publishBtnText:string = "PUBLISH";
+  error: boolean = true;
   environmentVars = environment.urls || {};
+  tableHeader = [];
+  evaluationComplete:boolean = false;
+  loadingState: string = 'default';
+  paginationSelected: Boolean = false;
+  sidebarType:string;
+
 
 
   private http:any;
@@ -59,7 +69,8 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
     private router: Router,
     private request:RequestService,
     private relaxedJson: RelaxedJsonService,
-    private data : DataService
+    private data : DataService,
+
   ) {
     this.http = request;
 
@@ -77,6 +88,10 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   enableButton(event){
     this.ispublishing = false;
     this.publishBtnText = "PUBLISH";
+  }
+
+  SetType(type){
+    this.sidebarType = type;
   }
 
   closeBar(){
@@ -114,9 +129,47 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
     this.formatJSON();
     var payload = JSON.parse(this.swagger_json);
     this.ispublishing = true;
-    this.evaluate.emit(payload);
+    this.evaluationComplete = false
+    this.evaluateSwagger(payload);
+    // this.evaluate.emit(payload);
   }
 
+  evaluateSwagger(swagger_json){
+    let swaggerLintPayload = {
+      'swaggerDoc': swagger_json,
+    };
+    this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
+    .subscribe(
+      (response) => {
+        this.obj = response;
+        this.cw_obj = response.results;
+        this.cw_score = response.results.score;
+        this.cw_message = response.results.message;
+        var arr = response.results.details;
+        // this.isloaded = true;
+        this.error = false;
+        this.cw_keysList = Object.keys(arr).map(key => {
+          return key;
+        });
+        this.cw_results = Object.keys(arr).map(key => {
+          return arr[key];
+        });
+        for (var i = 0; i < this.cw_results.length; i++) {
+          this.cw_results[i]["heading"] = this.cw_keysList[i];
+          this.cw_results[i].score = Math.abs(this.cw_results[i].score);
+        }
+        this.enableButton(true);
+        this.evaluationComplete = true;
+
+
+      },
+      (error) => {
+        // this.isloaded = true;
+        this.error = true;
+        this.evaluationComplete = true;
+      }
+    );
+  }
   getassets(){
     this.http.get('/jazz/assets', {
       service: this.service.service || this.service.name,
@@ -215,6 +268,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
           domain: this.service.domain,
           request_id: Response.data.request_id
         }));
+      this.closeBar();
       this.onRequestId.emit(Response.data.request_id);
     },
     (err) => {

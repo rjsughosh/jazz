@@ -69,9 +69,9 @@
               <div class='det-label cw-label'>Description</div>
               <div class='det-value cw-message'>{{cw_message}}</div>
               <div class='cw-button'>
-                <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE" class="testApiBtn" (click)="showService(true)"
+                <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE" class="testApiBtn" (click)="showService(true,'evaluate')"
                   [class.invisible]="isLoading"></btn-jazz-secondary>
-                <btn-jazz-secondary *ngIf='!slideSidebar' text="PUBLISH" class="testApiBtn" (click)='openSidebar()'
+                <btn-jazz-secondary *ngIf='!slideSidebar' text="PUBLISH" class="testApiBtn" (click)="showService(true,'publish')"
                   [class.invisible]="isLoading"></btn-jazz-secondary>
                 <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
                   [class.invisible]="isLoading"></btn-jazz-secondary>
@@ -220,7 +220,7 @@
 
 <section class='clearwater-sidebar' [class.slide-in]='slideSidebar'>
   <sidebar [show]="showAddService" (onClose)="showService(false)">
-    <evaluate-swagger-sidebar #swaggerSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="showService(false)"></evaluate-swagger-sidebar>
+    <evaluate-swagger-sidebar #EvaluateSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="showService(false)"></evaluate-swagger-sidebar>
   </sidebar>
 </section>
 

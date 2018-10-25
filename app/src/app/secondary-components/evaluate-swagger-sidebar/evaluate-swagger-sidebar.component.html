@@ -5,13 +5,12 @@
       <div class='icon-icon-close closeicon pointer' (click)='closeBar()'></div>
     </div>
 
-    <section class="sidebar-details">
-      <div class='sidebar-summary' (click)="summaryClicked('top')">
-        <div class='icon-icon-up rotate-90' [class.rotate-180]="evaluateBody"></div>
+    <section class="sidebar-details" *ngIf="sidebarType == 'evaluate'">
+      <div class='sidebar-summary' >
         <div class="summary-text">Evaluate
         </div>
       </div>
-      <div class='publish-body'  [class.bodyshow]="evaluateBody">
+      <div class='publish-body evaluateBody'>
         <div class='swaggerhelp-text'>Change your swagger here and evaluate against Clearwater Linter<br> <i>Note: Changes here will not be persisted.</i></div>
 
         <div class='json-cover' *ngIf='isloaded == "default"'>
@@ -27,15 +26,93 @@
         </div>
         <p *ngIf="!valid" class="jz-text-error">{{validityMessage}}</p>
       </div>
+
+      <div *ngIf="evaluationComplete">
+
+        <div class='cw-cover relative'>
+
+          <div class='cw-score'>
+            <div class='score-head'>CLEARWATER SCORE</div>
+            <div class='score-val'>
+              <div>{{cw_score.current}}</div>
+            </div>
+          </div>
+
+          <div class='cw-values'>
+            <ul>
+              <li>
+                <div class='det-label cw-label'>Organization<br>goal</div>
+                <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
+              </li>
+              <li>
+                <div class='det-label cw-label'>Organization<br>Average</div>
+                <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
+              </li>
+              <li>
+                <div class='det-label cw-label'>Total<br>warnings</div>
+                <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>
+              </li>
+              <li>
+                <div class='det-label cw-label'>Total<br>errors</div>
+                <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
+              </li>
+
+            </ul>
+          </div>
+
+        </div>
+
+        <div class='cw-errors-cover'>
+          <table-template class="table-container log-table-container clear-water relative" [message]="errMessage" [state]="loadingState"
+            [type]="'accordian'" [showPaginationtable]="paginationSelected" [header]="tableHeader">
+            <div class="table-row-wrp" [class.bbn]='row.status == "warning" && warningSelected' *ngFor="let row of cw_results | myfilter:search_bar; let i = index"
+              [class.expanded]="row.expanded">
+              <div class="table-row" *ngIf='row.status == "error" || !warningSelected' (click)="onRowClicked(row, i)">
+                <div class="column visible">{{row.heading}}
+                  <span class='{{row.status}}'>{{row.status}} </span><span class='right'>{{row.issues.length}} issue<span
+                      *ngIf='row.issues.length > 1'>s</span></span>
+                </div>
+              </div>
+              <div *ngIf='row.status == "error" || !warningSelected' class="table-row-expanded">
+                <div class='sub-row'>
+                  <div>{{row.description}}</div>
+                  <div class='{{row.status}} score-cw'>Reduces your score by {{row.score}}</div>
+                </div>
+                <table class='cw-table bordered'>
+                  <thead>
+                    <tr>
+                      <th>MESSAGE</th>
+                      <th>LOCATION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let each of row.issues'>
+                      <td>
+                        {{each.message}}
+                      </td>
+                      <td>
+                        {{each.location}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <a class="view-details right pointer" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'>VIEW
+                  DETAILS</a>
+
+              </div>
+            </div>
+          </table-template>
+        </div>
+
+      </div>
     </section>
-    <section class="sidebar-details" *ngIf="envSelected == 'prod'">
-        <div class='sidebar-summary' (click)="summaryClicked('bottom')">
-            <div class='icon-icon-up rotate-90' [class.rotate-180]="publishBody"></div>
+    <section class="sidebar-details" *ngIf="envSelected == 'prod' && sidebarType == 'publish'" >
+        <div class='sidebar-summary'>
             <div class="summary-text">Publish
 
             </div>
         </div>
-        <div class="publish-body" [class.bodyshow]="publishBody">
+        <div class="publish-body bodyshow">
           <div class='swaggerhelp-text'>Publish your swagger to <a target="_blank" href="{{environmentVars.clearwaterAppUrl}}">Clearwater</a> repository</div>
           <div class='publish-sections'>
             <div class="publish-sections-header">

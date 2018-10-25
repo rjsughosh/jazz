@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { DataService } from '../data-service/data.service';
 import { EvaluateSwaggerSidebarComponent } from './../../secondary-components/evaluate-swagger-sidebar/evaluate-swagger-sidebar.component';
+import { PublishSwaggerSidebarComponent } from './../../secondary-components/publish-swagger-sidebar/publish-swagger-sidebar.component';
 
 @Component({
   selector: 'clear-water',
@@ -18,7 +19,9 @@ export class ClearWaterComponent implements OnInit {
 
   @Output() open_sidebar: EventEmitter<any> = new EventEmitter<any>();
   @Input() service: any = {};
-  @ViewChild('swaggerSidebar') swaggerSidebar : EvaluateSwaggerSidebarComponent;
+  @ViewChild('EvaluateSidebar') EvaluateSidebar : EvaluateSwaggerSidebarComponent;
+  @ViewChild('PublishSidebar') PublishSidebar : PublishSwaggerSidebarComponent;
+
   env: string;
   swagger_json;
   error: boolean = true;
@@ -105,8 +108,10 @@ export class ClearWaterComponent implements OnInit {
     }
   }
 
-  showService(isShow){
+  showService(isShow,type){
     this.showAddService = isShow;
+    this.EvaluateSidebar.SetType(type)
+
   }
 
   formatGraphData(metricData) {
@@ -266,14 +271,15 @@ export class ClearWaterComponent implements OnInit {
             });
           }
           else{
-            this.swaggerSidebar.enableButton(true);
+            this.EvaluateSidebar.enableButton(true);
           }
 
         },
         (error) => {
           this.isloaded = true;
           this.error = true;
-        });
+        }
+      );
   }
 
   refresh() {
@@ -359,7 +365,7 @@ export class ClearWaterComponent implements OnInit {
                 setTimeout(() => {
                     this.service_error = false;
                     this.statusCompleted = true;
-                    this.swaggerSidebar.enableButton(true);
+                    this.EvaluateSidebar.enableButton(true);
                 }, 5000);
             } else if (respStatus.status.toLowerCase() === 'failed') {
                 this.statusFailed = true;
