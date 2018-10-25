@@ -22,7 +22,7 @@
         </div>
         <div class='btn-cover'>
           <a class='primary pointer' (click)='formatJSON()'>FORMAT JSON</a>
-          <btn-jazz-primary [disablePrimaryBtn]="ispublishing" class='primary' text='EVALUATE' (click)='EvaluateJSON()'></btn-jazz-primary>
+          <btn-jazz-primary [disablePrimaryBtn]="ispublishing" class='primary' text='{{evaluateText}}' (click)='EvaluateJSON()'></btn-jazz-primary>
         </div>
         <p *ngIf="!valid" class="jz-text-error">{{validityMessage}}</p>
       </div>
@@ -62,7 +62,7 @@
 
         </div>
 
-        <div class='cw-errors-cover'>
+        <div class='cw-errors-cover' *ngIf='detailView'>
           <table-template class="table-container log-table-container clear-water relative" [message]="errMessage" [state]="loadingState"
             [type]="'accordian'" [showPaginationtable]="paginationSelected" [header]="tableHeader">
             <div class="table-row-wrp" [class.bbn]='row.status == "warning" && warningSelected' *ngFor="let row of cw_results | myfilter:search_bar; let i = index"
@@ -104,6 +104,45 @@
           </table-template>
         </div>
 
+        <div class='service-details row detailed-view' *ngIf='!detailView'>
+          <div class='back-search-cover'>
+            <span class='icon-icon-back' (click)='detailView = !detailView;searchDetail_bar="";'></span>
+            <span (click)='detailView = !detailView;searchDetail_bar="";' class='inside-back'>
+              Back
+            </span>
+            <search-box #searchbox (onChange)="onCWDetailsearch($event)"></search-box>
+          </div>
+
+
+          <div class="column visible">{{oneObject.heading}}
+            <span class='{{oneObject.status}}'>{{oneObject.status}} </span><span class='right'>{{oneObject.issues.length}}
+              issue<span *ngIf='oneObject.issues.length > 1'>s</span></span>
+          </div>
+          <div class="table-row-expanded show">
+            <div class='sub-row'>
+              <div>{{oneObject.description}}</div>
+              <div class='{{oneObject.status}} score-cw'>Reduces your score by {{oneObject.score}}</div>
+            </div>
+            <table class='cw-table bordered'>
+              <thead>
+                <tr>
+                  <th>MESSAGE</th>
+                  <th>LOCATION</th>
+                </tr>
+              </thead>
+              <tbody class='not-fixed'>
+                <tr *ngFor='let each of oneObject.issues| myfilter:searchDetail_bar;'>
+                  <td>
+                    {{each.message}}
+                  </td>
+                  <td>
+                    {{each.location}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
     <section class="sidebar-details" *ngIf="envSelected == 'prod' && sidebarType == 'publish'" >

@@ -8,11 +8,11 @@
 
 .bar-cover {
   min-height: 100vh;
-  min-width: 47rem;
+  width: 60rem;
   right: 0;
   z-index: 2;
   border: 2px solid #efefef;
-  padding: 7rem 3.5rem 2.5rem 2.5rem;
+  padding: 2.5rem
   ;
   background-color: #efefef;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.5);
@@ -133,6 +133,13 @@ btn-jazz-primary {
   }
 }
 
+.table-row-wrp{
+  border-bottom:1px solid #ddd;
+}
+.detailed-view{
+  margin-top:1rem;
+}
+
 .closeicon {
   font-size: 1.2rem;
   color: #ed008c;
@@ -233,7 +240,6 @@ btn-jazz-primary {
 }
 .swaggerhelp-text{
   font-size: 1rem;
-  padding-left: 2.5rem;
   color: #aaa;
 }
 .icon-icon-up{

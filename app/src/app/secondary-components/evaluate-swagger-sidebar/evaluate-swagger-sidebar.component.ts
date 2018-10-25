@@ -59,7 +59,12 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   loadingState: string = 'default';
   paginationSelected: Boolean = false;
   sidebarType:string;
-
+  search_bar: string;
+  reqJson:any;
+  searchDetail_bar: string;
+  detailView: boolean = true;
+  oneObject: any;
+  evaluateText:string = "EVALUATE";
 
 
   private http:any;
@@ -92,6 +97,14 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
 
   SetType(type){
     this.sidebarType = type;
+  }
+
+  onCWDetailsearch(data) {
+    this.searchDetail_bar = data.searchString;
+  }
+
+  onCWsearch(data) {
+    this.search_bar = data.searchString;
   }
 
   closeBar(){
@@ -135,6 +148,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   }
 
   evaluateSwagger(swagger_json){
+    this.evaluateText = "EVALUATING"
     let swaggerLintPayload = {
       'swaggerDoc': swagger_json,
     };
@@ -160,6 +174,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
         }
         this.enableButton(true);
         this.evaluationComplete = true;
+        this.evaluateText = "EVALUATE";
 
 
       },
@@ -167,6 +182,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
         // this.isloaded = true;
         this.error = true;
         this.evaluationComplete = true;
+        this.evaluateText = "EVALUATE";
       }
     );
   }
@@ -209,6 +225,24 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
     this.lineNumberCount = new Array(line_numbers).fill('');
   }
 
+  onRowClicked(row, index) {
+    index = this.cw_results.indexOf(row)
+    for (let i = 0; i < this.cw_results.length; i++) {
+      let rowData = this.cw_results[i];
+      if (i === index) {
+        rowData['expanded'] = !rowData['expanded'];
+      }
+    }
+  }
+
+
+  viewDetails(obj) {
+    this.search_bar = '';
+    this.searchDetail_bar = '';
+    let index = this.cw_results.indexOf(obj);
+    this.oneObject = this.cw_results[index];
+    this.oneObject['heading'] = this.cw_keysList[index];
+  }
   ontextareaScroll(){
     var target = $("#target");
     $("#source").scroll(function() {
