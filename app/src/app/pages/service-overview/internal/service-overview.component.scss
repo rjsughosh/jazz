@@ -366,6 +366,17 @@ $screen-lg:                  1200px !default;
     }
 }
 
+.det-label-show{
+    padding-top : 5px;
+    padding-bottom: 0px;
+    width: 11rem;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000;
+    text-transform: capitalize;
+}
+
 .show-service-overview{
     display: flex;
     @media(max-width: $screen-sm){
