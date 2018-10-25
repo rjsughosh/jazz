@@ -48,6 +48,7 @@ export const environment = {
   api_doc_name: 'http://cloud-api-doc.corporate.t-mobile.com',
   envName : "jazz",
   multi_env:false,
+  envLists : ["nodejs8.10","python2.7","java8"],
   serviceTabs:['overview','access control','metrics','logs'],
   environmentTabs:['overview','deployments','code quality','assets', 'metrics', 'logs','clearwater'],
   urls:{

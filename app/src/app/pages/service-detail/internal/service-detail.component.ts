@@ -128,7 +128,7 @@ export class ServiceDetailComponent implements OnInit {
         name: service.service,
         serviceType: meta.type || service.type,
         runtime: meta.providerRuntime || service.runtime,
-        status: meta.status.replace('_', ' ') || service.status.replace('_', ' '),
+        status:  service.status.replace('_', ' '),
         description: service.description,
         approvers: meta.approvers || service.approvers,
         domain: meta.domain || service.domain,

@@ -18,11 +18,12 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { ServicesListComponent } from "../../../pages/services-list/services-list.component"
 import {environment} from "../../../../environments/environment";
+import { MyFilterPipe } from "../../../primary-components/custom-filter";
 
 @Component({
   selector: 'create-service',
   templateUrl: './create-service.component.html',
-  providers: [RequestService, MessageService],
+  providers: [RequestService, MessageService,  MyFilterPipe],
   styleUrls: ['./create-service.component.scss']
 })
 
@@ -181,6 +182,7 @@ export class CreateServiceComponent implements OnInit {
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
+    private myFilterPipe : MyFilterPipe,
     private cronParserService: CronParserService,
     private http: RequestService,
     private cache: DataCacheService,
@@ -687,8 +689,8 @@ export class CreateServiceComponent implements OnInit {
     } else {
       this.approversPlaceHolder = "";
       this.showApproversList = true;
-      if(newVal.length>2)
-        this.approversList = this.approversList1;
+      if(newVal.length > 2)
+        this.approversList = this.myFilterPipe.transform(this.approversList1,newVal);
       else
         if(this.approversList1)
           this.approversList = this.approversList1.slice(0,50);

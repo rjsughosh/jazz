@@ -42,7 +42,8 @@ export class ServiceOverviewComponent implements OnInit {
     private subscription: any;
 
     multiENV: boolean = true;
-    list_env = []
+    environList = [];
+    list_env = [];
     list_inactive_env = [];
     copyLink: string = 'Copy Link';
     disp_edit: boolean = true;
@@ -163,7 +164,9 @@ export class ServiceOverviewComponent implements OnInit {
     edit_save: string = 'EDIT';
     activeEnv: string = 'dev';
     Environments = [];
+    isEnvChanged : boolean = false;
     environ_arr = [];
+    accSelected : string;
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -275,6 +278,8 @@ export class ServiceOverviewComponent implements OnInit {
         this.toastmessage = messageservice;
         this.description_empty = true;
         this.isSlackAvailable = false;
+        this.environList = environment.envLists;
+        this.accSelected = this.service.runtime || environment.envLists[0];
     }
 
     copy_link(id) {
@@ -290,6 +295,16 @@ export class ServiceOverviewComponent implements OnInit {
         }
         finally {
             document.getSelection().removeAllRanges;
+        }
+    }
+
+    onenvSelected($event){
+        if(this.service.runtime !== $event){
+            this.accSelected = $event;
+            this.isEnvChanged = true;
+        }
+        else{
+            this.isEnvChanged = false;
         }
     }
 
@@ -344,11 +359,13 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     onTextAreaChange(desc_temp){
+        if(!desc_temp){
+            desc_temp = null
+        }
         // update_payload.description=desc_temp
         this.update_payload.description = desc_temp;
-        this.description_empty = false;
         //update only some changes made to 
-        if(desc_temp && this.service.description !== desc_temp ){
+        if(this.service.description !== desc_temp ){
             this.description_empty = false;
         }
         else{
@@ -645,6 +662,11 @@ export class ServiceOverviewComponent implements OnInit {
             }
             if (this.slackChannel_temp != this.service.slackChannel) {
                 payload["slack_channel"] = this.slackChannel_temp;
+            }
+            if (this.accSelected != this.service.runtime) {
+                payload["metadata"] = {
+                    "providerRuntime" : this.accSelected
+                }
             }
             if ((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName)) {
                 payload["appName"] = this.selectApp.appName;

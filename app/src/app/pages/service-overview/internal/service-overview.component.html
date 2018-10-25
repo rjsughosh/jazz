@@ -141,7 +141,7 @@
       </div>
     </summary>
     <div *ngIf='!disp_show' class='down-btn-wrap'>
-      <btn-jazz-primary  [disablePrimaryBtn]="description_empty && !isSlackAvailable" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+      <btn-jazz-primary  [disablePrimaryBtn]="description_empty && !isSlackAvailable && !isEnvChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
       <a (click)="onCancelClick()">CANCEL</a>
     </div>
     <div class='metadata-body relative metadata-body-border'>
@@ -179,7 +179,10 @@
           </li>
           <li *ngIf="service.serviceType != 'website' ">
             <div class="det-label">Runtime</div>
-            <div class="det-value" [class.PlaceHolder]="runtime_empty">{{service.runtime}}</div>
+            <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="runtime_empty">{{service.runtime}}</div>
+            <div *ngIf='!disp_show'>
+                <dropdown class='dropdown-3'  [dropdwnContent]="environList" title="Select enviroment" [selected]="accSelected" (onSelected)="onenvSelected($event)"></dropdown>
+            </div>
           </li>
           <li>
             <div class='det-label'>Slack</div>
