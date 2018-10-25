@@ -59,13 +59,13 @@ export class CreateServiceComponent implements OnInit {
   appIndex: any;
   git_err: boolean = false;
   approversList: any;
-  approversList1: any;
-  approversList2: any;
+  approversListShow: any;
+  approversListBasic: any;
   slackAvailble: boolean = false;
   slackNotAvailble: boolean = false;
   channelNameError: boolean = false;
   showLoader: boolean = false;
-  showApproversList2: boolean = false;
+  showApproversListBasic: boolean = false;
   showRegionList:boolean = false;
   showAccountList:boolean = false;
   oneSelected:boolean=false;
@@ -151,7 +151,7 @@ export class CreateServiceComponent implements OnInit {
 
   @HostListener('scroll', ['$event'])
     onScroll(event) {
-      if(this.approversList !== this.approversList1 && this.approversList.length >100){
+      if(this.approversList !== this.approversListShow && this.approversList.length >100){
         if(event.target.scrollTop - this.localRef < 0){
           this.localRef = event.target.scrollTop;
           if(event.target.scrollTop < 50 && event.target.scrollTop > 0 && this.isScrolled){
@@ -162,7 +162,7 @@ export class CreateServiceComponent implements OnInit {
             if(this.counter < 51){
               this.start = 0;
             }
-            this.approversList = this.approversList1.slice(this.start,this.counter);
+            this.approversList = this.approversListShow.slice(this.start,this.counter);
           }
         }
         if(event.target.scrollTop - this.localRef > 0){
@@ -173,7 +173,7 @@ export class CreateServiceComponent implements OnInit {
           if(this.approversList.length >= 100){
             this.start = this.start + 50;
           }        
-          this.approversList = this.approversList1.slice(this.start,this.counter);
+          this.approversList = this.approversListShow.slice(this.start,this.counter);
           }
         }
       }
@@ -230,7 +230,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
     this.serviceRequestSuccess = false;
-    this.approversList = this.approversList1
+    this.approversList = this.approversListShow;
     this.onClose.emit(false);
   }
 
@@ -298,10 +298,10 @@ export class CreateServiceComponent implements OnInit {
     this.http.get('/platform/ad/users')
       .subscribe((res: Response) => {
         this.approversListRes = res;
-        this.approversList1 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.approversList = this.approversList1.splice(0,20);
-        this.getUserDetails(this.approversList2);
+        this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.approversListBasic= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.approversList = this.approversListShow.splice(0,20);
+        this.getUserDetails(this.approversListBasic);
       }, error => {
         this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
         this.toast_pop('error', 'Oops!', this.resMessage);
@@ -690,18 +690,18 @@ export class CreateServiceComponent implements OnInit {
       this.approversPlaceHolder = "";
       this.showApproversList = true;
       if(newVal.length > 2)
-        this.approversList = this.myFilterPipe.transform(this.approversList1,newVal);
+        this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
       else
-        if(this.approversList1)
-          this.approversList = this.approversList1.slice(0,50);
+        if(this.approversListShow)
+          this.approversList = this.approversListShow.slice(0,50);
     }
   }
 
   onApproverChange2(newVal) {
     if (!newVal) {
-      this.showApproversList2 = false;
+      this.showApproversListBasic = false;
     } else {
-      this.showApproversList2 = true;
+      this.showApproversListBasic = true;
     }
   }
 
@@ -885,7 +885,7 @@ blurApplication(){
   selectApprovers2(approver) {
 
     let thisclass: any = this;
-    this.showApproversList2 = false;
+    this.showApproversListBasic = false;
     thisclass.approverName2 = '';
     // for (var i = 0; i < this.selectedApprovers.length; i++) {
     //     if(this.selectedApprovers[i].displayName === approver.displayName){
@@ -893,9 +893,9 @@ blurApplication(){
     //     }
     // }
     this.selectedApprovers2.push(approver);
-    for (var i = 0; i < this.approversList2.length; i++) {
-      if (this.approversList2[i].displayName === approver.displayName) {
-        this.approversList2.splice(i, 1);
+    for (var i = 0; i < this.approversListBasic.length; i++) {
+      if (this.approversListBasic[i].displayName === approver.displayName) {
+        this.approversListBasic.splice(i, 1);
 
         return;
       }
@@ -910,7 +910,7 @@ blurApplication(){
   }
 
   removeApprover2(index, approver) {
-    this.approversList2.push(approver);
+    this.approversListBasic.push(approver);
     this.selectedApprovers2.splice(index, 1);
   }
 
@@ -1246,7 +1246,7 @@ blurApplication(){
     this.createSlackModel.purpose = '';
     this.createSlackModel.invites = '';
     for (var i = 0; i < this.selectedApprovers2.length; i++) {
-      this.approversList2.push(this.selectedApprovers2[i]);
+      this.approversListBasic.push(this.selectedApprovers2[i]);
     }
     this.selectedApprovers2 = [];
   }

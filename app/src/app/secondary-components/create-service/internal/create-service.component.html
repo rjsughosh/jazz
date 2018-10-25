@@ -396,9 +396,9 @@
 
                                                             </ul>
                                                         </div>
-                                                        <div [hidden]="!showApproversList2" class="approvers-list-wrap">
+                                                        <div [hidden]="!showApproversListBasic" class="approvers-list-wrap">
                                                             <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversList2 | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
+                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversListBasic | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
                                                                     <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
                                                                 </div>
                                                             </div>
