@@ -151,7 +151,7 @@ export class CreateServiceComponent implements OnInit {
 
   @HostListener('scroll', ['$event'])
     onScroll(event) {
-      if(this.approversList !== this.approversList1){
+      if(this.approversList !== this.approversList1 && this.approversList.length >100){
         if(event.target.scrollTop - this.localRef < 0){
           this.localRef = event.target.scrollTop;
           if(event.target.scrollTop < 50 && event.target.scrollTop > 0 && this.isScrolled){
