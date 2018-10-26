@@ -148,6 +148,7 @@ export class ServiceOverviewComponent implements OnInit {
     advancedSaveClicked: boolean = false;
     showApplicationList: boolean = false;
     selectedApplications = [];
+    listRuntime : Object;
     initialselectedApplications = [];
     oneSelected: boolean = false;
     appPlaceHolder: string = 'Start typing...';
