@@ -161,6 +161,13 @@ $screen-lg:                  1200px !default;
 
 }
 
+.dropdown-3 /deep/ .dropdown > button{
+    box-shadow: 0 0 0;
+    border: 1px solid #ccc;
+    width : 10em;
+    text-align: center;
+} 
+
 .endp-cover{
     display: inline-flex;
     margin-right: 0.5rem;
@@ -246,7 +253,7 @@ $screen-lg:                  1200px !default;
     opacity:0
 }
 .stage-wrp.active{
-    border-radius:5px;
+    border-radius:5px;  
     border:1px solid #ccc;
     &:hover{
         border:1px solid #ed008c;
@@ -345,6 +352,7 @@ $screen-lg:                  1200px !default;
     border: none;
     border: 1px solid #ccc;
     height: 70px;
+    border-radius: 2px;
 
 }
 

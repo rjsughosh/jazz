@@ -93,20 +93,20 @@
                     <div class="input-field-container">
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" class='test-focus' name="runtime" id="nodejs" [value]="nodejs" [checked]="runtime == 'nodejs'" (click)="onSelectionChange('nodejs')">
-                                <label for="nodejs"><span class='outer'></span><span class="background"></span>Nodejs (8.10)</label>
+                                <input type="radio" class='test-focus' name="runtime" id="nodejs" [value]="nodejs" [checked]="runtime == 'nodejs'" (click)="onSelectionChange(runtimeKeys[0])">
+                                <label for="nodejs"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" id="java" [value]="java" [checked]="runtime == 'java'" (click)="onSelectionChange('java')">
-                                <label for="java"><span class='outer'></span><span class="background"></span>Java 8</label>
+                                <input type="radio" name="runtime" id="java" [value]="java" [checked]="runtime == 'java'" (click)="onSelectionChange(runtimeKeys[0])">
+                                <label for="java"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[1]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" id="python" [value]="python" [checked]="runtime == 'python'" (change)="onSelectionChange('python')">
-                                <label for="python"><span class='outer'></span><span class="background"></span>Python (2.7)</label>
+                                <input type="radio" name="runtime" id="python" [value]="python" [checked]="runtime == 'python'" (change)="onSelectionChange(runtimeKeys[0])">
+                                <label for="python"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
@@ -398,7 +398,7 @@
                                                         </div>
                                                         <div [hidden]="!showApproversListBasic" class="approvers-list-wrap">
                                                             <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversListBasic | myfilter:approverName2;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
+                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversListBasic | myfilter:approversListBasic;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
                                                                     <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
                                                                 </div>
                                                             </div>

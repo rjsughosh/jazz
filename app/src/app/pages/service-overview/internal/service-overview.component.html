@@ -179,9 +179,9 @@
           </li>
           <li *ngIf="service.serviceType != 'website' ">
             <div [ngClass]="disp_show ? 'det-label' : 'det-label-show'">Runtime</div>
-            <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="runtime_empty">{{service.runtime}}</div>
+            <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="runtime_empty">{{listRuntime[service.runtime]}}</div>
             <div *ngIf='!disp_show'>
-                <dropdown class='dropdown-3' [dropdwnContent]="environList" title="Select enviroment" [selected]="accSelected" (onSelected)="onenvSelected($event)"></dropdown>
+                <dropdown class='dropdown-3' [dropdwnContent]="environList" title="Select Runtime" [selected]="listRuntime[service.runtime]|| 'NA' " (onSelected)="onenvSelected($event)"></dropdown>
             </div>
           </li>
           <li>

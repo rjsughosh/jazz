@@ -279,8 +279,13 @@ export class ServiceOverviewComponent implements OnInit {
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
         this.isSlackAvailable = false;
-        this.environList = environment.envLists;
-        this.accSelected = this.service.runtime || environment.envLists[0];
+        this.listRuntime  = environment.envLists;
+        this.environList = Object.keys(environment.envLists);
+        let localArray = [];
+        this.environList.map(data=>{
+            localArray.push(environment.envLists[data]);
+        })
+        this.environList = localArray;
     }
 
     copy_link(id) {
@@ -301,7 +306,10 @@ export class ServiceOverviewComponent implements OnInit {
 
     onenvSelected($event){
         if(this.service.runtime !== $event){
-            this.accSelected = $event;
+            Object.keys(environment.envLists).map(data=>{
+                if(environment.envLists[data] == $event)
+                    this.accSelected = data;
+            })
             this.isEnvChanged = true;
         }
         else{
@@ -564,7 +572,6 @@ export class ServiceOverviewComponent implements OnInit {
         if (this.service.app_name && this.selectedApplications.length == 0)
             this.selectApplication(appobj);
         this.disp_show = false;
-        console.log(this.service);
         // debugger
 
     }
@@ -1033,7 +1040,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.isenvLoading = true;
         this.ErrEnv = false;
         if (this.service == undefined) { return }
-        console.log(this.service)
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
         this.http.get('/jazz/environments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
             response => {

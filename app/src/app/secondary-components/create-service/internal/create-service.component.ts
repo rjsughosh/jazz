@@ -146,12 +146,14 @@ export class CreateServiceComponent implements OnInit {
   counter: number = 0;
   localRef : number = 0;
   applc:string;
+  runtimeKeys : any;
+  runtimeObject : any;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
 
   @HostListener('scroll', ['$event'])
     onScroll(event) {
-      if(this.approversList !== this.approversListShow && this.approversList.length >100){
+      if(this.approversList !== this.approversListShow && this.approversList.length >40){
         if(event.target.scrollTop - this.localRef < 0){
           this.localRef = event.target.scrollTop;
           if(event.target.scrollTop < 50 && event.target.scrollTop > 0 && this.isScrolled){
@@ -192,6 +194,9 @@ export class CreateServiceComponent implements OnInit {
   ) {
     this.toastmessage = messageservice;
     this.approversPlaceHolder = "Start typing...";
+    this.runtimeObject = environment.envLists;
+    this.runtimeKeys = Object.keys(this.runtimeObject);
+    
   }
 
   // serviceTypeData = [
