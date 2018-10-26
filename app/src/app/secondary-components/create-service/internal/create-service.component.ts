@@ -6,7 +6,7 @@
 
 
 import { Http, Headers, Response } from '@angular/http';
-import { Component, Input, OnInit, Output, EventEmitter, NgModule, HostListener } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 // import { FORM_DIRECTIVES, ControlGroup, Control, Validators, FormBuilder, Validator, } from '@angular/common';
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './../service-form-data';
@@ -305,7 +305,7 @@ export class CreateServiceComponent implements OnInit {
         this.approversListRes = res;
         this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.approversListBasic= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.approversList = this.approversListShow.splice(0,20);
+        this.approversList = this.approversListShow.slice(0,200);
         this.getUserDetails(this.approversListBasic);
       }, error => {
         this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
@@ -693,11 +693,15 @@ export class CreateServiceComponent implements OnInit {
       this.showApproversList = false;
     } else {
       this.approversPlaceHolder = "";
-      this.showApproversList = true;
-      if(newVal.length > 2)
+      if(newVal.length > 2 && this.approversList) {
+        this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
+        if(this.approversList.length > 300)
+          this.approversList = this.approversList.slice(0,300);
+        this.showApproversList = true;
+      }
         this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
       else
-        if(this.approversListShow)
+        this.showApproversList = false;
           this.approversList = this.approversListShow.slice(0,50);
     }
   }
@@ -1298,7 +1302,7 @@ blurApplication(){
       var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
 
       var appobj = {
-        "issueID":pinkElement[0].attributes[3].value,
+        "appID":pinkElement[0].attributes[3].value,
         "appName": pinkElement[0].attributes[2].value
       }
 
