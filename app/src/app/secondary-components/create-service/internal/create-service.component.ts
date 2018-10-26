@@ -689,7 +689,7 @@ export class CreateServiceComponent implements OnInit {
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
     if (!newVal) {
-      this.approversPlaceHolder = "Start typing";
+      this.approversPlaceHolder = "Start typing...";
       this.showApproversList = false;
     } else {
       this.approversPlaceHolder = "";
