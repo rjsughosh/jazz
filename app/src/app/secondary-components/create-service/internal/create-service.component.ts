@@ -669,10 +669,8 @@ export class CreateServiceComponent implements OnInit {
           this.approversList = this.approversList.slice(0,300);
         this.showApproversList = true;
       }
-        this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
       else
         this.showApproversList = false;
-          this.approversList = this.approversListShow.slice(0,50);
     }
   }
 
