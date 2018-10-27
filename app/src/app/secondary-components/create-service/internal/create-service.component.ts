@@ -864,6 +864,7 @@ blurApplication(){
     let thisclass: any = this;
     this.showApproversListBasic = false;
     thisclass.approverName2 = '';
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     // for (var i = 0; i < this.selectedApprovers.length; i++) {
     //     if(this.selectedApprovers[i].displayName === approver.displayName){
     //       return;
@@ -893,7 +894,7 @@ blurApplication(){
 
   //function for closing dropdown on outside click//
   closeDropdowns() {
-    this.approversPlaceHolder = "Start typing...";
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.showApproversList = false;
   }
 
