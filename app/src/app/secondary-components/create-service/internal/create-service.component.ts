@@ -151,36 +151,6 @@ export class CreateServiceComponent implements OnInit {
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
 
-  @HostListener('scroll', ['$event'])
-    onScroll(event) {
-      if(this.approversList !== this.approversListShow && this.approversList.length >40){
-        if(event.target.scrollTop - this.localRef < 0){
-          this.localRef = event.target.scrollTop;
-          if(event.target.scrollTop < 50 && event.target.scrollTop > 0 && this.isScrolled){
-            this.counter = this.counter - 50;
-            if(this.approversList.length >= 10 && this.start >51){
-              this.start = this.start - 50;
-            } 
-            if(this.counter < 51){
-              this.start = 0;
-            }
-            this.approversList = this.approversListShow.slice(this.start,this.counter);
-          }
-        }
-        if(event.target.scrollTop - this.localRef > 0){
-          this.localRef = event.target.scrollTop;
-          if (event.target.scrollTop + event.target.clientHeight >= (event.target.scrollHeight/2 + 500)){
-            this.isScrolled = true;
-            this.counter = this.counter + 50;
-          if(this.approversList.length >= 100){
-            this.start = this.start + 50;
-          }        
-          this.approversList = this.approversListShow.slice(this.start,this.counter);
-          }
-        }
-      }
-    }
-
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
