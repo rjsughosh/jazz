@@ -112,64 +112,66 @@ export class ServiceDetailComponent implements OnInit {
   close: boolean = false;
   closed: boolean = false;
   processService(service) {
-    var meta;
     if (service === undefined) {
       return {};
     } else {
       service = this.fixMetadata(service);
       if (service.metadata) {
         service.metadata = this.addEventSource(service.metadata);
-        meta = service.metadata;
       }
      
-      var returnObject = {
+      let returnObject = {
         id: service.id,
-        app_id : meta.app_id,
         name: service.service,
-        serviceType: meta.type || service.type,
-        runtime: meta.providerRuntime || service.runtime,
+        serviceType: service.type,
+        runtime: service.runtime,
         status:  service.status.replace('_', ' '),
         description: service.description,
-        approvers: meta.approvers || service.approvers,
-        domain: meta.domain || service.domain,
+        approvers: service.approvers,
+        domain: service.domain,
         email:  service.email,
         slackChannel:  service.slack_channel,
         repository:  service.repository,
-        tags: meta.tags || service.tags,
-        endpoints: meta.endpoints || service.endpoints,
-        is_public_endpoint: meta.is_public_endpoint || service.is_public_endpoint,
-        created_by: meta.created_by || service.created_by,
-        owner : meta.owner,
-        approvalTimeoutInMins : meta.approvalTimeoutInMins,
-        providerMemorySize : meta.providerMemorySize,
-
-
-      }
+        tags: service.tags,
+        endpoints: service.endpoints,
+        is_public_endpoint: service.is_public_endpoint,
+        created_by: service.created_by
+      };
       if (service.metadata) {
-        returnObject["create_cloudfront_url"] = service.metadata.create_cloudfront_url;
-        returnObject["eventScheduleRate"] = service.metadata.eventScheduleRate;
-        if(service.metadata.event_source){
-          returnObject["event_source"] = service.metadata.event_source;
+        // replace existing values with new values from metadata, if available.
+        returnObject.runtime = service.metadata.providerRuntime || service.runtime;
+        returnObject.approvers = service.metadata.approvers || service.approvers;
+        returnObject.domain = service.metadata.domain || service.domain;
+        returnObject.tags = service.metadata.tags || service.tags;
+        returnObject.endpoints = service.metadata.endpoints || service.endpoints;
+        returnObject.is_public_endpoint = service.metadata.is_public_endpoint || service.is_public_endpoint;
+        returnObject.created_by =  service.metadata.created_by || service.created_by;
+        returnObject['owner'] = service.metadata.owner;
+        returnObject['approvalTimeoutInMins'] = service.metadata.approvalTimeoutInMins;
+        returnObject['app_id'] = service.metadata.app_id;
+        returnObject['providerMemorySize'] = service.metadata.providerMemorySize;
+        returnObject['create_cloudfront_url'] = service.metadata.create_cloudfront_url;
+        returnObject['eventScheduleRate'] = service.metadata.eventScheduleRate;
+        if (service.metadata.event_source) {
+          returnObject['event_source'] = service.metadata.event_source;
         }
-        if(service.metadata.event_source_dynamodb){
-          returnObject["event_source_arn"] = service.metadata.event_source_dynamodb;
+        if (service.metadata.event_source_dynamodb) {
+          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb;
         }
-        if(service.metadata.event_source_kinesis){
-          returnObject["event_source_arn"] = service.metadata.event_source_kinesis;
+        if (service.metadata.event_source_kinesis) {
+          returnObject['event_source_arn'] = service.metadata.event_source_kinesis;
         }
-        if(service.metadata.event_source_s3){
-          returnObject["event_source_arn"] = service.metadata.event_source_s3;
+        if (service.metadata.event_source_s3) {
+          returnObject['event_source_arn'] = service.metadata.event_source_s3;
         }
-        returnObject["app_name"] = service.metadata.app_name;
-        returnObject["require_internal_access"] = service.metadata.require_internal_access;
-        returnObject["enable_api_security"] = service.metadata.enable_api_security;
+        returnObject['app_name'] = service.metadata.app_name;
+        returnObject['require_internal_access'] = service.metadata.require_internal_access;
+        returnObject['enable_api_security'] = service.metadata.enable_api_security;
       }
-      if(typeof returnObject["event_source_arn"] == "object"){
-        returnObject["event_source_arn"] = returnObject["event_source_arn"].S;
+      if (typeof returnObject['event_source_arn'] === 'object') {
+        returnObject['event_source_arn'] = returnObject['event_source_arn'].S;
       }
-
       return returnObject;
-
     }
   };
 
