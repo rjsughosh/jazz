@@ -47,7 +47,7 @@ export class CreateServiceComponent implements OnInit {
   showApplicationList:boolean = false;
   approverName: string;
   approverName2: string;
-  approversPlaceHolder : string = "Start typing...";
+  approversPlaceHolder : string = "Start typing (min 3 chars)...";
   currentUserSlack: boolean = false;
   git_clone: boolean = false;
   git_url: string = "";
@@ -163,7 +163,7 @@ export class CreateServiceComponent implements OnInit {
     private authenticationservice: AuthenticationService
   ) {
     this.toastmessage = messageservice;
-    this.approversPlaceHolder = "Start typing...";
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.runtimeObject = environment.envLists;
     this.runtimeKeys = Object.keys(this.runtimeObject);
     
@@ -200,7 +200,7 @@ export class CreateServiceComponent implements OnInit {
       this.servicelist.serviceCall();
     }
     this.selectedDeploymentTarget = '';
-    this.approversPlaceHolder = "Start typing...";
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
@@ -618,7 +618,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestSuccess = false;
     this.serviceRequestFailure = false;
-    this.approversPlaceHolder = "Start typing...";
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
   }
 
 
@@ -659,7 +659,7 @@ export class CreateServiceComponent implements OnInit {
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
     if (!newVal) {
-      this.approversPlaceHolder = "Start typing...";
+      this.approversPlaceHolder = "Start typing (min 3 chars)...";
       this.showApproversList = false;
     } else {
       this.approversPlaceHolder = "";
