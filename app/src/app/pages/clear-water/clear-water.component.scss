@@ -4,7 +4,19 @@
 
 .cw-cover{
     display: flex;
-
+    >div{
+      &:first-child{
+        border-right:1px solid #ccc;
+      }
+      &:nth-child(2){
+        padding: 2.5rem 3rem;
+      }
+      padding:3rem;
+      &:last-child{
+        border-left:1px solid #ccc;
+        padding: 2.5rem 3rem;
+      }
+    }
 
 }
 .cw-top-part{
@@ -14,37 +26,53 @@
 
 .cw-message{
   font-size: 1.5rem;
-  margin: 3rem 0 2rem 0;
-  text-align: center;
+  margin:2rem 0;
 }
 
 .cw-score{
-    width:25%
+    width:25%;
+    padding: 1.5rem 5rem !important;
 }
 .cw-button{
     // display: flex;
     // justify-content: flex-end;
-    padding:0 1rem;
+    padding:0.5rem 1rem;
+    border-top: 1px solid #ccc;
+    justify-content: flex-end;
+    display: flex;
     btn-jazz-secondary{
       margin:0 1rem;
     }
 }
 .cw-values{
-    width:75%;
+    // width:50%;
+    // margin
+    padding:0 3rem;
     ul{
         display: flex;
         justify-content: space-around;
     }
     li{
-
+        padding-bottom: 0;
         display: flex;
         flex-direction: column;
+        margin: 0 2rem;
+        &:first-child{
+          margin:0;
+        }
+        &:last-child{
+          margin:0;
+        }
         // height: 2rem;
         div{
             // border:1px solid black;
 
         }
     }
+}
+
+.cw-description{
+  padding: 3rem;
 }
 
 .error{
@@ -194,7 +222,6 @@ margin-bottom: 1rem;
 }
 
 .cw-value{
-    text-align: center;
     font-size: 2.5rem;
     font-weight: normal;
     margin-top: 1rem;
@@ -202,7 +229,6 @@ margin-bottom: 1rem;
 
 .cw-label{
     width:auto;
-    text-align: center;
 }
 .score-head{
     color: #666666;
@@ -260,6 +286,8 @@ search-box{
 
 .top-section{
     border-bottom: 1px solid #ddd;
+    padding:0;
+    margin-bottom: 1rem;
 }
 
 .testApiBtn{
@@ -552,4 +580,10 @@ padding:0rem 0.5rem 2.5rem 0.5rem;
   /deep/.sidebar-wrp{
     position: fixed;
   }
+}
+.graph-refresh-icon{
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  cursor: pointer;
 }

@@ -149,6 +149,8 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
 
   evaluateSwagger(swagger_json){
     this.evaluateText = "EVALUATING"
+    this.isloaded = 'loading';
+
     let swaggerLintPayload = {
       'swaggerDoc': swagger_json,
     };
@@ -160,7 +162,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
         this.cw_score = response.results.score;
         this.cw_message = response.results.message;
         var arr = response.results.details;
-        // this.isloaded = true;
+        this.isloaded = 'default';
         this.error = false;
         this.cw_keysList = Object.keys(arr).map(key => {
           return key;
@@ -179,7 +181,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
 
       },
       (error) => {
-        // this.isloaded = true;
+        this.isloaded = 'loading';
         this.error = true;
         this.evaluationComplete = true;
         this.evaluateText = "EVALUATE";
@@ -276,6 +278,8 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
     this.isloaded='default';
   }
 
+
+
   summaryClicked(position){
     if(position === "top"){
       this.evaluateBody = !this.evaluateBody;
@@ -286,6 +290,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   }
 
   publish(){
+    this.isloaded = 'loading';
     this.ispublishing = true;
     this.publishBtnText = "PUBLISHING";
     let payload = {
@@ -303,12 +308,15 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
           request_id: Response.data.request_id
         }));
       this.closeBar();
+      this.isloaded = 'default';
       this.onRequestId.emit(Response.data.request_id);
     },
     (err) => {
       this.notesInput = '';
       this.publishBtnText = "PUBLISH";
+      this.isloaded = 'default';
       this.ispublishing = false;
+      this.toast_pop('error', 'Oops!', 'Error in publishing swagger');
     });
   }
 

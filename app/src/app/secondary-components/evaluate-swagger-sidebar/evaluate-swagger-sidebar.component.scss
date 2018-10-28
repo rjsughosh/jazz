@@ -32,6 +32,7 @@
 
 .btn-cover {
   display: flex;
+  margin: 2rem 0;
   justify-content: space-between;
 
   a {
@@ -64,9 +65,8 @@
 }
 
 .cw-cover {
-  flex-direction: column;
   background: white;
-  padding: 2rem;
+  // padding: 2rem;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,.11);
 }
 
@@ -83,7 +83,8 @@
 }
 
 .cw-score {
-  width: 100%
+  width: 32%;
+  border:none;
 }
 
 .cw-values {
@@ -92,7 +93,6 @@
   ul {
     display: flex;
     justify-content: space-around;
-    margin-top: 2.5rem;
   }
 
   li {
@@ -197,14 +197,10 @@ btn-jazz-primary {
   }
 }
 .sidebar-summary{
-  &:hover{
-    color:#ed008c;
-  }
 
   display: flex;
   align-items:center;
   outline:none;
-  cursor:pointer;
   font-size: 1.4rem;
 }
 
@@ -279,4 +275,16 @@ btn-jazz-primary {
 .textForm-area{
   height:5rem !important;
   padding:10px;
+}
+.cw-evaluate-score{
+  padding:1.5rem 3rem !important;
+
+}
+.cw-cover{
+  >div{
+    border:none !important;
+  }
+}
+.pub-desc{
+  height: 15rem !important;
 }

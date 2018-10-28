@@ -284,6 +284,20 @@ export class ClearWaterComponent implements OnInit {
     this.isloaded = false;
     this.getSwaggerUrl(this.service.assets);
   }
+
+  refreshGraph(){
+    this.isGraphloaded = false;
+    this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
+      this.graphData = this.formatGraphData(response.changeHistory);
+      setTimeout(() => {
+        this.isGraphloaded = true;
+      },1000)
+    },
+    (error) => {
+      console.log('error', error)
+      this.graphError = true;
+    });
+  }
   ngOnInit() {
 
     this.env = this.route.snapshot.params['env'];

@@ -20,10 +20,7 @@
           <textarea id="source" (scroll)='ontextareaScroll()' [(ngModel)]='swagger_json' (ngModelChange)="lineNumbers()"
             class='json-input-area'></textarea>
         </div>
-        <div class='btn-cover'>
-          <a class='primary pointer' (click)='formatJSON()'>FORMAT JSON</a>
-          <btn-jazz-primary [disablePrimaryBtn]="ispublishing" class='primary' text='{{evaluateText}}' (click)='EvaluateJSON()'></btn-jazz-primary>
-        </div>
+
         <p *ngIf="!valid" class="jz-text-error">{{validityMessage}}</p>
       </div>
 
@@ -31,7 +28,7 @@
 
         <div class='cw-cover relative'>
 
-          <div class='cw-score'>
+          <div class='cw-score cw-evaluate-score'>
             <div class='score-head'>CLEARWATER SCORE</div>
             <div class='score-val'>
               <div>{{cw_score.current}}</div>
@@ -144,7 +141,13 @@
           </div>
         </div>
       </div>
+
+      <div class='btn-cover'>
+        <a class='primary pointer' (click)='formatJSON()'>FORMAT JSON</a>
+        <btn-jazz-primary [disablePrimaryBtn]="ispublishing" class='primary' text='{{evaluateText}}' (click)='EvaluateJSON()'></btn-jazz-primary>
+      </div>
     </section>
+
     <section class="sidebar-details" *ngIf="envSelected == 'prod' && sidebarType == 'publish'" >
         <div class='sidebar-summary'>
             <div class="summary-text">Publish
@@ -158,7 +161,7 @@
               Description
             </div>
             <div class="publish-sections-textinput">
-              <textarea placeholder="Enter Description" rows="5" type="text" class="textForm textForm-area" [(ngModel)]='notesInput'></textarea>
+              <textarea placeholder="Enter Description" rows="5" type="text" class="textForm textForm-area pub-desc" [(ngModel)]='notesInput'></textarea>
             </div>
           </div>
           <div class='publish-sections'>
@@ -170,4 +173,7 @@
 
   </div>
 
+  <div class="loading-row" [class.show]="isloaded == 'loading'">
+    <div class="loading-circle"></div>
+  </div>
 </div>
