@@ -275,7 +275,6 @@ export class CreateServiceComponent implements OnInit {
         this.approversListRes = res;
         this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.approversListBasic= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.approversList = this.approversListShow.slice(0,200);
         this.getUserDetails(this.approversListBasic);
       }, error => {
         this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
@@ -663,7 +662,7 @@ export class CreateServiceComponent implements OnInit {
       this.showApproversList = false;
     } else {
       this.approversPlaceHolder = "";
-      if(newVal.length > 2 && this.approversList) {
+      if(newVal.length > 2 && this.approversListShow) {
         this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
         if(this.approversList.length > 300)
           this.approversList = this.approversList.slice(0,300);
