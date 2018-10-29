@@ -141,7 +141,7 @@
       </div>
     </summary>
     <div *ngIf='!disp_show' class='down-btn-wrap'>
-      <btn-jazz-primary  [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !isEnvChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+      <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !isEnvChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
       <a (click)="onCancelClick()">CANCEL</a>
     </div>
     <div class='metadata-body relative metadata-body-border'>
@@ -159,10 +159,13 @@
             <div class="det-label">Service</div>
             <div class="det-value">{{service.name}}</div>
           </li>
-          <li>
-            <div class="det-label">Service Type</div>
-            <div class="det-value">{{service.serviceType || 'Pick your service type'}}</div>
-          </li>
+          <li *ngIf="service.serviceType != 'website' ">
+                <div [ngClass]="disp_show ? 'det-label' : 'det-label-show'">Runtime</div>
+                <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="runtime_empty">{{listRuntime[service.runtime] || service.runtime || 'NA'}} </div>
+                <div *ngIf='!disp_show'>
+                    <dropdown class='dropdown-3' [dropdwnContent]="environList" title="Select Runtime" [selected]="listRuntime[service.runtime] || service.runtime || 'NA' " (onSelected)="onenvSelected($event)"></dropdown>
+                </div>
+              </li>
           <li>
             <div class="det-label">Description</div>
             <div *ngIf='disp_show' class="det-value wrap" [ngClass]="{PlaceHolder:description_empty}">{{service.description || 'Give details for your service'}}</div>
@@ -177,13 +180,23 @@
             <div class='det-label'>Created By</div>
             <div class='det-value'>{{service.created_by}}</div>
           </li>
-          <li *ngIf="service.serviceType != 'website' ">
-            <div [ngClass]="disp_show ? 'det-label' : 'det-label-show'">Runtime</div>
-            <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="runtime_empty">{{listRuntime[service.runtime] || service.runtime || 'NA'}} </div>
-            <div *ngIf='!disp_show'>
-                <dropdown class='dropdown-3' [dropdwnContent]="environList" title="Select Runtime" [selected]="listRuntime[service.runtime]|| 'NA' " (onSelected)="onenvSelected($event)"></dropdown>
-            </div>
-          </li>
+          <li>
+                <div class="det-label">Service Type</div>
+                <div class="det-value">{{service.serviceType || 'Pick your service type'}}</div>
+              </li>
+
+              <li *ngIf="service.serviceType != 'website' ">
+                    <div [ngClass]="disp_show ? 'det-label' : 'det-label-show'">Approval Timeout</div>
+                    <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="approval_empty">{{ displayApprovalTime || service.approvalTimeOutInMins || 'NA'}} </div>
+                    <div *ngIf='!disp_show' class="inline-value">
+                            <dropdown class='dropdown-4' [dropdwnContent]="hoursArray" title="Select Hours" [selected]="approvalHours || hoursArray[0] " (onSelected)="onenvSelectedHours($event)"></dropdown>
+                            <div class="det-value det-space det-space1">HRS</div>
+                    </div>
+                    <div *ngIf='!disp_show' class="inline-value">
+                            <dropdown class='dropdown-4' [dropdwnContent]="minutesArray" title="Select Minutes" [selected]="approvalMinutes || minutesArray[0] " (onSelected)="onenvSelectedMins($event)"></dropdown>
+                            <div class="det-value det-space det-space1">MINS</div>
+                    </div>
+                  </li>
           <li>
               
             <div class='det-label'>Slack</div>
@@ -197,11 +210,12 @@
 
           </li>
           <p class='email-err-msg' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>
-
+          
           <li class="hide">
             <div class='det-label'>Approvers</div>
             <div class='det-value'>{{service.approvers}}</div>
           </li>
+          
         </ul>
       </div>
       <div class='metadata-column'>
@@ -242,7 +256,8 @@
           <li>
             <div class="det-label">Repository</div>
             <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
-          </li>
+          </li> 
+
         </ul>
       </div>
 

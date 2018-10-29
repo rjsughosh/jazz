@@ -133,6 +133,26 @@ $screen-lg:                  1200px !default;
         width: 33.33%;
     }
 }
+ 
+.save-btn-wrap /deep/ .btn{
+    font-weight: 700;
+    color : white !important;
+    border: none;
+    text-align: center;
+}
+
+.save-btn-wrap /deep/ button.btn-primary:hover,
+button.btn-primary:focus,
+button.btn-primary:active {
+    outline: none !important;
+    background-color: #ffffff;
+    color: #ed008c !important;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid #ffffff;
+}
+
+
+
 
 .popup-endp{
     height: 0;
@@ -161,6 +181,20 @@ $screen-lg:                  1200px !default;
 
 }
 
+.inline-value{
+    display: flex;
+}
+
+.det-space{
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.det-space1{
+    padding-left: 10px;
+}
+
 .dropdown-3 /deep/ .dropdown > button > .padding-right{
     padding-right: 0px;
 } 
@@ -175,6 +209,26 @@ $screen-lg:                  1200px !default;
     padding-left: 17px;
 } 
 
+.dropdown-4 /deep/ .dropdown > button{
+    box-shadow: 0 0 0;
+    border: 1px solid #ccc;
+    width : 10em;
+    padding-left: 17px;
+} 
+
+.dropdown-4 /deep/ .dropdown > .btn{
+    width: 6em;
+    max-width: 6em;
+    text-align: center;
+} 
+
+.dropdown-4 /deep/ .dropdown .dropdown-menu{
+    height: 15em;
+    width: 6em;
+    max-width: 6em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 
 .endp-cover{
     display: inline-flex;

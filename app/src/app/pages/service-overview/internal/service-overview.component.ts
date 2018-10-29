@@ -168,7 +168,14 @@ export class ServiceOverviewComponent implements OnInit {
     Environments = [];
     isEnvChanged : boolean = false;
     environ_arr = [];
+    displayApprovalTime : string;
     accSelected : string;
+    approvalMinutes : number = 0;
+    approvalHours: number = 0;
+    approvalTime : number = 0;
+    hoursArray : any = [];
+    approvalTimeChanged : boolean = false; 
+    minutesArray : any = [];
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -287,6 +294,13 @@ export class ServiceOverviewComponent implements OnInit {
             localArray.push(environment.envLists[data]);
         })
         this.environList = localArray;
+
+        for(let i = 0; i<25; i++){
+            this.hoursArray.push(i);
+        }
+        for(let i = 5;i<60;i=i+5){
+            this.minutesArray.push(i);
+        }
     }
 
     copy_link(id) {
@@ -306,7 +320,8 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     onenvSelected($event){
-        if(this.service.runtime !== $event){
+        if(this.listRuntime[this.service.runtime] !== $event){
+            console.log($event);
             Object.keys(environment.envLists).map(data=>{
                 if(environment.envLists[data] == $event)
                     this.accSelected = data;
@@ -316,6 +331,22 @@ export class ServiceOverviewComponent implements OnInit {
         else{
             this.isEnvChanged = false;
         }
+    }
+
+    onenvSelectedMins($event){
+        this.approvalMinutes = $event;
+    }
+
+    onenvSelectedHours($event){
+        this.approvalHours = $event;
+        if($event === 0){
+            if(this.minutesArray[0] === 0)
+            this.minutesArray = this.minutesArray.slice(1);
+        }
+       else{
+           if(this.minutesArray[0] !== 0)
+           this.minutesArray.unshift(0);
+       }
     }
 
     onEventScheduleChange(val) {
@@ -374,6 +405,7 @@ export class ServiceOverviewComponent implements OnInit {
         }
         // update_payload.description=desc_temp
         this.update_payload.description = desc_temp;
+        console.log(this.service);  
         //update only some changes made to 
         if(this.service.description !== desc_temp ){
             this.descriptionChanged = false;
@@ -658,12 +690,17 @@ export class ServiceOverviewComponent implements OnInit {
         this.PutPayload = payload;
         if (Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
     }
+    
 
     onSaveClick() {
         this.saveClicked = true;
         this.advancedSaveClicked = false;
         this.descriptionChanged = true;
         this.isEnvChanged = false;
+        console.log(this.approvalHours,this.approvalMinutes);
+        this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
+        console.log(this.approvalTime);
+        console.log(this.accSelected);
 
         let payload = {};
         if (this.saveClicked) {
@@ -676,6 +713,12 @@ export class ServiceOverviewComponent implements OnInit {
             if (this.accSelected != this.service.runtime) {
                 payload["metadata"] = {
                     "providerRuntime" : this.accSelected
+                }
+            }
+            if (this.approvalTime != this.service.approvalTimeOutInMins && this.approvalTime){
+                console.log(this.approvalTime);
+                payload["metadata"] = {
+                    "approvalTimeOutInMins" : this.approvalTime
                 }
             }
             if ((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName)) {
@@ -1224,14 +1267,33 @@ export class ServiceOverviewComponent implements OnInit {
         this.creation_status = this.service.status;
         this.animatingDots = "...";
         this.testingStatus();
-
-
-    }
+    }   
 
     testingStatus() {
         setInterval(() => {
             this.onload.emit(this.service.status);
         }, 500);
+    }
+
+    ngAfterContentInit(){
+       this.setApprovalData();
+    }
+
+
+    setApprovalData(){
+        console.log(this.service);
+        console.log("called");
+        this.approvalTime = this.service.approvalTimeOutInMins;
+        if(this.approvalTime/60 >= 1){
+            console.log("here");
+            this.approvalHours = Math.floor(this.approvalTime/60);
+            this.approvalMinutes = this.approvalTime - this.approvalHours*60;
+            this.displayApprovalTime = `${this.approvalHours} hours ${this.approvalMinutes} minutes`; 
+        }
+        else if(this.approvalTime){
+            this.approvalMinutes = this.approvalTime;
+            this.displayApprovalTime = `${this.approvalMinutes || this.service.approvalTimeOutInMins} minutes`;
+        }
     }
 
     transform_env_oss(data) {
@@ -1325,6 +1387,9 @@ export class ServiceOverviewComponent implements OnInit {
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
+        if(this.service.approvalTimeOutInMins){
+            this.setApprovalData();
+        }
 
         this.loadPlaceholders();
 
@@ -1340,7 +1405,6 @@ export class ServiceOverviewComponent implements OnInit {
         if (!this.internal_build) {
             this.envfoross();
         }
-
 
 
         this.check_empty_fields();

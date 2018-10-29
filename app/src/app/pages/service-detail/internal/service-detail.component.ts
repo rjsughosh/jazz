@@ -138,6 +138,7 @@ export class ServiceDetailComponent implements OnInit {
         created_by: service.created_by
       };
       if (service.metadata) {
+        console.log(service.metadata);
         // replace existing values with new values from metadata, if available.
         returnObject.runtime = service.metadata.providerRuntime || service.runtime;
         returnObject.approvers = service.metadata.approvers || service.approvers;
@@ -147,7 +148,7 @@ export class ServiceDetailComponent implements OnInit {
         returnObject.is_public_endpoint = service.metadata.is_public_endpoint || service.is_public_endpoint;
         returnObject.created_by =  service.metadata.created_by || service.created_by;
         returnObject['owner'] = service.metadata.owner;
-        returnObject['approvalTimeoutInMins'] = service.metadata.approvalTimeoutInMins;
+        returnObject['approvalTimeOutInMins'] = service.metadata.approvalTimeOutInMins;
         returnObject['app_id'] = service.metadata.app_id;
         returnObject['providerMemorySize'] = service.metadata.providerMemorySize;
         returnObject['create_cloudfront_url'] = service.metadata.create_cloudfront_url;
