@@ -88,25 +88,11 @@
 
 
   </div>
-  <div class='service-details row' *ngIf='detailView && !congratulations'>
+  <div class='service-details row service-details-cw' *ngIf='detailView && !congratulations'>
 
 
 
-    <div class='cw-top-part'>
 
-      <div class='warning-chk custom-cb'>
-        <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false"
-          [checked]="warningSelected" (change)="warningSelected = !warningSelected">
-        <label for="checkbox-cw"></label>
-        <div class="cb-status-dets">Hide Warnings</div>
-      </div>
-      <div class='cw-search-wrap'>
-        <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
-        <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
-        <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
-
-      </div>
-    </div>
 
     <div class="graph-section-cover" [class.hide]="graphError">
       <div class="graph-title">
@@ -122,6 +108,22 @@
             <chartjs-linegraph [class.hide]="graphError" *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class='cw-top-part'>
+
+      <div class='warning-chk custom-cb'>
+        <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false"
+          [checked]="warningSelected" (change)="warningSelected = !warningSelected">
+        <label for="checkbox-cw"></label>
+        <div class="cb-status-dets">Hide Warnings</div>
+      </div>
+      <div class='cw-search-wrap'>
+        <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
+        <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
+        <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
+
       </div>
     </div>
 

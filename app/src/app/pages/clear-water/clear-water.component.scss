@@ -6,14 +6,14 @@
     display: flex;
     >div{
       &:first-child{
-        border-right:1px solid #ccc;
+        border-right:2px solid #f1f1f1;
       }
       &:nth-child(2){
         padding: 2.5rem 3rem;
       }
       padding:3rem;
       &:last-child{
-        border-left:1px solid #ccc;
+        border-left:2px solid #f1f1f1;
         padding: 2.5rem 3rem;
       }
     }
@@ -22,6 +22,7 @@
 .cw-top-part{
     display: flex;
     justify-content: space-between;
+    margin:2rem 0 0 0;
 }
 
 .cw-message{
@@ -37,7 +38,8 @@
     // display: flex;
     // justify-content: flex-end;
     padding:0.5rem 1rem;
-    border-top: 1px solid #ccc;
+    border-top: 2px solid #f1f1f1;
+    background: #f9f9f9;
     justify-content: flex-end;
     display: flex;
     btn-jazz-secondary{
@@ -296,10 +298,12 @@ search-box{
         /* background-color: #c62770; */
         color: #c62770;
         border:1px solid #c62770;
+        background:#f9f9f9;
         box-shadow: none;
         padding: 0.5rem 1.5rem;
         &:hover, &:active, &:focus{
             color: #fff;
+            background: #c62770;
         }
     }
 }
@@ -563,7 +567,8 @@ search-box{
 }
 
 .graph-title {
-  padding: 1.6rem 0;
+  padding:0 0 1.6rem 0;
+  font-weight: bold;
 }
 .jz-chart{
 min-height: 22rem;
@@ -586,4 +591,8 @@ padding:0rem 0.5rem 2.5rem 0.5rem;
   top: 1.5rem;
   right: 1.5rem;
   cursor: pointer;
+}
+
+.service-details-cw{
+  padding:1.5rem;
 }

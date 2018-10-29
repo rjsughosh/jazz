@@ -181,10 +181,13 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
 
       },
       (error) => {
-        this.isloaded = 'loading';
+        this.isloaded = 'default';
         this.error = true;
-        this.evaluationComplete = true;
+        this.evaluationComplete = false;
         this.evaluateText = "EVALUATE";
+        this.enableButton(true);
+        this.toast_pop('error', 'Oops!', 'Swagger evaluation failed');
+
       }
     );
   }

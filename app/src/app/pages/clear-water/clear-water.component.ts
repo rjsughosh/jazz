@@ -198,6 +198,11 @@ export class ClearWaterComponent implements OnInit {
     const swaggerAsset = serviceAssets.find((asset) => {
       return asset.type === 'swagger_url';
     });
+    if(!swaggerAsset){
+      this.isloaded = true;
+      this.error = true;
+    }
+
     if (swaggerAsset) {
       this.http.get(swaggerAsset.provider_id).subscribe(
         (response) => {
