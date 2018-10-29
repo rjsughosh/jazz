@@ -171,7 +171,9 @@ export class ServiceOverviewComponent implements OnInit {
     displayApprovalTime : string;
     accSelected : string;
     approvalMinutes : number = 0;
+    globalApprovalMin : number = 0;
     approvalHours: number = 0;
+    globalApprovalHours : number = 0;
     approvalTime : number = 0;
     hoursArray : any = [];
     approvalTimeChanged : boolean = false; 
@@ -321,7 +323,6 @@ export class ServiceOverviewComponent implements OnInit {
 
     onenvSelected($event){
         if(this.listRuntime[this.service.runtime] !== $event){
-            console.log($event);
             Object.keys(environment.envLists).map(data=>{
                 if(environment.envLists[data] == $event)
                     this.accSelected = data;
@@ -333,11 +334,20 @@ export class ServiceOverviewComponent implements OnInit {
         }
     }
 
+    //method to watch changes on minute tab
     onenvSelectedMins($event){
+    if(this.globalApprovalMin !== $event){
         this.approvalMinutes = $event;
+        this.approvalTimeChanged  = true;
+    }
+    if(this.globalApprovalMin === $event && this.globalApprovalHours === this.approvalHours)
+        this.approvalTimeChanged = false;
     }
 
+    //method to watch changes on hours tab
     onenvSelectedHours($event){
+    if(this.approvalHours !== $event){
+        this.approvalTimeChanged = true;
         this.approvalHours = $event;
         if($event === 0){
             if(this.minutesArray[0] === 0)
@@ -347,6 +357,9 @@ export class ServiceOverviewComponent implements OnInit {
            if(this.minutesArray[0] !== 0)
            this.minutesArray.unshift(0);
        }
+    }
+    if(this.globalApprovalHours === $event && this.globalApprovalMin === this.approvalMinutes)
+        this.approvalTimeChanged = false;
     }
 
     onEventScheduleChange(val) {
@@ -405,7 +418,6 @@ export class ServiceOverviewComponent implements OnInit {
         }
         // update_payload.description=desc_temp
         this.update_payload.description = desc_temp;
-        console.log(this.service);  
         //update only some changes made to 
         if(this.service.description !== desc_temp ){
             this.descriptionChanged = false;
@@ -696,12 +708,9 @@ export class ServiceOverviewComponent implements OnInit {
         this.saveClicked = true;
         this.advancedSaveClicked = false;
         this.descriptionChanged = true;
+        this.approvalTimeChanged = false;
         this.isEnvChanged = false;
-        console.log(this.approvalHours,this.approvalMinutes);
         this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
-        console.log(this.approvalTime);
-        console.log(this.accSelected);
-
         let payload = {};
         if (this.saveClicked) {
             if (this.desc_temp != this.service.description) {
@@ -716,7 +725,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
             }
             if (this.approvalTime != this.service.approvalTimeOutInMins && this.approvalTime){
-                console.log(this.approvalTime);
                 payload["metadata"] = {
                     "approvalTimeOutInMins" : this.approvalTime
                 }
@@ -1279,19 +1287,29 @@ export class ServiceOverviewComponent implements OnInit {
        this.setApprovalData();
     }
 
-
+    //method responsible for conversion of minutes in hours and minutes.
     setApprovalData(){
-        console.log(this.service);
-        console.log("called");
         this.approvalTime = this.service.approvalTimeOutInMins;
         if(this.approvalTime/60 >= 1){
-            console.log("here");
             this.approvalHours = Math.floor(this.approvalTime/60);
-            this.approvalMinutes = this.approvalTime - this.approvalHours*60;
+            this.globalApprovalHours = this.approvalHours;
+            if(this.approvalHours > 0 && this.minutesArray[0] !== 0)
+                this.minutesArray.unshift(0); //adding zero
+
+            else if(this.approvalHours === 0 && this.minutesArray[0] === 0)
+                this.minutesArray = this.minutesArray.slice(1); //removing zero
+
+            this.approvalMinutes = this.approvalTime - this.approvalHours*60; //calculating minutes 
+            this.globalApprovalMin = this.approvalMinutes;
+            if(this.approvalHours === 1)
+                    this.displayApprovalTime = `${this.approvalHours} hour ${this.approvalMinutes} minutes`;
+            
+            else if(this.approvalHours !== 1 && this.approvalMinutes !== 0)
             this.displayApprovalTime = `${this.approvalHours} hours ${this.approvalMinutes} minutes`; 
         }
         else if(this.approvalTime){
             this.approvalMinutes = this.approvalTime;
+            this.globalApprovalMin = this.approvalMinutes;
             this.displayApprovalTime = `${this.approvalMinutes || this.service.approvalTimeOutInMins} minutes`;
         }
     }
@@ -1387,6 +1405,7 @@ export class ServiceOverviewComponent implements OnInit {
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
+        //setting the value of approvalTimeOut
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
