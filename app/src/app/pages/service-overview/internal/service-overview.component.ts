@@ -42,7 +42,8 @@ export class ServiceOverviewComponent implements OnInit {
     private subscription: any;
 
     multiENV: boolean = true;
-    list_env = []
+    environList = [];
+    list_env = [];
     list_inactive_env = [];
     copyLink: string = 'Copy Link';
     disp_edit: boolean = true;
@@ -59,12 +60,13 @@ export class ServiceOverviewComponent implements OnInit {
     show_loader: boolean = false;
     plc_hldr: boolean = true;
     status_empty: boolean;
+    descriptionChanged : boolean = true;
     description_empty: boolean;
     approvers_empty: boolean;
     domain_empty: boolean;
     serviceType_empty: boolean;
     email_empty: boolean;
-    slackChannel_empty: boolean;
+    slackChannel_empty: boolean = false;
     repository_empty: boolean;
     runtime_empty: boolean = false;
     tags_empty: boolean;
@@ -146,11 +148,12 @@ export class ServiceOverviewComponent implements OnInit {
     advancedSaveClicked: boolean = false;
     showApplicationList: boolean = false;
     selectedApplications = [];
+    listRuntime : Object;
     initialselectedApplications = [];
     oneSelected: boolean = false;
-    app_placeH: string = 'Start typing...';
+    appPlaceHolder: string = 'Start typing...';
     applc: string;
-    isSlackAvailable: boolean = true;
+    isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
     PutPayload: any;
     isPayloadAvailable: boolean = false;
@@ -163,7 +166,19 @@ export class ServiceOverviewComponent implements OnInit {
     edit_save: string = 'EDIT';
     activeEnv: string = 'dev';
     Environments = [];
+    isEnvChanged : boolean = false;
     environ_arr = [];
+    displayApprovalTime : string;
+    accSelected : string;
+    approvalMinutes : number = 0;
+    globalApprovalMin : number = 0;
+    approvalHours: number = 0;
+    globalApprovalHours : number = 0;
+    approvalTime : number = 0;
+    hoursArray : any = [];
+    minuteDropDownDisable : boolean = false;
+    approvalTimeChanged : boolean = false; 
+    minutesArray : any = [];
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -273,6 +288,23 @@ export class ServiceOverviewComponent implements OnInit {
     ) {
         this.http = request;
         this.toastmessage = messageservice;
+        this.descriptionChanged = true;
+        this.isSlackAvailable = false;
+        this.listRuntime  = environment.envLists;
+        this.environList = Object.keys(environment.envLists);
+        let localArray = [];
+        this.environList.map(data=>{
+            localArray.push(environment.envLists[data]);
+        })
+        this.environList = localArray;
+
+        for(let i = 0; i<25; i++){
+            this.hoursArray.push(i);
+        }
+        for(let i = 5;i<60;i=i+5){
+            this.minutesArray.push(i);
+        }
+        console.log("constructor");
     }
 
     copy_link(id) {
@@ -289,6 +321,57 @@ export class ServiceOverviewComponent implements OnInit {
         finally {
             document.getSelection().removeAllRanges;
         }
+    }
+
+    onenvSelected($event){
+        if(this.listRuntime[this.service.runtime] !== $event){
+            Object.keys(environment.envLists).map(data=>{
+                if(environment.envLists[data] == $event)
+                    this.accSelected = data;
+            })
+            this.isEnvChanged = true;
+        }
+        else{
+            this.isEnvChanged = false;
+        }
+    }
+
+    //method to watch changes on minute tab
+    onenvSelectedMins($event){
+    if(this.globalApprovalMin !== $event){
+        this.approvalMinutes = $event;
+        this.approvalTimeChanged  = true;
+    }
+    if(this.globalApprovalMin === $event && this.globalApprovalHours === this.approvalHours)
+        this.approvalTimeChanged = false;
+    }
+
+    //method to watch changes on hours tab
+    onenvSelectedHours($event){
+    if(this.approvalHours !== $event){
+        this.approvalTimeChanged = true;
+        this.approvalHours = $event;
+        if($event === 0) {
+            if(this.minutesArray[0] === 0) {
+                this.minutesArray = this.minutesArray.slice(1);
+            }
+            this.approvalMinutes = this.minutesArray[0];
+            this.minuteDropDownDisable = false;
+        } else if($event === 24) {
+            if(this.minutesArray[0] !== 0) {
+                this.minutesArray.unshift(0);
+            }
+            this.minuteDropDownDisable = true;
+            this.approvalMinutes = 0;
+        } else {
+           if(this.minutesArray[0] !== 0) {
+            this.minutesArray.unshift(0);
+           }
+           this.minuteDropDownDisable = false;
+       }
+    }
+    if(this.globalApprovalHours === $event && this.globalApprovalMin === this.approvalMinutes)
+        this.approvalTimeChanged = false;
     }
 
     onEventScheduleChange(val) {
@@ -339,6 +422,21 @@ export class ServiceOverviewComponent implements OnInit {
 
     showService(s) {
 
+    }
+
+    onTextAreaChange(desc_temp){
+        if(!desc_temp){
+            desc_temp = null
+        }
+        // update_payload.description=desc_temp
+        this.update_payload.description = desc_temp;
+        //update only some changes made to 
+        if(this.service.description !== desc_temp ){
+            this.descriptionChanged = false;
+        }
+        else{
+            this.descriptionChanged = true;
+        }
     }
 
     loadPlaceholders() {
@@ -445,7 +543,7 @@ export class ServiceOverviewComponent implements OnInit {
     selectApp;
     selectApplication(app) {
         this.oneSelected = true;
-        this.app_placeH = '';
+        this.appPlaceHolder = '';
         this.selectApp = app;
         let thisclass: any = this;
         this.showApplicationList = false;
@@ -466,7 +564,7 @@ export class ServiceOverviewComponent implements OnInit {
     removeApplication(index, approver) {
         this.oneSelected = false;
         this.selectApp = {};
-        this.app_placeH = 'Start typing...';
+        this.appPlaceHolder = 'Start typing...';
         this.application_arr.push(approver);
         this.selectedApplications.splice(index, 1);
     }
@@ -522,6 +620,7 @@ export class ServiceOverviewComponent implements OnInit {
 
 
     onEditClick() {
+        this.descriptionChanged = true;
         this.loadPlaceholders();
         var appobj = {
             "issueID": '',
@@ -538,7 +637,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.disp_show2 = false;
         this.publicSelected = this.publicInitial;
         this.cdnConfigSelected = this.cdnConfigInitial;
-
 
     }
     onCompleteClick() {
@@ -616,11 +714,15 @@ export class ServiceOverviewComponent implements OnInit {
         this.PutPayload = payload;
         if (Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
     }
+    
 
     onSaveClick() {
         this.saveClicked = true;
         this.advancedSaveClicked = false;
-
+        this.descriptionChanged = true;
+        this.approvalTimeChanged = false;
+        this.isEnvChanged = false;
+        this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
         let payload = {};
         if (this.saveClicked) {
             if (this.desc_temp != this.service.description) {
@@ -628,6 +730,16 @@ export class ServiceOverviewComponent implements OnInit {
             }
             if (this.slackChannel_temp != this.service.slackChannel) {
                 payload["slack_channel"] = this.slackChannel_temp;
+            }
+            if (this.accSelected != this.service.runtime) {
+                payload["metadata"] = {
+                    "providerRuntime" : this.accSelected
+                }
+            }
+            if (this.approvalTime != this.service.approvalTimeOutInMins && this.approvalTime){
+                payload["metadata"] = {
+                    "approvalTimeOutInMins" : this.approvalTime
+                }
             }
             if ((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName)) {
                 payload["appName"] = this.selectApp.appName;
@@ -650,9 +762,10 @@ export class ServiceOverviewComponent implements OnInit {
         this.disp_show2 = true;
         this.edit_save = 'EDIT';
         this.showCancel = false;
+        this.descriptionChanged = true;
         this.hide_email_error = true;
         this.hide_slack_error = true;
-        this.isSlackAvailable = true;
+        this.isSlackAvailable = false;
         if (this.subscription != undefined)
             this.subscription.unsubscribe();
         this.show_loader = false;
@@ -994,7 +1107,6 @@ export class ServiceOverviewComponent implements OnInit {
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(
         this.http.get('/jazz/environments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
             response => {
-
                 this.isenvLoading = false;
                 this.environ_arr = response.data.environment;
                 if (this.environ_arr != undefined)
@@ -1175,14 +1287,44 @@ export class ServiceOverviewComponent implements OnInit {
         this.creation_status = this.service.status;
         this.animatingDots = "...";
         this.testingStatus();
-
-
-    }
+    }   
 
     testingStatus() {
         setInterval(() => {
             this.onload.emit(this.service.status);
         }, 500);
+    }
+
+    ngAfterContentInit(){
+       this.setApprovalData();
+    }
+
+    //method responsible for conversion of minutes in hours and minutes.
+    setApprovalData(){
+        this.approvalTime = +this.service.approvalTimeOutInMins;
+        if(this.approvalTime/60 >= 1){
+            this.approvalHours = Math.floor(this.approvalTime/60);
+            this.globalApprovalHours = this.approvalHours;
+            if(this.approvalHours > 0 && this.minutesArray[0] !== 0)
+                this.minutesArray.unshift(0); //adding zero
+
+            else if(this.approvalHours === 0 && this.minutesArray[0] === 0)
+                this.minutesArray = this.minutesArray.slice(1); //removing zero
+
+            this.approvalMinutes = this.approvalTime - this.approvalHours*60; //calculating minutes 
+            this.globalApprovalMin = this.approvalMinutes;
+            if(this.approvalHours === 1)
+                    this.displayApprovalTime = `${this.approvalHours} hour ${this.approvalMinutes} minutes`;
+            
+            else if(this.approvalHours !== 1)
+            this.displayApprovalTime = `${this.approvalHours} hours ${this.approvalMinutes} minutes`; 
+        }
+        else if(this.approvalTime){
+            this.approvalMinutes = this.approvalTime;
+            this.globalApprovalMin = this.approvalMinutes;
+            this.displayApprovalTime = `${this.approvalMinutes || this.service.approvalTimeOutInMins} minutes`;
+        }
+
     }
 
     transform_env_oss(data) {
@@ -1276,6 +1418,10 @@ export class ServiceOverviewComponent implements OnInit {
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
+        //setting the value of approvalTimeOut
+        if(this.service.approvalTimeOutInMins){
+            this.setApprovalData();
+        }
 
         this.loadPlaceholders();
 
@@ -1291,7 +1437,6 @@ export class ServiceOverviewComponent implements OnInit {
         if (!this.internal_build) {
             this.envfoross();
         }
-
 
 
         this.check_empty_fields();

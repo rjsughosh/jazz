@@ -50,7 +50,6 @@ export class ServicesListComponent implements OnInit {
     this.message = this.sharedService.sharedMessage;
     this.toasterService = toasterService;
     this.toastMessage =messageservice;
-
     this.http = request;
   }
 

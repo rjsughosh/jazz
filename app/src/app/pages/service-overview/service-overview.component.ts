@@ -297,14 +297,13 @@ export class ServiceOverviewComponent implements OnInit {
       }
       loadPlaceholders()
       {
-          
         if(this.service.tags != undefined) this.tags_temp=this.service.tags.join();
         this.desc_temp=this.service.description;
         this.email_temp=this.service.email;
         this.slackChannel_temp=this.service.slackChannel;
       }
       updateTags(){
-          var payloag_tags;
+        var payloag_tags;
         payloag_tags =this.tags_temp.split(',');
         payloag_tags.forEach(function(item,index){                
             payloag_tags[index]=item.trim(); 
