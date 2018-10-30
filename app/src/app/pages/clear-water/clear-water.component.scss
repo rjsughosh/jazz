@@ -332,17 +332,20 @@ search-box{
 .set-width{
     width:60%;
 }
-
+.cw-values{
+    .det-value{
+        text-align: center;
+    }
+}
 .cw-desc{
     /deep/.det-value,.det-label{
-    font-size: 1.5rem;
-    margin-top:3rem;
-    width:auto;
-}
-/deep/.det-value{
-    margin-left:2rem;
-
-}
+        font-size: 1.5rem;
+        margin-top:3rem;
+        width:auto;
+    }
+    /deep/.det-value{
+        margin-left:2rem;
+    }
 }
 
 
