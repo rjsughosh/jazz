@@ -459,6 +459,7 @@ export class ClearWaterComponent implements OnInit {
               }
               else{
                 this.servicePublishStatus(undefined);
+                localStorage.removeItem('cw_request_id_' + this.service.name + '_' + this.service.domain);
                 this.toast_pop('error', 'Oops!', 'Failed to Publish Swagger');
                 this.progressCompleted = true;
                 this.EvaluateSidebar.enableButton(true);
