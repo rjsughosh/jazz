@@ -58,6 +58,7 @@ export class CreateServiceComponent implements OnInit {
   selApprover: any = [];
   appIndex: any;
   git_err: boolean = false;
+  slackUsersList : any;
   approversList: any;
   approversListShow: any;
   approversListBasic: any;
@@ -672,12 +673,21 @@ export class CreateServiceComponent implements OnInit {
         this.showApproversList = false;
     }
   }
-
+//change
   onApproverChange2(newVal) {
     if (!newVal) {
-      this.showApproversListBasic = false;
+      this.approversPlaceHolder = "Start typing (min 3 chars)...";
+      this.showApproversList = false;
     } else {
-      this.showApproversListBasic = true;
+      this.approversPlaceHolder = "";
+      if(newVal.length > 2 && this.approversListBasic) {
+        this.slackUsersList = this.myFilterPipe.transform(this.approversListBasic,newVal);
+        if(this.slackUsersList.length > 300)
+          this.slackUsersList = this.slackUsersList.slice(0,300);
+        this.showApproversListBasic = true;
+      }
+      else
+      this.showApproversListBasic = false;
     }
   }
 
@@ -848,9 +858,10 @@ blurApplication(){
     this.showApproversList = false;
     thisclass.approverName = '';
     this.selectedApprovers.push(approver);
-    for (var i = 0; i < this.approversList.length; i++) {
-      if (this.approversList[i].displayName === approver.displayName) {
-        this.approversList.splice(i, 1);
+    for (var i = 0; i < this.approversListShow.length; i++) {
+      if (this.approversListShow[i].displayName === approver.displayName) {
+        this.approversListShow.splice(i, 1);
+
         return;
       }
     }
@@ -882,7 +893,7 @@ blurApplication(){
 
   // function for removing selected approvers
   removeApprover(index, approver) {
-    this.approversList.push(approver);
+    this.approversListShow.push(approver);
     this.selectedApprovers.splice(index, 1);
   }
 

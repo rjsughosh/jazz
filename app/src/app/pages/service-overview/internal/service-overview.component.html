@@ -193,7 +193,7 @@
                             <div class="det-value det-space det-space1">HRS</div>
                     </div>
                     <div *ngIf='!disp_show' class="inline-value">
-                            <dropdown class='dropdown-4' [dropdwnContent]="minutesArray" title="Select Minutes" [selected]="approvalMinutes || minutesArray[0] " (onSelected)="onenvSelectedMins($event)"></dropdown>
+                            <dropdown class='dropdown-4' [ngClass]="{dropDownDisable : minuteDropDownDisable}" [dropdwnContent]="minutesArray" title="Select Minutes" [selected]="approvalMinutes || minutesArray[0] " (onSelected)="onenvSelectedMins($event)"></dropdown>
                             <div class="det-value det-space det-space1">MINS</div>
                     </div>
                   </li>

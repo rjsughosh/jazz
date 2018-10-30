@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MyFilterPipe implements PipeTransform {
     
     transform(items: any[], filter: any): any {
-        if (!items || !filter || filter.length < 3) {
+        if (!items || !filter || filter.length < 2) {
             return items;
         } else if(items.length > 0){            
             if(items[0].appName){

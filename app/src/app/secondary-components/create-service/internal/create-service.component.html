@@ -392,13 +392,13 @@
                                                                     {{selected.displayName}} ({{selected.userId}})
                                                                     <span (click)="removeApprover2(i, selected)" class="icon-icon-close"></span>
                                                                 </li>
-                                                                <input (keydown)="keypress2($event);" autocomplete="off" id="approverName2" name="approverName2" type="text" class="textForm" [(ngModel)]="approverName2" (ngModelChange)="onApproverChange2($event)">
+                                                                <input (keydown)="keypress2($event);" autocomplete="off" id="approverName2" name="approverName2" placeholder="{{approversPlaceHolder}}" type="text" class="textForm" [(ngModel)]="approverName2" (ngModelChange)="onApproverChange2($event)">
 
                                                             </ul>
                                                         </div>
                                                         <div [hidden]="!showApproversListBasic" class="approvers-list-wrap">
                                                             <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of approversListBasic | myfilter:approversListBasic;let i = index;" (focus)=" i==focusindex " [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
+                                                                <div class="approvers-dets" *ngFor="let approvers2 of slackUsersList | myfilter:approverName2;let i = index;" (focus)=" i==focusindex "  [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
                                                                     <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
                                                                 </div>
                                                             </div>
