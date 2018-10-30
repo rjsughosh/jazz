@@ -1,5 +1,5 @@
 <div class='bar-cover relative' [class.removepadding]="isloaded == 'popup'">
-  <div *ngIf='isloaded == "default"'>
+  <div>
     <div class='relative'>
       <div class='service-name'>{{service.name}}</div>
       <div class='icon-icon-close closeicon pointer' (click)='closeBar()'></div>
@@ -13,7 +13,7 @@
       <div class='publish-body evaluateBody'>
         <div class='swaggerhelp-text'>Change your swagger here and evaluate against Clearwater Linter<br> <i>Note: Changes here will not be persisted.</i></div>
 
-        <div class='json-cover' *ngIf='isloaded == "default"'>
+        <div class='json-cover'>
           <div readonly id="target" class="line-numbers">
             <div *ngFor="let value of lineNumberCount; let i = index">{{i + 1}}</div>
           </div>
