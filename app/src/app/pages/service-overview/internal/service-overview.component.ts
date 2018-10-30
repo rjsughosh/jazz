@@ -1297,7 +1297,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     //method responsible for conversion of minutes in hours and minutes.
     setApprovalData(){
-        this.approvalTime = this.service.approvalTimeOutInMins;
+        this.approvalTime = +this.service.approvalTimeOutInMins;
         if(this.approvalTime/60 >= 1){
             this.approvalHours = Math.floor(this.approvalTime/60);
             this.globalApprovalHours = this.approvalHours;
@@ -1312,7 +1312,7 @@ export class ServiceOverviewComponent implements OnInit {
             if(this.approvalHours === 1)
                     this.displayApprovalTime = `${this.approvalHours} hour ${this.approvalMinutes} minutes`;
             
-            else if(this.approvalHours !== 1 && this.approvalMinutes !== 0)
+            else if(this.approvalHours !== 1)
             this.displayApprovalTime = `${this.approvalHours} hours ${this.approvalMinutes} minutes`; 
         }
         else if(this.approvalTime){
@@ -1320,6 +1320,7 @@ export class ServiceOverviewComponent implements OnInit {
             this.globalApprovalMin = this.approvalMinutes;
             this.displayApprovalTime = `${this.approvalMinutes || this.service.approvalTimeOutInMins} minutes`;
         }
+
     }
 
     transform_env_oss(data) {
