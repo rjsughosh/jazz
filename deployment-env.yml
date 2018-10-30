@@ -1,5 +1,3 @@
-service: webapp
-domain: jazz
+service_id: 8bcd4e59-26b4-eee6-9579-91b7cfc13304
 type: angular
-owner: Smalire
 create_cloudfront_url: true
