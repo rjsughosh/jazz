@@ -182,6 +182,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function for opening and closing create service popup
   closeCreateService(serviceRequest) {
+    this.onClose.emit(false);
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
@@ -190,7 +191,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
     this.serviceRequestSuccess = false;
-    this.onClose.emit(false);
+
   }
 
 
