@@ -351,18 +351,22 @@ export class ServiceOverviewComponent implements OnInit {
     if(this.approvalHours !== $event){
         this.approvalTimeChanged = true;
         this.approvalHours = $event;
-        if($event === 0){
-            if(this.minutesArray[0] === 0)
-            this.minutesArray = this.minutesArray.slice(1);
+        if($event === 0) {
+            if(this.minutesArray[0] === 0) {
+                this.minutesArray = this.minutesArray.slice(1);
+            }
+            this.approvalMinutes = this.minutesArray[0];
             this.minuteDropDownDisable = false;
-        }
-        else if($event === 24){
+        } else if($event === 24) {
+            if(this.minutesArray[0] !== 0) {
+                this.minutesArray.unshift(0);
+            }
             this.minuteDropDownDisable = true;
             this.approvalMinutes = 0;
-        }
-       else{
-           if(this.minutesArray[0] !== 0)
-           this.minutesArray.unshift(0);
+        } else {
+           if(this.minutesArray[0] !== 0) {
+            this.minutesArray.unshift(0);
+           }
            this.minuteDropDownDisable = false;
        }
     }
