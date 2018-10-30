@@ -304,6 +304,7 @@ export class ServiceOverviewComponent implements OnInit {
         for(let i = 5;i<60;i=i+5){
             this.minutesArray.push(i);
         }
+        console.log("constructor");
     }
 
     copy_link(id) {
