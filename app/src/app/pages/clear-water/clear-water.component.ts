@@ -7,6 +7,7 @@ import * as _ from "lodash";
 import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { DataService } from '../data-service/data.service';
+import { ToasterService } from 'angular2-toaster';
 import { EvaluateSwaggerSidebarComponent } from './../../secondary-components/evaluate-swagger-sidebar/evaluate-swagger-sidebar.component';
 
 @Component({
@@ -56,17 +57,24 @@ export class ClearWaterComponent implements OnInit {
   isGraphloaded:boolean = false;
   graphError:boolean = false;
   datasets;
+  private toastmessage:any = '';
   showAddService: boolean = false;
+  requestStatusErrorCount=0;
+  requestStatusErrorLimit=3;
+
 
 
   constructor(
     private request: RequestService,
     private route: ActivatedRoute,
     private router: Router,
-    private data : DataService
+    private data : DataService,
+    private toasterService: ToasterService,
+    private messageservice: MessageService,
   )
   {
     this.http = request;
+    this.toastmessage = messageservice;
   }
 
 
@@ -191,8 +199,18 @@ export class ClearWaterComponent implements OnInit {
 
   onRequestId(requestID){
     this.servicePublishStatus(requestID);
+    this.requestStatusErrorCount=0;
   }
 
+  toast_pop(error,oops,errorMessage)
+  {
+    var tst = document.getElementById('toast-container');
+      tst.classList.add('toaster-anim');
+      this.toasterService.pop(error,oops,errorMessage);
+      setTimeout(() => {
+          tst.classList.remove('toaster-anim');
+        }, 3000);
+  }
 
   getSwaggerUrl(serviceAssets) {
     const swaggerAsset = serviceAssets.find((asset) => {
@@ -361,13 +379,14 @@ export class ClearWaterComponent implements OnInit {
     this.statusprogress = 5;
     this.hidden = false;
     this.intervalSubscription = Observable.interval(3000)
-      .switchMap((response) => this.http.get('/jazz/request-status?id='+message))
+      .switchMap((response,error) => this.http.get('/jazz/request-status?id='+message))
       .subscribe(
           response => {
             let dataResponse = <any>{};
             dataResponse.list = response;
             var respStatus = dataResponse.list.data;
             let currentStatus = respStatus.events[respStatus.events.length - 1].name;
+            this.requestStatusErrorCount = 0;
             if (respStatus.status.toLowerCase() === 'completed' && currentStatus === 'CLEARWATER_SEND_NOTIFICATION') {
                 this.serviceStatusCompleted = true;
                 this.serviceStatusPermissionD = true;
@@ -434,12 +453,20 @@ export class ClearWaterComponent implements OnInit {
           error => {
 
               this.service_error = false;
-              this.servicePublishStatus(undefined);
+              this.requestStatusErrorCount++;
+              if(this.requestStatusErrorCount < this.requestStatusErrorLimit){
+                this.servicePublishStatus(this.reqJson.request_id);
+              }
+              else{
+                this.servicePublishStatus(undefined);
+                this.toast_pop('error', 'Oops!', 'Failed to Publish Swagger');
+                this.progressCompleted = true;
+                this.EvaluateSidebar.enableButton(true);
+              }
           }
       )
   }
+
 }
-
-
 
 }
