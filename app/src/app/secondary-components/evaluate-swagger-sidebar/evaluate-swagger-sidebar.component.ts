@@ -254,7 +254,19 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
       target.prop("scrollTop", this.scrollTop)
             .prop("scrollLeft", this.scrollLeft);
     });
+  }
+
+  getSwaggerFromAssets(){
+    if(this.assets[0].hasOwnProperty('type')){
+      this.foundAsset = this.assets.find((asset) => {
+        return asset.type === 'swagger_url';
+      });
+      if(this.foundAsset){
+        this.getdata();
+      }
+
     }
+  }
 
   getdata(){
     this.http.get(this.foundAsset.provider_id).subscribe(
@@ -326,8 +338,13 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   ngOnChanges(){
     if(this.service.hasOwnProperty('id') && !this.assets && !this.swagger_json){
       this.getassets();
-    }else{
+    }
+    else if(!this.swagger_json){
+      this.getSwaggerFromAssets();
+    }
+    else{
       this.formatSwagger();
+      this.lineNumbers();
     }
   }
 }
