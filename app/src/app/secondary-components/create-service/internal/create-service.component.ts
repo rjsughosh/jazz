@@ -232,7 +232,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function called on runtime change(radio)
   onSelectionChange(val) {
-
+    this.runtime = val;
   }
 
   // function called on event schedule change(radio)
