@@ -205,8 +205,8 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequestFailure = false;
     this.serviceRequestSuccess = false;
 
-    this.allUsersApprover = this.usersList;
-    this.allUsersSlack = this.usersList;
+    this.allUsersApprover = this.usersList.values.slice(0, this.usersList.values.length);
+    this.allUsersSlack = this.usersList.values.slice(0, this.usersList.values.length);
     // this.approversList = this.approversListShow;
   }
 
@@ -510,24 +510,14 @@ export class CreateServiceComponent implements OnInit {
         payload["git_repository"] = {};
         //payload["git_repository"]["git_url"] = this.git_url;
         obj = { "git_https_url": this.git_url, "git_creds": {} };
-        // console.log("cloned")
 
         if (this.git_private == true) {
           //payload["git_private"] = this.git_private;
           this.git_creds = {
-
             "git_username": this.gitusername,
             "git_pwd": this.gituserpwd
-
           }
           obj["git_creds"] = this.git_creds;
-
-          // payload["git_pwd"] = this.gitpwd;
-
-
-
-          // console.log("private")
-
         }
         payload["git_repository"] = obj;
       }
@@ -560,7 +550,6 @@ export class CreateServiceComponent implements OnInit {
         var domain = payload.domain;
         var reqId = Response.data.request_id;
         localStorage.setItem('request_id' + "_" + payload.service_name + "_" + payload.domain, JSON.stringify({ service: service, domain: domain, request_id: reqId }));
-        console.log("payload ===== ", payload)
         var output = Response;
         // this.cache.set("request_id", Response.data.request_id);
         // this.cache.set("request_id_name", Response.input.service_name);
@@ -739,9 +728,7 @@ keypressAccount(hash){
       if (pinkElements == undefined) {
         this.focusindex = 0;
       }
-      // var id=pinkElements.children[0].innerHTML;
     }
-    // console.log(this.focusindex);
     if (this.focusindex > 2) {
       this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
@@ -792,9 +779,7 @@ keypressRegion(hash){
       if (pinkElements == undefined) {
         this.focusindexR = 0;
       }
-      // var id=pinkElements.children[0].innerHTML;
     }
-    // console.log(this.focusindexR);
     if (this.focusindexR > 2) {
       this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindexR - 2) * 2.9) + 'rem' };
 
@@ -1028,8 +1013,6 @@ blurApplication(){
       var gitClone = <HTMLInputElement>document.getElementById("checkbox-gitclone");
 
       this.git_clone = gitClone.checked;
-
-      console.log("git_clone = ", this.git_clone);
       if (this.git_clone) {
         var gitPrivate = <HTMLInputElement>document.getElementById("checkbox-gitprivate");
 
@@ -1096,9 +1079,7 @@ blurApplication(){
         if (pinkElements == undefined) {
           this.focusindex = 0;
         }
-        // var id=pinkElements.children[0].innerHTML;
       }
-      // console.log(this.focusindex);
       if (this.focusindex > 2) {
         this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
@@ -1346,7 +1327,6 @@ blurApplication(){
   }
 
   ngOnChanges(x: any) {
-    console.log('loginUserDetail:', this.loginUserDetail);
     if(this.cronObj.minutes == '')
       this.cronObj.minutes='0/5';
 
