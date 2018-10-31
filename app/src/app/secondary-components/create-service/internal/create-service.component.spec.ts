@@ -1056,7 +1056,7 @@ expect(component.approversList).not.toContain(approver);
 
  });
  it ("New Approver should  be added the selected Approvers list2 ",()=>{
-  component.approversList2 = [
+  component.approversListBasic = [
     {
       displayName: "Approver1",
       givenName: "Approver1",
@@ -1088,7 +1088,7 @@ expect(component.approversList).not.toContain(approver);
  });
 
  it ("New Approver should  be added the selected Approvers list2 ",()=>{
-  component.approversList2 = [
+  component.approversListBasic = [
     {
       displayName: "Approver1",
       givenName: "Approver1",
@@ -1167,7 +1167,7 @@ expect(component.approversList).not.toContain(approver);
 }));
 
 it ("Selected Approvers must be Removed Selected Approvers2 ",()=>{
-  component.approversList2 = [
+  component.approversListBasic = [
     {
       displayName: "Approver1",
       givenName: "Approver1",
@@ -1195,7 +1195,7 @@ let approver =  {
 component.selectedApprovers2.push();
 component.removeApprover2(approver,0);
 expect(component.selectedApprovers2).not.toContain(approver);
-expect(component.approversList2).toContain(approver);
+expect(component.approversListBasic).toContain(approver);
  });
  it ("disable function should return false for valid case ",()=>{
    //initialization 
@@ -2008,10 +2008,10 @@ it('validating onApproverChange2 function',() => {
   let newVal;
   if(newVal == "vban"){
   component.onApproverChange2(newVal);
-  expect(component.showApproversList2).toBe(true);
+  expect(component.showApproversListBasic).toBe(true);
   }else if(newVal == undefined){
     component.onApproverChange2(newVal);
-    expect(component.showApproversList2).toBe(false);
+    expect(component.showApproversListBasic).toBe(false);
   }
 });
 
@@ -2099,12 +2099,12 @@ this.createslackSelected = false;
     this.createSlackModel.purpose = '';
     this.createSlackModel.invites = '';
     for (var i = 0; i < this.selectedApprovers2.length; i++) {
-      this.approversList2.push(this.selectedApprovers2[i]);
+      this.approversListBasic.push(this.selectedApprovers2[i]);
     }
     this.selectedApprovers2 = [];
   }
   *///
-  component.approversList2 = [];
+  component.approversListBasic = [];
   component.selectedApprovers2=[
     {
       givenName: "Approver1",
@@ -2122,7 +2122,7 @@ this.createslackSelected = false;
   expect(component.createSlackModel.name).toBe('');
   expect(component.createSlackModel.purpose).toBe('');
   expect(component.createSlackModel.invites).toBe('');
-  expect(component.approversList2).toContain({
+  expect(component.approversListBasic).toContain({
     givenName: "Approver1",
     userId: "AP1",
     userEmail: "ap1@moonraft.com"

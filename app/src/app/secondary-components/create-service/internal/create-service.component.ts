@@ -18,11 +18,12 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { ServicesListComponent } from "../../../pages/services-list/services-list.component"
 import {environment} from "../../../../environments/environment";
+import { MyFilterPipe } from "../../../primary-components/custom-filter";
 
 @Component({
   selector: 'create-service',
   templateUrl: './create-service.component.html',
-  providers: [RequestService, MessageService],
+  providers: [RequestService, MessageService,  MyFilterPipe],
   styleUrls: ['./create-service.component.scss']
 })
 
@@ -46,6 +47,7 @@ export class CreateServiceComponent implements OnInit {
   showApplicationList:boolean = false;
   approverName: string;
   approverName2: string;
+  approversPlaceHolder : string = "Start typing (min 3 chars)...";
   currentUserSlack: boolean = false;
   git_clone: boolean = false;
   git_url: string = "";
@@ -56,13 +58,15 @@ export class CreateServiceComponent implements OnInit {
   selApprover: any = [];
   appIndex: any;
   git_err: boolean = false;
+  slackUsersList : any;
   approversList: any;
-  approversList2: any;
+  approversListShow: any;
+  approversListBasic: any;
   slackAvailble: boolean = false;
   slackNotAvailble: boolean = false;
   channelNameError: boolean = false;
   showLoader: boolean = false;
-  showApproversList2: boolean = false;
+  showApproversListBasic: boolean = false;
   showRegionList:boolean = false;
   showAccountList:boolean = false;
   oneSelected:boolean=false;
@@ -94,6 +98,7 @@ export class CreateServiceComponent implements OnInit {
   focusindex: any = -1;
   scrollList: any = '';
   toast: any;
+  start: number = 0;
   gitCloneSelected: boolean = false;
   gitprivateSelected: boolean = false;
   //   model: any = {
@@ -131,20 +136,26 @@ export class CreateServiceComponent implements OnInit {
   domain: any = "";
   reqId: any = "";
   poc_appname:string;
-  app_placeH:string = 'Start typing...';
+  appPlaceHolder:string = 'Start typing...';
   accounts=['tmodevops','tmonpe'];
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
   regionInput:string;
+  isScrolled : boolean = false;
   selectedAccount=[];
   AccountInput:string;
+  counter: number = 0;
+  localRef : number = 0;
   applc:string;
+  runtimeKeys : any;
+  runtimeObject : any;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
 
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
+    private myFilterPipe : MyFilterPipe,
     private cronParserService: CronParserService,
     private http: RequestService,
     private cache: DataCacheService,
@@ -153,6 +164,10 @@ export class CreateServiceComponent implements OnInit {
     private authenticationservice: AuthenticationService
   ) {
     this.toastmessage = messageservice;
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
+    this.runtimeObject = environment.envLists;
+    this.runtimeKeys = Object.keys(this.runtimeObject);
+
   }
 
   // serviceTypeData = [
@@ -187,11 +202,12 @@ export class CreateServiceComponent implements OnInit {
       this.servicelist.serviceCall();
     }
     this.selectedDeploymentTarget = '';
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
     this.serviceRequestSuccess = false;
-
+    this.approversList = this.approversListShow;
   }
 
 
@@ -205,6 +221,7 @@ export class CreateServiceComponent implements OnInit {
   changeServiceType(serviceType) {
     this.typeOfService = serviceType;
   }
+
 
   // function for changing platform type
   changePlatformType(platformType) {
@@ -257,9 +274,9 @@ export class CreateServiceComponent implements OnInit {
     this.http.get('/platform/ad/users')
       .subscribe((res: Response) => {
         this.approversListRes = res;
-        this.approversList = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.approversList2 = this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.getUserDetails(this.approversList2);
+        this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.approversListBasic= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        this.getUserDetails(this.approversListBasic);
       }, error => {
         this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
         this.toast_pop('error', 'Oops!', this.resMessage);
@@ -544,6 +561,7 @@ export class CreateServiceComponent implements OnInit {
         this.serviceRequestSuccess = true;
         this.serviceRequestFailure = false;
         this.isLoading = false;
+        this.appPlaceHolder='Start typing...';
         // this.cache.set('request_id',output.data.request_id);
         // var index = output.data.indexOf("https://");
         // this.serviceLink = output.data.slice(index, output.data.length);
@@ -600,6 +618,7 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestSuccess = false;
     this.serviceRequestFailure = false;
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
   }
 
 
@@ -640,17 +659,35 @@ export class CreateServiceComponent implements OnInit {
   // function to hide approver list when input field is empty
   onApproverChange(newVal) {
     if (!newVal) {
+      this.approversPlaceHolder = "Start typing (min 3 chars)...";
       this.showApproversList = false;
     } else {
-      this.showApproversList = true;
+      this.approversPlaceHolder = "";
+      if(newVal.length > 2 && this.approversListShow) {
+        this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
+        if(this.approversList.length > 300)
+          this.approversList = this.approversList.slice(0,300);
+        this.showApproversList = true;
+      }
+      else
+        this.showApproversList = false;
     }
   }
-
+//change
   onApproverChange2(newVal) {
     if (!newVal) {
-      this.showApproversList2 = false;
+      this.approversPlaceHolder = "Start typing (min 3 chars)...";
+      this.showApproversList = false;
     } else {
-      this.showApproversList2 = true;
+      this.approversPlaceHolder = "";
+      if(newVal.length > 2 && this.approversListBasic) {
+        this.slackUsersList = this.myFilterPipe.transform(this.approversListBasic,newVal);
+        if(this.slackUsersList.length > 300)
+          this.slackUsersList = this.slackUsersList.slice(0,300);
+        this.showApproversListBasic = true;
+      }
+      else
+      this.showApproversListBasic = false;
     }
   }
 
@@ -821,9 +858,10 @@ blurApplication(){
     this.showApproversList = false;
     thisclass.approverName = '';
     this.selectedApprovers.push(approver);
-    for (var i = 0; i < this.approversList.length; i++) {
-      if (this.approversList[i].displayName === approver.displayName) {
-        this.approversList.splice(i, 1);
+    for (var i = 0; i < this.approversListShow.length; i++) {
+      if (this.approversListShow[i].displayName === approver.displayName) {
+        this.approversListShow.splice(i, 1);
+
         return;
       }
     }
@@ -834,17 +872,18 @@ blurApplication(){
   selectApprovers2(approver) {
 
     let thisclass: any = this;
-    this.showApproversList2 = false;
+    this.showApproversListBasic = false;
     thisclass.approverName2 = '';
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     // for (var i = 0; i < this.selectedApprovers.length; i++) {
     //     if(this.selectedApprovers[i].displayName === approver.displayName){
     //       return;
     //     }
     // }
     this.selectedApprovers2.push(approver);
-    for (var i = 0; i < this.approversList2.length; i++) {
-      if (this.approversList2[i].displayName === approver.displayName) {
-        this.approversList2.splice(i, 1);
+    for (var i = 0; i < this.approversListBasic.length; i++) {
+      if (this.approversListBasic[i].displayName === approver.displayName) {
+        this.approversListBasic.splice(i, 1);
 
         return;
       }
@@ -854,17 +893,18 @@ blurApplication(){
 
   // function for removing selected approvers
   removeApprover(index, approver) {
-    this.approversList.push(approver);
+    this.approversListShow.push(approver);
     this.selectedApprovers.splice(index, 1);
   }
 
   removeApprover2(index, approver) {
-    this.approversList2.push(approver);
+    this.approversListBasic.push(approver);
     this.selectedApprovers2.splice(index, 1);
   }
 
   //function for closing dropdown on outside click//
   closeDropdowns() {
+    this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.showApproversList = false;
   }
 
@@ -1194,7 +1234,7 @@ blurApplication(){
     this.createSlackModel.purpose = '';
     this.createSlackModel.invites = '';
     for (var i = 0; i < this.selectedApprovers2.length; i++) {
-      this.approversList2.push(this.selectedApprovers2[i]);
+      this.approversListBasic.push(this.selectedApprovers2[i]);
     }
     this.selectedApprovers2 = [];
   }
@@ -1257,25 +1297,24 @@ blurApplication(){
   selectApp;
   selectApplication(app) {
     this.oneSelected=true;
-    this.app_placeH='';
+    this.appPlaceHolder='';
     this.selectApp = app;
     let thisclass: any = this;
     this.showApplicationList = false;
     thisclass.applc = '';
     this.selectedApplications.push(app);
-    for (var i = 0; i < this.application_arr.length; i++) {
-      if (this.application_arr[i].appName === app.appName) {
-        this.application_arr.splice(i, 1);
-        return;
-      }
-    }
+    let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+    this.application_arr = nonRepeatedData(this.application_arr);
+    return;
 
   }
   removeApplication(index, approver) {
     this.oneSelected=false;
     this.selectApp={};
-    this.app_placeH='Start typing...';
-    this.application_arr.push(approver);
+    this.appPlaceHolder='Start typing...';
+    // this.application_arr.push(approver);
+    let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+    this.application_arr = nonRepeatedData(this.application_arr);
     this.selectedApplications.splice(index, 1);
   }
   start_at:number=0;
