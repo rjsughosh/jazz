@@ -269,10 +269,10 @@ export class CreateServiceComponent implements OnInit {
   };
   approversListRes: any;
   usersList;
-  allUsersSlack;
-  allUsersApprover;
-  filteredSlackUsers;
-  filteredApproversUsers;
+  allUsersSlack = [];
+  allUsersApprover = [];
+  filteredSlackUsers = [];
+  filteredApproversUsers = [];
   // function to get approvers list
   public getData() {
 
@@ -280,8 +280,8 @@ export class CreateServiceComponent implements OnInit {
       .subscribe((res: Response) => {
         this.approversListRes = res;
         this.usersList = this.approversListRes.data;
-        this.allUsersSlack= this.usersList.values.slice(0, this.usersList.values.length);
-        this.allUsersApprover= this.usersList.values.slice(0, this.usersList.values.length);
+        this.allUsersSlack = this.usersList.values.slice(0, this.usersList.values.length);
+        this.allUsersApprover = this.usersList.values.slice(0, this.usersList.values.length);
 
         this.getUserDetails(this.allUsersApprover);
       }, error => {
@@ -617,7 +617,7 @@ export class CreateServiceComponent implements OnInit {
     this.rateExpression.type = 'none';
     this.rateExpression.duration = "5";
     this.eventExpression.type = 'awsEventsNone';
-    this.runtime = 'nodejs';
+    this.runtime = this.runtimeKeys[0];
   }
   // function to navigate from success or error screen to create service screen
   backToCreateService() {
