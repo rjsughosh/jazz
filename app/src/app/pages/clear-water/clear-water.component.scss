@@ -587,8 +587,8 @@ padding:0rem 0.5rem 2.5rem 0.5rem;
 .clearwater-sidebar{
   /deep/.sidebar-wrp{
     position: fixed;
-    &.show /deep/ sidebar-inr{
-        overflow-y: scroll;
+    &.show /deep/ .sidebar-inr{
+        overflow-y: auto;
     }
   }
 }

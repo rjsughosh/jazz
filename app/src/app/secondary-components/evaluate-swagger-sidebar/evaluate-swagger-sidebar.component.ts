@@ -65,7 +65,9 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   detailView: boolean = true;
   oneObject: any;
   evaluateText:string = "EVALUATE";
-
+  headerObj = {
+    'accept': 'application/json'
+  };
 
   private http:any;
   constructor(
@@ -154,7 +156,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
     let swaggerLintPayload = {
       'swaggerDoc': swagger_json,
     };
-    this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
+    this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload, this.headerObj)
     .subscribe(
       (response) => {
         this.obj = response;
@@ -269,7 +271,7 @@ export class EvaluateSwaggerSidebarComponent implements OnInit {
   }
 
   getdata(){
-    this.http.get(this.foundAsset.provider_id).subscribe(
+    this.http.get(this.foundAsset.provider_id, null, this.headerObj).subscribe(
       (response) => {
         this.swagger_json=JSON.stringify(response);
         this.swagger_json = this.stringToPrettyString(this.swagger_json);

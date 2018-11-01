@@ -31,7 +31,6 @@ export class ClearWaterComponent implements OnInit {
   oneObject: any;
   isloaded: boolean = false;
   expandText: string = 'Expand all';
-  evaluatePublish:string = 'EVALUATE';
   tableHeader = [];
   errMessage;
   search_text: string;
@@ -61,7 +60,9 @@ export class ClearWaterComponent implements OnInit {
   showAddService: boolean = false;
   requestStatusErrorCount=0;
   requestStatusErrorLimit=3;
-
+  headerObj = {
+    'accept': 'application/json'
+  };
 
 
   constructor(
@@ -222,7 +223,7 @@ export class ClearWaterComponent implements OnInit {
     }
 
     if (swaggerAsset) {
-      this.http.get(swaggerAsset.provider_id).subscribe(
+      this.http.get(swaggerAsset.provider_id, null, this.headerObj).subscribe(
         (response) => {
           this.swagger_json = response;
           this.getGraphData(this.swagger_json);
@@ -252,7 +253,7 @@ export class ClearWaterComponent implements OnInit {
       };
     }
 
-    this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload)
+    this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload, this.headerObj)
       .subscribe(
         (response) => {
           this.obj = response;
@@ -278,7 +279,7 @@ export class ClearWaterComponent implements OnInit {
           }
           this.historicalChangeTrendURI = response.links.historicalChangeTrendURI;
           if(!sidebar){
-            this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
+            this.http.get(this.historicalChangeTrendURI, null, this.headerObj).subscribe((response) => {
               this.graphData = this.formatGraphData(response.changeHistory);
               console.log("cw-data", JSON.stringify(this.graphData));
               setTimeout(() => {
@@ -310,7 +311,7 @@ export class ClearWaterComponent implements OnInit {
 
   refreshGraph(){
     this.isGraphloaded = false;
-    this.http.get(this.historicalChangeTrendURI).subscribe((response) => {
+    this.http.get(this.historicalChangeTrendURI,null, this.headerObj).subscribe((response) => {
       this.graphData = this.formatGraphData(response.changeHistory);
       setTimeout(() => {
         this.isGraphloaded = true;
@@ -326,7 +327,6 @@ export class ClearWaterComponent implements OnInit {
     this.env = this.route.snapshot.params['env'];
     this.getSwaggerUrl(this.service.assets);
     if(this.env == 'prod'){
-      this.evaluatePublish = 'EVALUATE / PUBLISH';
       try{
         this.reqJson = JSON.parse(localStorage.getItem('cw_request_id'+"_"+this.service.name+"_"+this.service.domain));
         if(this.reqJson){

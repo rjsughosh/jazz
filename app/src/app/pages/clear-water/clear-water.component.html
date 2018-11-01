@@ -80,7 +80,7 @@
     <div class='cw-button'>
       <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE" class="testApiBtn" (click)="showService(true,'evaluate')"
         [class.invisible]="isLoading"></btn-jazz-secondary>
-      <btn-jazz-secondary *ngIf='!slideSidebar' text="PUBLISH" class="testApiBtn" (click)="showService(true,'publish')"
+      <btn-jazz-secondary *ngIf='this.env == "prod" &&! slideSidebar' text="PUBLISH" class="testApiBtn" (click)="showService(true,'publish')"
         [class.invisible]="isLoading"></btn-jazz-secondary>
       <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
         [class.invisible]="isLoading"></btn-jazz-secondary>
