@@ -50,43 +50,66 @@
         <div class='cw-values'>
           <ul>
             <li>
-              <div class='det-label cw-label'>Organization<br>goal</div>
+              <div class='det-label cw-label'>Organization goal</div>
               <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
             </li>
             <li>
-              <div class='det-label cw-label'>Organization<br>Average</div>
+              <div class='det-label cw-label'>Organization Average</div>
               <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
             </li>
             <li>
-              <div class='det-label cw-label'>Total<br>warnings</div>
+              <div class='det-label cw-label'>Total warnings</div>
               <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>
             </li>
             <li>
-              <div class='det-label cw-label'>Total<br>errors</div>
+              <div class='det-label cw-label'>Total errors</div>
               <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
-            </li>
-            <li *ngIf='!slideSidebar'>
-              <div class='det-label cw-label'>Description</div>
-              <div class='det-value cw-message'>{{cw_message}}</div>
             </li>
 
           </ul>
         </div>
 
-        <div class='cw-button'>
-          <btn-jazz-secondary *ngIf='!slideSidebar' text="{{evaluatePublish}}" class="testApiBtn" (click)='openSidebar()'
-            [class.invisible]="isLoading"></btn-jazz-secondary>
-          <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
-            [class.invisible]="isLoading"></btn-jazz-secondary>
-
+        <div class='cw-description'>
+            <div class='det-label cw-label'>Description</div>
+            <div class='det-value cw-message'>{{cw_message}}</div>
         </div>
+
       </div>
     </div>
 
+    <div class='cw-button'>
+      <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE" class="testApiBtn" (click)="showService(true,'evaluate')"
+        [class.invisible]="isLoading"></btn-jazz-secondary>
+      <btn-jazz-secondary *ngIf='this.env == "prod" &&! slideSidebar' text="PUBLISH" class="testApiBtn" (click)="showService(true,'publish')"
+        [class.invisible]="isLoading"></btn-jazz-secondary>
+      <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
+        [class.invisible]="isLoading"></btn-jazz-secondary>
+    </div>
+
+
   </div>
-  <div class='service-details row' *ngIf='detailView && !congratulations'>
+  <div class='service-details row service-details-cw' *ngIf='detailView && !congratulations'>
 
 
+
+
+
+    <div class="graph-section-cover" [class.hide]="graphError">
+      <div class="graph-title">
+        Clearwater Score Trend
+      </div>
+      <div class="jz-height-full">
+        <div class="jz-chart">
+          <div class="loading-row" [class.show]="!isGraphloaded">
+            <div class="loading-circle"></div>
+          </div>
+          <div class="icon-icon-refresh graph-refresh-icon" (click)='refreshGraph()'></div>
+          <div class="jz-chart-content" *ngIf='graphData && isGraphloaded'>
+            <chartjs-linegraph [class.hide]="graphError" *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class='cw-top-part'>
 
@@ -101,22 +124,6 @@
         <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
         <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
 
-      </div>
-    </div>
-
-    <div class="graph-section-cover" [class.hide]="graphError">
-      <div class="graph-title">
-        Clearwater Score Trend
-      </div>
-      <div class="jz-height-full">
-        <div class="jz-chart">
-          <div class="loading-row" [class.show]="!isGraphloaded">
-            <div class="loading-circle"></div>
-          </div>
-          <div class="jz-chart-content" *ngIf='graphData && isGraphloaded'>
-            <chartjs-linegraph [class.hide]="graphError" *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -214,10 +221,14 @@
   </div>
 </div>
 
-<section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-  <swagger-sidebar #swaggerSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
-
+<section class='clearwater-sidebar' [class.slide-in]='slideSidebar'>
+  <sidebar [show]="showAddService" (onClose)="showService(false)">
+    <evaluate-swagger-sidebar #EvaluateSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="showService(false)"></evaluate-swagger-sidebar>
+  </sidebar>
 </section>
+
+
+
 
 <div *ngIf='isloaded && error' class="service-details empty-row with-refresh relative hgt">
   <div class="icon-icon-server-error">

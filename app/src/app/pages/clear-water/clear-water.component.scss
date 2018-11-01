@@ -4,43 +4,77 @@
 
 .cw-cover{
     display: flex;
-
+    >div{
+      &:first-child{
+        border-right:2px solid #f1f1f1;
+      }
+      &:nth-child(2){
+        padding: 2.5rem 3rem;
+      }
+      padding:3rem;
+      &:last-child{
+        border-left:2px solid #f1f1f1;
+        padding: 2.5rem 3rem;
+      }
+    }
 
 }
 .cw-top-part{
     display: flex;
     justify-content: space-between;
+    margin:2rem 0 0 0;
 }
 
 .cw-message{
-   font-size: 1.5rem;
-   margin-top: 3rem;
+  font-size: 1.5rem;
+  margin:2rem 0;
 }
 
 .cw-score{
-    width:21%
+    width:25%;
+    padding: 1.5rem 5rem !important;
 }
 .cw-button{
-    position: absolute;
-    top:-1rem;
-    right: 0rem;
+    // display: flex;
+    // justify-content: flex-end;
+    padding:0.5rem 1rem;
+    border-top: 2px solid #f1f1f1;
+    background: #f9f9f9;
+    justify-content: flex-end;
+    display: flex;
+    btn-jazz-secondary{
+      margin:0 1rem;
+    }
 }
 .cw-values{
-    width:65%;
+    // width:50%;
+    // margin
+    padding:0 3rem;
     ul{
         display: flex;
         justify-content: space-around;
     }
     li{
-
+        padding-bottom: 0;
         display: flex;
         flex-direction: column;
+        margin: 0 2rem;
+        &:first-child{
+          margin:0;
+        }
+        &:last-child{
+          margin:0;
+        }
         // height: 2rem;
         div{
             // border:1px solid black;
 
         }
     }
+}
+
+.cw-description{
+  padding: 3rem;
 }
 
 .error{
@@ -190,7 +224,6 @@ margin-bottom: 1rem;
 }
 
 .cw-value{
-    text-align: center;
     font-size: 2.5rem;
     font-weight: normal;
     margin-top: 1rem;
@@ -198,7 +231,6 @@ margin-bottom: 1rem;
 
 .cw-label{
     width:auto;
-    text-align: center;
 }
 .score-head{
     color: #666666;
@@ -256,6 +288,8 @@ search-box{
 
 .top-section{
     border-bottom: 1px solid #ddd;
+    padding:0;
+    margin-bottom: 1rem;
 }
 
 .testApiBtn{
@@ -264,10 +298,12 @@ search-box{
         /* background-color: #c62770; */
         color: #c62770;
         border:1px solid #c62770;
+        background:#f9f9f9;
         box-shadow: none;
         padding: 0.5rem 1.5rem;
         &:hover, &:active, &:focus{
             color: #fff;
+            background: #c62770;
         }
     }
 }
@@ -296,17 +332,20 @@ search-box{
 .set-width{
     width:60%;
 }
-
+.cw-values{
+    .det-value{
+        text-align: center;
+    }
+}
 .cw-desc{
     /deep/.det-value,.det-label{
-    font-size: 1.5rem;
-    margin-top:3rem;
-    width:auto;
-}
-/deep/.det-value{
-    margin-left:2rem;
-
-}
+        font-size: 1.5rem;
+        margin-top:3rem;
+        width:auto;
+    }
+    /deep/.det-value{
+        margin-left:2rem;
+    }
 }
 
 
@@ -440,7 +479,6 @@ search-box{
    }
 }
 .current-status-wrap{
-  z-index: 101!important;
   margin-bottom: 2rem;
   padding:2rem 3rem;
   background-color: #fff;
@@ -532,7 +570,8 @@ search-box{
 }
 
 .graph-title {
-  padding: 1.6rem 0;
+  padding:0 0 1.6rem 0;
+  font-weight: bold;
 }
 .jz-chart{
 min-height: 22rem;
@@ -545,4 +584,21 @@ padding:0rem 0.5rem 2.5rem 0.5rem;
   }
 }
 
+.clearwater-sidebar{
+  /deep/.sidebar-wrp{
+    position: fixed;
+    &.show /deep/ .sidebar-inr{
+        overflow-y: auto;
+    }
+  }
+}
+.graph-refresh-icon{
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  cursor: pointer;
+}
 
+.service-details-cw{
+  padding:1.5rem;
+}

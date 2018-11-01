@@ -93,19 +93,19 @@
                     <div class="input-field-container">
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" class='test-focus' name="runtime" [id]="runtimeKeys[0]" [value]="runtimeKeys[0]" [checked]="runtime == 'runtimeKeys[0]'" (click)="onSelectionChange(runtimeKeys[0])">
+                                <input type="radio" class='test-focus' name="runtime" [id]="runtimeKeys[0]" [value]="runtimeKeys[0]" [checked]="runtime == runtimeKeys[0]" (click)="onSelectionChange(runtimeKeys[0])">
                                 <label [for]="runtimeKeys[0]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" [id]="runtimeKeys[1]" [value]="runtimeKeys[1]" [checked]="runtime == 'runtimeKeys[1]'" (click)="onSelectionChange(runtimeKeys[1])">
+                                <input type="radio" name="runtime" [id]="runtimeKeys[1]" [value]="runtimeKeys[1]" [checked]="runtime == runtimeKeys[1]" (click)="onSelectionChange(runtimeKeys[1])">
                                 <label [for]="runtimeKeys[1]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[1]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" [id]="runtimeKeys[2]" [value]="runtimeKeys[2]" [checked]="runtime == 'runtimeKeys[2]'" (change)="onSelectionChange(runtimeKeys[2])">
+                                <input type="radio" name="runtime" [id]="runtimeKeys[2]" [value]="runtimeKeys[2]" [checked]="runtime == runtimeKeys[2]" (change)="onSelectionChange(runtimeKeys[2])">
                                 <label [for]="runtimeKeys[2]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
                             </div>
                         </section>
@@ -388,18 +388,18 @@
 
                                                         <div class="selected-approvers whit  slackForm">
                                                             <ul (click)='focusInput2($event)'>
-                                                                <li *ngFor="let selected of selectedApprovers2;let i=index" >
+                                                                <li *ngFor="let selected of selectedSlackUsers;let i=index" >
                                                                     {{selected.displayName}} ({{selected.userId}})
-                                                                    <span (click)="removeApprover2(i, selected)" class="icon-icon-close"></span>
+                                                                    <span (click)="removeSlackUser(i, selected)" class="icon-icon-close"></span>
                                                                 </li>
-                                                                <input (keydown)="keypress2($event);" autocomplete="off" id="approverName2" name="approverName2" placeholder="{{approversPlaceHolder}}" type="text" class="textForm" [(ngModel)]="approverName2" (ngModelChange)="onApproverChange2($event)">
+                                                                <input (keydown)="keypressSlack($event);" autocomplete="off" id="slackName" name="slackName" placeholder="{{approversPlaceHolder}}" type="text" class="textForm" [(ngModel)]="slackName" (ngModelChange)="onSlackUserChange($event)">
 
                                                             </ul>
                                                         </div>
-                                                        <div [hidden]="!showApproversListBasic" class="approvers-list-wrap">
+                                                        <div [hidden]="!showSlackList" class="approvers-list-wrap">
                                                             <div class="approvers-list typeShow open">
-                                                                <div class="approvers-dets" *ngFor="let approvers2 of slackUsersList | myfilter:approverName2;let i = index;" (focus)=" i==focusindex "  [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
-                                                                    <div  (click)="$event.preventDefault();selectApprovers2( approvers2);" index="{i}" [attr.displayName]='approvers2.displayName' [attr.givenName]='approvers2.givenName' [attr.userId]='approvers2.userId' [attr.userEmail]='approvers2.userEmail'>{{approvers2.displayName || approvers2.givenName}} ({{approvers2.userId}})</div>
+                                                                <div class="approvers-dets" *ngFor="let slackUser of filteredSlackUsers | myfilter:slackName;let i = index;" (focus)=" i==focusindex "  [ngClass]="{pinkfocuslack : i==focusindex }" [ngStyle]="scrollList" >
+                                                                    <div  (click)="$event.preventDefault();selectSlackUser( slackUser);" index="{i}" [attr.displayName]='slackUser.displayName' [attr.givenName]='slackUser.givenName' [attr.userId]='slackUser.userId' [attr.userEmail]='slackUser.userEmail'>{{slackUser.displayName || slackUser.givenName}} ({{slackUser.userId}})</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -410,7 +410,7 @@
                                             <!-- <input name="slackInvite" type="text" class="textForm slackForm" [(ngModel)]="createSlackModel.invites"> -->
                                             <div class='createSlackbtns'>
                                                 <a (click)='cancelCreateSlack()'>CANCEL</a>
-                                                <btn-jazz-primary [disablePrimaryBtn]='(createSlackModelname.valid && (createSlackModelname.dirty || createSlackModelname.touched)) || !createSlackModel.name || selectedApprovers2.length==0' class='createSlackbtn' text='CREATE' (click)='createSlack($event)'></btn-jazz-primary>
+                                                <btn-jazz-primary [disablePrimaryBtn]='(createSlackModelname.valid && (createSlackModelname.dirty || createSlackModelname.touched)) || !createSlackModel.name || selectedSlackUsers.length==0' class='createSlackbtn' text='CREATE' (click)='createSlack($event)'></btn-jazz-primary>
                                             </div>
                                         </div>
                                     </div>
@@ -703,13 +703,13 @@
                                             {{selected.displayName}} ({{selected.userId}})
                                             <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                         </li>
-                                        <input (keydown)="keypress($event)"   autocomplete="off" id="approverName" name="approverName" type="text" placeholder="{{approversPlaceHolder}}" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
+                                        <input (keydown)="keypressApprovers($event)"   autocomplete="off" id="approverName" name="approverName" type="text" placeholder="{{approversPlaceHolder}}" class="textForm" [(ngModel)]="approverName" (ngModelChange)="onApproverChange($event)">
 
                                     </ul>
                                 </div>
                                 <div [hidden]="!showApproversList" class="approvers-list-wrap">
                                     <div  class="approvers-list typeShow open">
-                                        <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
+                                        <div class="approvers-dets" *ngFor="let approverss of filteredApproversUsers | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
                                             <div  (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
                                         </div>
                                     </div>

@@ -2,23 +2,21 @@
 @import './../../pages/services-list/services-list.component.scss';
 @import './../../pages/clear-water/clear-water.component.scss';
 
-.sidebar-wrp .sidebar-inr {
-  overflow-y: hidden;
-}
 
 .bar-cover {
-  min-height: 100vh;
-  min-width: 47rem;
+  min-height: 100%;
+  width: 60rem;
   right: 0;
   z-index: 2;
-  border: 2px solid #efefef;
-  padding: 7rem 3.5rem 2.5rem 2.5rem;
-  ;
+  border: none;
+  padding: 2.5rem;
   background-color: #efefef;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.5);
-
-
+  .loading-row{
+    background: rgba(0,0,0,.3);
+  }
 }
+
 
 .empty-row-default {
   position: relative;
@@ -32,6 +30,7 @@
 
 .btn-cover {
   display: flex;
+  margin: 2rem 0;
   justify-content: space-between;
 
   a {
@@ -64,7 +63,9 @@
 }
 
 .cw-cover {
-  flex-direction: column;
+  background: white;
+  // padding: 2rem;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.11);
 }
 
 .cw-top-part {
@@ -80,7 +81,8 @@
 }
 
 .cw-score {
-  width: 100%
+  width: 32%;
+  border:none;
 }
 
 .cw-values {
@@ -89,7 +91,6 @@
   ul {
     display: flex;
     justify-content: space-around;
-    margin-top: 2.5rem;
   }
 
   li {
@@ -128,6 +129,13 @@ btn-jazz-primary {
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
   }
+}
+
+.table-row-wrp{
+  border-bottom:1px solid #ddd;
+}
+.detailed-view{
+  margin-top:1rem;
 }
 
 .closeicon {
@@ -187,24 +195,16 @@ btn-jazz-primary {
   }
 }
 .sidebar-summary{
-  &:hover{
-    color:#ed008c;
-  }
 
   display: flex;
   align-items:center;
   outline:none;
-  cursor:pointer;
   font-size: 1.4rem;
 }
 
 .publish-body{
   margin-bottom: 1rem;
-  visibility: hidden;
-  display:none;
-  height: 0;
-  opacity:0;
-  max-height: 0;
+
   .publish-sections{
     &:last-child{
       display:flex;
@@ -234,7 +234,6 @@ btn-jazz-primary {
 }
 .swaggerhelp-text{
   font-size: 1rem;
-  padding-left: 2.5rem;
   color: #aaa;
 }
 .icon-icon-up{
@@ -274,4 +273,16 @@ btn-jazz-primary {
 .textForm-area{
   height:5rem !important;
   padding:10px;
+}
+.cw-evaluate-score{
+  padding:1.5rem 3rem !important;
+
+}
+.cw-cover{
+  >div{
+    border:none !important;
+  }
+}
+.pub-desc{
+  height: 15rem !important;
 }

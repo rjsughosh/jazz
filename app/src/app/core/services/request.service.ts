@@ -47,16 +47,20 @@ export class RequestService {
 
 
 
-  get(url: string, params?): Observable<any> {
+  get(url: string, params?, headerObj?): Observable<any> {
     url = this.constructUrl(url);
     this.token = this.authenticationService.getToken();
 
-    let options = new RequestOptions({
-      headers: new Headers({
+    if (!headerObj) {
+      headerObj = {
         'Authorization': this.token,
         'Content-Type': 'application/json',
         'accept': 'application/json'
-      }),
+      }
+    }
+    let headers = new Headers(headerObj);
+    let options = new RequestOptions({
+      headers: headers,
       search: null
     });
 
@@ -81,7 +85,7 @@ export class RequestService {
       });
   }
 
-  post(url: string, body: any): Observable<any> {
+  post(url: string, body: any, headerObj?): Observable<any> {
     // Make a POST request to url
 
     // Construct url
@@ -91,11 +95,14 @@ export class RequestService {
     this.token = this.authenticationService.getToken();
 
     // Add Authentication token to headers
-    let headerObj = {
-      'Authorization': this.token,
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
-    };
+    if (!headerObj){ 
+      headerObj= {
+        'Authorization': this.token,
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      };
+    }
+
     let headers = new Headers(headerObj);
     let options = new RequestOptions({headers: headers});
     let router = this.router;
