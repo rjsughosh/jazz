@@ -248,7 +248,7 @@
           </li> 
           <li>
             <div class='det-label'>Approvers</div>
-            <div *ngIf='disp_show' class='det-value'>{{service.approvers || "NA"}}</div>
+            <div *ngIf='disp_show' class='det-value'>{{service.approvers?service.approvers.join(', ') : "NA"}}</div>
             <div *ngIf='!disp_show' class="det-value application-drop-wrap">
                 <div class="flex-col">
                     <section class="pad-left0">
