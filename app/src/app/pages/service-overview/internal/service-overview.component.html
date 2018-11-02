@@ -140,15 +140,10 @@
 
       </div>
     </summary>
-    <div *ngIf='!disp_show' class='down-btn-wrap'>
-      <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
-      <a (click)="onCancelClick()">CANCEL</a>
-    </div>
     <div class='metadata-body relative metadata-body-border'>
       <div *ngIf="disp_show" class='metadata-buttons-wrap'>
         <btn-jazz-secondary [disablebtn]="service.status != 'creation completed'" text="EDIT" (click)='onEditClick()'></btn-jazz-secondary>
       </div>
-
       <div class='metadata-column'>
         <ul>
           <li>
@@ -209,13 +204,7 @@
             </div>
 
           </li>
-          <p class='email-err-msg' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>
-          
-          <li class="hide">
-            <div class='det-label'>Approvers</div>
-            <div class='det-value'>{{service.approvers}}</div>
-          </li>
-          
+          <p class='email-err-msg' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>   
         </ul>
       </div>
       <div class='metadata-column'>
@@ -257,15 +246,47 @@
             <div class="det-label">Repository</div>
             <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
           </li> 
-
+          <li>
+            <div class='det-label'>Approvers</div>
+            <div *ngIf='disp_show' class='det-value'>{{service.approvers || "NA"}}</div>
+            <div *ngIf='!disp_show' class="det-value application-drop-wrap">
+                <div class="flex-col">
+                    <section class="pad-left0">
+                        <div class="input-field-container">
+                            <div class="selected-approvers">
+                                <ul (click)='focusInput($event)'>
+                                    <li *ngFor="let selected of selectedApprovers;let i=index" >
+                                        <div class="display-wrapper">{{selected.userId}}</div>
+                                        <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
+                                    </li>
+                                    <input *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
+                                </ul>
+                             </div>  
+                            <div [hidden]="!showApproversList" class="approvers-list-wrap">
+                                <div  class="approvers-list typeShow open">
+                                    <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
+                                        <div  (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                 </div>
+              </div>
+            </li>    
+            <p class='email-err-msg approvers-err' [class.hide]='isInputShow'>*Maximum 5 Approvers</p>
+            <p class='email-err-msg approvers-err' [class.hide]='!approversLimitStatus'>*Minimum 1 Approver required</p>
         </ul>
       </div>
-
-    </div>
-
+       <div *ngIf='!disp_show' class='down-btn-wrap'>
+            <div class="custom-save-btn-wrap">
+                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+                <a (click)="onCancelClick()">CANCEL</a>
+            </div>
+        </div>
+      </div>
   </details>
-
-  <details>
+  <details [ngClass]="{'advance-wrapper': disp_show == false}" >
     <summary class='summary-last-child'>
       <div class='metadata-heading-wrap'>
         <div class='metadata-heading'>

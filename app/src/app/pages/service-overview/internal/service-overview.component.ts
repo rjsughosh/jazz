@@ -15,13 +15,15 @@ import { ServiceDetailComponent } from '../../service-detail/internal/service-de
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './../../../secondary-components/create-service/service-form-data';
 import { CronParserService } from '../../../core/helpers';
 import { environment } from './../../../../environments/environment';
+import { MyFilterPipe } from "../../../primary-components/custom-filter";
+import * as _ from 'lodash';
 
 declare var $: any;
 
 @Component({
     selector: 'service-overview',
     templateUrl: './service-overview.component.html',
-    providers: [RequestService, MessageService],
+    providers: [RequestService, MessageService, MyFilterPipe ],
     styleUrls: ['../../service-detail/internal/service-detail.component.scss', './service-overview.component.scss']
 })
 
@@ -151,7 +153,7 @@ export class ServiceOverviewComponent implements OnInit {
     listRuntime : Object;
     initialselectedApplications = [];
     oneSelected: boolean = false;
-    appPlaceHolder: string = 'Start typing...';
+    appPlaceHolder: string = 'Start typing(min 3 char)...';
     applc: string;
     isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
@@ -179,6 +181,17 @@ export class ServiceOverviewComponent implements OnInit {
     minuteDropDownDisable : boolean = false;
     approvalTimeChanged : boolean = false; 
     minutesArray : any = [];
+    isInputShow : boolean = true;
+    isApproversChanged: boolean = false;
+    showApproversList : boolean = false;
+    approversLimitStatus: boolean = false;
+    approversSaveStatus : boolean = false;
+    resMessage : any;
+    approversList: any;
+    approversListRes : any;
+    selectedApprovers : any = [];
+    approversListShow: any;
+    approversPlaceHolder : string = "Start typing (min 3 chars)...";
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -280,6 +293,7 @@ export class ServiceOverviewComponent implements OnInit {
         private router: Router,
         private request: RequestService,
         private messageservice: MessageService,
+        private myFilterPipe : MyFilterPipe,
         private cronParserService: CronParserService,
         private cache: DataCacheService,
         private toasterService: ToasterService,
@@ -297,15 +311,48 @@ export class ServiceOverviewComponent implements OnInit {
             localArray.push(environment.envLists[data]);
         })
         this.environList = localArray;
-
         for(let i = 0; i<25; i++){
             this.hoursArray.push(i);
         }
         for(let i = 5;i<60;i=i+5){
             this.minutesArray.push(i);
         }
-        console.log("constructor");
+        this.getData();
     }
+
+    public getData() {
+
+        this.http.get('/platform/ad/users')
+          .subscribe((res: Response) => {
+            this.approversListRes = res;
+            this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+            this.getApproversList();
+        }, error => {
+            this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
+            this.toast_pop('error', 'Oops!', this.resMessage);
+          });
+      }
+
+    getApproversList(){
+        let locArr = [];
+            if(this.service.approvers && this.approversListShow) {
+                if(this.approversListShow.length > 0)
+                {
+                    this.service.approvers.map((data,index) => {
+                    for (var i = 0; i < this.approversListShow.length; i++) {
+                        if (this.approversListShow[i].userId.toLowerCase() === data.toLowerCase()) {
+                            locArr.push(this.approversListShow[i]);
+                            this.approversListShow.splice(i, 1);
+                        }
+                    }
+
+            });
+        }
+            if(locArr.length > 0)
+                this.selectedApprovers = locArr;
+        }
+    }
+
 
     copy_link(id) {
         var element = null; // Should be <textarea> or <input>
@@ -424,13 +471,70 @@ export class ServiceOverviewComponent implements OnInit {
 
     }
 
+    onApproverChange(newVal) {
+        if (!newVal) {
+          this.approversPlaceHolder = "Start typing (min 3 chars)...";
+          this.showApproversList = false;
+        } else {
+          this.approversPlaceHolder = "";
+          if(newVal.length > 2 && this.approversListShow) {
+            this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
+            if(this.approversList.length > 300)
+              this.approversList = this.approversList.slice(0,300);
+            this.showApproversList = true;
+          }
+          else
+            this.showApproversList = false;
+        }
+      }
+    
+    //function for comparing the passed array with service.approvers 
+    compareApproversArray(firstArr){
+        let serviceApproverss = [];
+        let selectApproverss = [];
+          //to make list to lowercase so that we can compare
+        this.service.approvers.map(x=>{
+            serviceApproverss.push(x.toLowerCase())
+        });
+        firstArr.map(x=>{
+            selectApproverss.push(x.userId.toLowerCase());
+        });
+        return (_.difference(selectApproverss,serviceApproverss).length + _.difference(serviceApproverss,selectApproverss).length);
+    }
+
+    selectApprovers(approver) {
+        this.selApprover = approver;
+        let thisclass: any = this;
+        this.showApproversList = false;
+        thisclass.approverName = '';
+        this.selectedApprovers.push(approver);
+        
+        if(this.selectedApprovers.length === 5)
+            this.isInputShow = false; //not to show input box
+        
+        if(this.selectedApprovers.length > 1)
+            this.approversLimitStatus = false;
+    
+        //checking for the difference in arrays
+        if (this.compareApproversArray(this.selectedApprovers) !== 0){
+            this.approversSaveStatus = true;
+        } else {
+            this.approversSaveStatus = false;
+        }
+        for (var i = 0; i < this.approversListShow.length; i++) {
+          if (this.approversListShow[i].displayName === approver.displayName) {
+            this.approversListShow.splice(i, 1);
+            return;
+          }
+        }
+      }
+
     onTextAreaChange(desc_temp){
         if(!desc_temp){
             desc_temp = null
         }
-        // update_payload.description=desc_temp
         this.update_payload.description = desc_temp;
-        //update only some changes made to 
+
         if(this.service.description !== desc_temp ){
             this.descriptionChanged = false;
         }
@@ -481,6 +585,37 @@ export class ServiceOverviewComponent implements OnInit {
 
     focusInputApplication(event) {
         document.getElementById('applc').focus();
+    }
+
+    removeApprover(index, approver) {
+    
+       if (this.selectedApprovers.length >1) { 
+            this.approversLimitStatus = false;
+            this.isInputShow = true;
+            this.approversListShow.push(approver);
+            this.selectedApprovers.splice(index, 1);
+       }else {
+           this.approversLimitStatus = true;
+       }
+       if(this.compareApproversArray(this.selectedApprovers) > 0)
+            this.approversSaveStatus = true;
+        else
+            this.approversSaveStatus = false;
+      }
+
+    removeApplication(index, approver) {
+        this.oneSelected=false;
+        this.selectApp={};  
+        this.appPlaceHolder='Start typing...';
+        // this.application_arr.push(approver);
+        let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+        this.selectedApprovers = nonRepeatedData(this.selectedApprovers);
+        this.approversListShow.splice(index, 1);
+      }
+
+    focusInput(event) {
+        if(this.isInputShow)
+            document.getElementById('applc').focus();
     }
 
     blurApplication() {
@@ -542,32 +677,19 @@ export class ServiceOverviewComponent implements OnInit {
 
     selectApp;
     selectApplication(app) {
-        this.oneSelected = true;
-        this.appPlaceHolder = '';
+        this.oneSelected=true;
+        this.appPlaceHolder='';
         this.selectApp = app;
         let thisclass: any = this;
         this.showApplicationList = false;
         thisclass.applc = '';
-        if (!app.appID)
-            this.initialselectedApplications.push(app);
         this.selectedApplications.push(app);
-        for (var i = 0; i < this.application_arr.length; i++) {
-            if (this.application_arr[i].appName === app.appName) {
-                this.application_arr.splice(i, 1);
-                return;
-            }
-        }
-        // debugger
+        let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+        this.application_arr = nonRepeatedData(this.application_arr);
+        return;
+    
+      }
 
-    }
-
-    removeApplication(index, approver) {
-        this.oneSelected = false;
-        this.selectApp = {};
-        this.appPlaceHolder = 'Start typing...';
-        this.application_arr.push(approver);
-        this.selectedApplications.splice(index, 1);
-    }
 
     generateExpression(rateExpression) {
         if (this.rateExpression !== undefined) {
@@ -629,7 +751,9 @@ export class ServiceOverviewComponent implements OnInit {
         if (this.service.app_name && this.selectedApplications.length == 0)
             this.selectApplication(appobj);
         this.disp_show = false;
-        // debugger
+        //to check approver limit on edit :)
+        if(this.selectedApprovers.length === 5)
+            this.isInputShow = false;
 
     }
 
@@ -721,7 +845,9 @@ export class ServiceOverviewComponent implements OnInit {
         this.advancedSaveClicked = false;
         this.descriptionChanged = true;
         this.approvalTimeChanged = false;
+        this.approversSaveStatus = false;
         this.isEnvChanged = false;
+        this.isApproversChanged = false;
         this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
         let payload = {};
         if (this.saveClicked) {
@@ -734,6 +860,15 @@ export class ServiceOverviewComponent implements OnInit {
             if (this.accSelected != this.service.runtime) {
                 payload["metadata"] = {
                     "providerRuntime" : this.accSelected
+                }
+            }
+            if(this.compareApproversArray(this.selectedApprovers) >0){
+                let localData = [];
+                this.selectedApprovers.map(data=>{
+                    localData.push(data.userId);
+                });
+                payload["metadata"] = {
+                    "approvers": localData
                 }
             }
             if (this.approvalTime != this.service.approvalTimeOutInMins && this.approvalTime){
@@ -756,8 +891,10 @@ export class ServiceOverviewComponent implements OnInit {
 
     onCancelClick() {
         this.update_payload = {};
+        this.approversLimitStatus = false;
+        this.isInputShow = true;
         this.selectedApplications = [];
-        this.oneSelected = false;
+        this.oneSelected = false; //need to be change
         this.disp_show = true;
         this.disp_show2 = true;
         this.edit_save = 'EDIT';
@@ -1316,7 +1453,7 @@ export class ServiceOverviewComponent implements OnInit {
             if(this.approvalHours === 1)
                     this.displayApprovalTime = `${this.approvalHours} hour ${this.approvalMinutes} minutes`;
             
-            else if(this.approvalHours !== 1)
+            else if(this.approvalHours !== 1)   
             this.displayApprovalTime = `${this.approvalHours} hours ${this.approvalMinutes} minutes`; 
         }
         else if(this.approvalTime){
@@ -1414,6 +1551,9 @@ export class ServiceOverviewComponent implements OnInit {
         this.envComponent.refresh();
     }
     internal_build: boolean = true;
+
+  
+
     ngOnChanges(x: any) {
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
@@ -1422,7 +1562,17 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
-
+        if(this.selectedApprovers.length === 0 && this.service.approvers){
+            this.service.approvers.map(data=>{
+                let obj = { 
+                    "userId" : data
+                };
+                this.selectedApprovers.push(obj);
+             })
+        }
+        if(this.service.approvers){
+            this.getApproversList();
+        }
         this.loadPlaceholders();
 
         this.prodEnv = {};

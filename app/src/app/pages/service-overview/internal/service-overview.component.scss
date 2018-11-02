@@ -64,6 +64,10 @@ $screen-lg:                  1200px !default;
     }
 }
 
+.approvers-err {
+    padding-top: 10px;
+}
+
 .stage-wrp:last-child {
     margin-right: 0;
     @media (max-width: $screen-sm) {}
@@ -72,6 +76,70 @@ $screen-lg:                  1200px !default;
         margin-right: 0rem;
         margin-bottom: 0rem;
     }
+}
+
+.selected-approvers {
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border linear .2s, box-shadow linear .2s;
+    height: auto;
+    ul {
+        padding-left: 0;
+        margin-bottom: 0;
+        display: flex;
+        flex-wrap : wrap;
+    }
+    li {
+        list-style-type: none;
+        border: 1px solid #d9d9d9;
+        height: 26px;
+        flex : 0 33%;
+        width: max-content;
+        border-radius: 50px;
+        margin-top: 6px;
+        margin-left: 4px;
+        font-size: 12px;
+        line-height: 28px;
+        height: 28px;
+        cursor: pointer;
+        padding: 0 28px 0 10px !important;
+        position: relative;
+        &:hover {
+            border: 1px solid #ed0295;
+        }
+        .icon-icon-close {
+            position: absolute;
+            width: 10px;
+            top: 8px;
+            right: 10px;
+            color:#ed008c;
+        }
+    }
+    input {
+        display: inline-block;
+        width: auto;
+        width: max-content;
+        box-shadow: none;
+        border: none;
+        margin-bottom: 0;
+        margin-top: 0;
+        height: 2.75rem;
+        &:focus{
+            outline: none !important;
+        }
+    }
+}
+
+.input-field-container {
+    /*margin-top: 20px;*/
+    position: relative;
+}
+
+
+
+.flex-col{
+    display: flex;
+    flex-direction: column;
 }
 
 .stage-wrp::before {
@@ -370,47 +438,64 @@ button.btn-primary:active {
 }
 
 
-.selected-approvers{
-    border:none;
-    box-shadow: none;
-
-    li{
-        &:nth-child(1){
-            margin-left: 0px !important;
-
-        }
-        background:#ed008c;
-        color:white;
+.selected-approvers {
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    border-radius: 2px;
+    max-width: 30em;
+    transition: border linear .2s, box-shadow linear .2s;
+    height: auto;
+    ul {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+    li {
         list-style-type: none;
         border: 1px solid #d9d9d9;
         display: inline-block;
-        /* height: 26px; */
+        height: 26px;
         border-radius: 50px;
-        margin-top: 0px !important;
-        margin-left: 4px;
-        margin-bottom: 2px;
+        margin: 10px;
         font-size: 12px;
-        line-height: normal;
-        height: auto;
+        width : 10em;
+        min-width: 10em;
+        max-width: 10em;
+        line-height: 28px;
+        height: 28px;
         cursor: pointer;
-        padding: 2px 28px 2px 10px;
+        padding: 0 13px 0 13px;
         position: relative;
-        /deep/.icon-icon-close{
+        &:hover {
+            border: 1px solid #ed0295;
+        }
+        .icon-icon-close {
             position: absolute;
             width: 10px;
-            top: 2px !important;
+            top: 8px;
             right: 10px;
-            color:white;
-            &:before{
-                color:white;
-                font-size: 0.8rem;
-            }
+            color:#ed008c;
+        }
+
+        .display-wrapper{
+            padding-left: 5px;
         }
     }
-    input{
-        height: 2rem;
+    input {
+        display: inline-block;
+        width: auto;
+        padding-top: 5px;
+        min-width: 16rem;
+        box-shadow: none;
+        border: none;
+        margin-bottom: 0;
+        margin-top: 5px;
+        height: 2.75rem;
+        &:focus{
+            outline: none !important;
+        }
     }
 }
+
 
 .det-value-input-txtarea
 {
@@ -1275,7 +1360,7 @@ details summary::-webkit-details-marker {
 
   li{
     display: flex;
-    margin:1rem;
+    margin: 5px;
   }
 }
 .extra-bottom-padding{
@@ -1347,7 +1432,7 @@ details{
   flex-direction: row-reverse;
   position: absolute;
   z-index: 1;
-  bottom: -1rem;
+  bottom: -6rem;
   right: -2rem;
   padding: 1rem;
   btn-jazz-primary,a{
@@ -1360,6 +1445,14 @@ details{
 }
 .down-btn-wrap-advanced{
   bottom: -4rem;
+  margin-right: 5em;
+}
+.advance-wrapper{
+    margin-top : 6em;
+}
+
+.custom-save-btn-wrap{
+    width: 100%;
 }
 .metadata-body-advanced{
 /deep/.advanced-ul{

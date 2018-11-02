@@ -138,7 +138,6 @@ export class ServiceDetailComponent implements OnInit {
         created_by: service.created_by
       };
       if (service.metadata) {
-        console.log(service.metadata);
         // replace existing values with new values from metadata, if available.
         returnObject.runtime = service.metadata.providerRuntime || service.runtime;
         returnObject.approvers = service.metadata.approvers || service.approvers;
