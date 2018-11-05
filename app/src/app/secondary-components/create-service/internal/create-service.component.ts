@@ -232,6 +232,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function called on runtime change(radio)
   onSelectionChange(val) {
+    console.log(val);
     this.runtime = val;
   }
 

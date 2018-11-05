@@ -382,6 +382,7 @@ export class ClearWaterComponent implements OnInit {
       .switchMap((response,error) => this.http.get('/jazz/request-status?id='+message))
       .subscribe(
           response => {
+            console.log(response);
             let dataResponse = <any>{};
             dataResponse.list = response;
             var respStatus = dataResponse.list.data;
