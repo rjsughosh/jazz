@@ -138,7 +138,7 @@ export class ServiceDetailComponent implements OnInit {
         created_by: service.created_by
       }
       if (service.deployment_targets && service.deployment_targets[service.type]){
-        returnObject["deployment_targets"] = service.deployment_targets[service.type].S || service.deployment_targets[service.type];
+        returnObject["deployment_targets"] = service.deployment_targets[service.type];
       }
       if (service.metadata) {
         console.log(service.metadata);

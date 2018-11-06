@@ -119,7 +119,7 @@ export class EnvironmentDetailComponent implements OnInit {
           created_by: service.created_by
         };
         if (service.deployment_targets && service.deployment_targets[service.type]){
-          _service["deployment_targets"] = service.deployment_targets[service.type].S || service.deployment_targets[service.type];
+          _service["deployment_targets"] = service.deployment_targets[service.type];
         }
         return _service;     
       }
