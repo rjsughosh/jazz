@@ -1056,7 +1056,7 @@ expect(component.approversList).not.toContain(approver);
 
  });
  it ("New Approver should  be added the selected Approvers list2 ",()=>{
-  component.approversList2 = [
+  component.approversListBasic = [
     {
       displayName: "Approver1",
       givenName: "Approver1",
@@ -1081,14 +1081,14 @@ let approver =  {
   userId: "AP1",
   userEmail: "ap1@moonraft.com"
 };
-component.selectApprovers2(approver);
-expect(component.selectedApprovers2).toContain(approver);
+component.selectSlackUser(approver);
+expect(component.selectedSlackUsers).toContain(approver);
 expect(component.approversList).not.toContain(approver);
 
  });
 
  it ("New Approver should  be added the selected Approvers list2 ",()=>{
-  component.approversList2 = [
+  component.approversListBasic = [
     {
       displayName: "Approver1",
       givenName: "Approver1",
@@ -1113,8 +1113,8 @@ let approver =  {
   userId: "AP1",
   userEmail: "ap1@moonraft.com"
 };
-component.selectApprovers2(approver);
-expect(component.selectedApprovers2).toContain(approver);
+component.selectSlackUser(approver);
+expect(component.selectedSlackUsers).toContain(approver);
 expect(component.approversList).not.toContain(approver);
 
  });
@@ -1167,7 +1167,7 @@ expect(component.approversList).not.toContain(approver);
 }));
 
 it ("Selected Approvers must be Removed Selected Approvers2 ",()=>{
-  component.approversList2 = [
+  component.approversListBasic = [
     {
       displayName: "Approver1",
       givenName: "Approver1",
@@ -1192,10 +1192,10 @@ let approver =  {
   userId: "AP1",
   userEmail: "ap1@moonraft.com"
 };
-component.selectedApprovers2.push();
-component.removeApprover2(approver,0);
-expect(component.selectedApprovers2).not.toContain(approver);
-expect(component.approversList2).toContain(approver);
+component.selectedSlackUsers.push();
+component.removeSlackUser(approver,0);
+expect(component.selectedSlackUsers).not.toContain(approver);
+expect(component.approversListBasic).toContain(approver);
  });
  it ("disable function should return false for valid case ",()=>{
    //initialization 
@@ -1545,43 +1545,43 @@ it('change platform type', () => {
     component.typeOfService ='api';
     let hash =  {key:'ArrowDown'};
     component.focusindex = 2;
-    component.keypress(hash);
+    component.keypressApprovers(hash);
     expect(component.focusindex).toBe(3);
   })
   it("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
     component.typeOfService ='api';
     let hash =  {key:'ArrowUp'};
     component.focusindex = 2;
-    component.keypress(hash);
+    component.keypressApprovers(hash);
     expect(component.focusindex).toBe(1);
   })
   it("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
     component.typeOfService ='api';
     let hash =  {key:'ArrowUp'};
     component.focusindex = -1;
-    component.keypress(hash);
+    component.keypressApprovers(hash);
     expect(component.focusindex).toBe(-1);
   })
-// KEYPRESS 2 
+// keypressApprovers 2 
 it("KeyPress with arrowdown button should increment the focus index by 1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowDown'};
   component.focusindex = 2;
-  component.keypress2(hash);
+  component.keypressSlack(hash);
   expect(component.focusindex).toBe(0);
 })
 it("KeyPress with arrowUp button should decrement the focus index by 1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowUp'};
   component.focusindex = 2;
-  component.keypress2(hash);
+  component.keypressSlack(hash);
   expect(component.focusindex).toBe(1);
 })
 it("KeyPress with arrowUp button should not decrement the focus index by 1 if the focus index is -1",()=>{
   component.typeOfService ='api';
   let hash =  {key:'ArrowUp'};
   component.focusindex = -1;
-  component.keypress2(hash);
+  component.keypressSlack(hash);
   expect(component.focusindex).toBe(-1);
 })
 
@@ -2004,14 +2004,14 @@ it('validating onApproverChange function',() => {
   }
 });
 
-it('validating onApproverChange2 function',() => {
+it('validating onSlackUserChange function',() => {
   let newVal;
   if(newVal == "vban"){
-  component.onApproverChange2(newVal);
-  expect(component.showApproversList2).toBe(true);
+  component.onSlackUserChange(newVal);
+  expect(component.showSlackList).toBe(true);
   }else if(newVal == undefined){
-    component.onApproverChange2(newVal);
-    expect(component.showApproversList2).toBe(false);
+    component.onSlackUserChange(newVal);
+    expect(component.showSlackList).toBe(false);
   }
 });
 
@@ -2098,14 +2098,14 @@ this.createslackSelected = false;
     this.createSlackModel.name = '';
     this.createSlackModel.purpose = '';
     this.createSlackModel.invites = '';
-    for (var i = 0; i < this.selectedApprovers2.length; i++) {
-      this.approversList2.push(this.selectedApprovers2[i]);
+    for (var i = 0; i < this.selectedSlackUsers.length; i++) {
+      this.approversListBasic.push(this.selectedSlackUsers[i]);
     }
-    this.selectedApprovers2 = [];
+    this.selectedSlackUsers = [];
   }
   *///
-  component.approversList2 = [];
-  component.selectedApprovers2=[
+  component.approversListBasic = [];
+  component.selectedSlackUsers=[
     {
       givenName: "Approver1",
       userId: "AP1",
@@ -2122,7 +2122,7 @@ this.createslackSelected = false;
   expect(component.createSlackModel.name).toBe('');
   expect(component.createSlackModel.purpose).toBe('');
   expect(component.createSlackModel.invites).toBe('');
-  expect(component.approversList2).toContain({
+  expect(component.approversListBasic).toContain({
     givenName: "Approver1",
     userId: "AP1",
     userEmail: "ap1@moonraft.com"

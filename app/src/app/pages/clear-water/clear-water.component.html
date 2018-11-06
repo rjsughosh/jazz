@@ -1,131 +1,157 @@
 <div *ngIf='isloaded && !error'>
-    <div class='service-details row top-section'>
-      <div>
-          <div class='cw-cover relative'>
-        
-              <div class='cw-score'>
-                <div class='score-head'>CLEARWATER SCORE</div>
-                <div class='score-val'>{{cw_score.current}}</div>
-              </div>
-              
-              <div class='cw-values'>
-                <ul>
-                  <li>
-                      <div class='det-label cw-label'>Organization<br>goal</div>
-                      <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>               
-                  </li>
-                  <li>
-                      <div class='det-label cw-label'>Organization<br>Average</div>
-                      <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
-                  </li>
-                  <li>
-                    <div class='det-label cw-label'>Total<br>warnings</div>
-                    <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>               
-                  </li>
-                  <li>
-                      <div class='det-label cw-label'>Total<br>errors</div>
-                    <div class='det-value cw-value error'>{{cw_obj.errors}}</div>               
-                  </li>
-                  <li *ngIf='!slideSidebar'>
-                      <div class='det-label cw-label'>Description</div>
-                    <div class='det-value cw-message'>{{cw_message}}</div>               
-                  </li>
-      
-                </ul>
-              </div>
-              
-              <div class='cw-button'>
-                  <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE API" class="testApiBtn" (click)='openSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
-                  <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()' [class.invisible]="isLoading"></btn-jazz-secondary>
-    
-              </div>
-          </div>
-      </div>
+  <section class="progress-bar-section relative">
 
-    </div>
-    <div class='service-details row' *ngIf='detailView && !congratulations'>
+    <div class='current-status-wrap' *ngIf="!progressCompleted && !statusCompleted">
+      <div class='icon-icon-close closeicon' (click)="progressCompleted = true" *ngIf='!service_error'></div>
+      <div class="current-meter-bar">
+        <span id='current-status-val' [ngClass]="statusCompleted || serviceStatusCompleted ? 'completed-bar':'under-progress-bar'"
+          [class.deletion-bar]='statusFailed'></span>
 
-
-      <div class='cw-top-part'>
-
-        <div class='warning-chk custom-cb'>
-            <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="warningSelected" (change)="warningSelected = !warningSelected">
-            <label for="checkbox-cw"></label>
-            <div class="cb-status-dets">Hide Warnings</div>
+        <div class='status-result' [ngClass]="serviceStatusStarted ? 'under-progress-bar':'under-progress'"
+          [class.completed-bar]='statusCompleted' [class.deletion-status]='statusFailed'>
+          <div class='status-icon icon-icon-confirmcheck' *ngIf=' serviceStatusStarted '></div>
+          <div class='status-icon icon-icon-close' *ngIf=' serviceStatusStartedD '></div>
+          <div class='status-lable'>Creation</div>
         </div>
-        <div class='cw-search-wrap'>
-            <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
-            <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
-            <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
 
+        <div class='status-result' [ngClass]="serviceStatusCompleted ? 'under-progress-bar':'under-progress'"
+          [class.completed-bar]='statusCompleted' [class.deletion-status]='statusFailed'>
+          <div class='status-icon icon-icon-confirmcheck' *ngIf='serviceStatusCompleted'></div>
+          <div class='status-icon icon-icon-close' *ngIf=' serviceStatusCompletedD '></div>
+          <div class='status-lable'>Completion</div>
         </div>
-      </div>
-      <div class='cw-errors-cover'>
-        <table-template class="table-container log-table-container clear-water relative" [message]="errMessage" [state]="loadingState" [type]="'accordian'" [showPaginationtable]="paginationSelected" [header]="tableHeader">
-            <div class="table-row-wrp" [class.bbn]='row.status == "warning" && warningSelected' *ngFor="let row of cw_results | myfilter:search_bar; let i = index" [class.expanded]="row.expanded">
-            <div class="table-row" *ngIf='row.status == "error" || !warningSelected' (click)="onRowClicked(row, i)">
-              <div class="column visible">{{row.heading}}
-                <span class='{{row.status}}'>{{row.status}} </span><span class='right'>{{row.issues.length}} issue<span *ngIf='row.issues.length > 1'>s</span></span>
-              </div>
-            </div>
-            <div *ngIf='row.status == "error" || !warningSelected' class="table-row-expanded">
-              <div class='sub-row'>
-                <div>{{row.description}}</div>
-                <div class='{{row.status}} score-cw'>Reduces your score by {{row.score}}</div>
-              </div>
-              <table class='cw-table bordered'>
-                <thead>
-                  <tr>
-                    <th>MESSAGE</th><th>LOCATION</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor='let each of row.issues'>
-                    <td>
-                      {{each.message}}
-                    </td>
-                    <td>
-                      {{each.location}}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <a  class="view-details right pointer" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'>VIEW DETAILS</a>
 
-            </div>
-          </div>
-        </table-template>
       </div>
-    </div>
-    <div class='service-details row congrats' *ngIf='detailView && congratulations'>
-      Congratulations! This API has no issues
-    </div>
-    <div class='service-details row' *ngIf='!detailView'>
-      <div class='back-search-cover'>
-        <span class='icon-icon-back' (click)='detailView = !detailView;searchDetail_bar="";'></span>
-        <span (click)='detailView = !detailView;searchDetail_bar="";' class='inside-back'>
-          Back
+
+      <div class="current-meter-status saving">
+        <span *ngIf="statusprogress === 100">Done. Please check your e-mail for PR details.</span>
+        <span *ngIf="statusprogress !== 100">
+            <b >Current Status:</b> {{statusInfo}}
+            <span> .</span>
+            <span> .</span>
+            <span> .</span>
         </span>
-          <search-box #searchbox (onChange)="onCWDetailsearch($event)"></search-box>
       </div>
 
+    </div>
+  </section>
 
-        <div class="column visible">{{oneObject.heading}}
-            <span class='{{oneObject.status}}'>{{oneObject.status}} </span><span class='right'>{{oneObject.issues.length}} issue<span *ngIf='oneObject.issues.length > 1'>s</span></span>
+  <div class='service-details row top-section'>
+    <div>
+      <div class='cw-cover relative'>
+
+        <div class='cw-score'>
+          <div class='score-head'>CLEARWATER SCORE</div>
+          <div class='score-val'>
+            <div>{{cw_score.current}}</div>
           </div>
-        <div class="table-row-expanded show">
+        </div>
+
+        <div class='cw-values'>
+          <ul>
+            <li>
+              <div class='det-label cw-label'>Organization goal</div>
+              <div class='det-value cw-value good'>{{cw_score.organizationGoal}}</div>
+            </li>
+            <li>
+              <div class='det-label cw-label'>Organization Average</div>
+              <div class='det-value cw-value good'>{{cw_score.organizationAverage}}</div>
+            </li>
+            <li>
+              <div class='det-label cw-label'>Total warnings</div>
+              <div class='det-value cw-value error'>{{cw_obj.warnings}}</div>
+            </li>
+            <li>
+              <div class='det-label cw-label'>Total errors</div>
+              <div class='det-value cw-value error'>{{cw_obj.errors}}</div>
+            </li>
+
+          </ul>
+        </div>
+
+        <div class='cw-description'>
+            <div class='det-label cw-label'>Description</div>
+            <div class='det-value cw-message'>{{cw_message}}</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class='cw-button'>
+      <btn-jazz-secondary *ngIf='!slideSidebar' text="EVALUATE" class="testApiBtn" (click)="showService(true,'evaluate')"
+        [class.invisible]="isLoading"></btn-jazz-secondary>
+      <btn-jazz-secondary *ngIf='this.env == "prod" &&! slideSidebar' text="PUBLISH" class="testApiBtn" (click)="showService(true,'publish')"
+        [class.invisible]="isLoading"></btn-jazz-secondary>
+      <btn-jazz-secondary *ngIf='slideSidebar' text="CLOSE" class="testApiBtn" (click)='closeSidebar()'
+        [class.invisible]="isLoading"></btn-jazz-secondary>
+    </div>
+
+
+  </div>
+  <div class='service-details row service-details-cw' *ngIf='detailView && !congratulations'>
+
+
+
+
+
+    <div class="graph-section-cover" [class.hide]="graphError">
+      <div class="graph-title">
+        Clearwater Score Trend
+      </div>
+      <div class="jz-height-full">
+        <div class="jz-chart">
+          <div class="loading-row" [class.show]="!isGraphloaded">
+            <div class="loading-circle"></div>
+          </div>
+          <div class="icon-icon-refresh graph-refresh-icon" (click)='refreshGraph()'></div>
+          <div class="jz-chart-content" *ngIf='graphData && isGraphloaded'>
+            <chartjs-linegraph [class.hide]="graphError" *ngIf='graphData && isGraphloaded' [datasets]="graphData.datasets" [options]="graphData.options"></chartjs-linegraph>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='cw-top-part'>
+
+      <div class='warning-chk custom-cb'>
+        <input type="checkbox" id="checkbox-cw" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false"
+          [checked]="warningSelected" (change)="warningSelected = !warningSelected">
+        <label for="checkbox-cw"></label>
+        <div class="cb-status-dets">Hide Warnings</div>
+      </div>
+      <div class='cw-search-wrap'>
+        <search-box #searchbox (onChange)="onCWsearch($event)"></search-box>
+        <span title='Collapse all' *ngIf='expandText == "Collapse all"' class="icon-Collapse-All expandbtn" (click)='collapseall()'></span>
+        <span title='Expand all' *ngIf='expandText == "Expand all"' class="icon-Expand-All expandbtn" (click)='expandall()'></span>
+
+      </div>
+    </div>
+
+    <div class='cw-errors-cover'>
+      <table-template class="table-container log-table-container clear-water relative" [message]="errMessage" [state]="loadingState"
+        [type]="'accordian'" [showPaginationtable]="paginationSelected" [header]="tableHeader">
+        <div class="table-row-wrp" [class.bbn]='row.status == "warning" && warningSelected' *ngFor="let row of cw_results | myfilter:search_bar; let i = index"
+          [class.expanded]="row.expanded">
+          <div class="table-row" *ngIf='row.status == "error" || !warningSelected' (click)="onRowClicked(row, i)">
+            <div class="column visible">{{row.heading}}
+              <span class='{{row.status}}'>{{row.status}} </span><span class='right'>{{row.issues.length}} issue<span
+                  *ngIf='row.issues.length > 1'>s</span></span>
+            </div>
+          </div>
+          <div *ngIf='row.status == "error" || !warningSelected' class="table-row-expanded">
             <div class='sub-row'>
-              <div>{{oneObject.description}}</div>
-              <div class='{{oneObject.status}} score-cw'>Reduces your score by {{oneObject.score}}</div>
+              <div>{{row.description}}</div>
+              <div class='{{row.status}} score-cw'>Reduces your score by {{row.score}}</div>
             </div>
             <table class='cw-table bordered'>
               <thead>
                 <tr>
-                  <th>MESSAGE</th><th>LOCATION</th>
+                  <th>MESSAGE</th>
+                  <th>LOCATION</th>
                 </tr>
               </thead>
-              <tbody class='not-fixed'>
-                <tr *ngFor='let each of oneObject.issues| myfilter:searchDetail_bar;'>
+              <tbody>
+                <tr *ngFor='let each of row.issues'>
                   <td>
                     {{each.message}}
                   </td>
@@ -135,28 +161,83 @@
                 </tr>
               </tbody>
             </table>
+            <a class="view-details right pointer" [class.invisible]="isLoading" (click)='detailView = !detailView;viewDetails(row)'>VIEW
+              DETAILS</a>
+
           </div>
+        </div>
+      </table-template>
     </div>
+  </div>
+
+  <div class='service-details row congrats' *ngIf='detailView && congratulations'>
+    Congratulations! This API has no issues
+  </div>
+
+  <div class='service-details row' *ngIf='!detailView'>
+    <div class='back-search-cover'>
+      <span class='icon-icon-back' (click)='detailView = !detailView;searchDetail_bar="";'></span>
+      <span (click)='detailView = !detailView;searchDetail_bar="";' class='inside-back'>
+        Back
+      </span>
+      <search-box #searchbox (onChange)="onCWDetailsearch($event)"></search-box>
+    </div>
+
+
+    <div class="column visible">{{oneObject.heading}}
+      <span class='{{oneObject.status}}'>{{oneObject.status}} </span><span class='right'>{{oneObject.issues.length}}
+        issue<span *ngIf='oneObject.issues.length > 1'>s</span></span>
+    </div>
+    <div class="table-row-expanded show">
+      <div class='sub-row'>
+        <div>{{oneObject.description}}</div>
+        <div class='{{oneObject.status}} score-cw'>Reduces your score by {{oneObject.score}}</div>
+      </div>
+      <table class='cw-table bordered'>
+        <thead>
+          <tr>
+            <th>MESSAGE</th>
+            <th>LOCATION</th>
+          </tr>
+        </thead>
+        <tbody class='not-fixed'>
+          <tr *ngFor='let each of oneObject.issues| myfilter:searchDetail_bar;'>
+            <td>
+              {{each.message}}
+            </td>
+            <td>
+              {{each.location}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <div *ngIf='!isloaded' class="empty-row with-refresh relative hgt">
-    <div class="loading-row" [class.show]="!isloaded">
-        <div class="loading-circle"></div>
-    </div>
+  <div class="loading-row" [class.show]="!isloaded">
+    <div class="loading-circle"></div>
+  </div>
 </div>
 
-<section class='clear-water-sidebar' [class.slide-in]='slideSidebar'>
-    <swagger-sidebar [envSelected]='env' [service]='service' (evaluate)="callapi($event)" (onClose)="closeSidebar()"></swagger-sidebar>
-
+<section class='clearwater-sidebar' [class.slide-in]='slideSidebar'>
+  <sidebar [show]="showAddService" (onClose)="showService(false)">
+    <evaluate-swagger-sidebar #EvaluateSidebar [envSelected]='env' [assets]='service.assets' [swagger_json]='swagger_json' [ispublishing]='!statusCompleted' [service]='service' (onRequestId)="onRequestId($event)" (evaluate)="callapi($event)" (onClose)="showService(false)"></evaluate-swagger-sidebar>
+  </sidebar>
 </section>
 
-<div  *ngIf='isloaded && error' class="service-details empty-row with-refresh relative hgt">
-    <div class="icon-icon-server-error">
-        <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span>
-    </div>
-    <div class='oops'>Oops!</div><br>
-    <div>Something went wrong while fetching your data<br><a (click)="getData()">REFRESH</a> to give it another try.</div>
-    <br><div class='ctc-us'>If the problem persists, <a (click)='reportIssue()'> contact us</a>.</div>
+
+
+
+<div *ngIf='isloaded && error' class="service-details empty-row with-refresh relative hgt">
+  <div class="icon-icon-server-error">
+    <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span
+      class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span
+      class="path10"></span>
+  </div>
+  <div class='oops'>Oops!</div><br>
+  <div>Something went wrong while fetching your data<br><a (click)="getData()">REFRESH</a> to give it another try.</div>
+  <br>
+  <div class='ctc-us'>If the problem persists, <a (click)='reportIssue()'> contact us</a>.</div>
 </div>
-
-

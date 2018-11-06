@@ -161,7 +161,7 @@
 .refresh-button {
   position: absolute;
   cursor: pointer;
-  top: .8rem;
+  top: 2rem;
   right: 12px;
   font-size: 1rem;
   text-transform: uppercase;
@@ -184,5 +184,5 @@
   /deep/.sidebar-wrp .sidebar-inr{
     overflow-y:auto !important;
     }
-  
+
 }

@@ -48,12 +48,15 @@ export const environment = {
   api_doc_name: 'http://cloud-api-doc.corporate.t-mobile.com',
   envName : "jazz",
   multi_env:false,
+  envLists:  {"nodejs8.10": "Nodejs 8.10", "python2.7": "Python 2.7", "python3.6": "Python 3.6", "java8": "Java 8"},
   serviceTabs:['overview','access control','metrics','logs'],
-  environmentTabs:['overview','deployments','code quality','assets', 'metrics', 'logs','clear water'],
+  environmentTabs:['overview','deployments','code quality','assets', 'metrics', 'logs','clearwater'],
   urls:{
     docs_link: "https://docs.jazz.corporate.t-mobile.com/",
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content",
-    swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com/?url='
+    swagger_editor: 'http://editor.cloud-api.corporate.t-mobile.com/?url=',
+    swaggerApiUrl: 'https://swagger-lint-ui-DLAB03.dev.px-npe01.cf.t-mobile.com/api-center-of-excellence/v1/swagger-lint',
+    clearwaterAppUrl: 'http://flows.corporate.t-mobile.com/'
   },
   userJourney: {
     registrationMessage: ''

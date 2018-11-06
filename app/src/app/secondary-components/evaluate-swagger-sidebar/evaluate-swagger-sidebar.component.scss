@@ -1,0 +1,288 @@
+@import './../../../main-styles';
+@import './../../pages/services-list/services-list.component.scss';
+@import './../../pages/clear-water/clear-water.component.scss';
+
+
+.bar-cover {
+  min-height: 100%;
+  width: 60rem;
+  right: 0;
+  z-index: 2;
+  border: none;
+  padding: 2.5rem;
+  background-color: #efefef;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.5);
+  .loading-row{
+    background: rgba(0,0,0,.3);
+  }
+}
+
+
+.empty-row-default {
+  position: relative;
+  text-align: center;
+  padding: 3rem 1.25rem;
+  top: 25%;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+.btn-cover {
+  display: flex;
+  margin: 2rem 0;
+  justify-content: space-between;
+
+  a {
+    margin: 0.5rem 0;
+  }
+}
+
+.close-icon {
+  position: absolute;
+  right: 1REM;
+  top: 1rem;
+  font-size: 1.2rem;
+  color: #ed008c;
+}
+
+.sidebar-loading {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.empty-row {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+
+  .loading-row {
+    background: transparent;
+
+  }
+}
+
+.cw-cover {
+  background: white;
+  // padding: 2rem;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.11);
+}
+
+.cw-top-part {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cw-message {
+  width: 100%;
+  text-align: center;
+  padding: 0 0 3rem 0;
+  font-weight: bold;
+}
+
+.cw-score {
+  width: 32%;
+  border:none;
+}
+
+.cw-values {
+  width: 100%;
+
+  ul {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  li {
+
+    display: flex;
+    flex-direction: column;
+
+    // height: 2rem;
+    div {
+      // border:1px solid black;
+
+    }
+  }
+}
+
+.fg-overlay {
+  position: absolute;
+  top: 40%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 3px;
+  width: 100%;
+  font-size: 1.5rem;
+}
+
+.removepadding {
+  padding: 0;
+}
+
+.no-btn {
+  margin: 1rem;
+}
+
+btn-jazz-primary {
+  /deep/button.btn-primary {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}
+
+.table-row-wrp{
+  border-bottom:1px solid #ddd;
+}
+.detailed-view{
+  margin-top:1rem;
+}
+
+.closeicon {
+  font-size: 1.2rem;
+  color: #ed008c;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  &:hover {
+    transform: rotate(90deg);
+    transition: 0.15s transform;
+  }
+}
+
+.bk-btn {
+  /deep/button.btn-primary {
+    margin: 1rem auto !important;
+    display: block !important;
+  }
+}
+
+.json-cover {
+  display: flex;
+  max-height: 50vh;
+  margin: 1rem 0;
+  font-size: 1rem;
+
+  >div {
+    background: #2b343e;
+    overflow-y: hidden;
+  }
+
+  .json-input-area {
+    width: 100%;
+    background: #2b343e;
+    color: #ddd;
+    overflow-y: scroll;
+  }
+
+}
+
+.line-numbers {
+  border-radius: 5px 0 0 5px;
+  width: 4rem;
+  padding: 2px 2px 2.5rem 2px;
+  color: #ddd;
+  text-align: right;
+}
+
+.details {
+  border:1px solid #333;
+  summary::-webkit-details-marker {
+    color: #ed008c !important;
+    font-size: 120% !important;
+    margin: 7px 1rem 0 0 !important;
+  }
+}
+.sidebar-summary{
+
+  display: flex;
+  align-items:center;
+  outline:none;
+  font-size: 1.4rem;
+}
+
+.publish-body{
+  margin-bottom: 1rem;
+
+  .publish-sections{
+    &:last-child{
+      display:flex;
+      justify-content: flex-end;
+    }
+
+    .publish-sections-header{
+      margin:1.5rem 0 0.5rem 0;
+      font-weight: bold;
+
+    }
+    .summary-2nd{
+      margin-top:1.5rem;
+    }
+    .publish-sections-textinput{
+      .det-value-input{
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        width:100%;
+      }
+      .det-text-area{
+        height: 8rem;
+      }
+
+    }
+  }
+}
+.swaggerhelp-text{
+  font-size: 1rem;
+  color: #aaa;
+}
+.icon-icon-up{
+  margin-right: 1rem;
+  color:#ed008c;
+
+}
+.bodyshow{
+  display: block;
+  visibility: visible;
+  height: auto;
+  opacity:1;
+  max-height:1000px;
+  transition:all 0.3s;
+
+}
+.rotate-90{
+  transform: rotate(90deg);
+  transition: all 0.3s;
+  font-size:1rem;
+}
+.rotate-180{
+  transform: rotate(180deg);
+  transition: all 0.3s;
+  font-size:1rem;
+}
+.sidebar-details{
+  border-top:1px solid #bbb;
+  padding: 1rem 0;
+}
+.service-name{
+  font-size:2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.textForm-area{
+  height:5rem !important;
+  padding:10px;
+}
+.cw-evaluate-score{
+  padding:1.5rem 3rem !important;
+
+}
+.cw-cover{
+  >div{
+    border:none !important;
+  }
+}
+.pub-desc{
+  height: 15rem !important;
+}

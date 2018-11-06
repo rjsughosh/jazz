@@ -26,6 +26,8 @@ export class ChartjsLinegraphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes?) {
+    this.datasets;
+    this.options;
     this.render();
     this._datasets = this.datasets.map(this.modifyDataSet);
     this._options = this.getOptions(this.options);
