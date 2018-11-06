@@ -108,21 +108,20 @@ export class EnvironmentDetailComponent implements OnInit {
     if (service === undefined) {
       return {};
     } else {
-        let _service = {
-          id: service.id,
-          name: service.service,
-          serviceType: service.type,
-          runtime: service.runtime,
-          status: service.status,
-          domain: service.domain,
-          repository: service.repository,
-          created_by: service.created_by
-        };
-        if (service.deployment_targets && service.deployment_targets[service.type]){
-          _service["deployment_targets"] = service.deployment_targets[service.type];
-        }
-        return _service;     
+      let _service = {
+        id: service.id,
+        name: service.service,
+        serviceType: service.type,
+        runtime: service.runtime,
+        status: service.status,
+        domain: service.domain,
+        repository: service.repository,
+        created_by: service.created_by
+      };
+      if (service.deployment_targets && service.deployment_targets[service.type]){
+        _service["deployment_targets"] = service.deployment_targets[service.type];
       }
+      return _service;     
     }
   };
 
