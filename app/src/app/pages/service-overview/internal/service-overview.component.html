@@ -185,7 +185,7 @@
                 <div class="det-value">{{service.serviceType || 'Pick your service type'}}</div>
               </li>
 
-              <li *ngIf="service.serviceType != 'website' ">
+              <li>
                     <div [ngClass]="disp_show ? 'det-label' : 'det-label-show'">Approval Timeout</div>
                     <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="approval_empty">{{ displayApprovalTime || service.approvalTimeOutInMins || 'NA'}} </div>
                     <div *ngIf='!disp_show' class="inline-value">
