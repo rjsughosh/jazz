@@ -4,7 +4,7 @@
   * @author
 */
 
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../../core/services/index';
 import { ToasterService } from 'angular2-toaster';
@@ -97,6 +97,7 @@ export class ServiceOverviewComponent implements OnInit {
     serviceStatusStarted: boolean = true;
     serviceStatusStartedD: boolean = false;
     statusFailed: boolean = false;
+    approversTouched : boolean = false;
     statusInfo: string = 'Service Creation started';
     private intervalSubscription: Subscription;
     swaggerUrl: string = '';
@@ -186,6 +187,7 @@ export class ServiceOverviewComponent implements OnInit {
     showApproversList : boolean = false;
     approversLimitStatus: boolean = false;
     approversSaveStatus : boolean = false;
+    showGenDeatils : boolean = true;
     resMessage : any;
     approversList: any;
     approversListRes : any;
@@ -291,7 +293,9 @@ export class ServiceOverviewComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private zone:NgZone,
         private request: RequestService,
+        private cdRef: ChangeDetectorRef,
         private messageservice: MessageService,
         private myFilterPipe : MyFilterPipe,
         private cronParserService: CronParserService,
@@ -503,6 +507,7 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     selectApprovers(approver) {
+        this.approversTouched = true;
         this.selApprover = approver;
         let thisclass: any = this;
         this.showApproversList = false;
@@ -512,7 +517,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.selectedApprovers.length === 5)
             this.isInputShow = false; //not to show input box
         
-        if(this.selectedApprovers.length > 1)
+        if(this.selectedApprovers.length > 0)
             this.approversLimitStatus = false;
     
         //checking for the difference in arrays
@@ -586,21 +591,94 @@ export class ServiceOverviewComponent implements OnInit {
     focusInputApplication(event) {
         document.getElementById('applc').focus();
     }
+    keypress(hash) {
+        if (hash.key == 'ArrowDown') {
+          this.focusindex++;
+          if (this.focusindex > 0) {
+            var pinkElements = document.getElementsByClassName("pinkfocus")[3];
+            // if(pinkElements == undefined)
+            //   {
+            //     this.focusindex = 0;
+            //   }
+          }
+          if (this.focusindex > 2) {
+            this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+    
+          }
+        }
+        else if (hash.key == 'ArrowUp') {
+    
+          if (this.focusindex > -1) {
+            this.focusindex--;
+    
+            if (this.focusindex > 1) {
+              this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+            }
+          }
+          if (this.focusindex == -1) {
+            this.focusindex = -1;
+    
+    
+          }
+        }
+        else if (hash.key == 'Enter' && this.focusindex > -1) {
+          this.appPlaceHolder = "Start typing(min 3 char)...";
+          event.preventDefault();
+          console.log(this.appPlaceHolder);
+          var pinkElement;
+          this.zone.run(() => { // <== added
+            this.appPlaceHolder = "Start typing(min 3 char)...";
+        });
+          pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
+          // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
+          // if (pinkElementS == undefined)
+          // {
+          //   var p_ele = document.getElementsByClassName('pinkfocus')[2];
+          //   if(p_ele == undefined){
+    
+          //   }
+          //   else pinkElement = document.getElementsByClassName('pinkfocus')[2].children;
+    
+          // }
+          // else
+          //   pinkElement = pinkElementS.children;
+          var approverObj = {
+            displayName: pinkElement[0].attributes[2].value,
+            givenName: pinkElement[0].attributes[3].value,
+            userId: pinkElement[0].attributes[4].value,
+            userEmail: pinkElement[0].attributes[5].value
+          }
+          this.selectApprovers(approverObj);
+          this.cdRef.markForCheck();
+          this.showApproversList = false;
+          this.focusindex = -1;
+    
+        } else {
+          this.focusindex = -1;
+        }
+       
+      }
 
     removeApprover(index, approver) {
-    
-       if (this.selectedApprovers.length >1) { 
-            this.approversLimitStatus = false;
-            this.isInputShow = true;
-            this.approversListShow.push(approver);
-            this.selectedApprovers.splice(index, 1);
-       }else {
-           this.approversLimitStatus = true;
-       }
-       if(this.compareApproversArray(this.selectedApprovers) > 0)
+
+        if (this.selectedApprovers.length > 0) { 
+                    this.approversLimitStatus = false;
+                    this.isInputShow = true;
+                    this.approversListShow.push(approver);
+                    this.selectedApprovers.splice(index, 1);
+        } else {
+            this.approversLimitStatus = true;
+        }
+        if (this.compareApproversArray(this.selectedApprovers) > 0) {
             this.approversSaveStatus = true;
-        else
+        }
+        else {
             this.approversSaveStatus = false;
+        }
+        if (this.selectedApprovers.length === 0 ){
+            this.approversLimitStatus = true;
+            this.approversSaveStatus = false;
+        }
       }
 
     removeApplication(index, approver) {
@@ -1313,6 +1391,10 @@ export class ServiceOverviewComponent implements OnInit {
         this.isLoading = false;
         this.errorInclude = JSON.stringify(this.djson);
         this.sjson = JSON.stringify(this.json);
+    }
+
+    onClickGenDetails() {
+        this.showGenDeatils = !this.showGenDeatils;
     }
 
     openFeedbackForm() {

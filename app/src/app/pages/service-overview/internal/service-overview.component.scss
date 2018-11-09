@@ -64,9 +64,6 @@ $screen-lg:                  1200px !default;
     }
 }
 
-.approvers-err {
-    padding-top: 10px;
-}
 
 .stage-wrp:last-child {
     margin-right: 0;
@@ -94,7 +91,9 @@ $screen-lg:                  1200px !default;
         border: 1px solid #d9d9d9;
         height: 26px;
         flex : 0 33%;
-        width: max-content;
+        width: max-content !important;
+        max-width: max-content !important;
+        min-width: max-content !important;
         border-radius: 50px;
         margin-top: 6px;
         margin-left: 4px;
@@ -201,11 +200,22 @@ $screen-lg:                  1200px !default;
         width: 33.33%;
     }
 }
- 
+
+.dangerError{
+    border : 1px solid red !important;
+}
+
+.slack-wrapper{
+  padding-top: 9px !important;
+}
+.repo-wrapper{
+  padding-top: 5px;
+}
+
 .save-btn-wrap /deep/ .btn{
     font-weight: 700;
     color : white !important;
-    border: none;
+    // border: none;
     text-align: center;    
 }
 
@@ -213,17 +223,15 @@ $screen-lg:                  1200px !default;
     pointer-events: none;
 }
 
-.save-btn-wrap /deep/ button.btn-primary:hover,
-button.btn-primary:focus,
-button.btn-primary:active {
+.save-btn-wrap /deep/ button.btn-primary:hover:not([disabled]),
+.save-btn-wrap /deep/ button.btn-primary:focus:not([disabled]),
+.save-btn-wrap /deep/ button.btn-primary:active:not([disabled]) {
     outline: none !important;
     background-color: #ffffff;
     color: #ed008c !important;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     border: 1px solid #ffffff;
 }
-
-
 
 
 .popup-endp{
@@ -643,6 +651,13 @@ section:focus
     color: rgb(220,220,220) !important;
     transform: skew(-20deg);
 
+}
+.limitWrapper{
+      padding-top: 10px;
+      color:#FFC200;
+      margin-left: 12rem;
+      margin-top: -2rem;
+      font-size: 0.9rem;
 }
 .current-status-wrap{
     z-index: 101!important;
@@ -1451,7 +1466,44 @@ details{
     margin-top : 6em;
 }
 
+.submit-form {
+    padding: 3rem 0 7rem 0;
+    text-align: center;
+    @media(max-width: 853px) {
+        position: fixed;
+        bottom: 0;
+        padding: 2rem 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.28);
+    }
+    a {
+        display: block;
+        padding-top: 1.25rem;
+        cursor: pointer;
+    }
+    button.btn-primary {
+        border-radius: 30px;
+        padding: 7px 16px;
+        letter-spacing: .7px;
+        background-color: #ed008c;
+        border: 1px solid #ed008c;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        font-weight: 700;
+        &:focus {
+            outline: 0px;
+        }
+        &:hover {
+            outline: 0px;
+        }
+    }
+}
+
 .custom-save-btn-wrap{
+    display: flex;
+    flex-direction: row-reverse;
     width: 100%;
 }
 .metadata-body-advanced{
@@ -1564,7 +1616,7 @@ input{
 .slack-relative{
   position: relative;
   input{
-    width:auto;
+    width:28em;
     padding: 0;
   }
   img{

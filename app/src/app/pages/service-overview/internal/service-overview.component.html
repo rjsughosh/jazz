@@ -132,7 +132,7 @@
 
 <section class='service-details service-metadata-wrap relative' [class.extra-bottom-padding]='!disp_show2' hide>
   <details open>
-    <summary>
+    <summary (click)="onClickGenDetails()">
       <div class='metadata-heading-wrap'>
         <div class='metadata-heading'>
           General
@@ -140,6 +140,7 @@
 
       </div>
     </summary>
+    <div>
     <div class='metadata-body relative metadata-body-border'>
       <div *ngIf="disp_show" class='metadata-buttons-wrap'>
         <btn-jazz-secondary [disablebtn]="service.status != 'creation completed'" text="EDIT" (click)='onEditClick()'></btn-jazz-secondary>
@@ -185,25 +186,43 @@
                     <div *ngIf='disp_show' class="det-value" [class.PlaceHolder]="approval_empty">{{ displayApprovalTime || service.approvalTimeOutInMins || 'NA'}} </div>
                     <div *ngIf='!disp_show' class="inline-value">
                             <dropdown class='dropdown-4' [dropdwnContent]="hoursArray" title="Select Hours" [selected]="approvalHours || hoursArray[0] " (onSelected)="onenvSelectedHours($event)"></dropdown>
-                            <div class="det-value det-space det-space1">HRS</div>
+                            <div class="det-value det-space det-space1">hrs</div>
                     </div>
                     <div *ngIf='!disp_show' class="inline-value">
                             <dropdown class='dropdown-4' [ngClass]="{dropDownDisable : minuteDropDownDisable}" [dropdwnContent]="minutesArray" title="Select Minutes" [selected]="approvalMinutes || minutesArray[0] " (onSelected)="onenvSelectedMins($event)"></dropdown>
-                            <div class="det-value det-space det-space1">MINS</div>
+                            <div class="det-value det-space det-space1">mins</div>
                     </div>
                   </li>
-          <li>
-              
-            <div class='det-label'>Slack</div>
-            <div *ngIf='disp_show' class='det-value' [class.PlaceHolder]="slackChannel_empty">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
-            <div *ngIf='!disp_show' class='det-value slack-relative'>
-                <input [(ngModel)]="slackChannel_temp" type='text' (blur)="checkSlackNameAvailability()" (ngModelChange)='update_payload.slack_channel=slackChannel_temp'
-                class="det-value-input" placeholder="Feeling collaborative? Add it to slack">
-              <img *ngIf="show_loader" class="input-loader" src="../assets/images/icons/loading.png">
-
-            </div>
-
-          </li>
+             <li>
+            <div class='det-label'>Approvers</div>
+            <div *ngIf='disp_show' class='det-value'>{{service.approvers?service.approvers.join(', ') : "NA"}}</div>
+            <div *ngIf='!disp_show' class="det-value application-drop-wrap">
+                <div class="flex-col">
+                    <section class="pad-left0">
+                        <div class="input-field-container">
+                            <div class="selected-approvers" [ngClass]="{dangerError : approversTouched === true && approversSaveStatus === false}" >
+                                <ul (click)='focusInput($event)'>
+                                    <li *ngFor="let selected of selectedApprovers;let i=index" >
+                                        <div class="display-wrapper">{{selected.userId}}</div>
+                                        <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
+                                    </li>
+                                    <input *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
+                                </ul>
+                             </div>  
+                            <div [hidden]="!showApproversList" class="approvers-list-wrap">
+                                <div  class="approvers-list typeShow open">
+                                    <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
+                                        <div (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                 </div>
+              </div>
+            </li>    
+            <p class='limitWrapper' [class.hide]='isInputShow'>*Approvers limit reached</p>
+            <p class='limitWrapper' [class.hide]='!approversLimitStatus'>*Must have atleast one approver</p>
           <p class='email-err-msg' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>   
         </ul>
       </div>
@@ -215,7 +234,7 @@
             <div *ngIf='!disp_show && false' class="det-value application-drop-wrap">
                 <div class="flex-col">
                     <section class="pad-left0">
-                        <div class="input-field-container">
+                        <div class="input-field-container" >
                             <div class="selected-approvers selected-applications">
                                 <ul (click)='focusInputApplication($event)'>
                                     <li *ngFor="let selected of selectedApplications;let i=index"   >
@@ -242,51 +261,33 @@
             <div class="det-label">Status</div>
             <div class="det-value">{{service.status}}</div>
           </li>
-          <li>
+          <li [ngClass]="{'repo-wrapper' : !disp_show}">
             <div class="det-label">Repository</div>
             <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
           </li> 
-          <li>
-            <div class='det-label'>Approvers</div>
-            <div *ngIf='disp_show' class='det-value'>{{service.approvers?service.approvers.join(', ') : "NA"}}</div>
-            <div *ngIf='!disp_show' class="det-value application-drop-wrap">
-                <div class="flex-col">
-                    <section class="pad-left0">
-                        <div class="input-field-container">
-                            <div class="selected-approvers">
-                                <ul (click)='focusInput($event)'>
-                                    <li *ngFor="let selected of selectedApprovers;let i=index" >
-                                        <div class="display-wrapper">{{selected.userId}}</div>
-                                        <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
-                                    </li>
-                                    <input *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
-                                </ul>
-                             </div>  
-                            <div [hidden]="!showApproversList" class="approvers-list-wrap">
-                                <div  class="approvers-list typeShow open">
-                                    <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
-                                        <div  (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.displayName || approverss.givenName}} ({{approverss.userId}})</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                 </div>
-              </div>
-            </li>    
-            <p class='email-err-msg approvers-err' [class.hide]='isInputShow'>*Maximum 5 Approvers</p>
-            <p class='email-err-msg approvers-err' [class.hide]='!approversLimitStatus'>*Minimum 1 Approver required</p>
+           <li [ngClass]="{'slack-wrapper' : !disp_show}">
+            <div class='det-label'>Slack</div>
+            <div *ngIf='disp_show' class='det-value' [class.PlaceHolder]="slackChannel_empty">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
+            <div *ngIf='!disp_show' class='det-value slack-relative'>
+                <input [(ngModel)]="slackChannel_temp" type='text' (blur)="checkSlackNameAvailability()" (ngModelChange)='update_payload.slack_channel=slackChannel_temp'
+                class="det-value-input" placeholder="Feeling collaborative? Add it to slack">
+              <img *ngIf="show_loader" class="input-loader" src="../assets/images/icons/loading.png">
+            </div>
+
+          </li>
+         
         </ul>
       </div>
-       <div *ngIf='!disp_show' class='down-btn-wrap'>
+        <div *ngIf='!disp_show' class='down-btn-wrap'>
             <div class="custom-save-btn-wrap">
                 <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
                 <a (click)="onCancelClick()">CANCEL</a>
             </div>
         </div>
       </div>
+    </div>
   </details>
-  <details [ngClass]="{'advance-wrapper': disp_show == false}" >
+  <details [ngClass]="{'advance-wrapper': disp_show === false && showGenDeatils}" >
     <summary class='summary-last-child'>
       <div class='metadata-heading-wrap'>
         <div class='metadata-heading'>
