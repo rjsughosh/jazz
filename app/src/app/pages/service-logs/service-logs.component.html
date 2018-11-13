@@ -37,16 +37,16 @@
                         </div>
                         <div class="eachFilter no-border-no-padding">
                             <div><div class='hori-line'></div>ENVIRONMENT</div>
-                            <dropdown class="dropdown-3" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select enviroment" [selected]="environment" (onSelected)="onEnvSelected($event)"></dropdown>            
+                            <dropdown class="dropdown-3" [IsEnvList]='envList.length > 5' [dropdwnContent]="envList" title="Select environment" [selected]="environment" (onSelected)="onEnvSelected($event)"></dropdown>            
                         </div>
                         
                         <div class="eachFilter hide" *ngIf='service.serviceType == "function"'>
                             <div><div class='hori-line'></div>ACCOUNT</div>
-                            <dropdown class="dropdown-3" [dropdwnContent]="accList" title="Select enviroment" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>            
+                            <dropdown class="dropdown-3" [dropdwnContent]="accList" title="Select environment" [selected]="accSelected" (onSelected)="onaccSelected($event)"></dropdown>            
                         </div>
                         <div class="eachFilter hide" *ngIf='service.serviceType == "function"'>
                             <div><div class='hori-line'></div>REGION</div>
-                            <dropdown class="dropdown-3"  [dropdwnContent]="regList" title="Select enviroment" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>            
+                            <dropdown class="dropdown-3"  [dropdwnContent]="regList" title="Select environment" [selected]="regSelected" (onSelected)="onregSelected($event)"></dropdown>            
                         </div>
                         
                     </div>
