@@ -329,7 +329,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     public getData() {
         console.log(JSON.parse(localStorage.getItem('approvers')))
-        let localApprovvs = JSON.parse(localStorage.getItem('approvers')) || {};
+        let localApprovvs = JSON.parse(localStorage.getItem('approvers')) ||  {};
         if(Object.keys(localApprovvs).length>0){
             this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
             this.getApproversList();
