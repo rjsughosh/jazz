@@ -2553,3 +2553,38 @@ html.jazz {
     padding: 3px 6px;
     transform: translateY(-4px);
 }
+::-webkit-scrollbar {
+  max-width: 7px;
+  background-color: transparent;
+  max-height: 7px;
+  transition: 0.28s ease;
+  }
+
+  ::-webkit-scrollbar-button {
+  background-color: transparent;
+  display: none;
+  }
+
+  ::-webkit-scrollbar-track {
+  background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+  width: 7px;
+  background-color: #888;
+  border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-corner {
+  display: none;
+  background-color: transparent;
+  }
+
+  ::-webkit-resizer {
+  display: none;
+  background-color: transparent;
+  }
