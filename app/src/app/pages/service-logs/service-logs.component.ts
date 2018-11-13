@@ -10,6 +10,7 @@ import {DataCacheService } from '../../core/services/index';
 import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
 import {AdvancedFilterService} from './../../advanced-filter.service';
 import {AdvFilters} from './../../adv-filter.directive';
+import * as _ from 'lodash';
 @Component({
   selector: 'service-logs',
   templateUrl: './service-logs.component.html',
@@ -266,6 +267,14 @@ export class ServiceLogsComponent implements OnInit {
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
+
+
+		this.fetchEnvlist()
+		.then((envList)=>{
+		  this.instance_yes.envList = envList;
+		  this.instance_yes.envSelected = this.instance_yes.envList[0];
+		})
+
 		this.instance_yes.data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
 		this.instance_yes.onFilterSelect.subscribe(event => {
 			comp.onFilterSelect(event);
@@ -748,15 +757,30 @@ export class ServiceLogsComponent implements OnInit {
 	}
 
 	fetchEnvlist(){
-		var env_list=this.cache.get('envList');
-		if(env_list != undefined){
-		  this.envList=env_list.friendly_name;
-		}
-	
+		// var env_list=this.cache.get('envList');
+		// if(env_list != undefined){
+		//   this.envList=env_list.friendly_name;
+		// }
+		if (this.instance_yes){
+			return this.http.get('/jazz/environments', {
+				domain: this.service.domain,
+				service: this.service.name
+			  }).toPromise()
+				.then((response: any) => {
+				  if (response && response.data && response.data.environment && response.data.environment.length) {
+				      let serviceEnvironments = _(response.data.environment).map('logical_id').uniq().value();
+					  return serviceEnvironments
+				  }
+				})
+				.catch((error) => {
+				  return error;
+				})
+		}		
 	  }
-	  ngOnChanges(x:any){
-		  this.fetchEnvlist();
-	  }
+
+	ngOnChanges(x:any){
+		this.fetchEnvlist();
+	}
 	 
 	ngOnInit() {
 		
