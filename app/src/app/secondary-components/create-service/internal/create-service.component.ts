@@ -1269,16 +1269,18 @@ blurApplication(){
     this.application_arr = nonRepeatedData(this.application_arr);
     this.selectedApplications.splice(index, 1);
   }
+
   start_at:number=0;
-  getapplications(){
+  fetchApplications(){
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt='+this.start_at)
     .subscribe((res: Response) => {
       this.applications=res;
-
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
+
+      localStorage.setItem('workload', JSON.stringify(this.application_arr));
+
       this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
-
         this.getapplications();
       }
       else{
@@ -1308,6 +1310,20 @@ blurApplication(){
     }, error => {
 
     });
+  }
+
+  getapplications(){
+    var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
+
+    if (localStorageWorkload.length > 0){
+      if (this.start_at + 100 >= localStorageWorkload.length) {
+        this.fetchApplications();
+      } else {
+        this.application_arr = localStorageWorkload;
+      }
+    } else {
+      this.fetchApplications();
+    }
   }
 
 
