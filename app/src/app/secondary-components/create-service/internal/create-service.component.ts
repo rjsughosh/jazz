@@ -274,6 +274,7 @@ export class CreateServiceComponent implements OnInit {
     this.http.get('/platform/ad/users')
       .subscribe((res: Response) => {
         this.approversListRes = res;
+        localStorage.setItem('approvers', JSON.stringify( this.approversListRes));
         this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.approversListBasic= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         this.getUserDetails(this.approversListBasic);

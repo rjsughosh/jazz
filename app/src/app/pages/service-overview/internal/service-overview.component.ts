@@ -328,17 +328,24 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     public getData() {
-
-        this.http.get('/platform/ad/users')
-          .subscribe((res: Response) => {
-            this.approversListRes = res;
-            this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+        console.log(JSON.parse(localStorage.getItem('approvers')))
+        let localApprovvs = JSON.parse(localStorage.getItem('approvers')) || {};
+        if(Object.keys(localApprovvs).length>0){
+            this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
             this.getApproversList();
-        }, error => {
-            this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
-            this.toast_pop('error', 'Oops!', this.resMessage);
-          });
+        }
+        else {
+            this.http.get('/platform/ad/users')
+            .subscribe((res: Response) => {
+                this.approversListRes = res;
+                this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+                this.getApproversList();
+            }, error => {
+                this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
+                this.toast_pop('error', 'Oops!', this.resMessage);
+            });
       }
+    }
 
     getApproversList(){
         let locArr = [];
