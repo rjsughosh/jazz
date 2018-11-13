@@ -333,8 +333,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(Object.keys(localApprovvs).length>0){
             this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
             this.getApproversList();
-        }
-        else {
+        }else {
             this.http.get('/platform/ad/users')
             .subscribe((res: Response) => {
                 this.approversListRes = res;
