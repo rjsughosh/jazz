@@ -141,7 +141,6 @@ export class ServiceDetailComponent implements OnInit {
         returnObject["deployment_targets"] = service.deployment_targets[service.type];
       }
       if (service.metadata) {
-        console.log(service.metadata);
         // replace existing values with new values from metadata, if available.
         returnObject.runtime = service.metadata.providerRuntime || service.runtime;
         returnObject.approvers = service.metadata.approvers || service.approvers;
