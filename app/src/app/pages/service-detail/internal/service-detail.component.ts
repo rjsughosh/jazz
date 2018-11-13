@@ -136,7 +136,10 @@ export class ServiceDetailComponent implements OnInit {
         endpoints: service.endpoints,
         is_public_endpoint: service.is_public_endpoint,
         created_by: service.created_by
-      };
+      }
+      if (service.deployment_targets && service.deployment_targets[service.type]){
+        returnObject["deployment_targets"] = service.deployment_targets[service.type];
+      }
       if (service.metadata) {
         // replace existing values with new values from metadata, if available.
         returnObject.runtime = service.metadata.providerRuntime || service.runtime;

@@ -12,14 +12,16 @@ import {RelaxedJsonService} from "../../core/helpers/relaxed-json.service";
 import {ToasterService} from 'angular2-toaster';
 import { DataService } from '../../pages/data-service/data.service';
 import { environment } from './../../../environments/environment';
+import { Subscription } from 'rxjs/Subscription';
+
 
 
 @Component({
-  selector: 'swagger-sidebar',
-  templateUrl: './swagger-sidebar.component.html',
-  styleUrls: ['./swagger-sidebar.component.scss']
+  selector: 'evaluate-swagger-sidebar',
+  templateUrl: './evaluate-swagger-sidebar.component.html',
+  styleUrls: ['./evaluate-swagger-sidebar.component.scss']
 })
-export class SwaggerSidebarComponent implements OnInit {
+export class EvaluateSwaggerSidebarComponent implements OnInit {
 
   @Input() service: any = {};
   @Input() envSelected: any = {};
@@ -30,6 +32,7 @@ export class SwaggerSidebarComponent implements OnInit {
   @Output() evaluate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRequestId: EventEmitter<any> = new EventEmitter<any>();
 
+  private subscription: any;
   swaggerAsset:any;
   validityMessage:string;
   valid:boolean = true;
@@ -49,8 +52,22 @@ export class SwaggerSidebarComponent implements OnInit {
   public lineNumberCount: any = new Array(40).fill('');
   requestId:string;
   publishBtnText:string = "PUBLISH";
+  error: boolean = true;
   environmentVars = environment.urls || {};
-
+  tableHeader = [];
+  evaluationComplete:boolean = false;
+  loadingState: string = 'default';
+  paginationSelected: Boolean = false;
+  sidebarType:string;
+  search_bar: string;
+  reqJson:any;
+  searchDetail_bar: string;
+  detailView: boolean = true;
+  oneObject: any;
+  evaluateText:string = "EVALUATE";
+  headerObj = {
+    'accept': 'application/json'
+  };
 
   private http:any;
   constructor(
@@ -59,7 +76,8 @@ export class SwaggerSidebarComponent implements OnInit {
     private router: Router,
     private request:RequestService,
     private relaxedJson: RelaxedJsonService,
-    private data : DataService
+    private data : DataService,
+
   ) {
     this.http = request;
 
@@ -77,6 +95,18 @@ export class SwaggerSidebarComponent implements OnInit {
   enableButton(event){
     this.ispublishing = false;
     this.publishBtnText = "PUBLISH";
+  }
+
+  SetType(type){
+    this.sidebarType = type;
+  }
+
+  onCWDetailsearch(data) {
+    this.searchDetail_bar = data.searchString;
+  }
+
+  onCWsearch(data) {
+    this.search_bar = data.searchString;
   }
 
   closeBar(){
@@ -114,9 +144,55 @@ export class SwaggerSidebarComponent implements OnInit {
     this.formatJSON();
     var payload = JSON.parse(this.swagger_json);
     this.ispublishing = true;
-    this.evaluate.emit(payload);
+    this.evaluationComplete = false
+    this.evaluateSwagger(payload);
+    // this.evaluate.emit(payload);
   }
 
+  evaluateSwagger(swagger_json){
+    this.evaluateText = "EVALUATING"
+    this.isloaded = 'loading';
+
+    let swaggerLintPayload = {
+      'swaggerDoc': swagger_json,
+    };
+    this.subscription = this.http.post(environment.urls.swaggerApiUrl, swaggerLintPayload, this.headerObj)
+    .subscribe(
+      (response) => {
+        this.obj = response;
+        this.cw_obj = response.results;
+        this.cw_score = response.results.score;
+        this.cw_message = response.results.message;
+        var arr = response.results.details;
+        this.isloaded = 'default';
+        this.error = false;
+        this.cw_keysList = Object.keys(arr).map(key => {
+          return key;
+        });
+        this.cw_results = Object.keys(arr).map(key => {
+          return arr[key];
+        });
+        for (var i = 0; i < this.cw_results.length; i++) {
+          this.cw_results[i]["heading"] = this.cw_keysList[i];
+          this.cw_results[i].score = Math.abs(this.cw_results[i].score);
+        }
+        this.enableButton(true);
+        this.evaluationComplete = true;
+        this.evaluateText = "EVALUATE";
+
+
+      },
+      (error) => {
+        this.isloaded = 'default';
+        this.error = true;
+        this.evaluationComplete = false;
+        this.evaluateText = "EVALUATE";
+        this.enableButton(true);
+        this.toast_pop('error', 'Oops!', 'Swagger evaluation failed');
+
+      }
+    );
+  }
   getassets(){
     this.http.get('/jazz/assets', {
       service: this.service.service || this.service.name,
@@ -156,16 +232,46 @@ export class SwaggerSidebarComponent implements OnInit {
     this.lineNumberCount = new Array(line_numbers).fill('');
   }
 
+  onRowClicked(row, index) {
+    index = this.cw_results.indexOf(row)
+    for (let i = 0; i < this.cw_results.length; i++) {
+      let rowData = this.cw_results[i];
+      if (i === index) {
+        rowData['expanded'] = !rowData['expanded'];
+      }
+    }
+  }
+
+
+  viewDetails(obj) {
+    this.search_bar = '';
+    this.searchDetail_bar = '';
+    let index = this.cw_results.indexOf(obj);
+    this.oneObject = this.cw_results[index];
+    this.oneObject['heading'] = this.cw_keysList[index];
+  }
   ontextareaScroll(){
     var target = $("#target");
     $("#source").scroll(function() {
       target.prop("scrollTop", this.scrollTop)
             .prop("scrollLeft", this.scrollLeft);
     });
+  }
+
+  getSwaggerFromAssets(){
+    if(this.assets[0].hasOwnProperty('type')){
+      this.foundAsset = this.assets.find((asset) => {
+        return asset.type === 'swagger_url';
+      });
+      if(this.foundAsset){
+        this.getdata();
+      }
+
     }
+  }
 
   getdata(){
-    this.http.get(this.foundAsset.provider_id).subscribe(
+    this.http.get(this.foundAsset.provider_id, null, this.headerObj).subscribe(
       (response) => {
         this.swagger_json=JSON.stringify(response);
         this.swagger_json = this.stringToPrettyString(this.swagger_json);
@@ -189,6 +295,8 @@ export class SwaggerSidebarComponent implements OnInit {
     this.isloaded='default';
   }
 
+
+
   summaryClicked(position){
     if(position === "top"){
       this.evaluateBody = !this.evaluateBody;
@@ -199,6 +307,7 @@ export class SwaggerSidebarComponent implements OnInit {
   }
 
   publish(){
+    this.isloaded = 'loading';
     this.ispublishing = true;
     this.publishBtnText = "PUBLISHING";
     let payload = {
@@ -215,20 +324,29 @@ export class SwaggerSidebarComponent implements OnInit {
           domain: this.service.domain,
           request_id: Response.data.request_id
         }));
+      this.closeBar();
+      this.isloaded = 'default';
       this.onRequestId.emit(Response.data.request_id);
     },
     (err) => {
       this.notesInput = '';
       this.publishBtnText = "PUBLISH";
+      this.isloaded = 'default';
       this.ispublishing = false;
+      this.toast_pop('error', 'Oops!', 'Error in publishing swagger');
     });
   }
 
   ngOnChanges(){
     if(this.service.hasOwnProperty('id') && !this.assets && !this.swagger_json){
       this.getassets();
-    }else{
+    }
+    else if(!this.swagger_json){
+      this.getSwaggerFromAssets();
+    }
+    else{
       this.formatSwagger();
+      this.lineNumbers();
     }
   }
 }

@@ -34,7 +34,7 @@
 	</div>
 </div>
 <div class="table-wrp" [ngClass]="type">
-	<!-- Table Header --> 
+	<!-- Table Header -->
 	<div class="table-header">
 		<div *ngFor="let column of header" class="column" [class.sortable]="column.sort" (click)="onSortColumn(column)">
 		<span>{{column.label}}</span>
@@ -84,13 +84,13 @@
 		<div *ngIf='isfromservice'>
 			<div  *ngIf="!err_disp" class="errMessage">
 				<div class='ops'>Oops, looks like there are no services here yet...</div>
-				
+
 			</div>
-			
+
 			<div class='crt-1'>Why don't you go ahead and create one <a (click)='showService()'>here?</a></div>
-			
+
 		</div>
-		
+
 		<div *ngIf="!isfromservice">
 			<div><b>Oops, No Data Found</b><br>Doesn't look like there is any data available here.</div>
 
@@ -103,13 +103,13 @@
             <div *ngIf='isfromservice'>
 				<div  *ngIf="!err_disp" class="errMessage">
 					<div class='ops'>Oops, looks like there are no services here yet...</div>
-					
+
 				</div>
-				
+
 				<div class='crt-1'>Why don't you go ahead and create one <a (click)='showService()'>here?</a></div>
-				
+
 			</div>
-			
+
 			<div *ngIf="!isfromservice">
 				<div><b>Oops, No Data Found</b><br>Doesn't look like there is any data available here.</div>
 

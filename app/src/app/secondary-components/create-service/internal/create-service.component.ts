@@ -38,7 +38,7 @@ export class CreateServiceComponent implements OnInit {
   typeOfPlatform: string = "aws";
   disablePlatform = true;
   selected: string = "Minutes";
-  runtime: string = 'nodejs';
+  runtime: string = 'nodejs8.10';
   eventSchedule: string = 'fixedRate';
   private slackSelected: boolean = false;
   private createslackSelected: boolean = false;
@@ -46,7 +46,7 @@ export class CreateServiceComponent implements OnInit {
   showApproversList: boolean = false;
   showApplicationList:boolean = false;
   approverName: string;
-  approverName2: string;
+  slackName: string;
   approversPlaceHolder : string = "Start typing (min 3 chars)...";
   currentUserSlack: boolean = false;
   git_clone: boolean = false;
@@ -66,7 +66,7 @@ export class CreateServiceComponent implements OnInit {
   slackNotAvailble: boolean = false;
   channelNameError: boolean = false;
   showLoader: boolean = false;
-  showApproversListBasic: boolean = false;
+  showSlackList: boolean = false;
   showRegionList:boolean = false;
   showAccountList:boolean = false;
   oneSelected:boolean=false;
@@ -152,6 +152,7 @@ export class CreateServiceComponent implements OnInit {
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
 
+
   constructor(
     // private http: Http,
     private toasterService: ToasterService,
@@ -167,14 +168,10 @@ export class CreateServiceComponent implements OnInit {
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.runtimeObject = environment.envLists;
     this.runtimeKeys = Object.keys(this.runtimeObject);
-    
+
+
   }
 
-  // serviceTypeData = [
-  //   {'name':'api','path':'../assets/images/icons/icon-api@3x.png'},
-  //   {'name':'function','path':'../assets/images/icons/icon-function@3x.png'},
-  //   {'name':'website','path':'../assets/images/icons/icon-function@3x.png'}
-  // ];
 
   public focusDynamo = new EventEmitter<boolean>();
   public focusKinesis = new EventEmitter<boolean>();
@@ -197,6 +194,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function for opening and closing create service popup
   closeCreateService(serviceRequest) {
+    this.onClose.emit(false);
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
@@ -206,14 +204,16 @@ export class CreateServiceComponent implements OnInit {
     this.serviceRequested = false;
     this.serviceRequestFailure = false;
     this.serviceRequestSuccess = false;
-    this.approversList = this.approversListShow;
-    this.onClose.emit(false);
+
+    this.allUsersApprover = this.usersList.values.slice(0, this.usersList.values.length);
+    this.allUsersSlack = this.usersList.values.slice(0, this.usersList.values.length);
+    // this.approversList = this.approversListShow;
   }
 
 
   selectedApplications=[];
   selectedApprovers = [];
-  selectedApprovers2 = [];
+  selectedSlackUsers = [];
 
   rateData = ['Minutes', 'Hours', 'Days'];
 
@@ -232,6 +232,7 @@ export class CreateServiceComponent implements OnInit {
 
   // function called on runtime change(radio)
   onSelectionChange(val) {
+    console.log(val);
     this.runtime = val;
   }
 
@@ -268,6 +269,11 @@ export class CreateServiceComponent implements OnInit {
     this.selected = item;
   };
   approversListRes: any;
+  usersList;
+  allUsersSlack = [];
+  allUsersApprover = [];
+  filteredSlackUsers = [];
+  filteredApproversUsers = [];
   // function to get approvers list
   public getData() {
 
@@ -275,9 +281,11 @@ export class CreateServiceComponent implements OnInit {
       .subscribe((res: Response) => {
         this.approversListRes = res;
         localStorage.setItem('approvers', JSON.stringify( this.approversListRes));
-        this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.approversListBasic= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
-        this.getUserDetails(this.approversListBasic);
+        this.usersList = this.approversListRes.data;
+        this.allUsersSlack = this.usersList.values.slice(0, this.usersList.values.length);
+        this.allUsersApprover = this.usersList.values.slice(0, this.usersList.values.length);
+
+        this.getUserDetails(this.allUsersApprover);
       }, error => {
         this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
         this.toast_pop('error', 'Oops!', this.resMessage);
@@ -504,24 +512,14 @@ export class CreateServiceComponent implements OnInit {
         payload["git_repository"] = {};
         //payload["git_repository"]["git_url"] = this.git_url;
         obj = { "git_https_url": this.git_url, "git_creds": {} };
-        // console.log("cloned")
 
         if (this.git_private == true) {
           //payload["git_private"] = this.git_private;
           this.git_creds = {
-
             "git_username": this.gitusername,
             "git_pwd": this.gituserpwd
-
           }
           obj["git_creds"] = this.git_creds;
-
-          // payload["git_pwd"] = this.gitpwd;
-
-
-
-          // console.log("private")
-
         }
         payload["git_repository"] = obj;
       }
@@ -546,7 +544,7 @@ export class CreateServiceComponent implements OnInit {
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
     this.isLoading = true;
-    
+
     this.http.post('/jazz/create-serverless-service', payload)
       .subscribe(
       (Response) => {
@@ -554,7 +552,6 @@ export class CreateServiceComponent implements OnInit {
         var domain = payload.domain;
         var reqId = Response.data.request_id;
         localStorage.setItem('request_id' + "_" + payload.service_name + "_" + payload.domain, JSON.stringify({ service: service, domain: domain, request_id: reqId }));
-        console.log("payload ===== ", payload)
         var output = Response;
         // this.cache.set("request_id", Response.data.request_id);
         // this.cache.set("request_id_name", Response.input.service_name);
@@ -573,6 +570,7 @@ export class CreateServiceComponent implements OnInit {
           this.resMessage = output.data.message;
         }
         this.selectedApprovers = [];
+        this.selectedSlackUsers = [];
         this.selectedApplications=[];
         this.notMyApp=false;
         this.oneSelected=false;
@@ -610,7 +608,7 @@ export class CreateServiceComponent implements OnInit {
     this.rateExpression.type = 'none';
     this.rateExpression.duration = "5";
     this.eventExpression.type = 'awsEventsNone';
-    this.runtime = 'nodejs';
+    this.runtime = this.runtimeKeys[0];
   }
   // function to navigate from success or error screen to create service screen
   backToCreateService() {
@@ -664,31 +662,27 @@ export class CreateServiceComponent implements OnInit {
       this.showApproversList = false;
     } else {
       this.approversPlaceHolder = "";
-      if(newVal.length > 2 && this.approversListShow) {
-        this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
-        if(this.approversList.length > 300)
-          this.approversList = this.approversList.slice(0,300);
+      if(newVal.length > 2 && this.allUsersSlack) {
+        this.filteredApproversUsers = this.myFilterPipe.transform(this.allUsersApprover,newVal);
         this.showApproversList = true;
       }
       else
         this.showApproversList = false;
     }
   }
-//change
-  onApproverChange2(newVal) {
+
+  onSlackUserChange(newVal) {
     if (!newVal) {
       this.approversPlaceHolder = "Start typing (min 3 chars)...";
       this.showApproversList = false;
     } else {
       this.approversPlaceHolder = "";
-      if(newVal.length > 2 && this.approversListBasic) {
-        this.slackUsersList = this.myFilterPipe.transform(this.approversListBasic,newVal);
-        if(this.slackUsersList.length > 300)
-          this.slackUsersList = this.slackUsersList.slice(0,300);
-        this.showApproversListBasic = true;
+      if(newVal.length > 2 && this.allUsersSlack) {
+        this.filteredSlackUsers = this.myFilterPipe.transform(this.allUsersSlack,newVal);
+        this.showSlackList = true;
       }
       else
-      this.showApproversListBasic = false;
+      this.showSlackList = false;
     }
   }
 
@@ -736,9 +730,7 @@ keypressAccount(hash){
       if (pinkElements == undefined) {
         this.focusindex = 0;
       }
-      // var id=pinkElements.children[0].innerHTML;
     }
-    // console.log(this.focusindex);
     if (this.focusindex > 2) {
       this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
@@ -770,7 +762,7 @@ keypressAccount(hash){
     this.selectAccount(approverObj);
 
     this.showApproversList = false;
-    this.approverName2 = '';
+    this.slackName = '';
     this.focusindex = -1;
 
   } else {
@@ -789,9 +781,7 @@ keypressRegion(hash){
       if (pinkElements == undefined) {
         this.focusindexR = 0;
       }
-      // var id=pinkElements.children[0].innerHTML;
     }
-    // console.log(this.focusindexR);
     if (this.focusindexR > 2) {
       this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindexR - 2) * 2.9) + 'rem' };
 
@@ -820,7 +810,7 @@ keypressRegion(hash){
     this.selectRegion(approverObj);
 
     this.showApproversList = false;
-    this.approverName2 = '';
+    this.slackName = '';
     this.focusindexR = -1;
 
   } else {
@@ -859,10 +849,9 @@ blurApplication(){
     this.showApproversList = false;
     thisclass.approverName = '';
     this.selectedApprovers.push(approver);
-    for (var i = 0; i < this.approversListShow.length; i++) {
-      if (this.approversListShow[i].displayName === approver.displayName) {
-        this.approversListShow.splice(i, 1);
-
+    for (var i = 0; i < this.allUsersApprover.length; i++) {
+      if (this.allUsersApprover[i].displayName === approver.displayName) {
+        this.allUsersApprover.splice(i, 1);
         return;
       }
     }
@@ -870,22 +859,16 @@ blurApplication(){
 
   }
 
-  selectApprovers2(approver) {
+  selectSlackUser(approver) {
 
     let thisclass: any = this;
-    this.showApproversListBasic = false;
-    thisclass.approverName2 = '';
+    this.showSlackList = false;
+    // thisclass.slackName = '';
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
-    // for (var i = 0; i < this.selectedApprovers.length; i++) {
-    //     if(this.selectedApprovers[i].displayName === approver.displayName){
-    //       return;
-    //     }
-    // }
-    this.selectedApprovers2.push(approver);
-    for (var i = 0; i < this.approversListBasic.length; i++) {
-      if (this.approversListBasic[i].displayName === approver.displayName) {
-        this.approversListBasic.splice(i, 1);
-
+    this.selectedSlackUsers.push(approver);
+    for (var i = 0; i < this.allUsersSlack.length; i++) {
+      if (this.allUsersSlack[i].displayName === approver.displayName) {
+        this.allUsersSlack.splice(i, 1);
         return;
       }
     }
@@ -894,13 +877,13 @@ blurApplication(){
 
   // function for removing selected approvers
   removeApprover(index, approver) {
-    this.approversListShow.push(approver);
+    this.allUsersApprover.push(approver);
     this.selectedApprovers.splice(index, 1);
   }
 
-  removeApprover2(index, approver) {
-    this.approversListBasic.push(approver);
-    this.selectedApprovers2.splice(index, 1);
+  removeSlackUser(index, approver) {
+    this.allUsersSlack.push(approver);
+    this.selectedSlackUsers.splice(index, 1);
   }
 
   //function for closing dropdown on outside click//
@@ -1026,13 +1009,12 @@ blurApplication(){
 
 
   }
-  keypress(hash) {
+
+  keypressApprovers(hash) {
     if (this.typeOfService == 'website') {
       var gitClone = <HTMLInputElement>document.getElementById("checkbox-gitclone");
 
       this.git_clone = gitClone.checked;
-
-      console.log("git_clone = ", this.git_clone);
       if (this.git_clone) {
         var gitPrivate = <HTMLInputElement>document.getElementById("checkbox-gitprivate");
 
@@ -1046,10 +1028,7 @@ blurApplication(){
       this.focusindex++;
       if (this.focusindex > 0) {
         var pinkElements = document.getElementsByClassName("pinkfocus")[3];
-        // if(pinkElements == undefined)
-        //   {
-        //     this.focusindex = 0;
-        //   }
+
       }
       if (this.focusindex > 2) {
         this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
@@ -1075,18 +1054,7 @@ blurApplication(){
       event.preventDefault();
       var pinkElement;
       pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
-      // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
-      // if (pinkElementS == undefined)
-      // {
-      //   var p_ele = document.getElementsByClassName('pinkfocus')[2];
-      //   if(p_ele == undefined){
 
-      //   }
-      //   else pinkElement = document.getElementsByClassName('pinkfocus')[2].children;
-
-      // }
-      // else
-      //   pinkElement = pinkElementS.children;
       var approverObj = {
         displayName: pinkElement[0].attributes[2].value,
         givenName: pinkElement[0].attributes[3].value,
@@ -1104,7 +1072,7 @@ blurApplication(){
     }
   }
 
-  keypress2(hash)
+  keypressSlack(hash)
   {
     if (hash.key == 'ArrowDown') {
       this.focusindex++;
@@ -1113,9 +1081,7 @@ blurApplication(){
         if (pinkElements == undefined) {
           this.focusindex = 0;
         }
-        // var id=pinkElements.children[0].innerHTML;
       }
-      // console.log(this.focusindex);
       if (this.focusindex > 2) {
         this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
@@ -1137,21 +1103,8 @@ blurApplication(){
     }
     else if (hash.key == 'Enter' && this.focusindex > -1) {
       event.preventDefault();
-      // console.log('hii--',document.getElementsByClassName("pinkfocus"))
       var pinkElement;
       pinkElement = document.getElementsByClassName("pinkfocuslack")[0].children;
-      // var pink_ele = document.getElementsByClassName("pinkfocus")[2];
-      // if(pink_ele != undefined){
-      //   alert('not undefined')
-      //   pinkElement = document.getElementsByClassName("pinkfocus")[2].children;
-
-      // }
-      // else{
-      //   alert('undefined')
-
-
-
-      // }
 
       var approverObj = {
         displayName: pinkElement[0].attributes[2].value,
@@ -1159,10 +1112,10 @@ blurApplication(){
         userId: pinkElement[0].attributes[4].value,
         userEmail: pinkElement[0].attributes[5].value
       }
-      this.selectApprovers2(approverObj);
+      this.selectSlackUser(approverObj);
 
       this.showApproversList = false;
-      this.approverName2 = '';
+      this.slackName = '';
       this.focusindex = -1;
 
     } else {
@@ -1185,7 +1138,7 @@ blurApplication(){
   }
 
   focusInput2(event) {
-    document.getElementById('approverName2').focus();
+    document.getElementById('slackName').focus();
   }
 
   createSlack(event) {
@@ -1195,13 +1148,13 @@ blurApplication(){
       "users": []
     }
     var currentuser = this.authenticationservice.getUserId();
-    for (var i = 0; i < this.selectedApprovers2.length; i++) {
-      payload.users[i] = { "email_id": this.selectedApprovers2[i].userEmail };
-      if (this.selectedApprovers2[i].userId.toLowerCase() == currentuser) {
+    for (var i = 0; i < this.selectedSlackUsers.length; i++) {
+      payload.users[i] = { "email_id": this.selectedSlackUsers[i].userEmail };
+      if (this.selectedSlackUsers[i].userId.toLowerCase() == currentuser) {
         this.currentUserSlack = true;
       }
       if (!this.currentUserSlack) {
-        payload.users[this.selectedApprovers2.length] = { "email_id": this.loginUserDetail.userEmail };
+        payload.users[this.selectedSlackUsers.length] = { "email_id": this.loginUserDetail.userEmail };
       }
       this.isLoadingNewSlack = true;
       this.http.post('/platform/slack-channel', payload).subscribe(
@@ -1234,10 +1187,10 @@ blurApplication(){
     this.createSlackModel.name = '';
     this.createSlackModel.purpose = '';
     this.createSlackModel.invites = '';
-    for (var i = 0; i < this.selectedApprovers2.length; i++) {
-      this.approversListBasic.push(this.selectedApprovers2[i]);
+    for (var i = 0; i < this.selectedSlackUsers.length; i++) {
+      this.approversListBasic.push(this.selectedSlackUsers[i]);
     }
-    this.selectedApprovers2 = [];
+    this.selectedSlackUsers = [];
   }
   selectAccountsRegions(){
 
@@ -1280,15 +1233,15 @@ blurApplication(){
       }
       event.preventDefault();
       var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
-
       var appobj = {
         "appID":pinkElement[0].attributes[3].value,
         "appName": pinkElement[0].attributes[2].value
       }
 
+
       this.selectApplication(appobj);
       this.showApplicationList = false;
-      this.approverName2 = '';
+      this.slackName = '';
       this.focusindex = -1;
     } else {
       this.focusindex = -1;
@@ -1361,7 +1314,7 @@ blurApplication(){
 
  ngOnInit() {
     this.selectAccountsRegions();
-    // this.gitRepo = "https://";
+    this.runtime = this.runtimeKeys[0];
     this.getData();
     this.getapplications();
     if(this.cronObj.minutes == '')
@@ -1375,40 +1328,11 @@ blurApplication(){
   }
 
   ngOnChanges(x: any) {
-    console.log('loginUserDetail:', this.loginUserDetail);
     if(this.cronObj.minutes == '')
       this.cronObj.minutes='0/5';
 
   }
 
-  // check(event){
-  //   var gitClone = <HTMLInputElement> document.getElementById("checkbox-gitclone");
-
-  //   this.git_clone =  gitClone.checked;
-
-  //   console.log("git_clone = ",this.git_clone);
-
-  // }
-
-  // checkk(event){
-  //   var gitClone = <HTMLInputElement> document.getElementById("checkbox-gitclone");
-
-  //     this.git_clone =  gitClone.checked;
-
-  //     console.log("git_clone = ",this.git_clone);
-
-  //   var gitPrivate = <HTMLInputElement> document.getElementById("checkbox-gitprivate");
-
-  //   this.git_private =  gitPrivate.checked;
-
-  //   this.git_url = "https://"+this.gitRepo;
-  //   console.log("git_clone = ",this.git_clone);
-  //   console.log("git_private = ",this.git_private);
-  //   console.log("git_url = ", this.git_url);
-  //   console.log("git_username = ", this.gitusername);
-  //   console.log("git_pwd = ", this.gitpwd);
-  // }
-  // cron validation related functions //
 
   inputChanged(val) {
     this.Currentinterval = val;
