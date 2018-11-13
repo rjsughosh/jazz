@@ -148,6 +148,7 @@ export class ServiceOverviewComponent implements OnInit {
     publicInitial: boolean = this.service.is_public_endpoint;
     cdnConfigSelected: boolean = this.service.create_cloudfront_url;
     cdnConfigInitial: boolean = this.service.create_cloudfront_url;
+    selectedApproversLocal : any;
     saveClicked: boolean = false;
     advancedSaveClicked: boolean = false;
     showApplicationList: boolean = false;
@@ -194,6 +195,7 @@ export class ServiceOverviewComponent implements OnInit {
     approversListRes : any;
     selectedApprovers : any = [];
     approversListShow: any;
+    changeCounterApp : number = 0;
     approversPlaceHolder : string = "Start typing (min 3 chars)...";
     endpList = [
         {
@@ -628,7 +630,6 @@ export class ServiceOverviewComponent implements OnInit {
           event.preventDefault();
           this.appPlaceHolder = "Start typing(min 3 char)...";
           var pinkElement;
-          console.log(this.approverInput);
           pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
           // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
           // if (pinkElementS == undefined)
@@ -660,12 +661,10 @@ export class ServiceOverviewComponent implements OnInit {
       }
 
     removeApprover(index, approver) {
-
         if (this.selectedApprovers.length > 0) { 
-                    this.approversLimitStatus = false;
-                    this.isInputShow = true;
-                    this.approversListShow.push(approver);
-                    this.selectedApprovers.splice(index, 1);
+            this.approversLimitStatus = false;
+            this.approversListShow.push(approver);
+            this.selectedApprovers.splice(index, 1);
         } else {
             this.approversLimitStatus = true;
         }
@@ -679,6 +678,10 @@ export class ServiceOverviewComponent implements OnInit {
             this.approversLimitStatus = true;
             this.approversSaveStatus = false;
         }
+        if(this.selectedApprovers.length == 5)
+            this.isInputShow = false;
+        else 
+            this.isInputShow = true;
       }
 
     removeApplication(index, approver) {
@@ -920,6 +923,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     onSaveClick() {
         this.saveClicked = true;
+        this.changeCounterApp = 0;
         this.advancedSaveClicked = false;
         this.descriptionChanged = true;
         this.approvalTimeChanged = false;
@@ -968,6 +972,7 @@ export class ServiceOverviewComponent implements OnInit {
 
 
     onCancelClick() {
+        this.selectedApprovers = this.selectedApproversLocal;
         this.update_payload = {};
         this.approversLimitStatus = false;
         this.isInputShow = true;
@@ -1644,13 +1649,19 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
-        if(this.selectedApprovers.length === 0 && this.service.approvers){
+        if(this.selectedApprovers.length === 0 &&  this.changeCounterApp == 0 && this.service.approvers){
             this.service.approvers.map(data=>{
                 let obj = { 
                     "userId" : data
                 };
                 this.selectedApprovers.push(obj);
-             })
+             });
+            
+            this.selectedApproversLocal = this.selectedApprovers;
+            this.changeCounterApp = 1;
+            if(this.service.approvers.length == 5){
+                this.isInputShow = false;
+            }
         }
         if(this.service.approvers){
             this.getApproversList();

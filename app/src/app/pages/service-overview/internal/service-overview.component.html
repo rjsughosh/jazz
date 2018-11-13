@@ -221,8 +221,8 @@
                  </div>
               </div>
             </li>    
-            <p class='limitWrapper1' [class.hide]='isInputShow'>*Approvers limit reached</p>
-            <p class='limitWrapper' [class.hide]='!approversLimitStatus'>*Must have atleast one approver</p>   
+            <p class='limitWrapper1' *ngIf='!disp_show && approversTouched' [class.hide]='isInputShow'>*Approvers limit reached</p>
+            <p class='limitWrapper' *ngIf='!disp_show  && approversTouched' [class.hide]='!approversLimitStatus'>*Must have atleast one approver</p>   
         </ul>
       </div>
       <div class='metadata-column'>
