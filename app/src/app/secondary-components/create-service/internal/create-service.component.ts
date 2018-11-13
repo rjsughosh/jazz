@@ -1231,7 +1231,6 @@ blurApplication(){
       }
       event.preventDefault();
       var pinkElement = document.getElementsByClassName("pinkfocusapplication")[0].children;
-
       var appobj = {
         "appID":pinkElement[0].attributes[3].value,
         "appName": pinkElement[0].attributes[2].value

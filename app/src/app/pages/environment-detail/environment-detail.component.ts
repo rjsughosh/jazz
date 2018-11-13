@@ -117,8 +117,11 @@ export class EnvironmentDetailComponent implements OnInit {
         domain: service.domain,
         repository: service.repository,
         created_by: service.created_by
+      };
+      if (service.deployment_targets && service.deployment_targets[service.type]){
+        _service["deployment_targets"] = service.deployment_targets[service.type];
       }
-      return _service;
+      return _service;     
     }
   };
 
