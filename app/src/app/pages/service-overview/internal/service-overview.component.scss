@@ -215,7 +215,7 @@ $screen-lg:                  1200px !default;
 .save-btn-wrap /deep/ .btn{
     font-weight: 700;
     color : white !important;
-    // border: none;
+    border: 1px solid #ed008c !important;
     text-align: center;    
 }
 
@@ -233,6 +233,11 @@ $screen-lg:                  1200px !default;
     border: 1px solid #ffffff;
 }
 
+.save-btn-wrap /deep/ button.btn-primary:hover[disabled],
+.save-btn-wrap /deep/ button.btn-primary:focus[disabled],
+.save-btn-wrap /deep/ button.btn-primary:active[disabled] {
+   border: none;
+}
 
 .popup-endp{
     height: 0;
@@ -654,10 +659,17 @@ section:focus
 }
 .limitWrapper{
       padding-top: 10px;
-      color:#FFC200;
       margin-left: 12rem;
       margin-top: -2rem;
       font-size: 0.9rem;
+      color:  red;
+}
+.limitWrapper1{
+    padding-top: 10px;
+    margin-left: 12rem;
+    margin-top: -2rem;
+    font-size: 0.9rem;
+    color:  #ea9201;   
 }
 .current-status-wrap{
     z-index: 101!important;
@@ -1445,7 +1457,7 @@ details{
 .down-btn-wrap{
   display: flex;
   flex-direction: row-reverse;
-  position: absolute;
+//   position: absolute;
   z-index: 1;
   bottom: -6rem;
   right: -2rem;
@@ -1615,8 +1627,9 @@ input{
 }
 .slack-relative{
   position: relative;
+  width: 100%;
   input{
-    width:28em;
+    width: 90%;
     padding: 0;
   }
   img{
