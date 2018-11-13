@@ -35,6 +35,7 @@ export class ServiceOverviewComponent implements OnInit {
     @Output() refresh: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('env') envComponent;
+    @ViewChild('approverInput') approverInput: any;
 
     flag: boolean = false;
 
@@ -526,6 +527,7 @@ export class ServiceOverviewComponent implements OnInit {
         } else {
             this.approversSaveStatus = false;
         }
+        this.appPlaceHolder = "Start typing(min 3 char)...";
         for (var i = 0; i < this.approversListShow.length; i++) {
           if (this.approversListShow[i].displayName === approver.displayName) {
             this.approversListShow.splice(i, 1);
@@ -622,13 +624,11 @@ export class ServiceOverviewComponent implements OnInit {
           }
         }
         else if (hash.key == 'Enter' && this.focusindex > -1) {
-          this.appPlaceHolder = "Start typing(min 3 char)...";
+          this.approverInput.nativeElement.blur();
           event.preventDefault();
-          console.log(this.appPlaceHolder);
+          this.appPlaceHolder = "Start typing(min 3 char)...";
           var pinkElement;
-          this.zone.run(() => { // <== added
-            this.appPlaceHolder = "Start typing(min 3 char)...";
-        });
+          console.log(this.approverInput);
           pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
           // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
           // if (pinkElementS == undefined)
@@ -1933,6 +1933,7 @@ export class ServiceOverviewComponent implements OnInit {
             var approverObj = pinkElement[0].attributes[2].value;
 
             this.selectAccount(approverObj);
+            this.approversPlaceHolder = "Start typing (min 3 chars)...";
 
             this.focusindex = -1;
 
@@ -1974,7 +1975,7 @@ export class ServiceOverviewComponent implements OnInit {
         else if (hash.key == 'Enter' && this.focusindex > -1) {
             event.preventDefault();
             var pinkElement = document.getElementsByClassName("pinkfocus2")[0].children;
-
+            this.approversPlaceHolder = "Start typing (min 3 chars)...";
             var approverObj = pinkElement[0].attributes[2].value;
 
             this.selectRegion(approverObj);

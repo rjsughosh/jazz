@@ -206,9 +206,9 @@
                                         <div class="display-wrapper">{{selected.userId}}</div>
                                         <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                     </li>
-                                    <input *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
+                                    <input #approverInput *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
                                 </ul>
-                             </div>  
+                             </div>    
                             <div [hidden]="!showApproversList" class="approvers-list-wrap">
                                 <div  class="approvers-list typeShow open">
                                     <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
@@ -221,7 +221,7 @@
                  </div>
               </div>
             </li>    
-            <p class='limitWrapper' [class.hide]='isInputShow'>*Approvers limit reached</p>
+            <p class='limitWrapper1' [class.hide]='isInputShow'>*Approvers limit reached</p>
             <p class='limitWrapper' [class.hide]='!approversLimitStatus'>*Must have atleast one approver</p>   
         </ul>
       </div>
