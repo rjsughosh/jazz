@@ -58,6 +58,7 @@ export class CreateServiceComponent implements OnInit {
   selApprover: any = [];
   appIndex: any;
   git_err: boolean = false;
+  enableAppInput:boolean = false;
   slackUsersList : any;
   approversList: any;
   approversListShow: any;
@@ -1278,8 +1279,10 @@ blurApplication(){
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
       this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
+        setTimeout(() => {
+          this.getapplications();
+        }, 3000);
 
-        this.getapplications();
       }
       else{
 
@@ -1301,7 +1304,7 @@ blurApplication(){
             return 0;
           }
         });
-
+        this.enableAppInput = true;
         return;
       }
 
