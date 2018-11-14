@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../core/services/index';
 import { ToasterService } from 'angular2-toaster';
+import * as moment from 'moment';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
@@ -123,6 +124,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   activeEnv: string = 'dev';
   Environments = [];
   environ_arr = [];
+  deployments_arr = [];
   feedbackRes: boolean = false;
   openModal: boolean = false;
   feedbackMsg: string = '';
@@ -175,8 +177,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     this.sortEnvArr();
 
     if (this.environ_arr != undefined) {
-      console.log('total lenght = ', this.environ_arr.length)
-      console.log('full array = ', this.environ_arr)
+      // console.log('total lenght = ', this.environ_arr.length)
+      // console.log('full array = ', this.environ_arr)
       for (var i = 0; i < this.environ_arr.length; i++) {
         this.environ_arr[i].status = this.environ_arr[i].status.replace("_", " ");
         // this.environ_arr[i].status=this.environ_arr[i].status.split(" ").join("\ n")
@@ -273,7 +275,82 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         this.errorUser = this.authenticationservice.getUserId();
         this.errorResponse = JSON.parse(err._body);
       })
+      this.getDeploymentData();
   };
+
+  getLastSuccessfulDeployment(env){
+    console.log(env.deploy_arr)
+    for (var i = 0; i < env.deploy_arr.length; i++){
+      var deployment = env.deploy_arr[i];
+      if (deployment.status == 'successful'){
+        var time = deployment.created_time.slice(0,-4);
+        return moment(time).format('MM/DD/YYYY HH:mm:ss');
+      }
+    }    
+  }
+
+  get24HourDeployment(env){
+    var count = 0;
+    for (var i = 0; i < env.deploy_arr.length; i++){
+      var time = env.deploy_arr[i].created_time.slice(0,-4);
+      var now = new Date;
+      var diff = moment(now).diff(moment(time),"second");
+      if (diff <= 24 * 60 * 60) {
+        count ++
+      }
+    }
+    return count
+  }
+
+  getDeploymentData() {
+    if (this.service == undefined) { return }
+    this.http.get('/jazz/deployments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
+      response => {
+        //this.isenvLoading = false;
+        //this.environ_arr = response.data.environment;
+        console.log('deployment')
+        console.log(response.data.deployments);
+
+        this.deployments_arr = response.data.deployments;
+
+        this.deployments_arr.map((deployment)=>{
+          if (deployment.environment_logical_id == 'stg') {
+            this.stgEnv.deploy_arr = this.stgEnv.deploy_arr || [];
+            this.stgEnv.deploy_arr.push(deployment);
+          } else if (deployment.environment_logical_id == 'prod'){
+            this.prodEnv.deploy_arr = this.prodEnv.deploy_arr || [];
+            this.prodEnv.deploy_arr.push(deployment);
+          }
+        })
+
+        this.stgEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.stgEnv);
+        this.stgEnv.deploymentsCountvalue = this.get24HourDeployment(this.stgEnv);
+        this.prodEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.prodEnv);
+        this.prodEnv.deploymentsCountvalue = this.get24HourDeployment(this.prodEnv);
+      },
+      err => {
+        // this.isenvLoading = false;
+        console.log('error', err);
+        // this.ErrEnv = true;
+        // if (err.status == 404){
+        //   this.err404 = true;
+        // }
+        // this.errMessage = "Something went wrong while fetching your data";
+        // this.errMessage = this.toastmessage.errorMessage(err, "environment");
+        // var payload = {
+        //   "domain": +this.service.domain,
+        //   "service": this.service.name
+        // }
+        // this.getTime();
+        // this.errorURL = window.location.href;
+        // this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
+        // this.errorRequest = payload;
+        // this.errorUser = this.authenticationservice.getUserId();
+        // this.errorResponse = JSON.parse(err._body);
+      })
+    //https://cloud-api.corporate.t-mobile.com/api/jazz/deployments?domain=jazz-test&service=jazz-test
+
+  }
 
   getTime() {
     var now = new Date();
