@@ -137,7 +137,7 @@ export class CreateServiceComponent implements OnInit {
   domain: any = "";
   reqId: any = "";
   poc_appname:string;
-  appPlaceHolder:string = 'Start typing...';
+  appPlaceHolder:string = 'Applications loading...';
   accounts=['tmodevops','tmonpe'];
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
@@ -1305,6 +1305,7 @@ blurApplication(){
           }
         });
         this.enableAppInput = true;
+        this.appPlaceHolder = "Start typing..."
         return;
       }
 
