@@ -5,31 +5,41 @@ import { Pipe, PipeTransform } from '@angular/core';
     pure: false
 })
 export class MyFilterPipe implements PipeTransform {
-    
+
     transform(items: any[], filter: any): any {
+
         if (!items || !filter || filter.length < 2) {
             return items;
-        } else if(items.length > 0){            
+        } else if(items.length > 0){
             if(items[0].appName){
-                return items.filter(item => item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
+                return items.filter(item =>
+                    item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                );
             }
             if(items[0].heading){
-                return items.filter(item => item.heading.toLowerCase().indexOf(filter.toLowerCase()) !== -1 );
+                return items.filter(item =>
+                    item.heading.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                );
             }
             if(items[0].message){
-                return items.filter(item => item.message.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.location.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+                return items.filter(item =>
+                    item.message.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.location.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                );
             }
             if(items[0].displayName){
-                return items.filter(item => item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+                return items.filter(item =>
+                    item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                );
             }
-                        
         }
 
-        // filter items array, items which match and return true will be kept, false will be filtered out            console.log('type--------------',typeof(items[0]));
+        // filter items array, items which match and return true will be kept, false will be filtered out
+
         if(typeof(items[0]) == "string"){
             return items.filter(item => item.indexOf(filter) !== -1 );
         }
         else{
+
             return items.filter(item => item.givenName.indexOf(filter) !== -1 );
 
         }
