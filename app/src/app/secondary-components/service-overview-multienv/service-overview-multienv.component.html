@@ -59,14 +59,14 @@
               </li>
               <li class="overview-item">
                   <div class="overview-value">
-                       NA
+                    {{prodEnv.lastSuccessfulDeployment || 'NA'}}
                   </div>
                   <div class="overview-label">Last Successful<br>Deployment</div>
               </li>
 
 
               <li class="overview-item">
-                  <div class="overview-value">{{prodEnv.deploymentsCountvalue || 'NA'}}</div>
+                  <div class="overview-value">{{prodEnv.deploymentsCountvalue}}</div>
                   <div class="overview-label">
                       <div># of Deployments<br>(Last 24 hours) </div>
                       <!-- <div>(Last 24 hours)</div> -->
@@ -122,12 +122,12 @@
                   <div class="overview-value">
                       <!-- <img *ngIf="stgEnv.serviceHealth == 'good'" src="assets/images/icons/icon-good.png">
                       <img *ngIf="stgEnv.serviceHealth == 'bad'" src="assets/images/icons/icon-bad.png"> -->
-                      NA
+                      {{stgEnv.lastSuccessfulDeployment || 'NA'}}
                   </div>
                   <div class="overview-label">Last Successful<br>Deployment</div>
               </li>
               <li class="overview-item">
-                  <div class="overview-value">{{stgEnv.deploymentsCountvalue || 'NA'}}</div>
+                  <div class="overview-value">{{stgEnv.deploymentsCountvalue}}</div>
                   <div class="overview-label">
                       <div># of Deployments<br>(Last 24 hours) </div>
                       <!-- <div>(Last 24 hours)</div> -->
