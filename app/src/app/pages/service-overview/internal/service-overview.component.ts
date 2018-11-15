@@ -489,7 +489,7 @@ export class ServiceOverviewComponent implements OnInit {
           this.showApproversList = false;
         } else {
           this.approversPlaceHolder = "";
-          if(newVal.length > 2 && this.approversListShow    ) {
+          if(newVal.length > 2 && this.approversListShow.length>0) {
             this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
             if(this.approversList.length > 300)
               this.approversList = this.approversList.slice(0,300);
