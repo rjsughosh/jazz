@@ -348,6 +348,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     getApproversList(){
         let locArr = [];
+        console.log("bug1");
             if(this.service.approvers && this.approversListShow) {
                 if(this.approversListShow.length > 0)
                 {
@@ -482,7 +483,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     showService(s) {
 
-    }
+    }   
 
     onApproverChange(newVal) {
         if (!newVal) {
@@ -490,8 +491,10 @@ export class ServiceOverviewComponent implements OnInit {
           this.showApproversList = false;
         } else {
           this.approversPlaceHolder = "";
-          if(newVal.length > 2 && this.approversListShow) {
+          if(newVal.length > 2 && this.approversListShow    ) {
+              console.log("bug121")
             this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
+            console.log("bug121-1")
             if(this.approversList.length > 300)
               this.approversList = this.approversList.slice(0,300);
             this.showApproversList = true;
@@ -499,23 +502,37 @@ export class ServiceOverviewComponent implements OnInit {
           else
             this.showApproversList = false;
         }
+        console.log("bug121-2")
       }
     
     //function for comparing the passed array with service.approvers 
     compareApproversArray(firstArr){
+        console.log("bug22")
         let serviceApproverss = [];
         let selectApproverss = [];
+        if(this.service.approvers && firstArr){
+            console.log(this.service.approvers)
           //to make list to lowercase so that we can compare
-        this.service.approvers.map(x=>{
-            serviceApproverss.push(x.toLowerCase())
-        });
-        firstArr.map(x=>{
-            selectApproverss.push(x.userId.toLowerCase());
-        });
-        return (_.difference(selectApproverss,serviceApproverss).length + _.difference(serviceApproverss,selectApproverss).length);
+            this.service.approvers.map(x=>{
+                console.log("bug22-1")
+                console.log(x.toLowerCase())
+                serviceApproverss.push(x.toLowerCase())
+            });
+            console.log(firstArr)
+            firstArr.map(x=>{
+                console.log("bug22-2")
+                console.log(x)
+                selectApproverss.push(x.userId.toLowerCase());
+                console.log("bug22-3")
+            });
+            return (_.difference(selectApproverss,serviceApproverss).length + _.difference(serviceApproverss,selectApproverss).length);
+        }
+        console.log("bug22 exit")
+        return 
     }
 
     selectApprovers(approver) {
+        this.approverInput.nativeElement.focus();
         this.approversTouched = true;
         this.selApprover = approver;
         let thisclass: any = this;
@@ -667,6 +684,7 @@ export class ServiceOverviewComponent implements OnInit {
       }
 
     removeApprover(index, approver) {
+        this.approversTouched = true;
         if (this.selectedApprovers.length > 0) { 
             this.approversLimitStatus = false;
             this.approversListShow.push(approver);
@@ -976,10 +994,16 @@ export class ServiceOverviewComponent implements OnInit {
 
     }
 
+    resetSelectedApprovers(){
+        this.selectedApprovers = this.selectedApproversLocal.slice(0);
+    }
+
 
     onCancelClick() {
-        this.selectedApprovers = this.selectedApproversLocal;
+        this.showApproversList = false;
+        this.resetSelectedApprovers();
         this.update_payload = {};
+        this.changeCounterApp = 0;
         this.approversLimitStatus = false;
         this.isInputShow = true;
         this.selectedApplications = [];
@@ -1652,6 +1676,7 @@ export class ServiceOverviewComponent implements OnInit {
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
         //setting the value of approvalTimeOut
+
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
@@ -1662,8 +1687,8 @@ export class ServiceOverviewComponent implements OnInit {
                 };
                 this.selectedApprovers.push(obj);
              });
-            
-            this.selectedApproversLocal = this.selectedApprovers;
+            //saving the value
+            this.selectedApproversLocal = this.selectedApprovers.slice(0);
             this.changeCounterApp = 1;
             if(this.service.approvers.length == 5){
                 this.isInputShow = false;

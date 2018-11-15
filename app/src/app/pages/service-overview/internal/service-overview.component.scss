@@ -314,6 +314,9 @@ $screen-lg:                  1200px !default;
     overflow-x: hidden;
     overflow-y: scroll;
 }
+.approvers-dets /deep/ {
+    overflow: hidden;
+}
 
 .endp-cover{
     display: inline-flex;
@@ -659,7 +662,7 @@ section:focus
 }
 .limitWrapper{
       padding-top: 10px;
-      margin-left: 12rem;
+      margin-left: calc(12rem - 5px);
       margin-top: -2rem;
       font-size: 0.9rem;
       color:  red;
