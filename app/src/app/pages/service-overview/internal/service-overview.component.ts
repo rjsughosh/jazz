@@ -328,7 +328,6 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     public getData() {
-        console.log(JSON.parse(localStorage.getItem('approvers')))
         let localApprovvs = JSON.parse(localStorage.getItem('approvers')) ||  {};
         if(Object.keys(localApprovvs).length>0){
             this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
@@ -348,7 +347,6 @@ export class ServiceOverviewComponent implements OnInit {
 
     getApproversList(){
         let locArr = [];
-        console.log("bug1");
             if(this.service.approvers && this.approversListShow) {
                 if(this.approversListShow.length > 0)
                 {
@@ -492,9 +490,7 @@ export class ServiceOverviewComponent implements OnInit {
         } else {
           this.approversPlaceHolder = "";
           if(newVal.length > 2 && this.approversListShow    ) {
-              console.log("bug121")
             this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
-            console.log("bug121-1")
             if(this.approversList.length > 300)
               this.approversList = this.approversList.slice(0,300);
             this.showApproversList = true;
@@ -502,32 +498,22 @@ export class ServiceOverviewComponent implements OnInit {
           else
             this.showApproversList = false;
         }
-        console.log("bug121-2")
       }
     
     //function for comparing the passed array with service.approvers 
     compareApproversArray(firstArr){
-        console.log("bug22")
         let serviceApproverss = [];
         let selectApproverss = [];
         if(this.service.approvers && firstArr){
-            console.log(this.service.approvers)
           //to make list to lowercase so that we can compare
             this.service.approvers.map(x=>{
-                console.log("bug22-1")
-                console.log(x.toLowerCase())
                 serviceApproverss.push(x.toLowerCase())
             });
-            console.log(firstArr)
             firstArr.map(x=>{
-                console.log("bug22-2")
-                console.log(x)
                 selectApproverss.push(x.userId.toLowerCase());
-                console.log("bug22-3")
             });
             return (_.difference(selectApproverss,serviceApproverss).length + _.difference(serviceApproverss,selectApproverss).length);
         }
-        console.log("bug22 exit")
         return 
     }
 
@@ -1001,6 +987,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     onCancelClick() {
         this.showApproversList = false;
+        this.approversSaveStatus = false;
         this.resetSelectedApprovers();
         this.update_payload = {};
         this.changeCounterApp = 0;
