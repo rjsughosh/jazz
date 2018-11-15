@@ -137,7 +137,7 @@ export class CreateServiceComponent implements OnInit {
   domain: any = "";
   reqId: any = "";
   poc_appname:string;
-  appPlaceHolder:string = 'Start typing...';
+  appPlaceHolder:string = 'Applications loading...';
   accounts=['tmodevops','tmonpe'];
   regions=['us-west-2', 'us-east-1'];
   selectedRegion=[];
@@ -1278,10 +1278,7 @@ blurApplication(){
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
       this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
-        setTimeout(() => {
           this.getapplications();
-        }, 3000);
-
       }
       else{
 
@@ -1304,6 +1301,7 @@ blurApplication(){
           }
         });
         this.enableAppInput = true;
+        this.appPlaceHolder = "Start typing..."
         return;
       }
 

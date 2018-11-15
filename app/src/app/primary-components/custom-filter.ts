@@ -12,23 +12,27 @@ export class MyFilterPipe implements PipeTransform {
             return items;
         } else if(items.length > 0){
             if(items[0].appName){
-                return items.filter(item =>
-                    item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                return items.filter(item => {
+                    if(item.appName) return item.appName.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+                }
                 );
             }
             if(items[0].heading){
-                return items.filter(item =>
-                    item.heading.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                return items.filter(item =>{
+                  if(item.heading) return item.heading.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+                }
                 );
             }
             if(items[0].message){
-                return items.filter(item =>
-                    item.message.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.location.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                return items.filter(item =>{
+                    if(item.message) return item.message.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.location.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                }
                 );
             }
             if(items[0].displayName){
-                return items.filter(item =>
-                    item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                return items.filter(item =>{
+                    if(item.givenName) return item.givenName.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.userId.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || item.displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
+                }
                 );
             }
         }
