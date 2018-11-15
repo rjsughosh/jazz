@@ -658,7 +658,10 @@ section:focus
 {
     color: rgb(220,220,220) !important;
     transform: skew(-20deg);
-
+    
+}
+.noSlackError{
+    border-bottom-color: red;
 }
 .limitWrapper{
       padding-top: 10px;
@@ -669,7 +672,7 @@ section:focus
 }
 .limitWrapper1{
     padding-top: 10px;
-    margin-left: 12rem;
+    margin-left: calc(12rem - 5px);
     margin-top: -2rem;
     font-size: 0.9rem;
     color:  #ea9201 ;   

@@ -200,7 +200,7 @@
                 <div class="flex-col">
                     <section class="pad-left0">
                         <div class="input-field-container">
-                            <div class="selected-approvers" [ngClass]="{dangerError : approversTouched === true && approversSaveStatus === false}" >
+                            <div class="selected-approvers"      >
                                 <ul (click)='focusInput($event)'>
                                     <li *ngFor="let selected of selectedApprovers;let i=index" >
                                         <div class="display-wrapper">{{selected.userId}}</div>
@@ -268,7 +268,7 @@
             <div class='det-label'>Slack</div>
             <div *ngIf='disp_show' class='det-value' [class.PlaceHolder]="slackChannel_empty">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
             <div *ngIf='!disp_show' class='det-value slack-relative'>
-                <input [(ngModel)]="slackChannel_temp" type='text' (blur)="checkSlackNameAvailability()" (ngModelChange)='update_payload.slack_channel=slackChannel_temp'
+                <input [(ngModel)]="slackChannel_temp"[ngClass]="{noSlackError : hide_slack_error === false}" type='text' (blur)="checkSlackNameAvailability()" (ngModelChange)='update_payload.slack_channel=slackChannel_temp'
                 class="det-value-input" placeholder="Feeling collaborative? Add it to slack">
               <img *ngIf="show_loader" class="input-loader" src="../assets/images/icons/loading.png">
             </div>
