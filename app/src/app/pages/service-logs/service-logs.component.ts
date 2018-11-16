@@ -271,12 +271,18 @@ export class ServiceLogsComponent implements OnInit {
 
 		this.fetchEnvlist()
 		.then((envList)=>{
-			var index = envList.indexOf('prod');
+			var index = envList.indexOf('stg');
+			if (index != -1) {
+				envList.splice(index, 1);
+				envList.unshift('stg');
+			}
+			index = envList.indexOf('prod');
 			// use prod as the default one
 			if (index != -1) {
 				envList.splice(index, 1);
 				envList.unshift('prod');
 			}
+			
 		  this.instance_yes.envList = envList;
 		})
 

@@ -127,10 +127,27 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
       .then((response: any) => {
         if (response && response.data && response.data.environment && response.data.environment.length) {
           let serviceEnvironments = _(response.data.environment).map('logical_id').uniq().value();
+          var index = serviceEnvironments.indexOf('stg');
+          if (index != -1) {
+            serviceEnvironments.splice(index, 1);
+            serviceEnvironments.unshift('stg');
+          }
+          index = serviceEnvironments.indexOf('prod');
+          if (index != -1) {
+            serviceEnvironments.splice(index, 1);
+            serviceEnvironments.unshift('prod');
+          }
+          var friendlyName = _(response.data.environment).map('physical_id').uniq().value();
+          index = friendlyName.indexOf('master');
+          if (index != -1) {
+            friendlyName.splice(index, 1);
+            friendlyName.unshift('stg');
+            friendlyName.unshift('prod');
+          }
           this.environmentFilter = {
             column: 'Filter By:',
             label: 'ENVIRONMENT',
-            options: serviceEnvironments,
+            options: friendlyName,
             values: serviceEnvironments,
             selected: 'prod'
           };
@@ -146,7 +163,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   }
 
   findIndexOfObjectWithKey(array,key,value){
-    debugger
+    // debugger
     for(let i = 0; i < array.length; i++ ){
       if(array[i][key] == value){
         return i;
