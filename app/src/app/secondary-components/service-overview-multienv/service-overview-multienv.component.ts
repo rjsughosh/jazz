@@ -279,12 +279,17 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   };
 
   getLastSuccessfulDeployment(env){
-    console.log(env.deploy_arr)
     for (var i = 0; i < env.deploy_arr.length; i++){
       var deployment = env.deploy_arr[i];
       if (deployment.status == 'successful'){
         var time = deployment.created_time.slice(0,-4);
-        return moment(time).format('MM/DD/YYYY HH:mm:ss');
+        var now = new Date;
+        var diff = moment(now).diff(moment(time),"second");
+        if (diff <= 24 * 60 * 60) {
+          return moment(time).fromNow();
+        } else {
+          return moment(time).format('MM/DD/YYYY HH:mm:ss');
+        }
       }
     }    
   }
@@ -308,8 +313,6 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       response => {
         //this.isenvLoading = false;
         //this.environ_arr = response.data.environment;
-        console.log('deployment')
-        console.log(response.data.deployments);
 
         this.deployments_arr = response.data.deployments;
 
