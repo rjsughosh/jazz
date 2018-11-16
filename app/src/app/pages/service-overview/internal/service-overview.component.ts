@@ -184,7 +184,7 @@ export class ServiceOverviewComponent implements OnInit {
     minuteDropDownDisable : boolean = false;
     approvalTimeChanged : boolean = false; 
     minutesArray : any = [];
-    isInputShow : boolean = true;
+    isInputShow : boolean = false;
     isApproversChanged: boolean = false;
     showApproversList : boolean = false;
     approversLimitStatus: boolean = false;
@@ -310,6 +310,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.http = request;
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
+        this.isInputShow = false;
         this.isSlackAvailable = false;
         this.listRuntime  = environment.envLists;
         this.environList = Object.keys(environment.envLists);
@@ -332,12 +333,14 @@ export class ServiceOverviewComponent implements OnInit {
         if(Object.keys(localApprovvs).length>0){
             this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
             this.getApproversList();
+            this.isInputShow = true;
         }else {
             this.http.get('/platform/ad/users')
             .subscribe((res: Response) => {
                 this.approversListRes = res;
                 this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
                 this.getApproversList();
+                this.isInputShow = true;
             }, error => {
                 this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
                 this.toast_pop('error', 'Oops!', this.resMessage);
@@ -360,8 +363,10 @@ export class ServiceOverviewComponent implements OnInit {
 
             });
         }
-            if(locArr.length > 0)
+            if(locArr.length > 0){
                 this.selectedApprovers = locArr;
+                this.selectedApproversLocal = locArr;
+            }
         }
     }
 
@@ -653,7 +658,7 @@ export class ServiceOverviewComponent implements OnInit {
       }
 
     removeApprover(index, approver) {
-        this.approversTouched = true;
+        this.approversTouched = true
         if (this.selectedApprovers.length > 0) { 
             this.approversLimitStatus = false;
             this.approversListShow.push(approver);
@@ -1449,7 +1454,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.http.post('/platform/jira-issues', payload).subscribe(
             response => {
                 this.buttonText = 'DONE';
-                // console.log(response);
                 this.isLoading = false;
                 this.model.userFeedback = '';
                 var respData = response.data;
@@ -1650,6 +1654,7 @@ export class ServiceOverviewComponent implements OnInit {
                 this.selectedApprovers.push(obj);
              });
             //saving the value
+            this.isInputShow = true;
             this.selectedApproversLocal = this.selectedApprovers.slice(0);
             this.changeCounterApp = 1;
             if(this.service.approvers.length == 5){
@@ -1737,7 +1742,6 @@ export class ServiceOverviewComponent implements OnInit {
             .subscribe(
                 response => {
                     this.createloader = false;
-                    // console.log("status = ", response);
                     let dataResponse = <any>{};
                     dataResponse.list = response;
                     var respStatus = dataResponse.list.data;
