@@ -677,11 +677,10 @@ export class ServiceOverviewComponent implements OnInit {
             this.selectedApprovers.splice(index, 1);
         } else {
             this.approversLimitStatus = true;
-        }
+        } 
         if (this.compareApproversArray(this.selectedApprovers) > 0) {
             this.approversSaveStatus = true;
-        }
-        else {
+        } else {
             this.approversSaveStatus = false;
         }
         if (this.selectedApprovers.length === 0 ){
