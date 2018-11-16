@@ -307,7 +307,6 @@ export class ServiceOverviewComponent implements OnInit {
         private serviceDetail: ServiceDetailComponent,
         private authenticationservice: AuthenticationService
     ) {
-        console.log("called")
         this.http = request;
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
