@@ -93,20 +93,21 @@
                     <div class="input-field-container">
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" class='test-focus' name="runtime" id="nodejs" [value]="nodejs" [checked]="runtime == 'nodejs8.10'" (click)="onSelectionChange(runtimeKeys[0])">
-                                <label for="nodejs"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
+                                <input type="radio" class='test-focus' name="runtime" [id]="runtimeKeys[0]" [value]="runtimeKeys[0]" [checked]="runtime == runtimeKeys[0]" (click)="onSelectionChange(runtimeKeys[0])">
+                                <label [for]="runtimeKeys[0]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
+
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" id="java" [value]="java" [checked]="runtime == 'java8'" (click)="onSelectionChange(runtimeKeys[0])">
-                                <label for="java"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[1]]}}</label>
+                                <input type="radio" name="runtime" [id]="runtimeKeys[1]" [value]="runtimeKeys[1]" [checked]="runtime == runtimeKeys[1]" (click)="onSelectionChange(runtimeKeys[1])">
+                                <label [for]="runtimeKeys[1]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[1]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" id="python" [value]="python" [checked]="runtime == 'python2.7'" (change)="onSelectionChange(runtimeKeys[0])">
-                                <label for="python"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
+                                <input type="radio" name="runtime" [id]="runtimeKeys[2]" [value]="runtimeKeys[2]" [checked]="runtime == runtimeKeys[2]" (change)="onSelectionChange(runtimeKeys[2])">
+                                <label for="runtimeKeys[2]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
