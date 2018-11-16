@@ -777,7 +777,6 @@ export class ServiceOverviewComponent implements OnInit {
         let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
         this.application_arr = nonRepeatedData(this.application_arr);
         return;
-    
       }
 
 
@@ -841,7 +840,7 @@ export class ServiceOverviewComponent implements OnInit {
         if (this.service.app_name && this.selectedApplications.length == 0)
             this.selectApplication(appobj);
         this.disp_show = false;
-        //to check approver limit on edit :)
+        //to check approver limit on edit
         if(this.selectedApprovers.length === 5)
             this.isInputShow = false;
 
@@ -931,14 +930,14 @@ export class ServiceOverviewComponent implements OnInit {
     
 
     onSaveClick() {
-        this.saveClicked = true;
         this.changeCounterApp = 0;
+        this.isApproversChanged = false;
+        this.approversSaveStatus = false;
+        this.saveClicked = true;
         this.advancedSaveClicked = false;
         this.descriptionChanged = true;
         this.approvalTimeChanged = false;
-        this.approversSaveStatus = false;
         this.isEnvChanged = false;
-        this.isApproversChanged = false;
         this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
         let payload = {};
         if (this.saveClicked) {
@@ -987,13 +986,12 @@ export class ServiceOverviewComponent implements OnInit {
     onCancelClick() {
         this.showApproversList = false;
         this.approversSaveStatus = false;
-        this.resetSelectedApprovers();
-        this.update_payload = {};
         this.changeCounterApp = 0;
         this.approversLimitStatus = false;
         this.isInputShow = true;
+        this.update_payload = {};
         this.selectedApplications = [];
-        this.oneSelected = false; //need to be change
+        this.oneSelected = false;
         this.disp_show = true;
         this.disp_show2 = true;
         this.edit_save = 'EDIT';
@@ -1006,6 +1004,7 @@ export class ServiceOverviewComponent implements OnInit {
             this.subscription.unsubscribe();
         this.show_loader = false;
         this.disableSaveBtn();
+        this.resetSelectedApprovers();
     }
     toast_pop(error, oops, errorMessage) {
         var tst = document.getElementById('toast-container');
@@ -1414,10 +1413,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.sjson = JSON.stringify(this.json);
     }
 
-    onClickGenDetails() {
-        this.showGenDeatils = !this.showGenDeatils;
-    }
-
     openFeedbackForm() {
         this.isFeedback = true;
         this.model.userFeedback = '';
@@ -1655,14 +1650,11 @@ export class ServiceOverviewComponent implements OnInit {
     }
     internal_build: boolean = true;
 
-  
-
     ngOnChanges(x: any) {
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
         //setting the value of approvalTimeOut
-
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
