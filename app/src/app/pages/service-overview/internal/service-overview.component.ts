@@ -365,7 +365,6 @@ export class ServiceOverviewComponent implements OnInit {
         }
     }
 
-
     copy_link(id) {
         var element = null; // Should be <textarea> or <input>
         element = document.getElementById(id);
