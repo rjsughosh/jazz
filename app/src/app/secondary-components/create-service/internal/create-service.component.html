@@ -95,7 +95,6 @@
                             <div class="radio-container">
                                 <input type="radio" class='test-focus' name="runtime" [id]="runtimeKeys[0]" [value]="runtimeKeys[0]" [checked]="runtime == runtimeKeys[0]" (click)="onSelectionChange(runtimeKeys[0])">
                                 <label [for]="runtimeKeys[0]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
-
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">
@@ -107,7 +106,7 @@
                         <section class="col-lg-3 col-md-3 pad-left0">
                             <div class="radio-container">
                                 <input type="radio" name="runtime" [id]="runtimeKeys[2]" [value]="runtimeKeys[2]" [checked]="runtime == runtimeKeys[2]" (change)="onSelectionChange(runtimeKeys[2])">
-                                <label for="runtimeKeys[2]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
+                                <label [for]="runtimeKeys[2]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
                             </div>
                         </section>
                         <section class="col-lg-3 col-md-3 pad-left0">

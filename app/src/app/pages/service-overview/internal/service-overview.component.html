@@ -45,7 +45,7 @@
     <span> .</span>
   </div>
   <div class="current-meter-bar">
-    <span id='current-status-val' [ngClass]="statusCompleted || serviceStatusompleted ? 'completed-bar':'under-progress-bar'"
+    <span id='current-status-val' [ngClass]="statusCompleted || serviceStatusCompleted ? 'completed-bar':'under-progress-bar'"
       [class.deletion-bar]='statusFailed'></span>
 
     <div class='status-result' [ngClass]="serviceStatusStarted ? 'under-progress-bar':'under-progress'" [class.completed-bar]='statusCompleted'
