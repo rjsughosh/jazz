@@ -137,17 +137,17 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
             serviceEnvironments.splice(index, 1);
             serviceEnvironments.unshift('prod');
           }
-          var friendlyName = _(response.data.environment).map('physical_id').uniq().value();
-          index = friendlyName.indexOf('master');
+          var friendlyNames = _(response.data.environment).map('physical_id').uniq().value();
+          index = friendlyNames.indexOf('master');
           if (index != -1) {
-            friendlyName.splice(index, 1);
-            friendlyName.unshift('stg');
-            friendlyName.unshift('prod');
+            friendlyNames.splice(index, 1);
+            friendlyNames.unshift('stg');
+            friendlyNames.unshift('prod');
           }
           this.environmentFilter = {
             column: 'Filter By:',
             label: 'ENVIRONMENT',
-            options: friendlyName,
+            options: friendlyNames,
             values: serviceEnvironments,
             selected: 'prod'
           };

@@ -190,7 +190,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
           this.stgEnv = this.environ_arr[i];
           continue;
         }
-        else {
+        
           // debugger
           if (this.environ_arr[i].status !== 'archived') {
             this.Environments[j] = this.environ_arr[i];
@@ -198,12 +198,12 @@ export class ServiceOverviewMultienvComponent implements OnInit {
             if (this.environ_arr[i].friendly_name != undefined) {
               this.friendlist[k++] = this.environ_arr[i].friendly_name;
             } else {
-              this.friendlist[k++] = this.environ_arr[i].logical_id;
+              this.friendlist[k++] = this.environ_arr[i].physical_id;
             }
             j++;
 
           }
-        }
+        
       }
     }
 
@@ -211,6 +211,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       env: this.envList,
       friendly_name: this.friendlist
     }
+    this.cache.set('envList',this.list);
+    
     if (this.Environments.length == 0) {
       this.noSubEnv = true;
     }
