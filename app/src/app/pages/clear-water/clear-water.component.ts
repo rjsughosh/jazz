@@ -323,6 +323,7 @@ export class ClearWaterComponent implements OnInit {
     });
   }
   ngOnInit() {
+    
     this.env = this.route.snapshot.params['env'];
     this.getSwaggerUrl(this.service.assets);
     if(this.env == 'prod'){
