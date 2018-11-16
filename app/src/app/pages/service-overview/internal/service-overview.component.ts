@@ -307,6 +307,7 @@ export class ServiceOverviewComponent implements OnInit {
         private serviceDetail: ServiceDetailComponent,
         private authenticationservice: AuthenticationService
     ) {
+        console.log("called")
         this.http = request;
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
@@ -350,9 +351,9 @@ export class ServiceOverviewComponent implements OnInit {
 
     getApproversList(){
         let locArr = [];
-            if(this.service.approvers && this.approversListShow) {
-                if(this.approversListShow.length > 0)
-                {
+        if(this.service.approvers && this.approversListShow) {
+            if(this.approversListShow.length > 0)
+                {  
                     this.service.approvers.map((data,index) => {
                     for (let i = 0; i < this.approversListShow.length; i++) {
                         if (this.approversListShow[i].userId.toLowerCase() === data.toLowerCase()) {
@@ -361,11 +362,11 @@ export class ServiceOverviewComponent implements OnInit {
                         }
                     }
 
-            });
-        }
+                });
+            }
             if(locArr.length > 0){
-                this.selectedApprovers = locArr;
-                this.selectedApproversLocal = locArr;
+                this.selectedApprovers = locArr.slice(0);
+                this.selectedApproversLocal = locArr.slice(0);
             }
         }
     }
@@ -1662,7 +1663,9 @@ export class ServiceOverviewComponent implements OnInit {
             }
         }
         if(this.service.approvers){
-            this.getApproversList();
+            if(Object.keys(this.service.approvers).length == Object.keys(this.selectedApprovers).length){
+                this.getApproversList();
+            }
         }
         this.loadPlaceholders();
 
