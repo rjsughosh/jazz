@@ -212,7 +212,7 @@
                             <div [hidden]="!showApproversList" class="approvers-list-wrap">
                                 <div  class="approvers-list typeShow open">
                                     <div class="approvers-dets" *ngFor="let approverss of approversList | myfilter:approverName;let j = index;" (focus)=" j==focusindex " [ngClass]="{pinkfocususers : j==focusindex }" [ngStyle]="scrollList" >
-                                        <div (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'>{{approverss.userId}}({{approverss.displayName || approverss.givenName}})</div>
+                                        <div (click)="selectApprovers(approverss);$event.stopPropagation();" index="{j}" [attr.displayName]='approverss.displayName' [attr.givenName]='approverss.givenName' [attr.userId]='approverss.userId' [attr.userEmail]='approverss.userEmail'><div class="approvers-text">{{approverss.userId}} ({{approverss.displayName || approverss.givenName}})</div></div>
                                     </div>
                                 </div>
                             </div>

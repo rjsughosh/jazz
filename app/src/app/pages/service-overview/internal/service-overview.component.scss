@@ -130,7 +130,6 @@ $screen-lg:                  1200px !default;
 }
 
 .input-field-container {
-    /*margin-top: 20px;*/
     position: relative;
 }
 
@@ -314,8 +313,11 @@ $screen-lg:                  1200px !default;
     overflow-x: hidden;
     overflow-y: scroll;
 }
-.approvers-dets /deep/ {
+.approvers-text{
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .endp-cover{
@@ -676,6 +678,10 @@ section:focus
     margin-top: -2rem;
     font-size: 0.9rem;
     color:  #ea9201 ;   
+}
+.approver-pre-wrapper{
+    border: 0; 
+    background-color: transparent;
 }
 .current-status-wrap{
     z-index: 101!important;

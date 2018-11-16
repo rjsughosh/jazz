@@ -351,7 +351,7 @@ export class ServiceOverviewComponent implements OnInit {
                 if(this.approversListShow.length > 0)
                 {
                     this.service.approvers.map((data,index) => {
-                    for (var i = 0; i < this.approversListShow.length; i++) {
+                    for (let i = 0; i < this.approversListShow.length; i++) {
                         if (this.approversListShow[i].userId.toLowerCase() === data.toLowerCase()) {
                             locArr.push(this.approversListShow[i]);
                             this.approversListShow.splice(i, 1);
@@ -513,7 +513,7 @@ export class ServiceOverviewComponent implements OnInit {
             });
             return (_.difference(selectApproverss,serviceApproverss).length + _.difference(serviceApproverss,selectApproverss).length);
         }
-        return 
+        return undefined;
     }
 
     selectApprovers(approver) {
@@ -608,10 +608,6 @@ export class ServiceOverviewComponent implements OnInit {
           this.focusindex++;
           if (this.focusindex > 0) {
             var pinkElements = document.getElementsByClassName("pinkfocus")[3];
-            // if(pinkElements == undefined)
-            //   {
-            //     this.focusindex = 0;
-            //   }
           }
           if (this.focusindex > 2) {
             this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
@@ -639,18 +635,6 @@ export class ServiceOverviewComponent implements OnInit {
           this.appPlaceHolder = "Start typing(min 3 char)...";
           var pinkElement;
           pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
-          // var pinkElementS = document.getElementsByClassName("pinkfocus")[0];
-          // if (pinkElementS == undefined)
-          // {
-          //   var p_ele = document.getElementsByClassName('pinkfocus')[2];
-          //   if(p_ele == undefined){
-    
-          //   }
-          //   else pinkElement = document.getElementsByClassName('pinkfocus')[2].children;
-    
-          // }
-          // else
-          //   pinkElement = pinkElementS.children;
           var approverObj = {
             displayName: pinkElement[0].attributes[2].value,
             givenName: pinkElement[0].attributes[3].value,
@@ -683,7 +667,7 @@ export class ServiceOverviewComponent implements OnInit {
         else {
             this.approversSaveStatus = false;
         }
-        if (this.selectedApprovers.length === 0 ){
+        if (this.selectedApprovers.length == 0 ){
             this.approversLimitStatus = true;
             this.approversSaveStatus = false;
         }
