@@ -267,25 +267,6 @@ export class ServiceLogsComponent implements OnInit {
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		this.instance_yes=(<AdvancedFiltersComponent>componentRef.instance);
-
-
-		this.fetchEnvlist()
-		.then((envList)=>{
-			var index = envList.indexOf('stg');
-			if (index != -1) {
-				envList.splice(index, 1);
-				envList.unshift('stg');
-			}
-			index = envList.indexOf('prod');
-			// use prod as the default one
-			if (index != -1) {
-				envList.splice(index, 1);
-				envList.unshift('prod');
-			}
-			
-		  this.instance_yes.envList = envList;
-		})
-
 		this.instance_yes.data = {"service" : this.service, "advanced_filter_input" : this.advanced_filter_input};
 		this.instance_yes.onFilterSelect.subscribe(event => {
 			comp.onFilterSelect(event);
@@ -368,8 +349,7 @@ export class ServiceLogsComponent implements OnInit {
 		  case "environment":{
 			this.FilterTags.notifyLogs('filter-Environment',event.value);
 			this.environment = event.value;
-			this.payload.environment = event.value;
-			this.resetPayload();
+			this.onEnvSelected(event.value);
 			break;
 		  }
 	
@@ -768,26 +748,11 @@ export class ServiceLogsComponent implements OnInit {
 	}
 
 	fetchEnvlist(){
-		// var env_list=this.cache.get('envList');
-		// if(env_list != undefined){
-		//   this.envList=env_list.friendly_name;
-		// }
-		if (this.instance_yes){
-			return this.http.get('/jazz/environments', {
-				domain: this.service.domain,
-				service: this.service.name
-			  }).toPromise()
-				.then((response: any) => {
-				  if (response && response.data && response.data.environment && response.data.environment.length) {
-				      let serviceEnvironments = _(response.data.environment).map('logical_id').uniq().value();
-					  return serviceEnvironments
-				  }
-				})
-				.catch((error) => {
-				  return error;
-				})
-		}		
-	  }
+		var env_list=this.cache.get('envList');
+		if(env_list != undefined){
+		  this.envList=env_list.friendly_name;
+		}
+	}
 
 	ngOnChanges(x:any){
 		this.fetchEnvlist();
