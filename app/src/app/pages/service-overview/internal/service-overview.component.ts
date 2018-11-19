@@ -4,7 +4,7 @@
   * @author
 */
 
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../../core/services/index';
 import { ToasterService } from 'angular2-toaster';
@@ -15,13 +15,15 @@ import { ServiceDetailComponent } from '../../service-detail/internal/service-de
 import { ServiceFormData, RateExpression, CronObject, EventExpression } from './../../../secondary-components/create-service/service-form-data';
 import { CronParserService } from '../../../core/helpers';
 import { environment } from './../../../../environments/environment';
+import { MyFilterPipe } from "../../../primary-components/custom-filter";
+import * as _ from 'lodash';
 
 declare var $: any;
 
 @Component({
     selector: 'service-overview',
     templateUrl: './service-overview.component.html',
-    providers: [RequestService, MessageService],
+    providers: [RequestService, MessageService, MyFilterPipe ],
     styleUrls: ['../../service-detail/internal/service-detail.component.scss', './service-overview.component.scss']
 })
 
@@ -33,6 +35,7 @@ export class ServiceOverviewComponent implements OnInit {
     @Output() refresh: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('env') envComponent;
+    @ViewChild('approverInput') approverInput: any;
 
     flag: boolean = false;
 
@@ -95,6 +98,7 @@ export class ServiceOverviewComponent implements OnInit {
     serviceStatusStarted: boolean = true;
     serviceStatusStartedD: boolean = false;
     statusFailed: boolean = false;
+    approversTouched : boolean = false;
     statusInfo: string = 'Service Creation started';
     private intervalSubscription: Subscription;
     swaggerUrl: string = '';
@@ -144,6 +148,7 @@ export class ServiceOverviewComponent implements OnInit {
     publicInitial: boolean = this.service.is_public_endpoint;
     cdnConfigSelected: boolean = this.service.create_cloudfront_url;
     cdnConfigInitial: boolean = this.service.create_cloudfront_url;
+    selectedApproversLocal : any;
     saveClicked: boolean = false;
     advancedSaveClicked: boolean = false;
     showApplicationList: boolean = false;
@@ -151,7 +156,7 @@ export class ServiceOverviewComponent implements OnInit {
     listRuntime : Object;
     initialselectedApplications = [];
     oneSelected: boolean = false;
-    appPlaceHolder: string = 'Start typing...';
+    appPlaceHolder: string = 'Start typing(min 3 char)...';
     applc: string;
     isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
@@ -179,6 +184,19 @@ export class ServiceOverviewComponent implements OnInit {
     minuteDropDownDisable : boolean = false;
     approvalTimeChanged : boolean = false; 
     minutesArray : any = [];
+    isInputShow : boolean = false;
+    isApproversChanged: boolean = false;
+    showApproversList : boolean = false;
+    approversLimitStatus: boolean = false;
+    approversSaveStatus : boolean = false;
+    showGenDeatils : boolean = true;
+    resMessage : any;
+    approversList: any;
+    approversListRes : any;
+    selectedApprovers : any = [];
+    approversListShow: any;
+    changeCounterApp : number = 0;
+    approversPlaceHolder : string = "Start typing (min 3 chars)...";
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -278,8 +296,11 @@ export class ServiceOverviewComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private zone:NgZone,
         private request: RequestService,
+        private cdRef: ChangeDetectorRef,
         private messageservice: MessageService,
+        private myFilterPipe : MyFilterPipe,
         private cronParserService: CronParserService,
         private cache: DataCacheService,
         private toasterService: ToasterService,
@@ -289,6 +310,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.http = request;
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
+        this.isInputShow = false;
         this.isSlackAvailable = false;
         this.listRuntime  = environment.envLists;
         this.environList = Object.keys(environment.envLists);
@@ -297,14 +319,55 @@ export class ServiceOverviewComponent implements OnInit {
             localArray.push(environment.envLists[data]);
         })
         this.environList = localArray;
-
         for(let i = 0; i<25; i++){
             this.hoursArray.push(i);
         }
         for(let i = 5;i<60;i=i+5){
             this.minutesArray.push(i);
         }
-        console.log("constructor");
+        this.getData();
+    }
+
+    public getData() {
+        let localApprovvs = JSON.parse(localStorage.getItem('approvers')) ||  {};
+        if(Object.keys(localApprovvs).length>0){
+            this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
+            this.getApproversList();
+            this.isInputShow = true;
+        }else {
+            this.http.get('/platform/ad/users')
+            .subscribe((res: Response) => {
+                this.approversListRes = res;
+                this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
+                this.getApproversList();
+                this.isInputShow = true;
+            }, error => {
+                this.resMessage = this.toastmessage.errorMessage(error, 'aduser');
+                this.toast_pop('error', 'Oops!', this.resMessage);
+            });
+      }
+    }
+
+    getApproversList(){
+        let locArr = [];
+        if(this.service.approvers && this.approversListShow) {
+            if(this.approversListShow.length > 0)
+                {  
+                    this.service.approvers.map((data,index) => {
+                    for (let i = 0; i < this.approversListShow.length; i++) {
+                        if (this.approversListShow[i].userId.toLowerCase() === data.toLowerCase()) {
+                            locArr.push(this.approversListShow[i]);
+                            this.approversListShow.splice(i, 1);
+                        }
+                    }
+
+                });
+            }
+            if(locArr.length > 0){
+                this.selectedApprovers = locArr.slice(0);
+                this.selectedApproversLocal = locArr.slice(0);
+            }
+        }
     }
 
     copy_link(id) {
@@ -422,15 +485,78 @@ export class ServiceOverviewComponent implements OnInit {
 
     showService(s) {
 
+    }   
+
+    onApproverChange(newVal) {
+        if (!newVal) {
+          this.approversPlaceHolder = "Start typing (min 3 chars)...";
+          this.showApproversList = false;
+        } else {
+          this.approversPlaceHolder = "";
+          if(newVal.length > 2 && this.approversListShow.length>0) {
+            this.approversList = this.myFilterPipe.transform(this.approversListShow,newVal);
+            if(this.approversList.length > 300)
+              this.approversList = this.approversList.slice(0,300);
+            this.showApproversList = true;
+          }
+          else
+            this.showApproversList = false;
+        }
+      }
+    
+    //function for comparing the passed array with service.approvers 
+    compareApproversArray(firstArr){
+        let serviceApproverss = [];
+        let selectApproverss = [];
+        if(this.service.approvers && firstArr){
+          //to make list to lowercase so that we can compare
+            this.service.approvers.map(x=>{
+                serviceApproverss.push(x.toLowerCase())
+            });
+            firstArr.map(x=>{
+                selectApproverss.push(x.userId.toLowerCase());
+            });
+            return (_.difference(selectApproverss,serviceApproverss).length + _.difference(serviceApproverss,selectApproverss).length);
+        }
+        return undefined;
     }
+
+    selectApprovers(approver) {
+        this.approverInput.nativeElement.focus();
+        this.approversTouched = true;
+        this.selApprover = approver;
+        let thisclass: any = this;
+        this.showApproversList = false;
+        thisclass.approverName = '';
+        this.selectedApprovers.push(approver);
+        
+        if(this.selectedApprovers.length === 5)
+            this.isInputShow = false; //not to show input box
+        
+        if(this.selectedApprovers.length > 0)
+            this.approversLimitStatus = false;
+    
+        //checking for the difference in arrays
+        if (this.compareApproversArray(this.selectedApprovers) !== 0){
+            this.approversSaveStatus = true;
+        } else {
+            this.approversSaveStatus = false;
+        }
+        this.appPlaceHolder = "Start typing(min 3 char)...";
+        for (var i = 0; i < this.approversListShow.length; i++) {
+          if (this.approversListShow[i].displayName === approver.displayName) {
+            this.approversListShow.splice(i, 1);
+            return;
+          }
+        }
+      }
 
     onTextAreaChange(desc_temp){
         if(!desc_temp){
             desc_temp = null
         }
-        // update_payload.description=desc_temp
         this.update_payload.description = desc_temp;
-        //update only some changes made to 
+
         if(this.service.description !== desc_temp ){
             this.descriptionChanged = false;
         }
@@ -481,6 +607,94 @@ export class ServiceOverviewComponent implements OnInit {
 
     focusInputApplication(event) {
         document.getElementById('applc').focus();
+    }
+    keypress(hash) {
+        if (hash.key == 'ArrowDown') {
+          this.focusindex++;
+          if (this.focusindex > 0) {
+            var pinkElements = document.getElementsByClassName("pinkfocus")[3];
+          }
+          if (this.focusindex > 2) {
+            this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+    
+          }
+        }
+        else if (hash.key == 'ArrowUp') {
+    
+          if (this.focusindex > -1) {
+            this.focusindex--;
+    
+            if (this.focusindex > 1) {
+              this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
+            }
+          }
+          if (this.focusindex == -1) {
+            this.focusindex = -1;
+    
+    
+          }
+        }
+        else if (hash.key == 'Enter' && this.focusindex > -1) {
+          this.approverInput.nativeElement.blur();
+          event.preventDefault();
+          this.appPlaceHolder = "Start typing(min 3 char)...";
+          var pinkElement;
+          pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
+          var approverObj = {
+            displayName: pinkElement[0].attributes[2].value,
+            givenName: pinkElement[0].attributes[3].value,
+            userId: pinkElement[0].attributes[4].value,
+            userEmail: pinkElement[0].attributes[5].value
+          }
+          this.selectApprovers(approverObj);
+          this.cdRef.markForCheck();
+          this.showApproversList = false;
+          this.focusindex = -1;
+    
+        } else {
+          this.focusindex = -1;
+        }
+       
+      }
+
+    removeApprover(index, approver) {
+        this.approversTouched = true
+        if (this.selectedApprovers.length > 0) { 
+            this.approversLimitStatus = false;
+            this.approversListShow.push(approver);
+            this.selectedApprovers.splice(index, 1);
+        } else {
+            this.approversLimitStatus = true;
+        }
+        if (this.compareApproversArray(this.selectedApprovers) > 0) {
+            this.approversSaveStatus = true;
+        }
+        else {
+            this.approversSaveStatus = false;
+        }
+        if (this.selectedApprovers.length == 0 ){
+            this.approversLimitStatus = true;
+            this.approversSaveStatus = false;
+        }
+        if(this.selectedApprovers.length == 5)
+            this.isInputShow = false;
+        else 
+            this.isInputShow = true;
+      }
+
+    removeApplication(index, approver) {
+        this.oneSelected=false;
+        this.selectApp={};  
+        this.appPlaceHolder='Start typing...';
+        // this.application_arr.push(approver);
+        let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+        this.selectedApprovers = nonRepeatedData(this.selectedApprovers);
+        this.approversListShow.splice(index, 1);
+      }
+
+    focusInput(event) {
+        if(this.isInputShow)
+            document.getElementById('applc').focus();
     }
 
     blurApplication() {
@@ -542,32 +756,18 @@ export class ServiceOverviewComponent implements OnInit {
 
     selectApp;
     selectApplication(app) {
-        this.oneSelected = true;
-        this.appPlaceHolder = '';
+        this.oneSelected=true;
+        this.appPlaceHolder='';
         this.selectApp = app;
         let thisclass: any = this;
         this.showApplicationList = false;
         thisclass.applc = '';
-        if (!app.appID)
-            this.initialselectedApplications.push(app);
         this.selectedApplications.push(app);
-        for (var i = 0; i < this.application_arr.length; i++) {
-            if (this.application_arr[i].appName === app.appName) {
-                this.application_arr.splice(i, 1);
-                return;
-            }
-        }
-        // debugger
+        let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
+        this.application_arr = nonRepeatedData(this.application_arr);
+        return;
+      }
 
-    }
-
-    removeApplication(index, approver) {
-        this.oneSelected = false;
-        this.selectApp = {};
-        this.appPlaceHolder = 'Start typing...';
-        this.application_arr.push(approver);
-        this.selectedApplications.splice(index, 1);
-    }
 
     generateExpression(rateExpression) {
         if (this.rateExpression !== undefined) {
@@ -629,7 +829,9 @@ export class ServiceOverviewComponent implements OnInit {
         if (this.service.app_name && this.selectedApplications.length == 0)
             this.selectApplication(appobj);
         this.disp_show = false;
-        // debugger
+        //to check approver limit on edit
+        if(this.selectedApprovers.length === 5)
+            this.isInputShow = false;
 
     }
 
@@ -717,6 +919,9 @@ export class ServiceOverviewComponent implements OnInit {
     
 
     onSaveClick() {
+        this.changeCounterApp = 0;
+        this.isApproversChanged = false;
+        this.approversSaveStatus = false;
         this.saveClicked = true;
         this.advancedSaveClicked = false;
         this.descriptionChanged = true;
@@ -736,6 +941,15 @@ export class ServiceOverviewComponent implements OnInit {
                     "providerRuntime" : this.accSelected
                 }
             }
+            if(this.compareApproversArray(this.selectedApprovers) >0){
+                let localData = [];
+                this.selectedApprovers.map(data=>{
+                    localData.push(data.userId);
+                });
+                payload["metadata"] = {
+                    "approvers": localData
+                }
+            }
             if (this.approvalTime != this.service.approvalTimeOutInMins && this.approvalTime){
                 payload["metadata"] = {
                     "approvalTimeOutInMins" : this.approvalTime
@@ -753,8 +967,17 @@ export class ServiceOverviewComponent implements OnInit {
 
     }
 
+    resetSelectedApprovers(){
+        this.selectedApprovers = this.selectedApproversLocal.slice(0);
+    }
+
 
     onCancelClick() {
+        this.showApproversList = false;
+        this.approversSaveStatus = false;
+        this.changeCounterApp = 0;
+        this.approversLimitStatus = false;
+        this.isInputShow = true;
         this.update_payload = {};
         this.selectedApplications = [];
         this.oneSelected = false;
@@ -770,6 +993,7 @@ export class ServiceOverviewComponent implements OnInit {
             this.subscription.unsubscribe();
         this.show_loader = false;
         this.disableSaveBtn();
+        this.resetSelectedApprovers();
     }
     toast_pop(error, oops, errorMessage) {
         var tst = document.getElementById('toast-container');
@@ -1230,7 +1454,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.http.post('/platform/jira-issues', payload).subscribe(
             response => {
                 this.buttonText = 'DONE';
-                // console.log(response);
                 this.isLoading = false;
                 this.model.userFeedback = '';
                 var respData = response.data;
@@ -1316,7 +1539,7 @@ export class ServiceOverviewComponent implements OnInit {
             if(this.approvalHours === 1)
                     this.displayApprovalTime = `${this.approvalHours} hour ${this.approvalMinutes} minutes`;
             
-            else if(this.approvalHours !== 1)
+            else if(this.approvalHours !== 1)   
             this.displayApprovalTime = `${this.approvalHours} hours ${this.approvalMinutes} minutes`; 
         }
         else if(this.approvalTime){
@@ -1414,6 +1637,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.envComponent.refresh();
     }
     internal_build: boolean = true;
+
     ngOnChanges(x: any) {
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
@@ -1422,7 +1646,26 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
-
+        if(this.selectedApprovers.length === 0 &&  this.changeCounterApp == 0 && this.service.approvers){
+            this.service.approvers.map(data=>{
+                let obj = { 
+                    "userId" : data
+                };
+                this.selectedApprovers.push(obj);
+             });
+            //saving the value
+            this.isInputShow = true;
+            this.selectedApproversLocal = this.selectedApprovers.slice(0);
+            this.changeCounterApp = 1;
+            if(this.service.approvers.length == 5){
+                this.isInputShow = false;
+            }
+        }
+        if(this.service.approvers){
+            if(Object.keys(this.service.approvers).length == Object.keys(this.selectedApprovers).length){
+                this.getApproversList();
+            }
+        }
         this.loadPlaceholders();
 
         this.prodEnv = {};
@@ -1501,7 +1744,6 @@ export class ServiceOverviewComponent implements OnInit {
             .subscribe(
                 response => {
                     this.createloader = false;
-                    // console.log("status = ", response);
                     let dataResponse = <any>{};
                     dataResponse.list = response;
                     var respStatus = dataResponse.list.data;
@@ -1701,6 +1943,7 @@ export class ServiceOverviewComponent implements OnInit {
             var approverObj = pinkElement[0].attributes[2].value;
 
             this.selectAccount(approverObj);
+            this.approversPlaceHolder = "Start typing (min 3 chars)...";
 
             this.focusindex = -1;
 
@@ -1742,7 +1985,7 @@ export class ServiceOverviewComponent implements OnInit {
         else if (hash.key == 'Enter' && this.focusindex > -1) {
             event.preventDefault();
             var pinkElement = document.getElementsByClassName("pinkfocus2")[0].children;
-
+            this.approversPlaceHolder = "Start typing (min 3 chars)...";
             var approverObj = pinkElement[0].attributes[2].value;
 
             this.selectRegion(approverObj);
