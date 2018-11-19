@@ -288,9 +288,10 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         var now = new Date;
         var diff = moment(now).diff(moment(time),"second");
         if (diff <= 24 * 60 * 60) {
-          return moment(time).fromNow();
+          // time format is UTC, need to convert to local time
+          return moment.utc(time).local().fromNow();
         } else {
-          return moment(time).format('MM/DD/YYYY HH:mm:ss');
+          return moment(time).format('ll');
         }
       }
     }    
@@ -334,27 +335,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         this.prodEnv.deploymentsCountvalue = this.get24HourDeployment(this.prodEnv);
       },
       err => {
-        // this.isenvLoading = false;
         console.log('error', err);
-        // this.ErrEnv = true;
-        // if (err.status == 404){
-        //   this.err404 = true;
-        // }
-        // this.errMessage = "Something went wrong while fetching your data";
-        // this.errMessage = this.toastmessage.errorMessage(err, "environment");
-        // var payload = {
-        //   "domain": +this.service.domain,
-        //   "service": this.service.name
-        // }
-        // this.getTime();
-        // this.errorURL = window.location.href;
-        // this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environments";
-        // this.errorRequest = payload;
-        // this.errorUser = this.authenticationservice.getUserId();
-        // this.errorResponse = JSON.parse(err._body);
       })
-    //https://cloud-api.corporate.t-mobile.com/api/jazz/deployments?domain=jazz-test&service=jazz-test
-
   }
 
   getTime() {
