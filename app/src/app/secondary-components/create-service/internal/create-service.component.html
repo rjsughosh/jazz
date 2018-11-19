@@ -191,6 +191,7 @@
                                             <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
                                         </li>
                                         <input [class.application-ip]='notMyApp' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                        <img [class.show]="!enableAppInput" class="hide input-loader" src="../assets/images/icons/loading.png">
 
                                     </ul>
                                 </div>

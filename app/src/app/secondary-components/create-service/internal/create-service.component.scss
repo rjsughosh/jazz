@@ -12,6 +12,20 @@
         padding: 0 1.5rem;
     }
 }
+.input-loader
+{
+    animation-name: rotate;
+    animation-duration: 0.8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    height: 1.5rem;
+    position: absolute;
+    right: -0.5rem;
+    top: 0.7rem;
+    transform: scale(0.7);
+    margin: 0 1rem;
+
+}
 .loading-row {
     display: none;
     z-index:5;
@@ -52,7 +66,7 @@
     }
     .service-box:hover{
         border-color:#ed008c;
-        
+
     }
 }
 .type-of-platform, .type-of-service{
@@ -504,7 +518,7 @@
 .approvers-list-wrap {
     position: relative;
 }
-.input-wrapper input[type="text"], 
+.input-wrapper input[type="text"],
 .input-wrapper input[type="number"]{
     margin-bottom: 0;
 }
@@ -771,7 +785,7 @@ p.learn-more {
 }
 .pinkfocusapplication{
     background-color: #ed008c;
-    color: #fff;  
+    color: #fff;
 }
 // /deep/ .sidebar-inr{
 //         overflow-y: hidden;
@@ -803,7 +817,7 @@ p.learn-more {
             padding:0.5rem 1rem;
             margin-left:1rem;
         }
-        
+
     }
 
     .createSlackbtns{
@@ -813,7 +827,7 @@ p.learn-more {
     label{
         margin:0;
     }
-    
+
 }
 
 .slackForm{
@@ -823,16 +837,16 @@ p.learn-more {
 .slack_arrow .arrow_box:after{
     left:42.5%;
     top:-3.2rem;
-    
+
 }
 
 .create-slack
 {
     display:flex;
     margin-top:0.5rem;
-    
+
     span{
-        
+
         font-weight:bold;
         padding-right: 0.5rem;
         label{
@@ -840,7 +854,7 @@ p.learn-more {
         }
 
     }
-    
+
 }
 .whit{
     background:white;
