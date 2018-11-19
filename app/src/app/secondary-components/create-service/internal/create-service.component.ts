@@ -1277,14 +1277,11 @@ blurApplication(){
     .subscribe((res: Response) => {
       this.applications=res;
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
-
-      localStorage.setItem('workload', JSON.stringify(this.application_arr));
-
       this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
-        this.getapplications();
-      }
-      else{
+        this.fetchApplications();
+      } else {
+        localStorage.setItem('workload', JSON.stringify(this.application_arr));
 
         for(var i=0;i<this.application_arr.length;i++){
           if(!this.application_arr[i].appID || !this.application_arr[i].appName){
@@ -1294,7 +1291,7 @@ blurApplication(){
             this.application_arr[i].appName=this.application_arr[i].appName.trim();
           }
         }
-
+    
         this.application_arr.sort((a: any, b: any) => {
           if (a.appName < b.appName) {
             return -1;
@@ -1303,31 +1300,26 @@ blurApplication(){
           } else {
             return 0;
           }
-        });
-        this.enableAppInput = true;
+        });   
         this.appPlaceHolder = "Start typing..."
-        return;
+        this.enableAppInput = true;
+        this.isLoading = false;
       }
-
     }, error => {
-
     });
   }
 
   getapplications(){
     var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
-
     if (localStorageWorkload.length > 0){
-      if (this.start_at + 100 >= localStorageWorkload.length) {
-        this.fetchApplications();
-      } else {
-        this.application_arr = localStorageWorkload;
-      }
+      this.application_arr = localStorageWorkload;
+      this.appPlaceHolder = "Start typing..."
+      this.enableAppInput = true;
+      this.isLoading = false;
     } else {
       this.fetchApplications();
     }
   }
-
 
  ngOnInit() {
     this.selectAccountsRegions();
