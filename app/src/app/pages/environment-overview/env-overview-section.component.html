@@ -315,20 +315,20 @@
 			<ul class="service-overview">
 				<li class="overview-item">
 					<div class="overview-value">
-						NA
+						{{deployments.deploymentsCountvalue || 'NA'}}
 					</div>
 					<div class="overview-label"># of Deployments<br>(Last 24 hours)</div>
 					<!-- <div class="overview-label"></div> -->
 				</li>
 				<li class="overview-item" >
 					<div class="overview-value">
-						NA
+						{{deployments.lastSuccessfulDeployment || 'NA'}}
 					</div>
 					<div class="overview-label">Last Successful Deployment</div>
 				</li>
 				<li class="overview-item">
 					<div class="overview-value">
-						NA
+						{{deployments.lastFailedDeployment || 'NA'}}
 					</div>
 					<div class="overview-label">Last Failed Deployment</div>
 				</li>
@@ -341,7 +341,7 @@
 				<li class="overview-item bottom-right">
 					<div class="overview-value">
 						<!-- <img src='assets\images\icons\icon-good@2x.png' height='30px' title='Success' > -->
-						NA
+						{{deployments.lastDeploymentStatus || 'NA'}}
 					</div>
 					<div class="overview-label">
 						Last Deployment Status

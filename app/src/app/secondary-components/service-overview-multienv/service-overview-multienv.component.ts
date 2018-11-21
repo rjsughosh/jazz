@@ -177,8 +177,6 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     this.sortEnvArr();
 
     if (this.environ_arr != undefined) {
-      // console.log('total lenght = ', this.environ_arr.length)
-      // console.log('full array = ', this.environ_arr)
       for (var i = 0; i < this.environ_arr.length; i++) {
         this.environ_arr[i].status = this.environ_arr[i].status.replace("_", " ");
         // this.environ_arr[i].status=this.environ_arr[i].status.split(" ").join("\ n")
@@ -281,6 +279,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   };
 
   getLastSuccessfulDeployment(env){
+    if (!env.deploy_arr) return "NA"
     for (var i = 0; i < env.deploy_arr.length; i++){
       var deployment = env.deploy_arr[i];
       if (deployment.status == 'successful'){
@@ -299,6 +298,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
 
   get24HourDeployment(env){
     var count = 0;
+    if (!env.deploy_arr) return 'NA'
     for (var i = 0; i < env.deploy_arr.length; i++){
       var time = env.deploy_arr[i].created_time.slice(0,-4);
       var now = new Date;
@@ -307,7 +307,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         count ++
       }
     }
-    return count
+    // return as string so when the count it 0, it won't be treat as false in html (count || 'NA') => 0 will be shown as 'NA'
+    return count.toString()
   }
 
   getDeploymentData() {

@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService} from 'angular2-toaster';
 import { DataService } from "../data-service/data.service";
 import { DataCacheService , AuthenticationService } from '../../core/services/index';
+import * as moment from 'moment';
 
 @Component({
   selector: 'env-overview-section',
@@ -37,6 +38,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   saveBtn:boolean = false;
   showCancel:boolean = false;
   environment:any;
+  deployments:any={};
   envResponseEmpty:boolean = false;
   envResponseTrue:boolean = false;
   envResponseError:boolean = false;
@@ -66,6 +68,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   
   
   private subscription:any;
+  private deploySubscription:any;
 
   @Input() service: any = {};
   
@@ -232,11 +235,87 @@ popup(state){
   openSidebar(){
     this.open_sidebar.emit('overview');
 
-}
-   callServiceEnv() {
-    if ( this.subscription ) {
-      this.subscription.unsubscribe();
+  }
+
+  get24HourDeployment(deploymentsArray){
+    var count = 0;
+    if (!deploymentsArray) return 'NA'
+    for (var i = 0; i < deploymentsArray.length; i++){
+      var time = deploymentsArray[i].created_time.slice(0,-4);
+      var now = new Date;
+      var diff = moment(now).diff(moment(time),"second");
+      if (diff <= 24 * 60 * 60) {
+        count ++
+      }
     }
+    // return as string so when the count it 0, it won't be treat as false in html (count || 'NA') => 0 will be shown as 'NA'
+    return count.toString();
+  }
+
+  getLastDeployment(deploymentArray, status){
+    if (!deploymentArray) return "NA"
+    for (var i = 0; i < deploymentArray.length; i++){
+      var deployment = deploymentArray[i];
+      if (deployment.status == status){
+        var time = deployment.created_time.slice(0,-4);
+        var now = new Date;
+        var diff = moment(now).diff(moment(time),"second");
+        if (diff <= 24 * 60 * 60) {
+          // time format is UTC, need to convert to local time
+          return moment.utc(time).local().fromNow();
+        } else {
+          return moment(time).format('ll');
+        }
+      }
+    }    
+  }
+
+  getDeployments(){
+    if (!this.env || !this.service.domain ||!this.service.name) {
+      return
+    }
+  
+    this.deploySubscription = this.http.get('/jazz/deployments' + '?domain=' + this.service.domain + '&service=' + this.service.name + "&environment=" + this.env).subscribe(
+      (response) => {
+        if(response.data == (undefined || '')){
+          return
+        }else if (response.data.deployments){
+          this.deployments = response.data;
+          this.deployments.deploymentsCountvalue = this.get24HourDeployment(this.deployments.deployments);
+          this.deployments.lastSuccessfulDeployment = this.getLastDeployment(this.deployments.deployments, 'successful');
+          this.deployments.lastFailedDeployment = this.getLastDeployment(this.deployments.deployments, 'failed');
+          this.deployments.lastDeploymentStatus = this.deployments.deployments[0]? this.deployments.deployments[0].status : 'NA';
+          this.cache.set('currentDeployments', this.deployments);
+        }
+      },
+      (error) => {
+        if( error.status == "404"){
+          this.router.navigateByUrl('404');
+        }
+        this.envResponseTrue = false;
+        this.envResponseError = true;
+        this.envResponseEmpty = false;
+        this.isLoading = false;
+        var payload ={
+          "service" : this.service.name,
+          "domain" : this.service.domain,         }
+        this.getTime();
+        this.errorURL = window.location.href;
+        this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environment/"+this.env;
+        this.errorRequest = payload;
+        this.errorUser = this.authenticationservice.getUserId();
+        this.errorResponse = JSON.parse(error._body);
+
+      // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
+            // this.popToast('error', 'Oops!', errorMessage);
+    })
+  }
+
+  callServiceEnv() {
+  if ( this.subscription ) {
+    this.subscription.unsubscribe();
+  }
+
   this.onload.emit(this.environment.endpoint);
     this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
@@ -261,11 +340,7 @@ popup(state){
             // if(this.status_val <= 3) this.envstatus='Active';
             // else if(this.status_val == 4 )this.envstatus='In Progress';
             // else if(this.status_val > 4 )this.envstatus='Inactive';
-            
-            console.log('#######');
-            console.log(this.environment);
-           
-            
+
             var envResponse = response.data.environment[0];
             this.friendlyName = envResponse.friendly_name
             this.branchname = envResponse.physical_id;
@@ -446,8 +521,12 @@ popup(state){
       this.env = params.env;
     });
     this.environment={};
-    if(this.service.domain != undefined)
+    if(this.service.domain != undefined){
       this.callServiceEnv();
+      this.getDeployments();
+    }
+
+
 }
 notify(services){
   this.service=services;
