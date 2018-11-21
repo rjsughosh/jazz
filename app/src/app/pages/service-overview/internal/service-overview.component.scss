@@ -1341,10 +1341,10 @@ summary{
   &:hover{
     color:#ed008c;
   }
-  display: flex;
+  display: block;
   outline:none;
   margin-bottom: 1rem;
-  cursor:pointer
+  cursor:pointer;
 }
 .summary-last-child{
   margin: 15px 0 0rem 0;
@@ -1365,9 +1365,9 @@ details summary::-webkit-details-marker {
 }
 
 .metadata-heading-wrap{
-  display: flex;
+  display: inline-block;
   justify-content: space-between;
-  width: 100%;
+  width: auto;
   .metadata-heading{
     font-size:1.8rem;
     font-weight: bold;

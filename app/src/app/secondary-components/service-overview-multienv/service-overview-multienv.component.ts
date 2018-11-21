@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService, DataCacheService, MessageService, AuthenticationService } from '../../core/services/index';
 import { ToasterService } from 'angular2-toaster';
+import * as moment from 'moment';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
@@ -123,6 +124,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   activeEnv: string = 'dev';
   Environments = [];
   environ_arr = [];
+  deployments_arr = [];
   feedbackRes: boolean = false;
   openModal: boolean = false;
   feedbackMsg: string = '';
@@ -175,8 +177,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     this.sortEnvArr();
 
     if (this.environ_arr != undefined) {
-      console.log('total lenght = ', this.environ_arr.length)
-      console.log('full array = ', this.environ_arr)
+      // console.log('total lenght = ', this.environ_arr.length)
+      // console.log('full array = ', this.environ_arr)
       for (var i = 0; i < this.environ_arr.length; i++) {
         this.environ_arr[i].status = this.environ_arr[i].status.replace("_", " ");
         // this.environ_arr[i].status=this.environ_arr[i].status.split(" ").join("\ n")
@@ -188,7 +190,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
           this.stgEnv = this.environ_arr[i];
           continue;
         }
-        else {
+        
           // debugger
           if (this.environ_arr[i].status !== 'archived') {
             this.Environments[j] = this.environ_arr[i];
@@ -196,12 +198,12 @@ export class ServiceOverviewMultienvComponent implements OnInit {
             if (this.environ_arr[i].friendly_name != undefined) {
               this.friendlist[k++] = this.environ_arr[i].friendly_name;
             } else {
-              this.friendlist[k++] = this.environ_arr[i].logical_id;
+              this.friendlist[k++] = this.environ_arr[i].physical_id;
             }
             j++;
 
           }
-        }
+        
       }
     }
 
@@ -209,6 +211,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       env: this.envList,
       friendly_name: this.friendlist
     }
+    this.cache.set('envList',this.list);
+    
     if (this.Environments.length == 0) {
       this.noSubEnv = true;
     }
@@ -273,7 +277,67 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         this.errorUser = this.authenticationservice.getUserId();
         this.errorResponse = JSON.parse(err._body);
       })
+      this.getDeploymentData();
   };
+
+  getLastSuccessfulDeployment(env){
+    for (var i = 0; i < env.deploy_arr.length; i++){
+      var deployment = env.deploy_arr[i];
+      if (deployment.status == 'successful'){
+        var time = deployment.created_time.slice(0,-4);
+        var now = new Date;
+        var diff = moment(now).diff(moment(time),"second");
+        if (diff <= 24 * 60 * 60) {
+          // time format is UTC, need to convert to local time
+          return moment.utc(time).local().fromNow();
+        } else {
+          return moment(time).format('ll');
+        }
+      }
+    }    
+  }
+
+  get24HourDeployment(env){
+    var count = 0;
+    for (var i = 0; i < env.deploy_arr.length; i++){
+      var time = env.deploy_arr[i].created_time.slice(0,-4);
+      var now = new Date;
+      var diff = moment(now).diff(moment(time),"second");
+      if (diff <= 24 * 60 * 60) {
+        count ++
+      }
+    }
+    return count
+  }
+
+  getDeploymentData() {
+    if (this.service == undefined) { return }
+    this.http.get('/jazz/deployments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
+      response => {
+        //this.isenvLoading = false;
+        //this.environ_arr = response.data.environment;
+
+        this.deployments_arr = response.data.deployments;
+
+        this.deployments_arr.map((deployment)=>{
+          if (deployment.environment_logical_id == 'stg') {
+            this.stgEnv.deploy_arr = this.stgEnv.deploy_arr || [];
+            this.stgEnv.deploy_arr.push(deployment);
+          } else if (deployment.environment_logical_id == 'prod'){
+            this.prodEnv.deploy_arr = this.prodEnv.deploy_arr || [];
+            this.prodEnv.deploy_arr.push(deployment);
+          }
+        })
+
+        this.stgEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.stgEnv);
+        this.stgEnv.deploymentsCountvalue = this.get24HourDeployment(this.stgEnv);
+        this.prodEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.prodEnv);
+        this.prodEnv.deploymentsCountvalue = this.get24HourDeployment(this.prodEnv);
+      },
+      err => {
+        console.log('error', err);
+      })
+  }
 
   getTime() {
     var now = new Date();

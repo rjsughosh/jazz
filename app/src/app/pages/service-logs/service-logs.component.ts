@@ -10,6 +10,7 @@ import {DataCacheService } from '../../core/services/index';
 import {AdvancedFiltersComponent} from './../../secondary-components/advanced-filters/advanced-filters.component';
 import {AdvancedFilterService} from './../../advanced-filter.service';
 import {AdvFilters} from './../../adv-filter.directive';
+import * as _ from 'lodash';
 @Component({
   selector: 'service-logs',
   templateUrl: './service-logs.component.html',
@@ -348,8 +349,7 @@ export class ServiceLogsComponent implements OnInit {
 		  case "environment":{
 			this.FilterTags.notifyLogs('filter-Environment',event.value);
 			this.environment = event.value;
-			this.payload.environment = event.value;
-			this.resetPayload();
+			this.onEnvSelected(event.value);
 			break;
 		  }
 	
@@ -752,11 +752,11 @@ export class ServiceLogsComponent implements OnInit {
 		if(env_list != undefined){
 		  this.envList=env_list.friendly_name;
 		}
-	
-	  }
-	  ngOnChanges(x:any){
-		  this.fetchEnvlist();
-	  }
+	}
+
+	ngOnChanges(x:any){
+		this.fetchEnvlist();
+	}
 	 
 	ngOnInit() {
 		

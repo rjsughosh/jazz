@@ -1270,18 +1270,18 @@ blurApplication(){
     this.application_arr = nonRepeatedData(this.application_arr);
     this.selectedApplications.splice(index, 1);
   }
+
   start_at:number=0;
-  getapplications(){
+  fetchApplications(){
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt='+this.start_at)
     .subscribe((res: Response) => {
       this.applications=res;
-
       this.application_arr.push.apply(this.application_arr,this.applications.data.summary);
       this.start_at = this.start_at+100;
       if(this.applications.data.total > this.start_at ){
-          this.getapplications();
-      }
-      else{
+        this.fetchApplications();
+      } else {
+        localStorage.setItem('workload', JSON.stringify(this.application_arr));
 
         for(var i=0;i<this.application_arr.length;i++){
           if(!this.application_arr[i].appID || !this.application_arr[i].appName){
@@ -1291,7 +1291,7 @@ blurApplication(){
             this.application_arr[i].appName=this.application_arr[i].appName.trim();
           }
         }
-
+    
         this.application_arr.sort((a: any, b: any) => {
           if (a.appName < b.appName) {
             return -1;
@@ -1300,17 +1300,26 @@ blurApplication(){
           } else {
             return 0;
           }
-        });
-        this.enableAppInput = true;
+        });   
         this.appPlaceHolder = "Start typing..."
-        return;
+        this.enableAppInput = true;
+        this.isLoading = false;
       }
-
     }, error => {
-
     });
   }
 
+  getapplications(){
+    var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
+    if (localStorageWorkload.length > 0){
+      this.application_arr = localStorageWorkload;
+      this.appPlaceHolder = "Start typing..."
+      this.enableAppInput = true;
+      this.isLoading = false;
+    } else {
+      this.fetchApplications();
+    }
+  }
 
  ngOnInit() {
     this.selectAccountsRegions();
