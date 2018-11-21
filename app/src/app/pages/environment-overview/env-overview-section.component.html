@@ -30,7 +30,7 @@
 		</div>
 	</div>
 </div>
-<div class='service-details row env-details bottom-10' *ngIf='environmnt.endpoint != undefined' >
+<div class='service-details row env-details bottom-10' *ngIf='environment.endpoint != undefined' >
 	<ul class=" col-md-12 col-sm-12">
 		<li class='det-wrp'>
 			<!-- *ngIf='service.endpoints.dev != undefined' -->
@@ -40,7 +40,7 @@
 			<div class='det-value endpoint-url align-slf'>
 				<div class="popupcopy" (mouseover)="myFunction()" (click)='copyClipboard("copyapilinkdev")'>
                     <span >
-                        {{environmnt.endpoint}}
+                        {{environment.endpoint}}
                         <span class='relative'>
                             <img src="./../../../assets/images/icons/icon-link.png"/>
                             <div class="tooltip-content" >
@@ -49,7 +49,7 @@
                         </span>
                     </span>
                 </div>
-				<textarea id="copyapilinkdev">{{environmnt.endpoint}}</textarea>
+				<textarea id="copyapilinkdev">{{environment.endpoint}}</textarea>
 			</div>
         </li>
     </ul>

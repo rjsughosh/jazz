@@ -36,7 +36,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   editBtn:boolean = true;
   saveBtn:boolean = false;
   showCancel:boolean = false;
-  environmnt:any;
+  environment:any;
   envResponseEmpty:boolean = false;
   envResponseTrue:boolean = false;
   envResponseError:boolean = false;
@@ -237,7 +237,7 @@ popup(state){
     if ( this.subscription ) {
       this.subscription.unsubscribe();
     }
-  this.onload.emit(this.environmnt.endpoint);
+  this.onload.emit(this.environment.endpoint);
     this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
         (response) => {
@@ -250,9 +250,9 @@ popup(state){
             // response.data.environment[0].status='deletion_started'
             this.onload.emit(response.data.environment[0].endpoint);
             this.envLoad.emit(response.data);
-            this.environmnt=response.data.environment[0];
-            this.cache.set('currentEnv',this.environmnt);
-            this.status_val = parseInt(status[this.environmnt.status]);
+            this.environment=response.data.environment[0];
+            this.cache.set('currentEnv',this.environment);
+            this.status_val = parseInt(status[this.environment.status]);
 
             var deployment_status = ["deployment_completed","active","deployment_started" ,"pending_approval","deployment_failed","inactive","deletion_started","deletion_failed","archived"]
 
@@ -262,7 +262,8 @@ popup(state){
             // else if(this.status_val == 4 )this.envstatus='In Progress';
             // else if(this.status_val > 4 )this.envstatus='Inactive';
             
-
+            console.log('#######');
+            console.log(this.environment);
            
             
             var envResponse = response.data.environment[0];
@@ -444,7 +445,7 @@ popup(state){
       params => {
       this.env = params.env;
     });
-    this.environmnt={};
+    this.environment={};
     if(this.service.domain != undefined)
       this.callServiceEnv();
 }
