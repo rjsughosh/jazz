@@ -662,8 +662,23 @@ section:focus
     transform: skew(-20deg);
     
 }
+
+.disableInputField{
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0.4;
+}
+.advance-baseline-wrapper{
+    align-items: baseline;
+}
 .noSlackError{
     border-bottom-color: red;
+}
+.noApproverError{
+    border-color:  red;
+}
+.radio-wrapper{
+    display: flex;
 }
 .limitWrapper{
       padding-top: 10px;
@@ -1484,7 +1499,6 @@ details{
 }
 .down-btn-wrap-advanced{
   bottom: -4rem;
-  margin-right: 5em;
 }
 .advance-wrapper{
     margin-top : 6em;

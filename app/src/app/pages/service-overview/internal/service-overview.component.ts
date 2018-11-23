@@ -63,6 +63,8 @@ export class ServiceOverviewComponent implements OnInit {
     show_loader: boolean = false;
     plc_hldr: boolean = true;
     status_empty: boolean;
+    appNameVis: string;
+    isapplicationDisable: boolean = true;
     descriptionChanged : boolean = true;
     description_empty: boolean;
     approvers_empty: boolean;
@@ -152,12 +154,13 @@ export class ServiceOverviewComponent implements OnInit {
     saveClicked: boolean = false;
     advancedSaveClicked: boolean = false;
     showApplicationList: boolean = false;
-    selectedApplications = [];
+    selectedApplications: any = [];
     listRuntime : Object;
     initialselectedApplications = [];
     oneSelected: boolean = false;
     appPlaceHolder: string = 'Start typing(min 3 char)...';
     applc: string;
+    showAppclInput: boolean = true;
     isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
     PutPayload: any;
@@ -196,6 +199,11 @@ export class ServiceOverviewComponent implements OnInit {
     selectedApprovers : any = [];
     approversListShow: any;
     changeCounterApp : number = 0;
+    disp_app_error: boolean = false;
+    applc1: string ='';
+    enableApiSecurity: boolean = false;
+    isAppTouched: boolean= false;
+    selectedApplicationLocal: any = [];
     approversPlaceHolder : string = "Start typing (min 3 chars)...";
     endpList = [
         {
@@ -522,6 +530,9 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     selectApprovers(approver) {
+        this.applc1='';
+        this.approversPlaceHolder = "Start typing (min 3 chars)...";
+        this.approverInput.nativeElement.blur();
         this.approverInput.nativeElement.focus();
         this.approversTouched = true;
         this.selApprover = approver;
@@ -542,7 +553,6 @@ export class ServiceOverviewComponent implements OnInit {
         } else {
             this.approversSaveStatus = false;
         }
-        this.appPlaceHolder = "Start typing(min 3 char)...";
         for (var i = 0; i < this.approversListShow.length; i++) {
           if (this.approversListShow[i].displayName === approver.displayName) {
             this.approversListShow.splice(i, 1);
@@ -606,7 +616,9 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     focusInputApplication(event) {
-        document.getElementById('applc').focus();
+    let applclocal1 =  document.getElementById('applc')
+    if(applclocal1)
+        applclocal1.focus();
     }
     keypress(hash) {
         if (hash.key == 'ArrowDown') {
@@ -637,7 +649,7 @@ export class ServiceOverviewComponent implements OnInit {
         else if (hash.key == 'Enter' && this.focusindex > -1) {
           this.approverInput.nativeElement.blur();
           event.preventDefault();
-          this.appPlaceHolder = "Start typing(min 3 char)...";
+          this.approversPlaceHolder = "Start typing(min 3 char)...";
           var pinkElement;
           pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
           var approverObj = {
@@ -682,19 +694,19 @@ export class ServiceOverviewComponent implements OnInit {
             this.isInputShow = true;
       }
 
-    removeApplication(index, approver) {
+    removeApplication(index, app) {
         this.oneSelected=false;
+        this.isAppTouched = true;
+        this.disp_app_error = false;
         this.selectApp={};  
+        this.showAppclInput = true;
         this.appPlaceHolder='Start typing...';
-        // this.application_arr.push(approver);
-        let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
-        this.selectedApprovers = nonRepeatedData(this.selectedApprovers);
-        this.approversListShow.splice(index, 1);
+        this.selectedApplications= [];
       }
 
     focusInput(event) {
         if(this.isInputShow)
-            document.getElementById('applc').focus();
+            document.getElementById('applc1').focus();
     }
 
     blurApplication() {
@@ -756,12 +768,14 @@ export class ServiceOverviewComponent implements OnInit {
 
     selectApp;
     selectApplication(app) {
+        this.disp_app_error = true;
+        this.isAppTouched = true;
+        this.showAppclInput = false;
         this.oneSelected=true;
-        this.appPlaceHolder='';
         this.selectApp = app;
         let thisclass: any = this;
         this.showApplicationList = false;
-        thisclass.applc = '';
+        thisclass.applc1 = '';
         this.selectedApplications.push(app);
         let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
         this.application_arr = nonRepeatedData(this.application_arr);
@@ -818,6 +832,27 @@ export class ServiceOverviewComponent implements OnInit {
         }
     }
 
+    getAppName(app){
+        this.selectedApplicationLocal = [];
+        if(this.application_arr.length>200){
+            this.isapplicationDisable = false;
+            this.showAppclInput = false;
+            this.selectedApplications.pop();
+            if(this.application_arr.length > 100){
+            let localRef = this.application_arr.filter((a)=> a.appID==app);
+            this.selectedApplications.push(localRef[0]);
+            localRef = localRef.slice(0);
+            this.selectedApplicationLocal.push(localRef[0]);
+            this.appNameVis = localRef[0].appName;
+            }
+            return;
+        }
+        setTimeout(()=>{
+            this.getAppName(app);
+        },500);
+    }
+
+
 
     onEditClick() {
         this.descriptionChanged = true;
@@ -855,6 +890,7 @@ export class ServiceOverviewComponent implements OnInit {
                     this.loadPlaceholders()
                     this.disp_show = true;
                     this.saveClicked = false;
+                    this.selectedApplications = []
                     let successMessage = this.toastmessage.successMessage(Response, "updateService");
                     this.toast_pop('success', "", "Data for service: " + this.service.name + " " + successMessage);
                 },
@@ -911,6 +947,12 @@ export class ServiceOverviewComponent implements OnInit {
             if (this.cdnConfigSelected !== this.cdnConfigInitial) {
                 payload["create_cloudfront_url"] = this.cdnConfigSelected;
             }
+            if(this.service.enable_api_security !== this.enableApiSecurity){
+                let obJ = {
+                    "enable_api_security" : this.enableApiSecurity
+                }
+                payload["metadata"] = obJ;
+            }
 
         }
         this.PutPayload = payload;
@@ -929,6 +971,13 @@ export class ServiceOverviewComponent implements OnInit {
         this.isEnvChanged = false;
         this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
         let payload = {};
+        console.log(this.descriptionChanged)
+        console.log(!this.isSlackAvailable) 
+        console.log(!this.disp_app_error)
+        console.log(!this.approversSaveStatus)
+        console.log(!this.isEnvChanged) 
+        console.log(!this.approvalTimeChanged)
+         console.log(this.descriptionChanged && !this.isSlackAvailable && !this.disp_app_error && !this.approversSaveStatus && !this.isEnvChanged && !this.approvalTimeChanged)
         if (this.saveClicked) {
             if (this.desc_temp != this.service.description) {
                 payload["description"] = this.desc_temp;
@@ -940,6 +989,12 @@ export class ServiceOverviewComponent implements OnInit {
                 payload["metadata"] = {
                     "providerRuntime" : this.accSelected
                 }
+            }
+            if (this.selectedApplications[0].appName != this.service.app_name){
+                payload["metadata"] = {
+                  "app_id" : this.selectedApplications[0].appID
+                }
+                payload["app_name"] = this.selectedApplications[0].appName
             }
             if(this.compareApproversArray(this.selectedApprovers) >0){
                 let localData = [];
@@ -955,11 +1010,7 @@ export class ServiceOverviewComponent implements OnInit {
                     "approvalTimeOutInMins" : this.approvalTime
                 }
             }
-            if ((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName)) {
-                payload["appName"] = this.selectApp.appName;
-                if (this.selectApp.appID)
-                    payload["appID"] = this.selectApp.appID.toLowerCase();
-            }
+
 
         }
         this.PutPayload = payload;
@@ -974,12 +1025,18 @@ export class ServiceOverviewComponent implements OnInit {
 
     onCancelClick() {
         this.showApproversList = false;
+        this.isAppTouched = false;
         this.approversSaveStatus = false;
         this.changeCounterApp = 0;
         this.approversLimitStatus = false;
         this.isInputShow = true;
+        this.enableApiSecurity = this.service.enable_api_security;
+        this.disp_app_error = false;
         this.update_payload = {};
-        this.selectedApplications = [];
+        this.selectedApplications = this.selectedApplicationLocal.slice(0);
+        if(this.selectedApplications.length>0){
+            this.showAppclInput = false;
+        }
         this.oneSelected = false;
         this.disp_show = true;
         this.disp_show2 = true;
@@ -1661,10 +1718,27 @@ export class ServiceOverviewComponent implements OnInit {
                 this.isInputShow = false;
             }
         }
+        if(this.service.enable_api_security){
+            this.enableApiSecurity= this.service.enable_api_security;
+        }
         if(this.service.approvers){
             if(Object.keys(this.service.approvers).length == Object.keys(this.selectedApprovers).length){
                 this.getApproversList();
             }
+        }
+
+        if(this.service.enable_api_security){
+
+        }
+
+        if(this.service.app_id){
+            let obj = { 
+                "appName" : this.service.appName,
+                "app_id" : this.service.app_id
+            };
+            this.selectedApplications.push(obj);
+            this.getAppName(this.service.app_id);
+            
         }
         this.loadPlaceholders();
 

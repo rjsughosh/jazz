@@ -200,13 +200,13 @@
                 <div class="flex-col">
                     <section class="pad-left0">
                         <div class="input-field-container">
-                            <div class="selected-approvers"      >
+                            <div class="selected-approvers" [ngClass]="{noApproverError : approversLimitStatus === true}">
                                 <ul (click)='focusInput($event)'>
                                     <li *ngFor="let selected of selectedApprovers;let i=index" >
                                         <div class="display-wrapper">{{selected.userId}}</div>
                                         <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                     </li>
-                                    <input #approverInput *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
+                                    <input #approverInput *ngIf="isInputShow"  (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{approversPlaceHolder}}"  autocomplete="off" id="applc1" name="applc1" type="text" class="textForm" [(ngModel)]="applc1" (ngModelChange)="onApproverChange($event)">
                                 </ul>
                              </div>    
                             <div [hidden]="!showApproversList" class="approvers-list-wrap">
@@ -228,35 +228,6 @@
       <div class='metadata-column'>
         <ul>
           <li>
-            <div class='det-label'>App Name</div>
-            <div *ngIf='disp_show || true' class='det-value'>{{service.app_name || "NA"}}</div>
-            <div *ngIf='!disp_show && false' class="det-value application-drop-wrap">
-                <div class="flex-col">
-                    <section class="pad-left0">
-                        <div class="input-field-container" >
-                            <div class="selected-approvers selected-applications">
-                                <ul (click)='focusInputApplication($event)'>
-                                    <li *ngFor="let selected of selectedApplications;let i=index"   >
-                                        {{selected.appName}}
-                                        <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
-                                    </li>
-                                    <input [class.hide]='oneSelected' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
-
-                                </ul>
-                            </div>
-                            <div [hidden]="!showApplicationList" class="approvers-list-wrap">
-                                <div class="approvers-list typeShow open">
-                                    <div class="approvers-dets" *ngFor="let app of application_arr | myfilter:applc;let m = index;" (focus)="m==focusindex" [ngClass]="{pinkfocusapplication : m==focusindex}" [ngStyle]="scrollList" >
-                                        <div  (click)="$event.stopPropagation();selectApplication(app);" class="each-app" index="{m}" [attr.appName]='app.appName' [attr.issueID]='app.issueID'>{{app.appName}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-          </li>
-          <li>
             <div class="det-label">Status</div>
             <div class="det-value">{{service.status}}</div>
           </li>
@@ -264,7 +235,7 @@
             <div class="det-label">Repository</div>
             <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
           </li> 
-           <li [ngClass]="{'slack-wrapper' : !disp_show}">
+           <li>
             <div class='det-label'>Slack</div>
             <div *ngIf='disp_show' class='det-value' [class.PlaceHolder]="slackChannel_empty">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
             <div *ngIf='!disp_show' class='det-value slack-relative'>
@@ -275,12 +246,41 @@
         
           </li>
            <p class='limitWrapper' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>
+         <li>
+            <div class='det-label'>App Name</div>
+            <div *ngIf='disp_show' class='det-value'>{{appNameVis || service.appName || "NA"}}</div>
+            <div *ngIf='!disp_show' class="det-value application-drop-wrap">
+                <div class="flex-col">
+                    <section class="pad-left0">
+                         <div class="input-field-container"  [ngClass]="{disableInputField : isapplicationDisable}" >   
+                                <div class="selected-approvers" [ngClass]="{noApproverError : disp_app_error === false && isAppTouched}">
+                                    <ul (click)='focusInputApplication($event)'>
+                                        <li *ngFor="let selected of selectedApplications;let i=index"   >
+                                            {{selected.appName}}
+                                            <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
+                                        </li>
+                                        <input [class.application-ip]='notMyApp' *ngIf="showAppclInput" (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                    </ul>
+                                </div>
+                                <div [hidden]="!showApplicationList" class="approvers-list-wrap">
+                                    <div class="approvers-list typeShow open">
+                                        <div class="approvers-dets" *ngFor="let app of application_arr | myfilter:applc;let m = index;" (focus)="m==focusindex" [ngClass]="{pinkfocusapplication : m==focusindex}" [ngStyle]="scrollList" >
+                                            <div  (click)="selectApplication(app);$event.stopPropagation();" index="{m}" [attr.appName]='app.appName' [attr.issueID]='app.issueID'>{{app.appName}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+                </div>
+            </div>
+          </li>
+           <p class='limitWrapper' *ngIf='!disp_app_error && !disp_show && isAppTouched'>Must have App Name</p>
         </ul>
       </div>
       </div>
        <div *ngIf='!disp_show' class='down-btn-wrap'>
             <div class="custom-save-btn-wrap">
-                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !disp_app_error && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
                 <a (click)="onCancelClick()">CANCEL</a>
             </div>
         </div>
@@ -300,13 +300,9 @@
         <div>Any saved changes will trigger a deployment for the service.</div>
       </div>
     </div>
-    <div *ngIf='!disp_show2' class='down-btn-wrap down-btn-wrap-advanced'>
-      <btn-jazz-primary text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
-      <a (click)='onCancelClick()'>CANCEL</a>
-    </div>
     <div class='metadata-body-advanced relative'>
       <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
-        <btn-jazz-secondary text="EDIT" [disablebtn]="true" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
+        <btn-jazz-secondary text="EDIT" [disablebtn]="!this.disp_show2" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
       </div>
       <div class='metadata-row first-row top-margin'>
         <ul class='advanced-ul'>
@@ -327,28 +323,39 @@
               </div>
             </div>
           </li>
-          <li *ngIf="service.serviceType == 'api'">
+          <li *ngIf="service.serviceType == 'api'" >
             <div class='det-label'>Security Enabled</div>
-            <div class='det-value'>{{(service.enable_api_security !== undefined)?service.enable_api_security : "NA"}}</div>
-          </li>
-          <li *ngIf="service.serviceType == 'website'">
-            <div class='det-label'>Cloudfront Enabled</div>
-            <div *ngIf='disp_show2' class="det-value">{{(service.create_cloudfront_url !== undefined)?service.create_cloudfront_url : "NA"}}</div>
+            <div *ngIf='disp_show2' class='det-value'>{{(service.enable_api_security !== undefined)?service.enable_api_security : "NA"}}</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="">
                     <section class="pad-left0">
                         <div class="input-field-container">
                             <div class="slack-checkbox custom-cb">
+                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="enableApiSecurity" (change)="enableApiSecurity = !enableApiSecurity">
+                                <label for="checkbox-vpc"></label>
+                                <div class="cb-status-dets"> Does your service require security?</div>
+                            </div>
+                        </div>
+                    </section>
+                  </div>
+              </div>
+          </li>
+          <li *ngIf="service.serviceType == 'website'">
+            <div class='det-label'>Cloudfront Enabled</div>
+            <div *ngIf='disp_show2' class="det-value">{{(service.create_cloudfront_url !== undefined)?service.create_cloudfront_url : "NA"}}</div>
+            <div *ngIf='!disp_show2' class='det-value'>
+                 <div class="input-field-container">
+                    <section class="pad-left0">
+                            <div class="slack-checkbox custom-cb">
                                 <input type="checkbox" id="checkbox-cdnconfig" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="cdnConfigSelected" (change)="cdnConfigSelected = !cdnConfigSelected">
                                 <label for="checkbox-cdnconfig"></label>
                                 <div class="cb-status-dets">Do you need CDN configured for your website?</div>
                             </div>
-                        </div>
                     </section>
                 </div>
             </div>
           </li>
-          <li *ngIf="service.serviceType != 'website'" [class.internal-access]="service.serviceType == 'function' && !disp_show2">
+          <li  *ngIf="service.serviceType != 'website'" [class.internal-access]="service.serviceType == 'function' && !disp_show2">
               <div class='det-label'>Internal Access</div>
               <div *ngIf='disp_show2' class='det-value'>{{(service.require_internal_access !== undefined)? service.require_internal_access : "NA"}}</div>
               <div *ngIf='!disp_show2' class='det-value'>
@@ -560,6 +567,12 @@
             </div>
           </li>
         </ul>
+         <div *ngIf='!disp_show2' class='down-btn-wrap down-btn-wrap-advanced'>
+          <div class="custom-save-btn-wrap">
+            <btn-jazz-primary class="save-btn-wrap" text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
+            <a (click)='onCancelClick()'>CANCEL</a>
+          </div>
+        </div>
       </div>
 
 
