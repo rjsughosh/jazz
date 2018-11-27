@@ -278,11 +278,11 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       this.getDeploymentData();
   };
 
-  getLastSuccessfulDeployment(env){
-    if (!env.deploy_arr) return "NA"
-    for (var i = 0; i < env.deploy_arr.length; i++){
-      var deployment = env.deploy_arr[i];
-      if (deployment.status == 'successful'){
+  getLastDeployment(deploymentArray, status){
+    if (!deploymentArray) return "NA"
+    for (var i = 0; i < deploymentArray.length; i++){
+      var deployment = deploymentArray[i];
+      if (deployment.status == status){
         var time = deployment.created_time.slice(0,-4);
         var now = new Date;
         var diff = moment(now).diff(moment(time),"second");
@@ -330,9 +330,11 @@ export class ServiceOverviewMultienvComponent implements OnInit {
           }
         })
 
-        this.stgEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.stgEnv);
+        this.stgEnv.lastSuccessfulDeployment = this.getLastDeployment(this.stgEnv.deploy_arr, "successful");
+        this.stgEnv.lastFailedDeployment = this.getLastDeployment(this.stgEnv.deploy_arr, "failed")
         this.stgEnv.deploymentsCountvalue = this.get24HourDeployment(this.stgEnv);
-        this.prodEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.prodEnv);
+        this.prodEnv.lastSuccessfulDeployment = this.getLastDeployment(this.prodEnv.deploy_arr, "successful");
+        this.prodEnv.lastFailedDeployment = this.getLastDeployment(this.prodEnv.deploy_arr, "failed");
         this.prodEnv.deploymentsCountvalue = this.get24HourDeployment(this.prodEnv);
       },
       err => {

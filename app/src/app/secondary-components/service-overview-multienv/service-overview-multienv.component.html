@@ -76,7 +76,7 @@
               <li class="overview-item" >
                   <div class="overview-value">{{prodEnv.costvalue || 'NA'}}</div>
                   <div class="overview-label">
-                      <div>Cost<br>(Per Day) </div>
+                      <div>Last Failed Deployment</div>
                       <!-- <div>(Per Day)</div> -->
                       <!-- {{prodEnv.costduration}} -->
                   </div>
@@ -134,9 +134,9 @@
                   </div>
               </li>
               <li class="overview-item" >
-                  <div class="overview-value">{{stgEnv.costvalue || 'NA'}}</div>
+                  <div class="overview-value">{{stgEnv.lastFailedDeployment || 'NA'}}</div>
                   <div class="overview-label">
-                      <div>(Cost<br>Per Day) </div>
+                      <div>Last Failed Deployment</div>
                       <!-- <div>(Per Day)</div> -->
                   </div>
               </li>
