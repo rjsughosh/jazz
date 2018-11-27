@@ -43,6 +43,7 @@ export class EnvOverviewSectionComponent implements OnInit {
   envResponseTrue:boolean = false;
   envResponseError:boolean = false;
   isLoading: boolean = true;
+  isDeploymentLoading: boolean = true;
   dayscommit: boolean = false;
   hourscommit: boolean = false;
   seccommit: boolean = false;
@@ -123,6 +124,7 @@ export class EnvOverviewSectionComponent implements OnInit {
     this.envResponseTrue = false;
     this.envResponseError = false;
     this.isLoading = true;
+    this.isDeploymentLoading = true;
     this.ngOnInit();
   }
 
@@ -278,8 +280,10 @@ popup(state){
     this.deploySubscription = this.http.get('/jazz/deployments' + '?domain=' + this.service.domain + '&service=' + this.service.name + "&environment=" + this.env).subscribe(
       (response) => {
         if(response.data == (undefined || '')){
+          this.isDeploymentLoading = false;
           return
         }else if (response.data.deployments){
+          this.isDeploymentLoading = false;
           this.deployments = response.data;
           this.deployments.deploymentsCountvalue = this.get24HourDeployment(this.deployments.deployments);
           this.deployments.lastSuccessfulDeployment = this.getLastDeployment(this.deployments.deployments, 'successful');
@@ -296,6 +300,7 @@ popup(state){
         this.envResponseError = true;
         this.envResponseEmpty = false;
         this.isLoading = false;
+        this.isDeploymentLoading = false;
         var payload ={
           "service" : this.service.name,
           "domain" : this.service.domain,         }

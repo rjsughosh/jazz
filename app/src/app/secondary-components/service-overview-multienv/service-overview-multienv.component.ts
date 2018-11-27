@@ -246,7 +246,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     if (this.service == undefined) { return }
     this.http.get('/jazz/environments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       response => {
-        this.isenvLoading = false;
+        //this.isenvLoading = false;
         this.environ_arr = response.data.environment;
         if (this.environ_arr != undefined)
           if (this.environ_arr.length == 0 || response.data == '') {
@@ -315,7 +315,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     if (this.service == undefined) { return }
     this.http.get('/jazz/deployments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       response => {
-        //this.isenvLoading = false;
+        this.isenvLoading = false;
         //this.environ_arr = response.data.environment;
 
         this.deployments_arr = response.data.deployments;
@@ -330,9 +330,14 @@ export class ServiceOverviewMultienvComponent implements OnInit {
           }
         })
 
+        this.Environments.map((item)=>{
+          item.status = item.status.replace('_', ' ');
+        })
+        this.stgEnv.status = this.stgEnv.status.replace('_', ' ');
         this.stgEnv.lastSuccessfulDeployment = this.getLastDeployment(this.stgEnv.deploy_arr, "successful");
         this.stgEnv.lastFailedDeployment = this.getLastDeployment(this.stgEnv.deploy_arr, "failed")
         this.stgEnv.deploymentsCountvalue = this.get24HourDeployment(this.stgEnv);
+        this.prodEnv.status = this.prodEnv.status.replace('_', ' ');
         this.prodEnv.lastSuccessfulDeployment = this.getLastDeployment(this.prodEnv.deploy_arr, "successful");
         this.prodEnv.lastFailedDeployment = this.getLastDeployment(this.prodEnv.deploy_arr, "failed");
         this.prodEnv.deploymentsCountvalue = this.get24HourDeployment(this.prodEnv);
@@ -382,7 +387,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     var arrEnv = data.data.environment
     if (environment.multi_env) {
       for (var i = 0; i < arrEnv.length; i++) {
-        arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
+        //arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
         if (arrEnv[i].logical_id == 'prod')
           this.prodEnv = arrEnv[i];
         else
@@ -391,7 +396,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     }
     else {
       for (var i = 0; i < arrEnv.length; i++) {
-        arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
+        //arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
         if (arrEnv[i].logical_id == 'prod')
           this.prodEnv = arrEnv[i];
         else

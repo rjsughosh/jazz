@@ -310,6 +310,9 @@
 		</div>
 	</div>
 	<div class="stage-wrp right-item" >
+		<div class="loading-row" [class.show]="isDeploymentLoading">
+			<div class="loading-circle"></div>
+		</div>
 		<div class="stage-title">Deployments</div>
 		<div class="stage-overview">
 			<ul class="service-overview">
@@ -339,9 +342,24 @@
 					<div class="overview-label"></div>
 				</li>
 				<li class="overview-item bottom-right">
-					<div class="overview-value">
-						<!-- <img src='assets\images\icons\icon-good@2x.png' height='30px' title='Success' > -->
-						{{deployments.lastDeploymentStatus || 'NA'}}
+					<div class="overview-value" [ngSwitch]="deployments.lastDeploymentStatus">
+						<!-- {{deployments.lastDeploymentStatus || 'NA'}} -->
+						<span class='icon-icon-good' title='{{deployments.lastDeploymentStatus}}' *ngSwitchCase='"successful"'>
+
+						<span class="path1"></span><span class="path2"></span>
+
+						</span>
+						<span class='icon-icon-good' title='{{deployments.lastDeploymentStatus}}' *ngSwitchCase='"active"'>
+
+								<span class="path1"></span><span class="path2"></span>
+
+						</span>
+
+						<span title='{{deployments.lastDeploymentStatus}} '*ngSwitchCase='"failed"' class='icon-icon-bad' >
+								<span class="path1"></span><span class="path2"></span>
+						</span>
+						<span title='{{deployments.lastDeploymentStatus}}' class='icon-icon-inactive' *ngSwitchDefault ></span>
+						<span title='{{deployments.lastDeploymentStatus}}' class='icon-In-Progress' *ngSwitchCase='"started"'></span>
 					</div>
 					<div class="overview-label">
 						Last Deployment Status

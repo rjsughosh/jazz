@@ -74,7 +74,7 @@
                   </div>
               </li>
               <li class="overview-item" >
-                  <div class="overview-value">{{prodEnv.costvalue || 'NA'}}</div>
+                  <div class="overview-value">{{prodEnv.lastFailedDeployment || 'NA'}}</div>
                   <div class="overview-label">
                       <div>Last Failed Deployment</div>
                       <!-- <div>(Per Day)</div> -->
@@ -149,7 +149,7 @@
 
 
 
-<div *ngIf="!ErrEnv" class="service-overview-wrap relative row" >
+<div *ngIf="!ErrEnv && !isenvLoading" class="service-overview-wrap relative row" >
   <div class='eachBranch col-md-2 col-sm-5' *ngFor='let item of Environments'  (click)='stageClicked(item.logical_id)'>
       <div *ngIf='noSecEnv' class='empty-row'>No Environments Available</div>
 
