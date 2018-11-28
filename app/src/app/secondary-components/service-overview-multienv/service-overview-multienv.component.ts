@@ -284,11 +284,14 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       var deployment = deploymentArray[i];
       if (deployment.status == status){
         var time = deployment.created_time.slice(0,-4);
+        // time format is UTC, need to convert to local time
+        time = moment.utc(time).local();
+        // get local time
         var now = new Date;
         var diff = moment(now).diff(moment(time),"second");
         if (diff <= 24 * 60 * 60) {
           // time format is UTC, need to convert to local time
-          return moment.utc(time).local().fromNow();
+          return moment(time).fromNow();
         } else {
           return moment(time).format('ll');
         }
@@ -301,6 +304,9 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     if (!env.deploy_arr) return 'NA'
     for (var i = 0; i < env.deploy_arr.length; i++){
       var time = env.deploy_arr[i].created_time.slice(0,-4);
+      // time format is UTC, need to convert to local time
+      time = moment.utc(time).local();
+      // get local time
       var now = new Date;
       var diff = moment(now).diff(moment(time),"second");
       if (diff <= 24 * 60 * 60) {

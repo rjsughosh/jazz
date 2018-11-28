@@ -244,6 +244,9 @@ popup(state){
     if (!deploymentsArray) return 'NA'
     for (var i = 0; i < deploymentsArray.length; i++){
       var time = deploymentsArray[i].created_time.slice(0,-4);
+      // time format is UTC, need to convert to local time
+      time = moment.utc(time).local();
+      // get local time
       var now = new Date;
       var diff = moment(now).diff(moment(time),"second");
       if (diff <= 24 * 60 * 60) {
@@ -260,11 +263,13 @@ popup(state){
       var deployment = deploymentArray[i];
       if (deployment.status == status){
         var time = deployment.created_time.slice(0,-4);
+        // time format is UTC, need to convert to local time
+        time = moment.utc(time).local();
+        // get local time
         var now = new Date;
         var diff = moment(now).diff(moment(time),"second");
         if (diff <= 24 * 60 * 60) {
-          // time format is UTC, need to convert to local time
-          return moment.utc(time).local().fromNow();
+          return moment(time).fromNow();
         } else {
           return moment(time).format('ll');
         }
@@ -293,26 +298,11 @@ popup(state){
         }
       },
       (error) => {
-        if( error.status == "404"){
-          this.router.navigateByUrl('404');
-        }
         this.envResponseTrue = false;
         this.envResponseError = true;
         this.envResponseEmpty = false;
         this.isLoading = false;
         this.isDeploymentLoading = false;
-        var payload ={
-          "service" : this.service.name,
-          "domain" : this.service.domain,         }
-        this.getTime();
-        this.errorURL = window.location.href;
-        this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environment/"+this.env;
-        this.errorRequest = payload;
-        this.errorUser = this.authenticationservice.getUserId();
-        this.errorResponse = JSON.parse(error._body);
-
-      // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
-            // this.popToast('error', 'Oops!', errorMessage);
     })
   }
 

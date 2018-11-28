@@ -95,27 +95,27 @@
           <ul class="service-overview">
               <li class="overview-item">
                       <div class="overview-value" [ngSwitch]="stgEnv.status" >
-                              <!-- <div class='background-icon' [class.success]='prodEnv.status=="deployment completed"' [class.inprogress]='prodEnv.status=="deployment failed"' [class.failed]='prodEnv.status=="deployment started" || prodEnv.status=="active"'> -->
-                                  <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"deployment completed"'>
+                        <!-- <div class='background-icon' [class.success]='prodEnv.status=="deployment completed"' [class.inprogress]='prodEnv.status=="deployment failed"' [class.failed]='prodEnv.status=="deployment started" || prodEnv.status=="active"'> -->
+                            <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"deployment completed"'>
 
-                                          <span class="path1"></span><span class="path2"></span>
+                                    <span class="path1"></span><span class="path2"></span>
 
-                                  </span>
-                                  <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"active"'>
+                            </span>
+                            <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"active"'>
 
-                                          <span class="path1"></span><span class="path2"></span>
+                                    <span class="path1"></span><span class="path2"></span>
 
-                                  </span>
+                            </span>
 
-                                  <span title='{{stgEnv.status}} '*ngSwitchCase='"deployment failed"' class='icon-icon-bad' >
-                                          <span class="path1"></span><span class="path2"></span>
-                                  </span>
-                                  <span title='{{stgEnv.status}}' class='icon-icon-inactive' *ngSwitchDefault ></span>
-                                  <span title='{{stgEnv.status}}' class='icon-In-Progress' *ngSwitchCase='"deployment started"'></span>
+                            <span title='{{stgEnv.status}} '*ngSwitchCase='"deployment failed"' class='icon-icon-bad' >
+                                    <span class="path1"></span><span class="path2"></span>
+                            </span>
+                            <span title='{{stgEnv.status}}' class='icon-icon-inactive' *ngSwitchDefault ></span>
+                            <span title='{{stgEnv.status}}' class='icon-In-Progress' *ngSwitchCase='"deployment started"'></span>
 
 
-                              <!-- </div> -->
-                          </div>
+                        <!-- </div> -->
+                      </div>
                   <div class="overview-label">Deployment<br>Status</div>
               </li>
               <li class="overview-item dep">
