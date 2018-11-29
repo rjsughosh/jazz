@@ -4,12 +4,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService} from 'angular2-toaster';
 import { DataService } from "../data-service/data.service";
 import { DataCacheService , AuthenticationService } from '../../core/services/index';
+import { environmentDataService } from '../../core/services/environments.service';  
+
 import * as moment from 'moment';
 
 @Component({
   selector: 'env-overview-section',
   templateUrl: './env-overview-section.component.html',
-  providers: [RequestService,MessageService,DataService],
+  providers: [RequestService,MessageService,DataService, environmentDataService],
   styleUrls: ['./env-overview-section.component.scss']
 })
 export class EnvOverviewSectionComponent implements OnInit {
@@ -111,7 +113,7 @@ export class EnvOverviewSectionComponent implements OnInit {
     private toasterService: ToasterService,
     private messageservice:MessageService,
     private data: DataService,
-
+    private environmentDataService: environmentDataService,
     private authenticationservice: AuthenticationService ,
   ) {
     this.http = request;
@@ -306,71 +308,54 @@ popup(state){
     })
   }
 
-  callServiceEnv() {
-  if ( this.subscription ) {
-    this.subscription.unsubscribe();
+  getEnvironment(response){
+    if (response) {
+      if(response.data == (undefined || '')){
+        this.envResponseEmpty = true; 
+        this.isLoading = false;
+      }else{
+        // response.data.environment[0].status='deletion_started'
+        this.onload.emit(response.data.environment[0].endpoint);
+        this.envLoad.emit(response.data);
+        this.environment=response.data.environment[0];
+        this.cache.set('currentEnv',this.environment);
+        this.status_val = parseInt(status[this.environment.status]);
+
+        var deployment_status = ["deployment_completed","active","deployment_started" ,"pending_approval","deployment_failed","inactive","deletion_started","deletion_failed","archived"]
+
+        this.envstatus = deployment_status[this.status_val].replace("_"," ");
+
+        var envResponse = response.data.environment[0];
+        this.friendlyName = envResponse.friendly_name
+        this.branchname = envResponse.physical_id;
+        this.lastCommitted = envResponse.last_updated;
+        this.frndload.emit(this.friendlyName);
+
+
+        this.formatLastCommit();               
+        
+        this.envResponseTrue = true;
+        this.envResponseEmpty = false;
+        this.isLoading = false;
+      }
+    } else {
+      // if( error.status == "404"){
+      //   this.router.navigateByUrl('404');
+      // }
+      this.envResponseTrue = false;
+      this.envResponseError = true;
+      this.envResponseEmpty = false;
+      this.isLoading = false;
+    }
   }
 
-  this.onload.emit(this.environment.endpoint);
-    this.subscription = this.http.get('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
-      // this.http.get('/jazz/environments/prd?domain=jazz-testing&service=test-create').subscribe(
-        (response) => {
+  callServiceEnv() {
+    if ( this.subscription ) {
+      this.subscription.unsubscribe();
+    }
 
-          if(response.data == (undefined || '')){
-           
-            this.envResponseEmpty = true; 
-            this.isLoading = false;
-          }else{
-            // response.data.environment[0].status='deletion_started'
-            this.onload.emit(response.data.environment[0].endpoint);
-            this.envLoad.emit(response.data);
-            this.environment=response.data.environment[0];
-            this.cache.set('currentEnv',this.environment);
-            this.status_val = parseInt(status[this.environment.status]);
-
-            var deployment_status = ["deployment_completed","active","deployment_started" ,"pending_approval","deployment_failed","inactive","deletion_started","deletion_failed","archived"]
-
-            this.envstatus = deployment_status[this.status_val].replace("_"," ");
-
-            // if(this.status_val <= 3) this.envstatus='Active';
-            // else if(this.status_val == 4 )this.envstatus='In Progress';
-            // else if(this.status_val > 4 )this.envstatus='Inactive';
-
-            var envResponse = response.data.environment[0];
-            this.friendlyName = envResponse.friendly_name
-            this.branchname = envResponse.physical_id;
-            this.lastCommitted = envResponse.last_updated;
-            this.frndload.emit(this.friendlyName);
-
-
-            this.formatLastCommit();               
-            
-            this.envResponseTrue = true;
-            this.envResponseEmpty = false;
-            this.isLoading = false;
-          }
-        },
-        (error) => {
-          if( error.status == "404"){
-            this.router.navigateByUrl('404');
-          }
-          this.envResponseTrue = false;
-          this.envResponseError = true;
-          this.envResponseEmpty = false;
-          this.isLoading = false;
-          var payload ={
-            "service" : this.service.name,
-            "domain" : this.service.domain,         }
-          this.getTime();
-          this.errorURL = window.location.href;
-          this.errorAPI = "https://cloud-api.corporate.t-mobile.com/api/jazz/environment/"+this.env;
-          this.errorRequest = payload;
-          this.errorUser = this.authenticationservice.getUserId();
-          this.errorResponse = JSON.parse(error._body);
-  
-        // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
-              // this.popToast('error', 'Oops!', errorMessage);
-      })
+    this.onload.emit(this.environment.endpoint);
+    this.environmentDataService.getEnvironment(this.service.domain, this.service.name, this.env);
     };
   
     getTime() {
@@ -507,7 +492,8 @@ popup(state){
   ngOnInit() {  
     if(this.service.domain != undefined)  
       this.callServiceEnv();
-      this.data.currentMessage.subscribe(message => this.message = message)
+      this.data.currentMessage.subscribe(message => this.message = message);
+      this.environmentDataService.environment.subscribe((res) => {this.getEnvironment(res)});
   }
 
   ngOnChanges(x:any) {

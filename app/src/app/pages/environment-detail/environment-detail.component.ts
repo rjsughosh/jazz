@@ -4,6 +4,7 @@ import {ToasterService} from 'angular2-toaster';
 import {Router, ActivatedRoute} from '@angular/router';
 import {EnvOverviewSectionComponent} from './../environment-overview/env-overview-section.component';
 import {DataService} from "../data-service/data.service";
+import { environmentDataService } from '../../core/services/environments.service';  
 import {environment} from './../../../environments/environment';
 //import {environment as env_internal} from './../../../environments/environment.internal';
 import {environment as env_oss} from './../../../environments/environment.oss';
@@ -13,7 +14,7 @@ import {EnvDeploymentsSectionComponent} from './../environment-deployment/env-de
 @Component({
   selector: 'environment-detail',
   templateUrl: './environment-detail.component.html',
-  providers: [RequestService, MessageService, DataService],
+  providers: [RequestService, MessageService, DataService, environmentDataService],
   styleUrls: ['./environment-detail.component.scss']
 })
 export class EnvironmentDetailComponent implements OnInit {
@@ -62,7 +63,8 @@ export class EnvironmentDetailComponent implements OnInit {
     private http: RequestService,
     private cache: DataCacheService,
     private router: Router,
-    private data: DataService
+    private data: DataService,
+    private environmentDataService: environmentDataService
   ) {}
 
   refreshTab() {
@@ -151,6 +153,12 @@ export class EnvironmentDetailComponent implements OnInit {
     this.selectedTab = i;
   };
 
+  getEnvironment(res){
+    if (res.data && res.data.environment && res.data.environment[0]){
+      var env = res.data.environment[0];
+      this.friendly_name = env.physical_id || env.logical_id;
+    }   
+  }
 
   fetchService(id: string) {
     this.isLoadingService = true;
@@ -166,6 +174,7 @@ export class EnvironmentDetailComponent implements OnInit {
         this.cache.set(id, this.service);
         this.onDataFetched(this.service);
         this.envoverview.notify(this.service);
+        this.environmentDataService.getEnvironment(this.service.domain, this.service.name, this.envSelected);
       },
       err => {
         this.isLoadingService = false;
@@ -249,8 +258,7 @@ export class EnvironmentDetailComponent implements OnInit {
       this.serviceId = id;
       this.envSelected = params['env'];
       this.fetchService(id);
-      this.friendly_name = this.envSelected;
-
+      this.environmentDataService.environment.subscribe((res) => {this.getEnvironment(res)});
     });
     this.breadcrumbs = [
       {

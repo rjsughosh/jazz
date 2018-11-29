@@ -690,7 +690,7 @@ export class ServiceOverviewComponent implements OnInit {
                     if(this.environ_arr[i].friendly_name != undefined){
                         this.friendlist[k++]=this.environ_arr[i].friendly_name;   
                     }else{
-                        this.friendlist[k++]=this.environ_arr[i].logical_id;
+                        this.friendlist[k++]=this.environ_arr[i].physical_id;
                     }
                             
                     j++;
@@ -756,14 +756,6 @@ export class ServiceOverviewComponent implements OnInit {
         // this.http.get('https://cloud-api.corporate.t-mobile.com/api/jazz/environments?domain=jazztesting&service=test-multienv').subscribe(            
         this.http.get('/jazz/environments?domain='+this.service.domain+'&service='+this.service.name).subscribe(
             response => {
-                // var spoon = response.data.environment;
-                // console.log("spoon == ", spoon[1])
-                // for(var i=0 ; i < spoon.length ; i++ ){
-                //    if(spoon[i].friendly_name != undefined){
-                //        this.friendly_name = spoon[i].friendly_name;
-                //    }
-                // }
-                // this.friendly_name = response
                 this.isenvLoading=false;
                   this.environ_arr=response.data.environment;
                   if(this.environ_arr!=undefined)    
@@ -772,12 +764,6 @@ export class ServiceOverviewComponent implements OnInit {
                     }             
                   this.ErrEnv=false;
                   
-                //   var obj1={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"dev"}
-                //   var obj2={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"feature"}
-                //   var obj3={"service":"test-create","domain":"jazz-testing","last_updated":"2017-10-16T08:02:13:210","status":"active","created_by":"aanand12","physical_id":"master","created":"2017-10-16T08:02:13:210","id":"f7635ea9-26ad-0661-4e52-14fd48421e22","logical_id":"stg"}
-                //   this.environ_arr[1]=obj1;
-                //   this.environ_arr[2]=obj2;
-                //   this.environ_arr[3]=obj3;
                   this.modifyEnvArr();
                   
               },
