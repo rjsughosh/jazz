@@ -18,6 +18,14 @@ import {
         this.http = request;
     }
 
+    clearEnvironmentCache(serviceDomain, serviceName, environment) {
+        this.cache.clear(serviceDomain + '/' + serviceName + '/' + environment);
+    }
+
+    clearEnvironmentsCache(serviceDomain, serviceName) {
+        this.cache.clear(serviceDomain + '/' + serviceName);
+    }
+
     getEnvironments(serviceDomain, serviceName) { 
         // get env list from cache
         var envs = this.cache.get(serviceDomain + '/' + serviceName);

@@ -127,6 +127,7 @@ export class EnvOverviewSectionComponent implements OnInit {
     this.envResponseError = false;
     this.isLoading = true;
     this.isDeploymentLoading = true;
+    this.clearEnvCache();
     this.ngOnInit();
   }
 
@@ -159,13 +160,14 @@ popup(state){
     var errMsgBody;
 
     if(this.friendlyChanged){
+      // clear cache and fetch env again
+      this.clearEnvCache();
       this.put_payload.friendly_name= this.tempFriendlyName;
       this.http.put('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name,this.put_payload)
             .subscribe(
                 (Response)=>{
                   let successMessage = this.toastmessage.successMessage(Response,"updateEnv");
                   this.toast_pop('success',"",successMessage);
-
                   this.callServiceEnv();
                   this.tempFriendlyName='';
                 },
@@ -188,9 +190,13 @@ popup(state){
               this.envResponseTrue=false;
               this.friendlyChanged=false;
               
-    }
-    
+    } 
   }
+
+  clearEnvCache(){
+    this.environmentDataService.clearEnvironmentCache(this.service.domain, this.service.name, this.env);
+  }
+
   onCancelClick(){
     this.showCancel=false;
     this.saveBtn=false;
@@ -350,13 +356,14 @@ popup(state){
   }
 
   callServiceEnv() {
-    if ( this.subscription ) {
-      this.subscription.unsubscribe();
+    var env = this.cache.get(this.service.domain + '/' + this.service.name + '/' + this.env);
+    if (env) {
+      this.onload.emit(this.environment.endpoint);
+      this.getEnvironment(env);
+      return
     }
-
-    this.onload.emit(this.environment.endpoint);
     this.environmentDataService.getEnvironment(this.service.domain, this.service.name, this.env);
-    };
+  };
   
     getTime() {
       var now = new Date();
@@ -491,9 +498,11 @@ popup(state){
 }
   ngOnInit() {  
     if(this.service.domain != undefined)  
-      this.callServiceEnv();
       this.data.currentMessage.subscribe(message => this.message = message);
-      this.environmentDataService.environment.subscribe((res) => {this.getEnvironment(res)});
+      this.environmentDataService.environment.subscribe((res) => {
+        this.getEnvironment(res)
+      });
+      this.callServiceEnv();
   }
 
   ngOnChanges(x:any) {

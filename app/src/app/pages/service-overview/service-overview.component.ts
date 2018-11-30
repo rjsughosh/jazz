@@ -794,14 +794,16 @@ export class ServiceOverviewComponent implements OnInit {
     
                 // let errorMessage=this.toastmessage.errorMessage(err,"serviceCost");
                 // this.popToast('error', 'Oops!', errorMessage);
-            })
-        };
-        getTime() {
-            var now = new Date();
-            this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
-            + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
-            // console.log(this.errorTime);
-          }
+            }
+        )
+    };
+
+    getTime() {
+        var now = new Date();
+        this.errorTime = ((now.getMonth() + 1) + '/' + (now.getDate()) + '/' + now.getFullYear() + " " + now.getHours() + ':'
+        + ((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' + ((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
+        // console.log(this.errorTime);
+    }
     
         feedbackRes:boolean=false;
         openModal:boolean=false;
