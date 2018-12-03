@@ -363,8 +363,8 @@
                     <section class="pad-left0">
                         <div class="input-field-container">
                             <div class="slack-checkbox custom-cb">
-                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected" (change)="vpcSelected = !vpcSelected">
-                                <label for="checkbox-vpc"></label>
+                                <input type="checkbox" id="checkbox-iA" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="requireInternalAccess" (change)="requireInternalAccess = !internalAccess">
+                                <label for="checkbox-iA"></label>
                                 <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
                             </div>
                         </div>
@@ -413,7 +413,7 @@
                               <label for="fixedRate"><span></span><span class="background"></span>Fixed Rate of</label>
                           </div>
                       </section>
-                      <section class="   pad-left0">
+                      <section class="pad-left0">
                           <div class="radio-container">
                               <input type="radio" name="EventSchedule" id="cron" [value]="cron" [checked]="rateExpression.type == 'cron'" (click)="onEventScheduleChange('cron')">
                               <label for="cron"><span></span><span class="background"></span>Cron Expression</label>
@@ -574,11 +574,6 @@
           </div>
         </div>
       </div>
-
-
-
-
-
     </div>
   </details>
 

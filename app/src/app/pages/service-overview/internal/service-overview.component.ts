@@ -144,7 +144,7 @@ export class ServiceOverviewComponent implements OnInit {
     eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
     viewMode: boolean = true;
     cronFieldValidity: any;
-    vpcSelected: boolean = this.service.require_internal_access;
+    requireInternalAccess: boolean = this.service.require_internal_access;
     vpcInitial: boolean = this.service.require_internal_access;
     publicSelected: boolean = this.service.is_public_endpoint;
     publicInitial: boolean = this.service.is_public_endpoint;
@@ -447,8 +447,10 @@ export class ServiceOverviewComponent implements OnInit {
 
     onEventScheduleChange(val) {
         this.rateExpression.type = val;
+        this.eventExpression.type = "awsEventsNone";
     }
     onAWSEventChange(val) {
+        this.rateExpression.type = "none";
         this.eventExpression.type = val;
     }
     public focusDynamo = new EventEmitter<boolean>();
@@ -782,7 +784,7 @@ export class ServiceOverviewComponent implements OnInit {
         return;
       }
 
-
+      //edit
     generateExpression(rateExpression) {
         if (this.rateExpression !== undefined) {
             this.rateExpression.error = undefined;
@@ -833,23 +835,32 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     getAppName(app){
-        this.selectedApplicationLocal = [];
-        if(this.application_arr.length>200){
-            this.isapplicationDisable = false;
-            this.showAppclInput = false;
-            this.selectedApplications.pop();
-            if(this.application_arr.length > 100){
-            let localRef = this.application_arr.filter((a)=> a.appID==app);
-            this.selectedApplications.push(localRef[0]);
-            localRef = localRef.slice(0);
-            this.selectedApplicationLocal.push(localRef[0]);
-            this.appNameVis = localRef[0].appName;
+        if(app){
+            this.selectedApplicationLocal = [];
+            //checking the complete app list arrived 
+            if(this.application_arr.length>200){
+                this.isapplicationDisable = false;
+                this.showAppclInput = false;
+                this.selectedApplications.pop();
+                if(this.application_arr.length > 100){
+                let localRef = this.application_arr.filter((a)=> (a.appID==app.app_id || a.issueID==app.app_id));
+                if(localRef.appID == app.app_id){
+                    localRef = localRef.slice(0);
+                }
+                if(localRef.length==0){
+                    localRef[0]= app;
+                }
+                this.selectedApplications.push(localRef[0]);
+                this.selectedApplicationLocal.push(localRef[0]);
+                this.appNameVis = localRef[0].appName;
+                return;
+                }
             }
-            return;
+            //getting the app list
+            setTimeout(()=>{
+                this.getAppName(app);
+            },500);
         }
-        setTimeout(()=>{
-            this.getAppName(app);
-        },500);
     }
 
 
@@ -911,6 +922,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.saveClicked = false;
         this.advancedSaveClicked = true;
         let payload = {};
+        let obJ = {};
 
         if (this.advancedSaveClicked) {
             if (this.rateExpression.type != 'none') {
@@ -938,8 +950,8 @@ export class ServiceOverviewComponent implements OnInit {
                 payload["events"] = [];
                 payload["events"].push(event);
             }
-            if (this.vpcInitial !== this.vpcSelected) {
-                payload["require_internal_access"] = this.vpcSelected;
+            if (this.requireInternalAccess !== this.service.require_internal_access) {
+                obJ["require_internal_access"] = this.requireInternalAccess;
             }
             if (this.publicSelected !== this.publicInitial) {
                 payload["is_public_endpoint"] = this.publicSelected;
@@ -948,13 +960,11 @@ export class ServiceOverviewComponent implements OnInit {
                 payload["create_cloudfront_url"] = this.cdnConfigSelected;
             }
             if(this.service.enable_api_security !== this.enableApiSecurity){
-                let obJ = {
-                    "enable_api_security" : this.enableApiSecurity
-                }
-                payload["metadata"] = obJ;
+                obJ["enable_api_security"] = this.enableApiSecurity;
             }
 
         }
+        payload["metadata"] = obJ;
         this.PutPayload = payload;
         if (Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
     }
@@ -971,13 +981,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.isEnvChanged = false;
         this.approvalTime  = this.approvalHours*60 + this.approvalMinutes;
         let payload = {};
-        console.log(this.descriptionChanged)
-        console.log(!this.isSlackAvailable) 
-        console.log(!this.disp_app_error)
-        console.log(!this.approversSaveStatus)
-        console.log(!this.isEnvChanged) 
-        console.log(!this.approvalTimeChanged)
-         console.log(this.descriptionChanged && !this.isSlackAvailable && !this.disp_app_error && !this.approversSaveStatus && !this.isEnvChanged && !this.approvalTimeChanged)
         if (this.saveClicked) {
             if (this.desc_temp != this.service.description) {
                 payload["description"] = this.desc_temp;
@@ -1031,6 +1034,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.approversLimitStatus = false;
         this.isInputShow = true;
         this.enableApiSecurity = this.service.enable_api_security;
+        this.requireInternalAccess = this.service.require_internal_access;
         this.disp_app_error = false;
         this.update_payload = {};
         this.selectedApplications = this.selectedApplicationLocal.slice(0);
@@ -1733,11 +1737,11 @@ export class ServiceOverviewComponent implements OnInit {
 
         if(this.service.app_id){
             let obj = { 
-                "appName" : this.service.appName,
+                "appName" : this.service.appName || 'NA',
                 "app_id" : this.service.app_id
             };
             this.selectedApplications.push(obj);
-            this.getAppName(this.service.app_id);
+            this.getAppName(obj);
             
         }
         this.loadPlaceholders();
@@ -1748,7 +1752,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.publicInitial = this.service.is_public_endpoint;
         this.cdnConfigInitial = this.service.create_cloudfront_url;
         this.vpcInitial = this.service.require_internal_access;
-        this.vpcSelected = this.service.require_internal_access;
+        this.requireInternalAccess = this.service.require_internal_access;
 
         // this.selectedApplications[0] = this.service.app_name;
         if (!this.internal_build) {
@@ -1763,11 +1767,9 @@ export class ServiceOverviewComponent implements OnInit {
             if (this.islink) {
                 if (this.internal_build) {
                     this.bitbucketRepo = "View on Bitbucket";
-
                 }
                 else {
                     this.bitbucketRepo = "Git Repo";
-
                 }
                 // this.bitbucketRepo = "View on Bitbucket";
                 this.repositorylink = this.service.repository;
