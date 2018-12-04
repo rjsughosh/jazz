@@ -690,7 +690,7 @@ export class ServiceOverviewComponent implements OnInit {
                     if(this.environ_arr[i].friendly_name != undefined){
                         this.friendlist[k++]=this.environ_arr[i].friendly_name;   
                     }else{
-                        this.friendlist[k++]=this.environ_arr[i].physical_id;
+                        this.friendlist[k++]=this.environ_arr[i].physical_id || this.environ_arr[i].logical_id;
                     }
                             
                     j++;

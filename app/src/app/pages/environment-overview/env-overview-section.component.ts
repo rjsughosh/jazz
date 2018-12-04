@@ -497,12 +497,13 @@ popup(state){
   }
 }
   ngOnInit() {  
-    if(this.service.domain != undefined)  
+    if(this.service.domain != undefined){
       this.data.currentMessage.subscribe(message => this.message = message);
-      this.environmentDataService.environment.subscribe((res) => {
-        this.getEnvironment(res)
-      });
       this.callServiceEnv();
+    }   
+    this.environmentDataService.environment.subscribe((res) => {
+      this.getEnvironment(res)
+    });  
   }
 
   ngOnChanges(x:any) {
@@ -523,7 +524,6 @@ notify(services){
  
   if(this.service.domain != undefined)
       {
-        
         this.callServiceEnv();
       }
 }

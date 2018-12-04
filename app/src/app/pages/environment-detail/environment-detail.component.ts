@@ -67,9 +67,9 @@ export class EnvironmentDetailComponent implements OnInit {
     private environmentDataService: environmentDataService
   ) {}
 
-  refreshTab() {
-    this.selectedTabComponent.refresh();
-  }
+  // refreshTab() {
+  //   this.selectedTabComponent.refresh();
+  // }
 
   onSelectedDr(selected) {
     this.selectedTab = selected;
