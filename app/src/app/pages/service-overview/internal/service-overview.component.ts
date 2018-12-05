@@ -793,7 +793,6 @@ export class ServiceOverviewComponent implements OnInit {
         return;
       }
 
-      //edit
     generateExpression(rateExpression) {
         if (this.rateExpression !== undefined) {
             this.rateExpression.error = undefined;
