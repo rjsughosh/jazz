@@ -253,7 +253,7 @@ export class ServiceDetailComponent implements OnInit {
     }
   }
 
-  getapplications() {
+  getApplications() {
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt=' + this.start_at)
       .subscribe((res: Response) => {
         this.applications = res;
@@ -262,7 +262,7 @@ export class ServiceDetailComponent implements OnInit {
         this.start_at = this.start_at + 100;
         if (this.applications.data.total > this.start_at) {
 
-          this.getapplications();
+          this.getApplications();
         }
         else {
 
@@ -517,7 +517,7 @@ export class ServiceDetailComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.getapplications();
+    this.getApplications();
     this.breadcrumbs = [
       {
         'name': this.service['name'],
