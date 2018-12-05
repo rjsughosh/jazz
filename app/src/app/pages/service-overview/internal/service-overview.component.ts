@@ -627,9 +627,9 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     focusInputApplication(event) {
-    let applclocal1 =  document.getElementById('applc')
-    if(applclocal1)
-        applclocal1.focus();
+        let applclocal1 =  document.getElementById('applc')
+        if(applclocal1)
+            applclocal1.focus();
     }
     keypress(hash) {
         if (hash.key == 'ArrowDown') {
