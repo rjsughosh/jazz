@@ -177,6 +177,7 @@ export class CreateServiceComponent implements OnInit {
   public focusDynamo = new EventEmitter<boolean>();
   public focusKinesis = new EventEmitter<boolean>();
   public focusS3 = new EventEmitter<boolean>();
+  public focusSQS = new EventEmitter<boolean>();
 
   chkDynamodb() {
     this.focusDynamo.emit(true);
@@ -192,6 +193,11 @@ export class CreateServiceComponent implements OnInit {
     this.focusS3.emit(true);
     return this.eventExpression.type === 's3';
   }
+
+  chkSQS() {
+    this.focusSQS.emit(true);
+    return this.eventExpression.type === 'sqs';
+  } 
 
   // function for opening and closing create service popup
   closeCreateService(serviceRequest) {

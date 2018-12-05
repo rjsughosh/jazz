@@ -459,6 +459,7 @@ export class ServiceOverviewComponent implements OnInit {
     public focusDynamo = new EventEmitter<boolean>();
     public focusKinesis = new EventEmitter<boolean>();
     public focusS3 = new EventEmitter<boolean>();
+    public focusSQS = new EventEmitter<boolean>();
 
     chkDynamodb() {
         this.focusDynamo.emit(true);
@@ -473,6 +474,11 @@ export class ServiceOverviewComponent implements OnInit {
     chkS3() {
         this.focusS3.emit(true);
         return this.eventExpression.type === 's3';
+    }
+
+    chkSQS() {
+        this.focusSQS.emit(true);
+        return this.eventExpression.type === 'sqs';
     }
 
     openLink(link) {
@@ -952,6 +958,9 @@ export class ServiceOverviewComponent implements OnInit {
                 } else if (this.eventExpression.type === "s3") {
                     event["source"] = this.eventExpression.S3BucketName;
                     event["action"] = "s3:ObjectCreated:*";
+                } else if (this.eventExpression.type === "sqs") {
+                    event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+                    event["action"] = "PutItem";
                 }
                 let locEventArr = [];
                 locEventArr.push(event);

@@ -1682,10 +1682,13 @@ input{
 .s3-fields.arrow_box:after {
   left: 61%;
 }
+.sqs-fields.arrow_box:after{
+    left:calc( 62% - 18px );
+}
 .application-drop-wrap{
   width: calc( 100% - 11rem );
 
-  .each-app{
+.each-app{
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

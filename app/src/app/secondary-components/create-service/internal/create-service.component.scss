@@ -320,15 +320,20 @@
     margin-bottom: -15px;
 }
 .kinesis-fields.arrow_box:after{
-    left:50%;
+    left:36%;
     margin-left: -7px;
     margin-bottom: -15px;
 }
 .s3-fields.arrow_box:after{
-    left:75%;
+    left: 60%;
+    margin-left: -3px;
+    margin-bottom: -15px
+}
+.sqs-fields.arrow_box:after{
+    left:74%;
     margin-left: -3px;
     margin-bottom: -15px;
-}
+  }
 
 .submit-form {
     padding: 3rem 0 7rem 0;
