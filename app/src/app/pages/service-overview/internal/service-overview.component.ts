@@ -448,6 +448,9 @@ export class ServiceOverviewComponent implements OnInit {
     onEventScheduleChange(val) {
         this.rateExpression.type = val;
         this.eventExpression.type = "awsEventsNone";
+        if(val=='cron' && this.service.eventScheduleRate){
+            this.setEventScheduleRate();
+        }
     }
     onAWSEventChange(val) {
         this.rateExpression.type = "none";
@@ -889,12 +892,13 @@ export class ServiceOverviewComponent implements OnInit {
     }
     onCompleteClick() {
         this.isPUTLoading = true;
-
         this.http.put('/jazz/services/' + this.service.id, this.PutPayload)
             .subscribe(
                 (Response) => {
                     this.isPUTLoading = false;
+                    this.advancedSaveClicked = false;
                     this.disp_show = true;
+                    this.disp_show2 = true;
                     this.isLoadingService = true;
                     this.serviceDetail.onDataFetched(Response.data);
                     this.isLoadingService = false;
@@ -908,7 +912,9 @@ export class ServiceOverviewComponent implements OnInit {
                 (Error) => {
                     this.isLoadingService = false;
                     this.isPUTLoading = false;
+                    this.advancedSaveClicked = false;
                     this.disp_show = true;
+                    this.disp_show2 = true;
                     this.saveClicked = false;
                     this.edit_save = 'SAVE';
                     let errorMessage = this.toastmessage.errorMessage(Error, "updateService");
@@ -930,7 +936,7 @@ export class ServiceOverviewComponent implements OnInit {
                 if (this.rateExpression.cronStr == 'invalid') {
                     return;
                 } else if (this.rateExpression.cronStr !== undefined) {
-                    payload["rateExpression"] = this.rateExpression.cronStr;
+                    obJ["eventScheduleRate"] = `cron(${this.rateExpression.cronStr})`;
                 }
             }
 
@@ -947,8 +953,10 @@ export class ServiceOverviewComponent implements OnInit {
                     event["source"] = this.eventExpression.S3BucketName;
                     event["action"] = "s3:ObjectCreated:*";
                 }
-                payload["events"] = [];
-                payload["events"].push(event);
+                let locEventArr = [];
+                locEventArr.push(event);
+                obJ["events"] = locEventArr;
+
             }
             if (this.requireInternalAccess !== this.service.require_internal_access) {
                 obJ["require_internal_access"] = this.requireInternalAccess;
@@ -1145,7 +1153,6 @@ export class ServiceOverviewComponent implements OnInit {
                     },
                     (error) => {
                         var err = error;
-                        // console.log(err);
                         this.show_loader = false;
 
                     }
@@ -1320,7 +1327,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 else {
                 this.Environments[j] = this.environ_arr[i];
-                    // console.log('--->><<---',this.environ_arr[i]);
                     this.envList[k] = this.environ_arr[i].logical_id;
                     if (this.environ_arr[i].friendly_name != undefined) {
                         this.friendlist[k++] = this.environ_arr[i].friendly_name;
@@ -1693,6 +1699,19 @@ export class ServiceOverviewComponent implements OnInit {
             });
     }
 
+    setEventScheduleRate() {
+        let localEvenSchedule = this.service.eventScheduleRate;
+        localEvenSchedule = localEvenSchedule.replace(/[\(\)']+/g,' ');
+        localEvenSchedule = localEvenSchedule.split(' ');
+        this.rateExpression.type = localEvenSchedule[0];
+        this.cronObj.minutes = localEvenSchedule[1];
+        this.cronObj.hours = localEvenSchedule[2];
+        this.cronObj.dayOfMonth = localEvenSchedule[3];
+        this.cronObj.month = localEvenSchedule[4];
+        this.cronObj.dayOfWeek = localEvenSchedule[5];
+        this.cronObj.year = localEvenSchedule[6];
+    }
+
 
     refresh_env() {
         this.envComponent.refresh();
@@ -1730,9 +1749,9 @@ export class ServiceOverviewComponent implements OnInit {
                 this.getApproversList();
             }
         }
-
-        if(this.service.enable_api_security){
-
+        
+        if(this.service.eventScheduleRate){
+            this.setEventScheduleRate();
         }
 
         if(this.service.app_id){
@@ -1992,7 +2011,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 // var id=pinkElements.children[0].innerHTML;
             }
-            // console.log(this.focusindex);
             if (this.focusindex > 2) {
                 this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
@@ -2038,7 +2056,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 // var id=pinkElements.children[0].innerHTML;
             }
-            // console.log(this.focusindex);
             if (this.focusindex > 2) {
                 this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 

@@ -310,7 +310,7 @@
             <div class='det-label'>Publicly Accessible</div>
             <div *ngIf='disp_show2' class="det-value">{{(service.is_public_endpoint !== undefined)? service.is_public_endpoint : "NA"}}</div>
             <div *ngIf='!disp_show2'class='det-value'>
-                <div class="">
+                <div>
                   <section class=" pad-left0">
                       <div class="input-field-container">
                           <div class="slack-checkbox custom-cb">
@@ -363,7 +363,7 @@
                     <section class="pad-left0">
                         <div class="input-field-container">
                             <div class="slack-checkbox custom-cb">
-                                <input type="checkbox" id="checkbox-iA" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="requireInternalAccess" (change)="requireInternalAccess = !internalAccess">
+                                <input type="checkbox" id="checkbox-iA" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="requireInternalAccess" (change)="requireInternalAccess = !requireInternalAccess">
                                 <label for="checkbox-iA"></label>
                                 <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
                             </div>
@@ -383,8 +383,8 @@
 
           </li>
           <li *ngIf="service.serviceType == 'function'">
-            <div class='det-label'>Event Source Type</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.event_source || "NA"}}</div>
+            <div class='det-label'>Event Type</div>
+            <div *ngIf='disp_show2' class="det-value">{{service.event_type || "NA"}}</div>
 
           </li>
           <li *ngIf="service.serviceType == 'function'">
@@ -484,7 +484,7 @@
         </ul>
         <ul>
           <li *ngIf="service.serviceType == 'function'">
-            <div class='det-label'>AWS events</div>
+            <div class='det-label'>AWS Events Type/Source</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="input-field-container event-schedule-radio row zero-margin">
                     <section class="pad-left0">
