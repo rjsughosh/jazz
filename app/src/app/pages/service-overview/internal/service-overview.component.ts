@@ -849,7 +849,7 @@ export class ServiceOverviewComponent implements OnInit {
             if(this.application_arr.length>200){
                 this.isapplicationDisable = false;
                 this.showAppclInput = false;
-                this.selectedApplications.pop();
+                this.selectedApplications = [];
                 if(this.application_arr.length > 100){
                 let localRef = this.application_arr.filter((a)=> (a.appID==app.app_id || a.issueID==app.app_id));
                 if(localRef.appID == app.app_id){
@@ -860,7 +860,7 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 this.selectedApplications.push(localRef[0]);
                 this.selectedApplicationLocal.push(localRef[0]);
-                this.appNameVis = localRef[0].appName;
+                this.appNameVis =  this.selectedApplications[0].appName;
                 return;
                 }
             }
@@ -936,14 +936,20 @@ export class ServiceOverviewComponent implements OnInit {
         let obJ = {};
 
         if (this.advancedSaveClicked) {
-            if (this.rateExpression.type != 'none') {
-                this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
-                if (this.rateExpression.cronStr == 'invalid') {
-                    return;
-                } else if (this.rateExpression.cronStr !== undefined) {
-                    obJ["eventScheduleRate"] = `cron(${this.rateExpression.cronStr})`;
+            if(this.rateExpression.type){
+                if (this.rateExpression.type != 'none') {
+                    this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+                    if (this.rateExpression.cronStr == 'invalid') {
+                        return;
+                    } else if (this.rateExpression.cronStr !== undefined) {
+                        obJ["eventScheduleRate"] = `cron(${this.rateExpression.cronStr})`;
+                    } 
+                }
+                else {
+                    obJ["eventScheduleRate"] = null;
                 }
             }
+            
 
             if (this.eventExpression.type !== "awsEventsNone") {
                 var event = {};
@@ -1727,6 +1733,7 @@ export class ServiceOverviewComponent implements OnInit {
     internal_build: boolean = true;
 
     ngOnChanges(x: any) {
+        this.selectedApprovers = [];
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
@@ -1734,7 +1741,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
-        if(this.selectedApprovers.length === 0 &&  this.changeCounterApp == 0 && this.service.approvers){
+        if(this.service.approvers){
             this.service.approvers.map(data=>{
                 let obj = { 
                     "userId" : data
@@ -1764,7 +1771,7 @@ export class ServiceOverviewComponent implements OnInit {
 
         if(this.service.app_id){
             let obj = { 
-                "appName" : this.service.appName || 'NA',
+                "appName" : this.service.appName || this.service.app_id,
                 "app_id" : this.service.app_id
             };
             this.selectedApplications.push(obj);

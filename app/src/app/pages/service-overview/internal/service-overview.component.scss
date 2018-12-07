@@ -1683,7 +1683,7 @@ input{
   left: 61%;
 }
 .sqs-fields.arrow_box:after{
-    left:calc( 62% - 18px );
+    left:calc( 72% - 18px );
 }
 .application-drop-wrap{
   width: calc( 100% - 11rem );
@@ -1725,7 +1725,7 @@ input{
 }
 
 .cron-fields.arrow_box:after {
-  left: 30.5%;
+  left: calc( 31% - 4rem );
 }
 .cron-field {
   margin-left: 0;
@@ -1735,4 +1735,10 @@ input{
   .det-value{
     margin-left: 1.5rem;
   }
+}
+.aws-events-left-block.stream-sqs{
+    width: 19.5rem;
+}
+.sqs-events{
+    width: 50%;
 }

@@ -115,6 +115,15 @@ export class CreateServiceComponent implements OnInit {
     purpose: '',
     invites: ''
   };
+  eventMaxLength:any = {
+    "stream_name":0,
+    "table_name":0,
+    "queue_name":0,
+    "bucket_name":0
+  };
+  serviceLimit:number;
+  domainLimit:number;
+  servicePatterns:any;
 
 
   model = new ServiceFormData('', '', '', '', '', '');
@@ -150,8 +159,10 @@ export class CreateServiceComponent implements OnInit {
   applc:string;
   runtimeKeys : any;
   runtimeObject : any;
+  invalidEventName:boolean = false;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
+  
 
 
   constructor(
@@ -169,7 +180,7 @@ export class CreateServiceComponent implements OnInit {
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.runtimeObject = environment.envLists;
     this.runtimeKeys = Object.keys(this.runtimeObject);
-
+    console.log(environment.awsEventExpression.dynamodb)
 
   }
 
@@ -198,6 +209,13 @@ export class CreateServiceComponent implements OnInit {
     this.focusSQS.emit(true);
     return this.eventExpression.type === 'sqs';
   } 
+
+  //function to validate event source names
+  validateEvents(value){
+    if(value != null && ((value[0] === '-' || value[value.length - 1] === '-') || (value[0] === '.' || value[value.length - 1] === '.') || (value[0] === '_' || value[value.length - 1] === '_'))){
+      this.invalidEventName = true;
+    }
+  }
 
   // function for opening and closing create service popup
   closeCreateService(serviceRequest) {
@@ -485,14 +503,17 @@ export class CreateServiceComponent implements OnInit {
         var event = {};
         event["type"] = this.eventExpression.type;
         if (this.eventExpression.type === "dynamodb") {
-          event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+          event["source"] = environment.awsEventExpression.dynamodb + this.eventExpression.dynamoTable;
           event["action"] = "PutItem";
         } else if (this.eventExpression.type === "kinesis") {
-          event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+          event["source"] = environment.awsEventExpression.kinesis + this.eventExpression.streamARN;
           event["action"] = "PutRecord";
         } else if (this.eventExpression.type === "s3") {
           event["source"] = this.eventExpression.S3BucketName;
-          event["action"] = "s3:ObjectCreated:*";
+          event["action"] = environment.awsEventExpression.s3
+        }  else if (this.eventExpression.type === "sqs") {
+          event["source"] = this.eventExpression.S3BucketName;
+          event["action"] = environment.awsEventExpression.sqs;
         }
         payload["events"] = [];
         payload["events"].push(event);
@@ -1004,6 +1025,9 @@ blurApplication(){
     if (this.approverName != '') {
       return true;
     }
+    if(this.invalidEventName){
+      return true
+    }
     return false;
   }
   gitChange() {
@@ -1327,10 +1351,22 @@ blurApplication(){
     }
   }
 
+  loadMaxLength(){
+    let maxEnvIfLength = 15;
+    this.serviceLimit = environment.    charachterLimits.serviceName;
+    this.domainLimit = environment.charachterLimits.domainName;
+    this.eventMaxLength.stream_name = environment.charachterLimits.eventMaxLength.stream_name - maxEnvIfLength;
+    this.eventMaxLength.table_name = environment.charachterLimits.eventMaxLength.table_name - maxEnvIfLength;
+    this.eventMaxLength.queue_name = environment.charachterLimits.eventMaxLength.queue_name - maxEnvIfLength;
+    this.eventMaxLength.bucket_name = environment.charachterLimits.eventMaxLength.bucket_name - maxEnvIfLength;
+    this.servicePatterns = environment.servicePatterns;
+  }
+
  ngOnInit() {
     this.selectAccountsRegions();
     this.runtime = this.runtimeKeys[0];
     this.getData();
+    this.loadMaxLength();
     this.getapplications();
     if(this.cronObj.minutes == '')
       this.cronObj.minutes='0/5';
