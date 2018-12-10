@@ -1731,7 +1731,7 @@ input{
   margin-left: 0;
 }
 .internal-access{
-  width:41% !important;
+//   width:41% !important;
   .det-value{
     margin-left: 1.5rem;
   }
@@ -1741,4 +1741,11 @@ input{
 }
 .sqs-events{
     width: 50%;
+}
+.width-api{
+    width: 100% !important;
+}
+
+.width-api-input{
+    width: 110%;
 }

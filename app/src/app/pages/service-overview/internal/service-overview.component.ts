@@ -950,28 +950,39 @@ export class ServiceOverviewComponent implements OnInit {
                 }
             }
             
-
-            if (this.eventExpression.type !== "awsEventsNone") {
-                var event = {};
-                event["type"] = this.eventExpression.type;
-                if (this.eventExpression.type === "dynamodb") {
-                    event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
-                    event["action"] = "PutItem";
-                } else if (this.eventExpression.type === "kinesis") {
-                    event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
-                    event["action"] = "PutRecord";
-                } else if (this.eventExpression.type === "s3") {
-                    event["source"] = this.eventExpression.S3BucketName;
-                    event["action"] = "s3:ObjectCreated:*";
-                } else if (this.eventExpression.type === "sqs") {
-                    event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
-                    event["action"] = "PutItem";
+            if(this.eventExpression.type){
+                if (this.eventExpression.type !== "awsEventsNone") {
+                    var event = {};
+                    event["type"] = this.eventExpression.type;
+                    if (this.eventExpression.type === "dynamodb") {
+                        event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+                        event["action"] = "PutItem";
+                    } else if (this.eventExpression.type === "kinesis") {
+                        event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+                        event["action"] = "PutRecord";
+                    } else if (this.eventExpression.type === "s3") {
+                        event["source"] = this.eventExpression.S3BucketName;
+                        event["action"] = "s3:ObjectCreated:*";
+                    } else if (this.eventExpression.type === "sqs") {
+                        event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+                        event["action"] = "PutItem";
+                    } 
+                    let locEventArr = [];
+                    locEventArr.push(event);
+                    obJ["events"] = locEventArr;
                 }
-                let locEventArr = [];
-                locEventArr.push(event);
-                obJ["events"] = locEventArr;
 
-            }
+                else {
+                    var event = {};
+                    event["type"] = "NA";
+                    event["source"] = "NA";
+                    event["action"] = "NA";
+                    let locEventArr = [];
+                    locEventArr.push(event);
+                    obJ["events"] = locEventArr;
+                }
+                
+             }   
             if (this.requireInternalAccess !== this.service.require_internal_access) {
                 obJ["require_internal_access"] = this.requireInternalAccess;
             }

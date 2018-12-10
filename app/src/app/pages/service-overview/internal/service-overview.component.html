@@ -304,14 +304,14 @@
       <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
         <btn-jazz-secondary text="EDIT" [disablebtn]="!this.disp_show2" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
       </div>
-      <div class='metadata-row first-row top-margin'>
+      <div class='metadata-row  top-margin' [ngClass]="[service.serviceType == 'api' ? 'width-api' : '', service.serviceType == 'website' ? 'first-row' : '']">
         <ul class='advanced-ul'>
           <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Publicly Accessible</div>
             <div *ngIf='disp_show2' class="det-value">{{(service.is_public_endpoint !== undefined)? service.is_public_endpoint : "NA"}}</div>
             <div *ngIf='!disp_show2'class='det-value'>
                 <div>
-                  <section class=" pad-left0">
+                  <section class=" pad-left0" >
                       <div class="input-field-container">
                           <div class="slack-checkbox custom-cb">
                               <input type="checkbox" [disabled]="service.serviceType != 'website'" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
@@ -361,7 +361,7 @@
               <div *ngIf='!disp_show2' class='det-value'>
                 <div class="">
                     <section class="pad-left0">
-                        <div class="input-field-container">
+                        <div class="input-field-container" [ngClass]="service.serviceType !== 'api' ? 'width-api-input' : ''" >
                             <div class="slack-checkbox custom-cb">
                                 <input type="checkbox" id="checkbox-iA" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="requireInternalAccess" (change)="requireInternalAccess = !requireInternalAccess">
                                 <label for="checkbox-iA"></label>
@@ -484,7 +484,7 @@
         </ul>
         <ul>
           <li *ngIf="service.serviceType == 'function'">
-            <div class='det-label'>AWS Events Type/Source</div>
+            <div class='det-label'>Events Type/Source</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="input-field-container event-schedule-radio row zero-margin">
                     <section class="pad-left0">
