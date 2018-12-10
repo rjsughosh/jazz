@@ -987,10 +987,10 @@ export class ServiceOverviewComponent implements OnInit {
                 obJ["require_internal_access"] = this.requireInternalAccess;
             }
             if (this.publicSelected !== this.publicInitial) {
-                payload["is_public_endpoint"] = this.publicSelected;
+                obJ["is_public_endpoint"] = this.publicSelected;
             }
             if (this.cdnConfigSelected !== this.cdnConfigInitial) {
-                payload["create_cloudfront_url"] = this.cdnConfigSelected;
+                obJ["create_cloudfront_url"] = this.cdnConfigSelected;
             }
             if(this.service.enable_api_security !== this.enableApiSecurity){
                 obJ["enable_api_security"] = this.enableApiSecurity;
@@ -1168,7 +1168,6 @@ export class ServiceOverviewComponent implements OnInit {
                         if (isAvailable)//if valid
                         {
                             this.hide_slack_error = true;
-
                         }
                         else {
                             this.hide_slack_error = false;
@@ -1782,7 +1781,7 @@ export class ServiceOverviewComponent implements OnInit {
 
         if(this.service.app_id){
             let obj = { 
-                "appName" : this.service.appName || this.service.app_id,
+                "appName" : this.service.app_name || this.service.app_id,
                 "app_id" : this.service.app_id
             };
             this.selectedApplications.push(obj);

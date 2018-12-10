@@ -170,12 +170,13 @@ export class ServiceDetailComponent implements OnInit {
         if (service.metadata.event_source_s3) {
           returnObject['event_source_arn'] = service.metadata.event_source_s3;
         }
-        returnObject['app_name'] = service.metadata.app_name;
+        returnObject['app_name'] = service.metadata.app_name || service.app_name;
         
         returnObject['require_internal_access'] = service.metadata.require_internal_access;
         returnObject['enable_api_security'] = service.metadata.enable_api_security;
       }
       if (typeof returnObject['event_source_arn'] === 'object') {
+        console.log("SSS2");
         returnObject['event_source_arn'] = returnObject['event_source_arn'].S;
       }
       return returnObject;
@@ -212,7 +213,8 @@ export class ServiceDetailComponent implements OnInit {
           if (typeof service.metadata.eventScheduleRate !== "object") {
           }
           else{
-            service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S;
+            console.log("SSS3");
+           !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
           }
           return service;
         }
