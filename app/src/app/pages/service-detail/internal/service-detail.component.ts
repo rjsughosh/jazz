@@ -176,7 +176,6 @@ export class ServiceDetailComponent implements OnInit {
         returnObject['enable_api_security'] = service.metadata.enable_api_security;
       }
       if (typeof returnObject['event_source_arn'] === 'object') {
-        console.log("SSS2");
         returnObject['event_source_arn'] = returnObject['event_source_arn'].S;
       }
       return returnObject;
@@ -213,7 +212,6 @@ export class ServiceDetailComponent implements OnInit {
           if (typeof service.metadata.eventScheduleRate !== "object") {
           }
           else{
-            console.log("SSS3");
            !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
           }
           return service;
