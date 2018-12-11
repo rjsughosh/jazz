@@ -339,6 +339,7 @@ export class ServiceOverviewComponent implements OnInit {
     public getData() {
         let localApprovvs = JSON.parse(localStorage.getItem('approvers')) ||  {};
         if(Object.keys(localApprovvs).length>0){
+            this.approversListRes = localApprovvs;
             this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
             this.getApproversList();
             this.isInputShow = true;
@@ -358,6 +359,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     getApproversList(){
         let locArr = [];
+        this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         if(this.service.approvers && this.approversListShow) {
             if(this.approversListShow.length > 0)
                 {  
@@ -1765,6 +1767,7 @@ export class ServiceOverviewComponent implements OnInit {
             if(this.service.approvers.length == 5){
                 this.isInputShow = false;
             }
+
         }
         if(this.service.enable_api_security){
             this.enableApiSecurity= this.service.enable_api_security;
