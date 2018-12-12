@@ -102,6 +102,7 @@ export class CreateServiceComponent implements OnInit {
   start: number = 0;
   gitCloneSelected: boolean = false;
   gitprivateSelected: boolean = false;
+  eventsPlaceHolder : any;
   //   model: any = {
   //     gitRepo: '',
   // };
@@ -180,7 +181,7 @@ export class CreateServiceComponent implements OnInit {
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.runtimeObject = environment.envLists;
     this.runtimeKeys = Object.keys(this.runtimeObject);
-    console.log(environment.awsEventExpression.dynamodb)
+    this.eventsPlaceHolder = environment.awsEventExpression;
 
   }
 
