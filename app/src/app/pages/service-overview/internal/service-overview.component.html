@@ -302,7 +302,7 @@
     </div>
     <div class='metadata-body-advanced relative'>
       <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
-        <btn-jazz-secondary text="EDIT" [disablebtn]="!this.disp_show2" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
+        <btn-jazz-secondary text="EDIT"  [disablebtn]="service.status != 'creation completed'"  (click)='onEditClickAdvanced()'></btn-jazz-secondary>
       </div>
       <div class='metadata-row  top-margin' [ngClass]="[service.serviceType == 'function' ? 'width-api' : '', service.serviceType == 'website' || service.serviceType == 'api' ? 'first-row' : '']">
         <ul class='advanced-ul'>
@@ -397,7 +397,7 @@
       </div>
       <div *ngIf='!disp_show2' class='metadata-row third-row'>
         <ul>
-          <li *ngIf="service.serviceType == 'function'">
+          <li *ngIf="service.serviceType == 'function' && service.eventScheduleRate !='NA' && service.eventScheduleRate">
               <div class="det-label">Event Schedule</div>
               <div *ngIf='!disp_show2' class="det-value">
                   <div class="input-field-container event-schedule-radio row zero-margin">
@@ -483,7 +483,7 @@
           </li>
         </ul>
         <ul>
-          <li *ngIf="service.serviceType == 'function'">
+          <li *ngIf="service.serviceType == 'function' && false">
             <div class='det-label'>Events Type/Source</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="input-field-container event-schedule-radio row zero-margin">
