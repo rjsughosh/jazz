@@ -1469,7 +1469,8 @@ details summary::-webkit-details-marker {
 }
 
 .cron-field{
-  min-width: 45rem;
+  min-width: 63rem;
+  width: 63rem;
   margin-left: -3.5rem;
 }
 .event-schedule-radio{
@@ -1695,7 +1696,7 @@ input{
   }
 }
 .fixed-rate{
-  padding-right: 2.5rem
+  padding-right: 2.5rem;
 }
 
 .first-row{
@@ -1721,14 +1722,14 @@ input{
   left: 31%;
 }
 .rate-field.arrow_box:after{
-  left: 14.5%;
+  left: calc( 12% - 14px );
 }
 
 .cron-fields.arrow_box:after {
-  left: calc( 31% - 4rem );
+  left: calc( 28% + 2px );
 }
 .cron-field {
-  margin-left: 0;
+  margin-left: 6px;
 }
 .internal-access{
 //   width:41% !important;
