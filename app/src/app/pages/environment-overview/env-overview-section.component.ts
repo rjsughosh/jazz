@@ -500,6 +500,7 @@ popup(state){
     if(this.service.domain != undefined){
       this.data.currentMessage.subscribe(message => this.message = message);
       this.callServiceEnv();
+      this.getDeployments();
     }   
     this.environmentDataService.environment.subscribe((res) => {
       this.getEnvironment(res)
