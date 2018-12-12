@@ -199,7 +199,7 @@ export class CreateServiceComponent implements OnInit {
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
-    this.selectedDeploymentTarget = '';
+    //this.selectedDeploymentTarget = '';
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
