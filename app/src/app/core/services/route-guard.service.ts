@@ -26,7 +26,7 @@ export class RouteGuard implements CanActivate {
   			//alert("Please Login to continue");
   		// }
       this.router.navigate(['']);
-      // this.toasterService.pop('error', 'Unauthorised', 'Please login to continue');
+      this.toasterService.pop('error', 'Unauthorised', 'Please login to continue');
   	}
     return allow;
   }
