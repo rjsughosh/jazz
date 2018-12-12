@@ -162,7 +162,8 @@ popup(state){
     if(this.friendlyChanged){
       // clear cache and fetch env again
       this.clearEnvCache();
-      this.put_payload.friendly_name= this.tempFriendlyName;
+      this.tempFriendlyName = this.tempFriendlyName.trim();
+      this.put_payload.friendly_name = this.tempFriendlyName == "" ? null : this.tempFriendlyName;
       this.http.put('/jazz/environments/'+ this.env +'?domain=' + this.service.domain + '&service=' + this.service.name,this.put_payload)
             .subscribe(
                 (Response)=>{
