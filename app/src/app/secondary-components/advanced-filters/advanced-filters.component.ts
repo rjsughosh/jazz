@@ -1,6 +1,6 @@
 import { Component,ViewContainerRef, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
 import {DataCacheService } from '../../core/services/index';
-import {IonRangeSliderModule} from "ng2-ion-range-slider";
+// import {IonRangeSliderModule} from "ng2-ion-range-slider";
 
 
 @Component({
@@ -18,7 +18,7 @@ export class AdvancedFiltersComponent implements OnInit {
     @Input() assets:boolean = false;
 
     @Input() service: any = {};
-    @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
+    // @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
 
     
     @Output() onFilterSelect:EventEmitter<any> = new EventEmitter<any>();
@@ -152,25 +152,25 @@ export class AdvancedFiltersComponent implements OnInit {
    }
 
    onClickFilter(){ 
-    var slider = document.getElementById('sliderElement');
-    if( this.sliderFrom == 1 ){
-        slider.getElementsByClassName('irs-single')[0].attributes[0].ownerElement.innerHTML = "1";
-    }
-    if(slider != null || slider != undefined){
-        slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
+    // var slider = document.getElementById('sliderElement');
+    // if( this.sliderFrom == 1 ){
+    //     slider.getElementsByClassName('irs-single')[0].attributes[0].ownerElement.innerHTML = "1";
+    // }
+    // if(slider != null || slider != undefined){
+    //     slider.getElementsByClassName('irs-line-mid')[0].setAttribute('style','border-radius:10px;')
         
-        slider.getElementsByClassName('irs-bar-edge')[0].setAttribute('style',' background: none;background-color: #ed008c;border-bottom-left-radius:10px;border-top-left-radius:10px;width: 10px;');
+    //     slider.getElementsByClassName('irs-bar-edge')[0].setAttribute('style',' background: none;background-color: #ed008c;border-bottom-left-radius:10px;border-top-left-radius:10px;width: 10px;');
         
-        slider.getElementsByClassName('irs-single')[0].setAttribute('style',' background: none;background-color: #ed008c;left:'+this.sliderPercentFrom+'%');
+    //     slider.getElementsByClassName('irs-single')[0].setAttribute('style',' background: none;background-color: #ed008c;left:'+this.sliderPercentFrom+'%');
        
-        slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
+    //     slider.getElementsByClassName('irs-bar')[0].setAttribute('style',' background: none;left:10px;background-color: #ed008c;width:'+this.sliderPercentFrom+'%');
         
-        slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
+    //     slider.getElementsByClassName('irs-slider single')[0].setAttribute('style','width: 20px;top: 20px;height: 20px;border-radius: 50%;cursor:pointer;background: none; background-color: #fff;left:'+this.sliderPercentFrom+'%');
         
-        slider.getElementsByClassName('irs-max')[0].setAttribute('style','background: none');
+    //     slider.getElementsByClassName('irs-max')[0].setAttribute('style','background: none');
        
-        slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
-    }
+    //     slider.getElementsByClassName('irs-min')[0].setAttribute('style','background: none');
+    // }
     
     
     
