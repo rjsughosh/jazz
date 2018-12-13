@@ -35,8 +35,12 @@ export class AdvancedFiltersComponentOSS implements OnInit {
     periodList: Array<string> = ['15 Minutes','1 Hour','6 Hours','1 Day','7 Days','30 Days'];
     periodSelected:string= this.periodList[0];
 
+    timePeriodList: Array<number> = [1,2,3,4,5,6,7];
+    selectedTimePeriod: number = 1;
+
     rangeList: Array<string> = ['Day', 'Week', 'Month', 'Year'];
     selectedTimeRange:string= this.rangeList[0];
+    
 
     statisticList: Array<string> = ['Average', 'Sum', 'Maximum','Minimum'];
     statisticSelected:string= this.statisticList[0];
@@ -84,12 +88,16 @@ export class AdvancedFiltersComponentOSS implements OnInit {
         this.periodSelected=this.periodList[0];
     }
     setSlider(event){
-        console.log('slidermax, ',event)
+        //console.log('slidermax, ',event)
         this.sliderMax=event;
+        // update time period list when sliderMax changes
+        var timePeriodList = [];
+        for (var i = this.sliderFrom; i <= this.sliderMax; i ++){
+            timePeriodList.push(i);
+        }
+        this.timePeriodList = timePeriodList;
         this.sliderFrom=1;
         this.sliderPercentFrom=0;
-
-
     }
     onRangeListSelected(range){
        
@@ -101,6 +109,22 @@ export class AdvancedFiltersComponentOSS implements OnInit {
         this.onFilterSelect.emit(this.selectFilter);
         
     }
+
+    onTimePeriodSelected(period){
+        this.selectedTimePeriod = period;
+        this.selectFilter["key"]='slider';
+        this.sliderFrom = period;
+        this.sliderPercentFrom = this.sliderMax > 1 ? (period - 1) / (this.sliderMax - 1) : 1;
+        var event = {
+            value: period,
+            from: period,
+            from_percent: this.sliderPercentFrom
+        };
+        
+        this.selectFilter["value"] = event;
+        this.onFilterSelect.emit(this.selectFilter);    
+    }
+
     onEnvSelected(envt){
         this.envSelected = envt;
         this.selectFilter["key"]='environment';
