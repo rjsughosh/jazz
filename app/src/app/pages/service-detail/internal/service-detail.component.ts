@@ -158,6 +158,9 @@ export class ServiceDetailComponent implements OnInit {
         if (service.metadata.events) {
           returnObject['event_type'] = service.metadata.events[0].type;
         }
+        if (service.metadata.event_source) {
+          returnObject['event_type'] = service.metadata.event_source;
+        }
         if (service.metadata.events) {
           returnObject['event_source_arn'] = service.metadata.events[0].source;
         }

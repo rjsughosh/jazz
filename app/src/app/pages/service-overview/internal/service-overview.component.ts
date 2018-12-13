@@ -204,6 +204,7 @@ export class ServiceOverviewComponent implements OnInit {
     enableApiSecurity: boolean = false;
     isAppTouched: boolean= false;
     selectedApplicationLocal: any = [];
+    rateData : any = ['Minutes', 'Hours', 'Days'];
     approversPlaceHolder : string = "Start typing (min 3 chars)...";
     endpList = [
         {
@@ -873,6 +874,10 @@ export class ServiceOverviewComponent implements OnInit {
         }
     }
 
+    onSelectedDr(selected) {
+        this.rateExpression.interval = selected;
+        this.generateExpression(this.rateExpression)
+    }
 
 
     onEditClick() {
