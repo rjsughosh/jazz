@@ -574,7 +574,7 @@
                                 <div class="text">Queue ARN</div>
                                 <div class="label-input slct-bx-selected input-wrapper">
                                     <input type="text" disabled="disabled" class="inline-input input-label aws-events-left-block sqs-events" value="{{awsEventExpression.sqs}}">
-                                    <input id="dynamoTable" name="dynamoTable" type="text" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Queue Name" required>
+                                    <input id="SQSstreamARN" name="SQSstreamARN" type="text" [(ngModel)]="eventExpression.SQSstreamARN"  [focus]="focusSQS" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Queue Name" required>
                                 </div>
                             </div>
                             <p class="learn-more">Function would be triggered whenever new messages are added to the source SQS queue</p>

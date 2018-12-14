@@ -130,7 +130,7 @@ export class CreateServiceComponent implements OnInit {
   model = new ServiceFormData('', '', '', '', '', '');
   cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
   rateExpression = new RateExpression(undefined, undefined, 'none', '5', this.selected, '');
-  eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
+  eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined, undefined);
   private doctors = [];
   private toastmessage: any;
   errBody: any;
@@ -513,8 +513,8 @@ export class CreateServiceComponent implements OnInit {
           event["source"] = this.eventExpression.S3BucketName;
           event["action"] = environment.awsEventExpression.s3
         }  else if (this.eventExpression.type === "sqs") {
-          event["source"] = this.eventExpression.S3BucketName;
-          event["action"] = environment.awsEventExpression.sqs;
+          event["source"] = environment.awsEventExpression.sqs + this.eventExpression.SQSstreamARN;
+          event["action"] = "PutItem";
         }
         payload["events"] = [];
         payload["events"].push(event);
@@ -631,6 +631,7 @@ export class CreateServiceComponent implements OnInit {
     this.eventExpression.dynamoTable = "";
     this.eventExpression.streamARN = "";
     this.eventExpression.S3BucketName = "";
+    this.eventExpression.SQSstreamARN = "";
     this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
     this.rateExpression.error = undefined;
     this.rateExpression.type = 'none';
@@ -1017,6 +1018,9 @@ blurApplication(){
       return true
     }
     if (this.eventExpression.type == 's3' && this.eventExpression.S3BucketName == undefined) {
+      return true
+    }
+    if (this.eventExpression.type == 'sqs' && this.eventExpression.SQSstreamARN  == undefined) {
       return true
     }
     if (this.invalidServiceName || this.invalidDomainName || this.invalidServiceNameNum) {

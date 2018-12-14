@@ -141,7 +141,7 @@ export class ServiceOverviewComponent implements OnInit {
     eventSchedule: string = 'fixedRate';
     cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
     rateExpression = new RateExpression(undefined, undefined, 'none', '5', this.selected, '');
-    eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
+    eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined,undefined);
     viewMode: boolean = true;
     cronFieldValidity: any;
     requireInternalAccess: boolean = this.service.require_internal_access;
@@ -964,16 +964,16 @@ export class ServiceOverviewComponent implements OnInit {
                     var event = {};
                     event["type"] = this.eventExpression.type;
                     if (this.eventExpression.type === "dynamodb") {
-                        event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+                        event["source"] = this.awsEventExpression.dynamodb + this.eventExpression.dynamoTable;
                         event["action"] = "PutItem";
                     } else if (this.eventExpression.type === "kinesis") {
-                        event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+                        event["source"] = this.awsEventExpression.kinesis + this.eventExpression.streamARN;
                         event["action"] = "PutRecord";
                     } else if (this.eventExpression.type === "s3") {
                         event["source"] = this.eventExpression.S3BucketName;
                         event["action"] = "s3:ObjectCreated:*";
                     } else if (this.eventExpression.type === "sqs") {
-                        event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+                        event["source"] = this.awsEventExpression.sqs + this.eventExpression.SQSstreamARN;
                         event["action"] = "PutItem";
                     } 
                     let locEventArr = [];

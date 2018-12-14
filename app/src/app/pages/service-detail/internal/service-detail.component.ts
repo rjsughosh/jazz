@@ -161,8 +161,8 @@ export class ServiceDetailComponent implements OnInit {
         if (service.metadata.events) {
           returnObject['event_source_arn'] = service.metadata.events[0].source;
         }
-        if (service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3) {
-          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3;
+        if (service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3 || service.metadata.event_source_sqs) {
+          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3 ||service.metadata.event_source_sqs;
         }
         returnObject['app_name'] = service.metadata.app_name || service.app_name;
         returnObject['require_internal_access'] = service.metadata.require_internal_access;
