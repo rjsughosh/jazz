@@ -677,7 +677,6 @@ export class CreateServiceComponent implements OnInit {
     this.oneSelected=false;
   }
   onApplicationChange(newVal) {
-    console.log(newVal)
     if (!newVal) {
       this.showApplicationList = false;
     } else {
