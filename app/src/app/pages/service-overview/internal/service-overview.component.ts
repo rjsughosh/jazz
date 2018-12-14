@@ -206,6 +206,7 @@ export class ServiceOverviewComponent implements OnInit {
     selectedApplicationLocal: any = [];
     rateData : any = ['Minutes', 'Hours', 'Days'];
     approversPlaceHolder : string = "Start typing (min 3 chars)...";
+    awsEventExpression : any; 
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -317,6 +318,7 @@ export class ServiceOverviewComponent implements OnInit {
         private authenticationservice: AuthenticationService
     ) {
         this.http = request;
+        this.awsEventExpression = environment.awsEventExpression;
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
         this.isInputShow = false;
