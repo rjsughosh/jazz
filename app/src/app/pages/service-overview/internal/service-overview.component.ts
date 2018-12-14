@@ -1753,6 +1753,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     ngOnChanges(x: any) {
         this.selectedApprovers = [];
+        this.selectedApplications = [];
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
