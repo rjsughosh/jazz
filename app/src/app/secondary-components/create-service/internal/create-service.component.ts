@@ -1355,7 +1355,7 @@ blurApplication(){
 
   loadMaxLength(){
     let maxEnvIfLength = 15;
-    this.serviceLimit = environment.    charachterLimits.serviceName;
+    this.serviceLimit = environment.charachterLimits.serviceName;
     this.domainLimit = environment.charachterLimits.domainName;
     this.eventMaxLength.stream_name = environment.charachterLimits.eventMaxLength.stream_name - maxEnvIfLength;
     this.eventMaxLength.table_name = environment.charachterLimits.eventMaxLength.table_name - maxEnvIfLength;

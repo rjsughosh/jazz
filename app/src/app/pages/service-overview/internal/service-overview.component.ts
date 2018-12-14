@@ -199,7 +199,7 @@ export class ServiceOverviewComponent implements OnInit {
     selectedApprovers : any = [];
     approversListShow: any;
     changeCounterApp : number = 0;
-    disp_app_error: boolean = false;
+    dispAppError: boolean = false;
     applc1: string ='';
     enableApiSecurity: boolean = false;
     isAppTouched: boolean= false;
@@ -711,7 +711,7 @@ export class ServiceOverviewComponent implements OnInit {
     removeApplication(index, app) {
         this.oneSelected=false;
         this.isAppTouched = true;
-        this.disp_app_error = false;
+        this.dispAppError = false;
         this.selectApp={};  
         this.showAppclInput = true;
         this.appPlaceHolder='Start typing...';
@@ -782,7 +782,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     selectApp;
     selectApplication(app) {
-        this.disp_app_error = true;
+        this.dispAppError = true;
         this.isAppTouched = true;
         this.showAppclInput = false;
         this.oneSelected=true;
@@ -1075,7 +1075,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.isInputShow = true;
         this.enableApiSecurity = this.service.enable_api_security;
         this.requireInternalAccess = this.service.require_internal_access;
-        this.disp_app_error = false;
+        this.dispAppError = false;
         this.update_payload = {};
         this.selectedApplications = this.selectedApplicationLocal.slice(0);
         if(this.selectedApplications.length>0){

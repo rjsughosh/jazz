@@ -253,7 +253,7 @@
                 <div class="flex-col">
                     <section class="pad-left0">
                          <div class="input-field-container"  [ngClass]="{disableInputField : isapplicationDisable}" >   
-                                <div class="selected-approvers" [ngClass]="{noApproverError : disp_app_error === false && isAppTouched}">
+                                <div class="selected-approvers" [ngClass]="{noApproverError : dispAppError === false && isAppTouched}">
                                     <ul (click)='focusInputApplication($event)'>
                                         <li *ngFor="let selected of selectedApplications;let i=index"   >
                                             {{selected.appName}}
@@ -274,13 +274,13 @@
                 </div>
             </div>
           </li>
-           <p class='limitWrapper' *ngIf='!disp_app_error && !disp_show && isAppTouched'>Must have App Name</p>
+           <p class='limitWrapper' *ngIf='!dispAppError && !disp_show && isAppTouched'>Must have App Name</p>
         </ul>
       </div>
       </div>
        <div *ngIf='!disp_show' class='down-btn-wrap'>
             <div class="custom-save-btn-wrap">
-                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !disp_app_error && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !dispAppError && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
                 <a (click)="onCancelClick()">CANCEL</a>
             </div>
         </div>

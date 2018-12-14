@@ -74,7 +74,7 @@ export const environment = {
     "dynamodb" :  "arn:aws:dynamodb:us-west-2:302890901340:table/",
     "kinesis" : "arn:aws:kinesis:us-west-2:302890901340:stream/",
     "s3" : "s3:ObjectCreated:*",
-    "sqs" : "arn:aws:sqs:us-east-1:102707241671:"
+    "sqs" : "arn:aws:sqs:us-west-2:302890901340:"
   },
   urls:{
     docs_link: "https://docs.jazz.corporate.t-mobile.com/",

@@ -155,26 +155,16 @@ export class ServiceDetailComponent implements OnInit {
         returnObject['providerMemorySize'] = service.metadata.providerMemorySize;
         returnObject['create_cloudfront_url'] = service.metadata.create_cloudfront_url;
         returnObject['eventScheduleRate'] = service.metadata.eventScheduleRate;
-        if (service.metadata.events) {
-          returnObject['event_type'] = service.metadata.events[0].type;
-        }
-        if (service.metadata.event_source) {
-          returnObject['event_type'] = service.metadata.event_source;
+        if (service.metadata.events || service.metadata.event_source) {
+          returnObject['event_type'] = service.metadata.event_source || service.metadata.events[0].type;
         }
         if (service.metadata.events) {
           returnObject['event_source_arn'] = service.metadata.events[0].source;
         }
-        if (service.metadata.event_source_dynamodb) {
-          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb;
-        }
-        if (service.metadata.event_source_kinesis) {
-          returnObject['event_source_arn'] = service.metadata.event_source_kinesis;
-        }
-        if (service.metadata.event_source_s3) {
-          returnObject['event_source_arn'] = service.metadata.event_source_s3;
+        if (service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3) {
+          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3;
         }
         returnObject['app_name'] = service.metadata.app_name || service.app_name;
-        
         returnObject['require_internal_access'] = service.metadata.require_internal_access;
         returnObject['enable_api_security'] = service.metadata.enable_api_security;
       }
