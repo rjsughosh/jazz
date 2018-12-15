@@ -281,20 +281,22 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   };
 
   getLastSuccessfulDeployment(env){
-    for (var i = 0; i < env.deploy_arr.length; i++){
-      var deployment = env.deploy_arr[i];
-      if (deployment.status == 'successful'){
-        var time = deployment.created_time.slice(0,-4);
-        var now = new Date;
-        var diff = moment(now).diff(moment(time),"second");
-        if (diff <= 24 * 60 * 60) {
-          // time format is UTC, need to convert to local time
-          return moment.utc(time).local().fromNow();
-        } else {
-          return moment(time).format('ll');
+    if(env.deploy_arr){
+      for (var i = 0; i < env.deploy_arr.length; i++){
+        var deployment = env.deploy_arr[i];
+        if (deployment.status == 'successful'){
+          var time = deployment.created_time.slice(0,-4);
+          var now = new Date;
+          var diff = moment(now).diff(moment(time),"second");
+          if (diff <= 24 * 60 * 60) {
+            // time format is UTC, need to convert to local time
+            return moment.utc(time).local().fromNow();
+          } else {
+            return moment(time).format('ll');
+          }
         }
-      }
-    }    
+      }    
+    }
   }
 
   get24HourDeployment(env){

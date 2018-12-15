@@ -71,8 +71,6 @@ export class CreateServiceComponent implements OnInit {
   showRegionList:boolean = false;
   showAccountList:boolean = false;
   oneSelected:boolean=false;
-
-
   isLoading: boolean = false;
   slackChannelLoader: boolean = false;
   serviceAvailable: boolean = false;
@@ -102,6 +100,7 @@ export class CreateServiceComponent implements OnInit {
   start: number = 0;
   gitCloneSelected: boolean = false;
   gitprivateSelected: boolean = false;
+  eventsPlaceHolder : any;
   //   model: any = {
   //     gitRepo: '',
   // };
@@ -115,12 +114,21 @@ export class CreateServiceComponent implements OnInit {
     purpose: '',
     invites: ''
   };
+  eventMaxLength:any = {
+    "stream_name":0,
+    "table_name":0,
+    "queue_name":0,
+    "bucket_name":0
+  };
+  serviceLimit:number;
+  domainLimit:number;
+  servicePatterns:any;
 
 
   model = new ServiceFormData('', '', '', '', '', '');
   cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
   rateExpression = new RateExpression(undefined, undefined, 'none', '5', this.selected, '');
-  eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
+  eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined, undefined);
   private doctors = [];
   private toastmessage: any;
   errBody: any;
@@ -150,8 +158,10 @@ export class CreateServiceComponent implements OnInit {
   applc:string;
   runtimeKeys : any;
   runtimeObject : any;
+  invalidEventName:boolean = false;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
+  
 
 
   constructor(
@@ -169,7 +179,7 @@ export class CreateServiceComponent implements OnInit {
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.runtimeObject = environment.envLists;
     this.runtimeKeys = Object.keys(this.runtimeObject);
-
+    this.eventsPlaceHolder = environment.awsEventExpression;
 
   }
 
@@ -177,6 +187,7 @@ export class CreateServiceComponent implements OnInit {
   public focusDynamo = new EventEmitter<boolean>();
   public focusKinesis = new EventEmitter<boolean>();
   public focusS3 = new EventEmitter<boolean>();
+  public focusSQS = new EventEmitter<boolean>();
 
   chkDynamodb() {
     this.focusDynamo.emit(true);
@@ -191,6 +202,18 @@ export class CreateServiceComponent implements OnInit {
   chkS3() {
     this.focusS3.emit(true);
     return this.eventExpression.type === 's3';
+  }
+
+  chkSQS() {
+    this.focusSQS.emit(true);
+    return this.eventExpression.type === 'sqs';
+  } 
+
+  //function to validate event source names
+  validateEvents(value){
+    if(value != null && ((value[0] === '-' || value[value.length - 1] === '-') || (value[0] === '.' || value[value.length - 1] === '.') || (value[0] === '_' || value[value.length - 1] === '_'))){
+      this.invalidEventName = true;
+    }
   }
 
   // function for opening and closing create service popup
@@ -479,14 +502,17 @@ export class CreateServiceComponent implements OnInit {
         var event = {};
         event["type"] = this.eventExpression.type;
         if (this.eventExpression.type === "dynamodb") {
-          event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
+          event["source"] = environment.awsEventExpression.dynamodb + this.eventExpression.dynamoTable;
           event["action"] = "PutItem";
         } else if (this.eventExpression.type === "kinesis") {
-          event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
+          event["source"] = environment.awsEventExpression.kinesis + this.eventExpression.streamARN;
           event["action"] = "PutRecord";
         } else if (this.eventExpression.type === "s3") {
           event["source"] = this.eventExpression.S3BucketName;
-          event["action"] = "s3:ObjectCreated:*";
+          event["action"] = environment.awsEventExpression.s3
+        }  else if (this.eventExpression.type === "sqs") {
+          event["source"] = environment.awsEventExpression.sqs + this.eventExpression.SQSstreamARN;
+          event["action"] = "PutItem";
         }
         payload["events"] = [];
         payload["events"].push(event);
@@ -603,6 +629,7 @@ export class CreateServiceComponent implements OnInit {
     this.eventExpression.dynamoTable = "";
     this.eventExpression.streamARN = "";
     this.eventExpression.S3BucketName = "";
+    this.eventExpression.SQSstreamARN = "";
     this.cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
     this.rateExpression.error = undefined;
     this.rateExpression.type = 'none';
@@ -991,12 +1018,18 @@ blurApplication(){
     if (this.eventExpression.type == 's3' && this.eventExpression.S3BucketName == undefined) {
       return true
     }
+    if (this.eventExpression.type == 'sqs' && this.eventExpression.SQSstreamARN  == undefined) {
+      return true
+    }
     if (this.invalidServiceName || this.invalidDomainName || this.invalidServiceNameNum) {
       return true
     }
     // this.approverName = '';
     if (this.approverName != '') {
       return true;
+    }
+    if(this.invalidEventName){
+      return true
     }
     return false;
   }
@@ -1321,10 +1354,22 @@ blurApplication(){
     }
   }
 
+  loadMaxLength(){
+    let maxEnvIfLength = 15;
+    this.serviceLimit = environment.charachterLimits.serviceName;
+    this.domainLimit = environment.charachterLimits.domainName;
+    this.eventMaxLength.stream_name = environment.charachterLimits.eventMaxLength.stream_name - maxEnvIfLength;
+    this.eventMaxLength.table_name = environment.charachterLimits.eventMaxLength.table_name - maxEnvIfLength;
+    this.eventMaxLength.queue_name = environment.charachterLimits.eventMaxLength.queue_name - maxEnvIfLength;
+    this.eventMaxLength.bucket_name = environment.charachterLimits.eventMaxLength.bucket_name - maxEnvIfLength;
+    this.servicePatterns = environment.servicePatterns;
+  }
+
  ngOnInit() {
     this.selectAccountsRegions();
     this.runtime = this.runtimeKeys[0];
     this.getData();
+    this.loadMaxLength();
     this.getapplications();
     if(this.cronObj.minutes == '')
       this.cronObj.minutes='0/5';

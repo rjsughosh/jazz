@@ -155,19 +155,16 @@ export class ServiceDetailComponent implements OnInit {
         returnObject['providerMemorySize'] = service.metadata.providerMemorySize;
         returnObject['create_cloudfront_url'] = service.metadata.create_cloudfront_url;
         returnObject['eventScheduleRate'] = service.metadata.eventScheduleRate;
-        if (service.metadata.event_source) {
-          returnObject['event_source'] = service.metadata.event_source;
+        if (service.metadata.events || service.metadata.event_source) {
+          returnObject['event_type'] = service.metadata.event_source || service.metadata.events[0].type;
         }
-        if (service.metadata.event_source_dynamodb) {
-          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb;
+        if (service.metadata.events) {
+          returnObject['event_source_arn'] = service.metadata.events[0].source;
         }
-        if (service.metadata.event_source_kinesis) {
-          returnObject['event_source_arn'] = service.metadata.event_source_kinesis;
+        if (service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3 || service.metadata.event_source_sqs) {
+          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3 ||service.metadata.event_source_sqs;
         }
-        if (service.metadata.event_source_s3) {
-          returnObject['event_source_arn'] = service.metadata.event_source_s3;
-        }
-        returnObject['app_name'] = service.metadata.app_name;
+        returnObject['app_name'] = service.metadata.app_name || service.app_name;
         returnObject['require_internal_access'] = service.metadata.require_internal_access;
         returnObject['enable_api_security'] = service.metadata.enable_api_security;
       }
@@ -208,7 +205,7 @@ export class ServiceDetailComponent implements OnInit {
           if (typeof service.metadata.eventScheduleRate !== "object") {
           }
           else{
-            service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S;
+           !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
           }
           return service;
         }
@@ -249,19 +246,19 @@ export class ServiceDetailComponent implements OnInit {
     }
   }
 
-  fetchApplications(){
+  getApplications() {
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt=' + this.start_at)
       .subscribe((res: Response) => {
         this.applications = res;
-        this.application_arr.push.apply(this.application_arr, this.applications.data.summary);
-        
-        localStorage.setItem('workload', JSON.stringify(this.application_arr));
 
+        this.application_arr.push.apply(this.application_arr, this.applications.data.summary);
         this.start_at = this.start_at + 100;
         if (this.applications.data.total > this.start_at) {
-          this.getapplications();
+
+          this.getApplications();
         }
         else {
+
           for (var i = 0; i < this.application_arr.length; i++) {
             if (!this.application_arr[i].appID || !this.application_arr[i].appName) {
               this.application_arr.splice(i, 1);
@@ -287,20 +284,6 @@ export class ServiceDetailComponent implements OnInit {
       }, error => {
         console.log('workloads error', error)
       });
-  }
-
-  getapplications() {
-    var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
-
-    if (localStorageWorkload.length > 0){
-      if (this.start_at + 100 >= localStorageWorkload.length) {
-        this.fetchApplications();
-      } else {
-        this.application_arr = localStorageWorkload;
-      }
-    } else {
-      this.fetchApplications();
-    }
   }
 
   fetchService(id: string) {
@@ -527,7 +510,7 @@ export class ServiceDetailComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.getapplications();
+    this.getApplications();
     this.breadcrumbs = [
       {
         'name': this.service['name'],
