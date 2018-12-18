@@ -93,9 +93,12 @@ export class EnvironmentDetailComponent implements OnInit {
   }
 
   frndload(event) {
-    if (event != undefined) {
-      this.friendly_name = event;
+    this.friendly_name = event;
+    if (!this.friendly_name){
+      var env = this.environment_obj;
+      this.friendly_name = env.physical_id || env.logical_id;
     }
+    
     this.breadcrumbs = [{
       'name': this.service['name'],
       'link': 'services/' + this.service['id']
@@ -156,6 +159,7 @@ export class EnvironmentDetailComponent implements OnInit {
   getEnvironment(res){
     if (res.data && res.data.environment && res.data.environment[0]){
       var env = res.data.environment[0];
+      this.environment_obj = env;
       this.friendly_name = env.physical_id || env.logical_id;
     }   
   }

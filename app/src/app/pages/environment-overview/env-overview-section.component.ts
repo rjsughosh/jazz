@@ -187,6 +187,8 @@ popup(state){
 
                 }
               );
+              // send change to page title and breadcrumb
+              this.frndload.emit(this.put_payload.friendly_name);
               this.isLoading=true;
               this.envResponseTrue=false;
               this.friendlyChanged=false;
