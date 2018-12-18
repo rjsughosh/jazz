@@ -663,6 +663,11 @@
     opacity: .5;
 }
 
+.runtime-option {
+    padding: 0 0.5em 0 15px;
+    width: 20%;
+}
+
 .pad-left0 {
     @media(max-width: 992px) {
         padding-left: 0px;
