@@ -177,8 +177,6 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     this.sortEnvArr();
 
     if (this.environ_arr != undefined) {
-      // console.log('total lenght = ', this.environ_arr.length)
-      // console.log('full array = ', this.environ_arr)
       for (var i = 0; i < this.environ_arr.length; i++) {
         this.environ_arr[i].status = this.environ_arr[i].status.replace("_", " ");
         // this.environ_arr[i].status=this.environ_arr[i].status.split(" ").join("\ n")
@@ -248,7 +246,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     if (this.service == undefined) { return }
     this.http.get('/jazz/environments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       response => {
-        this.isenvLoading = false;
+        //this.isenvLoading = false;
         this.environ_arr = response.data.environment;
         if (this.environ_arr != undefined)
           if (this.environ_arr.length == 0 || response.data == '') {
@@ -280,16 +278,20 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       this.getDeploymentData();
   };
 
-  getLastSuccessfulDeployment(env){
-    for (var i = 0; i < env.deploy_arr.length; i++){
-      var deployment = env.deploy_arr[i];
-      if (deployment.status == 'successful'){
+  getLastDeployment(deploymentArray, status){
+    if (!deploymentArray) return "NA"
+    for (var i = 0; i < deploymentArray.length; i++){
+      var deployment = deploymentArray[i];
+      if (deployment.status == status){
         var time = deployment.created_time.slice(0,-4);
+        // time format is UTC, need to convert to local time
+        time = moment.utc(time).local();
+        // get local time
         var now = new Date;
         var diff = moment(now).diff(moment(time),"second");
         if (diff <= 24 * 60 * 60) {
           // time format is UTC, need to convert to local time
-          return moment.utc(time).local().fromNow();
+          return moment(time).fromNow();
         } else {
           return moment(time).format('ll');
         }
@@ -299,22 +301,27 @@ export class ServiceOverviewMultienvComponent implements OnInit {
 
   get24HourDeployment(env){
     var count = 0;
+    if (!env.deploy_arr) return 'NA'
     for (var i = 0; i < env.deploy_arr.length; i++){
       var time = env.deploy_arr[i].created_time.slice(0,-4);
+      // time format is UTC, need to convert to local time
+      time = moment.utc(time).local();
+      // get local time
       var now = new Date;
       var diff = moment(now).diff(moment(time),"second");
       if (diff <= 24 * 60 * 60) {
         count ++
       }
     }
-    return count
+    // return as string so when the count it 0, it won't be treat as false in html (count || 'NA') => 0 will be shown as 'NA'
+    return count.toString()
   }
 
   getDeploymentData() {
     if (this.service == undefined) { return }
     this.http.get('/jazz/deployments?domain=' + this.service.domain + '&service=' + this.service.name).subscribe(
       response => {
-        //this.isenvLoading = false;
+        this.isenvLoading = false;
         //this.environ_arr = response.data.environment;
 
         this.deployments_arr = response.data.deployments;
@@ -329,9 +336,16 @@ export class ServiceOverviewMultienvComponent implements OnInit {
           }
         })
 
-        this.stgEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.stgEnv);
+        this.Environments.map((item)=>{
+          item.status = item.status.replace('_', ' ');
+        })
+        this.stgEnv.status = this.stgEnv.status.replace('_', ' ');
+        this.stgEnv.lastSuccessfulDeployment = this.getLastDeployment(this.stgEnv.deploy_arr, "successful");
+        this.stgEnv.lastFailedDeployment = this.getLastDeployment(this.stgEnv.deploy_arr, "failed")
         this.stgEnv.deploymentsCountvalue = this.get24HourDeployment(this.stgEnv);
-        this.prodEnv.lastSuccessfulDeployment = this.getLastSuccessfulDeployment(this.prodEnv);
+        this.prodEnv.status = this.prodEnv.status.replace('_', ' ');
+        this.prodEnv.lastSuccessfulDeployment = this.getLastDeployment(this.prodEnv.deploy_arr, "successful");
+        this.prodEnv.lastFailedDeployment = this.getLastDeployment(this.prodEnv.deploy_arr, "failed");
         this.prodEnv.deploymentsCountvalue = this.get24HourDeployment(this.prodEnv);
       },
       err => {
@@ -379,7 +393,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     var arrEnv = data.data.environment
     if (environment.multi_env) {
       for (var i = 0; i < arrEnv.length; i++) {
-        arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
+        //arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
         if (arrEnv[i].logical_id == 'prod')
           this.prodEnv = arrEnv[i];
         else
@@ -388,7 +402,7 @@ export class ServiceOverviewMultienvComponent implements OnInit {
     }
     else {
       for (var i = 0; i < arrEnv.length; i++) {
-        arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
+        //arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
         if (arrEnv[i].logical_id == 'prod')
           this.prodEnv = arrEnv[i];
         else
@@ -479,15 +493,12 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   }
 
   internal_build: boolean = true;
-  ngOnChanges(x: any) {
 
+  ngOnChanges(x: any) {
     if (environment.multi_env) this.is_multi_env = true;
     if (environment.envName == 'oss') this.internal_build = false;
     var obj;
-    // this.getJSON().subscribe(data => obj=data, error => console.log(error));
-    // console.log('got config,,,,,',obj)
-    // let test = require(environment.configFile);
-    // console.log('test = ',test)
+
     if (!this.env_call) {
       if ((this.service.domain != undefined) && (this.internal_build == true)) {
         this.env_call = true;
@@ -495,20 +506,11 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       }
     }
 
-    this.prodEnv = {};
-    this.stgEnv = {};
-
     if (!this.internal_build) {
       this.envfoross();
     }
-
-
-
-
-
-
-
   }
+
   ngOnDestroy() {
 
   }

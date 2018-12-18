@@ -74,9 +74,9 @@
                   </div>
               </li>
               <li class="overview-item" >
-                  <div class="overview-value">{{prodEnv.costvalue || 'NA'}}</div>
+                  <div class="overview-value">{{prodEnv.lastFailedDeployment || 'NA'}}</div>
                   <div class="overview-label">
-                      <div>Cost<br>(Per Day) </div>
+                      <div>Last Failed Deployment</div>
                       <!-- <div>(Per Day)</div> -->
                       <!-- {{prodEnv.costduration}} -->
                   </div>
@@ -95,27 +95,27 @@
           <ul class="service-overview">
               <li class="overview-item">
                       <div class="overview-value" [ngSwitch]="stgEnv.status" >
-                              <!-- <div class='background-icon' [class.success]='prodEnv.status=="deployment completed"' [class.inprogress]='prodEnv.status=="deployment failed"' [class.failed]='prodEnv.status=="deployment started" || prodEnv.status=="active"'> -->
-                                  <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"deployment completed"'>
+                        <!-- <div class='background-icon' [class.success]='prodEnv.status=="deployment completed"' [class.inprogress]='prodEnv.status=="deployment failed"' [class.failed]='prodEnv.status=="deployment started" || prodEnv.status=="active"'> -->
+                            <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"deployment completed"'>
 
-                                          <span class="path1"></span><span class="path2"></span>
+                                    <span class="path1"></span><span class="path2"></span>
 
-                                  </span>
-                                  <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"active"'>
+                            </span>
+                            <span class='icon-icon-good' title='{{stgEnv.status}}' *ngSwitchCase='"active"'>
 
-                                          <span class="path1"></span><span class="path2"></span>
+                                    <span class="path1"></span><span class="path2"></span>
 
-                                  </span>
+                            </span>
 
-                                  <span title='{{stgEnv.status}} '*ngSwitchCase='"deployment failed"' class='icon-icon-bad' >
-                                          <span class="path1"></span><span class="path2"></span>
-                                  </span>
-                                  <span title='{{stgEnv.status}}' class='icon-icon-inactive' *ngSwitchDefault ></span>
-                                  <span title='{{stgEnv.status}}' class='icon-In-Progress' *ngSwitchCase='"deployment started"'></span>
+                            <span title='{{stgEnv.status}} '*ngSwitchCase='"deployment failed"' class='icon-icon-bad' >
+                                    <span class="path1"></span><span class="path2"></span>
+                            </span>
+                            <span title='{{stgEnv.status}}' class='icon-icon-inactive' *ngSwitchDefault ></span>
+                            <span title='{{stgEnv.status}}' class='icon-In-Progress' *ngSwitchCase='"deployment started"'></span>
 
 
-                              <!-- </div> -->
-                          </div>
+                        <!-- </div> -->
+                      </div>
                   <div class="overview-label">Deployment<br>Status</div>
               </li>
               <li class="overview-item dep">
@@ -127,16 +127,16 @@
                   <div class="overview-label">Last Successful<br>Deployment</div>
               </li>
               <li class="overview-item">
-                  <div class="overview-value">{{stgEnv.deploymentsCountvalue}}</div>
+                  <div class="overview-value">{{stgEnv.deploymentsCountvalue || 'NA'}}</div>
                   <div class="overview-label">
                       <div># of Deployments<br>(Last 24 hours) </div>
                       <!-- <div>(Last 24 hours)</div> -->
                   </div>
               </li>
               <li class="overview-item" >
-                  <div class="overview-value">{{stgEnv.costvalue || 'NA'}}</div>
+                  <div class="overview-value">{{stgEnv.lastFailedDeployment || 'NA'}}</div>
                   <div class="overview-label">
-                      <div>(Cost<br>Per Day) </div>
+                      <div>Last Failed Deployment</div>
                       <!-- <div>(Per Day)</div> -->
                   </div>
               </li>
@@ -149,7 +149,7 @@
 
 
 
-<div *ngIf="!ErrEnv" class="service-overview-wrap relative row" >
+<div *ngIf="!ErrEnv && !isenvLoading" class="service-overview-wrap relative row" >
   <div class='eachBranch col-md-2 col-sm-5' *ngFor='let item of Environments'  (click)='stageClicked(item.logical_id)'>
       <div *ngIf='noSecEnv' class='empty-row'>No Environments Available</div>
 
