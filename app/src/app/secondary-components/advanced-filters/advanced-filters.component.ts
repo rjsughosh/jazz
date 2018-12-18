@@ -1,7 +1,5 @@
 import { Component,ViewContainerRef, OnInit, Input, Output, EventEmitter,ViewChild } from '@angular/core';
 import {DataCacheService } from '../../core/services/index';
-// import {IonRangeSliderModule} from "ng2-ion-range-slider";
-
 
 @Component({
   selector: '[advanced_filters]',
@@ -18,9 +16,7 @@ export class AdvancedFiltersComponent implements OnInit {
     @Input() assets:boolean = false;
 
     @Input() service: any = {};
-    // @ViewChild('sliderElement') sliderElement: IonRangeSliderModule;
 
-    
     @Output() onFilterSelect:EventEmitter<any> = new EventEmitter<any>();
 
 
