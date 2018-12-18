@@ -493,15 +493,12 @@ export class ServiceOverviewMultienvComponent implements OnInit {
   }
 
   internal_build: boolean = true;
-  ngOnChanges(x: any) {
 
+  ngOnChanges(x: any) {
     if (environment.multi_env) this.is_multi_env = true;
     if (environment.envName == 'oss') this.internal_build = false;
     var obj;
-    // this.getJSON().subscribe(data => obj=data, error => console.log(error));
-    // console.log('got config,,,,,',obj)
-    // let test = require(environment.configFile);
-    // console.log('test = ',test)
+
     if (!this.env_call) {
       if ((this.service.domain != undefined) && (this.internal_build == true)) {
         this.env_call = true;
@@ -509,20 +506,11 @@ export class ServiceOverviewMultienvComponent implements OnInit {
       }
     }
 
-    this.prodEnv = {};
-    this.stgEnv = {};
-
     if (!this.internal_build) {
       this.envfoross();
     }
-
-
-
-
-
-
-
   }
+
   ngOnDestroy() {
 
   }
