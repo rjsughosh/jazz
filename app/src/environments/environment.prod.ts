@@ -48,7 +48,7 @@ export const environment = {
   api_doc_name: 'http://cloud-api-doc.corporate.t-mobile.com',
   envName : "jazz",
   multi_env:false,
-  envLists:  {"nodejs8.10": "Nodejs 8.10", "python2.7": "Python 2.7", "python3.6": "Python 3.6", "java8": "Java 8"},
+  envLists:  {"nodejs8.10": "Nodejs 8.10", "python2.7": "Python 2.7", "python3.6": "Python 3.6", "java8": "Java 8", "go1.x": "Go 1.x"},
   deployment_accounts:[
     {
       "provider": "aws",

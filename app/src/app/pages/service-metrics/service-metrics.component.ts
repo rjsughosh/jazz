@@ -90,6 +90,9 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
         return this.getEnvironments()
           .then(() => {
             return this.applyFilter();
+          })
+          .catch((err)=>{
+            this.sectionStatus = 'error';
           });
       } else {
         return this.applyFilter();
