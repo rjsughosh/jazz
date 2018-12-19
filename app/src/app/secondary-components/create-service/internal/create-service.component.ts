@@ -215,6 +215,7 @@ export class CreateServiceComponent implements OnInit {
   validateEvents(value){
     if(value != null && ((value[0] === '-' || value[value.length - 1] === '-') || (value[0] === '.' || value[value.length - 1] === '.') || (value[0] === '_' || value[value.length - 1] === '_'))){
       this.invalidEventName = true;
+      console.log(this.invalidEventName);
     }
   }
 
@@ -270,6 +271,10 @@ export class CreateServiceComponent implements OnInit {
   }
   onAWSEventChange(val) {
     this.eventExpression.type = val;
+    this.eventExpression.S3BucketName = '';
+    this.eventExpression.SQSstreamARN = '';
+    this.eventExpression.dynamoTable = '';
+    this.eventExpression.streamARN = '';
     if(val !== `none`){
       this.rateExpression.type = 'none';
     }
