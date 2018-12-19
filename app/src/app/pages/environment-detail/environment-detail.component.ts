@@ -96,7 +96,11 @@ export class EnvironmentDetailComponent implements OnInit {
     this.friendly_name = event;
     if (!this.friendly_name){
       var env = this.environment_obj;
-      this.friendly_name = env.physical_id || env.logical_id;
+      if (env.logical_id.toLowerCase() == "prod" || env.logical_id.toLowerCase() == "stg"){
+        this.friendly_name = env.logical_id;
+      } else {
+        this.friendly_name = env.physical_id || env.logical_id;
+      }
     }
     
     this.breadcrumbs = [{
@@ -160,7 +164,11 @@ export class EnvironmentDetailComponent implements OnInit {
     if (res.data && res.data.environment && res.data.environment[0]){
       var env = res.data.environment[0];
       this.environment_obj = env;
-      this.friendly_name = env.physical_id || env.logical_id;
+      if (env.logical_id.toLowerCase() == "prod" || env.logical_id.toLowerCase() == "stg"){
+        this.friendly_name = env.logical_id;
+      } else {
+        this.friendly_name = env.physical_id || env.logical_id;
+      }
     }   
   }
 
