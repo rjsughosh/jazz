@@ -161,6 +161,7 @@ export class CreateServiceComponent implements OnInit {
   runtimeKeys : any;
   runtimeObject : any;
   invalidEventName:boolean = false;
+  disableBtn: boolean = true;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
   
@@ -271,13 +272,20 @@ export class CreateServiceComponent implements OnInit {
   }
   onAWSEventChange(val) {
     this.eventExpression.type = val;
-    this.eventExpression.S3BucketName = '';
-    this.eventExpression.SQSstreamARN = '';
-    this.eventExpression.dynamoTable = '';
-    this.eventExpression.streamARN = '';
+    this.eventExpression.S3BucketName = ' ';
+    this.eventExpression.SQSstreamARN = ' ';
+    this.eventExpression.dynamoTable = ' ';
+    this.eventExpression.streamARN = ' ';
     if(val !== `none`){
       this.rateExpression.type = 'none';
+      this.eventExpression.S3BucketName = '';
+      this.eventExpression.SQSstreamARN = '';
+      this.eventExpression.dynamoTable = '';
+      this.eventExpression.streamARN = '';
     }
+  }
+  validEvents(){
+    
   }
   onSelectedDr(selected) {
     this.rateExpression.interval = selected;
@@ -1016,16 +1024,16 @@ blurApplication(){
     if (this.rateExpression.error != undefined && this.typeOfService == 'function' && this.rateExpression.type != 'none') {
       return true
     }
-    if (this.eventExpression.type == 'dynamodb' && this.eventExpression.dynamoTable == undefined) {
+    if (this.eventExpression.type == 'dynamodb' && ( this.eventExpression.dynamoTable == undefined || this.eventExpression.dynamoTable.length < 3 )) {
       return true
     }
-    if (this.eventExpression.type == 'kinesis' && this.eventExpression.streamARN == undefined) {
+    if (this.eventExpression.type == 'kinesis' && ( this.eventExpression.streamARN == undefined || this.eventExpression.streamARN.length < 3 )) {
       return true
     }
-    if (this.eventExpression.type == 's3' && this.eventExpression.S3BucketName == undefined) {
+    if (this.eventExpression.type == 's3' && ( this.eventExpression.S3BucketName == undefined || this.eventExpression.S3BucketName.length < 3 )) {
       return true
     }
-    if (this.eventExpression.type == 'sqs' && this.eventExpression.SQSstreamARN  == undefined) {
+    if (this.eventExpression.type == 'sqs' && ( this.eventExpression.SQSstreamARN  == undefined || this.eventExpression.SQSstreamARN.length < 3 )) {
       return true
     }
     if (this.invalidServiceName || this.invalidDomainName || this.invalidServiceNameNum) {
