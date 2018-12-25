@@ -70,7 +70,12 @@ export class CreateServiceComponent implements OnInit {
   showSlackList: boolean = false;
   showRegionList:boolean = false;
   showAccountList:boolean = false;
-  oneSelected:boolean=false;
+  oneSelected:boolean = false;
+  isTableArnInFocus:boolean = false;
+  isStreamArnInFocus:boolean = false;
+  isS3InFocus:boolean = false;
+  isSQSInFocus:boolean = false;
+  
 
 
   isLoading: boolean = false;
@@ -276,6 +281,10 @@ export class CreateServiceComponent implements OnInit {
     this.eventExpression.SQSstreamARN = ' ';
     this.eventExpression.dynamoTable = ' ';
     this.eventExpression.streamARN = ' ';
+    this.isTableArnInFocus = false;
+    this.isStreamArnInFocus = false;
+    this.isS3InFocus = false;
+    this.isSQSInFocus = false;
     if(val !== `none`){
       this.rateExpression.type = 'none';
       this.eventExpression.S3BucketName = '';

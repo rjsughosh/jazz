@@ -338,7 +338,7 @@
     margin-bottom: -15px;
 }
 .s3-fields.arrow_box:after{
-    left: 58%;
+    left: calc( 58% - 3px );
     margin-left: -3px;
     margin-bottom: -15px
 }

@@ -117,11 +117,10 @@
                         </section>
                          <section class="col-lg-2 col-md-2 pad-left0 runtime-option">
                             <div class="radio-container">
-                                <input type="radio" name="runtime" [id]="runtimeKeys[4]" [value]="runtimeKeys[4]" [checked]="runtime == runtimeKeys[4]" (change)="onSelectionChange(runtimeKeys[4])">
+                                <input type="radio" name="runtime" [id]="runtimeKeys[4]" [disabled]='true' [value]="runtimeKeys[4]" [checked]="runtime == runtimeKeys[4]" (change)="onSelectionChange(runtimeKeys[4])">
                                 <label [for]="runtimeKeys[4]" class="radio-label grey"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[4]]}}</label>
                             </div>
                         </section>
-                       
                     </div>
                 </div>
             </div>
@@ -555,7 +554,7 @@
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input type="radio" name="AWSEvents" id="awsEventsNone" [value]="awsEventsNone" [checked]="eventExpression.type == 'awsEventsNone'" (click)="onAWSEventChange('awsEventsNone')">
-                                    <label for="awsEventsNone" class="radio-label"><span class='outer'></span><span class="background"></span>None</label>
+                                    <label for="awsEventsNone"><span class='outer'></span><span class="background"></span>None</label>
                                 </div>
                             </section>
                             <section class="col-lg-3 col-md-3  pad-left0 events-radio">
@@ -595,11 +594,11 @@
                                     <div class="text">Table ARN</div>
                                     <div class="label-input slct-bx-selected input-wrapper">
                                         <input type="text" disabled="disabled" class="inline-input input-label aws-events-left-block" value="{{eventsPlaceHolder.dynamodb}}">
-                                        <input id="dynamoTable" name="dynamoTable" type="text" minlength="3" maxlength="{{eventMaxLength.table_name}}" #dynamoTable='ngModel' pattern="{{servicePatterns.tableName}}" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" (blur)="validateEvents(eventExpression.dynamoTable)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Table Name"  >
+                                        <input id="dynamoTable" name="dynamoTable"  (focusout)="isTableArnInFocus=true"  type="text" minlength="3" maxlength="{{eventMaxLength.table_name}}" #dynamoTable='ngModel' pattern="{{servicePatterns.tableName}}" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" (blur)="validateEvents(eventExpression.dynamoTable)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Table Name"  >
                                   </div>
                                 </div>
-                                 <p class="termsConditions error-message" *ngIf="((chkDynamodb()) && dynamoTable.hasError('minlength') && (!dynamoTable.valid && (dynamoTable.dirty || dynamoTable.touched)))">Table name must contain only letters, numbers, hyphens, underscores or periods. Enter atleast 3 characters</p>
-                                <p class="termsConditions error-message" *ngIf="(chkDynamodb() && !dynamoTable.hasError('minlength') && dynamoTable.hasError('pattern'))">Table name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isTableArnInFocus && (eventExpression.dynamoTable.length< 3))">Enter atleast 3 characters</p>
+                                <p class="termsConditions error-message" *ngIf="(chkDynamodb() && dynamoTable.hasError('pattern'))">Table name must contain only letters, numbers, hyphens, underscores or periods.</p>
                                 <p class="learn-more">Function would be triggered whenever a new entry is added to the table. Note that the DynamoDB table should exist already and Jazz creates a new stream for this table</p>
                             </div>                          
 
@@ -614,11 +613,11 @@
                                     <div class="text">Stream ARN</div>
                                     <div class="label-input slct-bx-selected input-wrapper">
                                         <input type="text" disabled="disabled" class="inline-input input-label stream aws-events-left-block" value="{{eventsPlaceHolder.kinesis}}">
-                                        <input id="streamARN" name="streamARN" type="text" #streamARN="ngModel" minlength="3" maxlength="{{eventMaxLength.stream_name}}" pattern="{{servicePatterns.streamName}}" [(ngModel)]="eventExpression.streamARN" [focus]="focusKinesis" (blur)="validateEvents(eventExpression.streamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Stream Name" >
+                                        <input id="streamARN" name="streamARN"  (focusout)="isStreamArnInFocus=true" type="text" #streamARN="ngModel" minlength="3" maxlength="{{eventMaxLength.stream_name}}" pattern="{{servicePatterns.streamName}}" [(ngModel)]="eventExpression.streamARN" [focus]="focusKinesis" (blur)="validateEvents(eventExpression.streamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Stream Name" >
                                   </div>
                                 </div>
-                                <p class="termsConditions error-message" *ngIf="((chkfrKinesis()) && (!streamARN.valid && streamARN.hasError('minlength') && (streamARN.dirty || streamARN.touched)))">Stream name must contain only letters, numbers, hyphens, underscores or periods. Enter atleast 3 characters</p>
-                                <p class="termsConditions error-message" *ngIf="(chkfrKinesis() && streamARN.hasError('pattern'))">Stream name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isStreamArnInFocus && (eventExpression.streamARN.length < 3) )"> Enter atleast 3 characters.</p>
+                                <p class="termsConditions error-message" *ngIf="(chkfrKinesis() && streamARN.hasError('pattern'))">Stream name must contain only letters, numbers, hyphens, underscores or periods.</p>
                                 <p class="learn-more">Function would be triggered whenever the Lambda checkpoint has not reached the end of the Kinesis stream</p>
                             </div>
 
@@ -632,12 +631,12 @@
                                 <div class="col-lg-9">
                                     <div class="text">Bucket ARN</div>
                                     <div class="label-input slct-bx-selected input-wrapper">
-                                        <input id="S3BucketName" name="S3BucketName" type="text"  minlength="3" maxlength="{{eventMaxLength.bucket_name}}" pattern="{{servicePatterns.bucketName}}" #S3BucketName="ngModel" [(ngModel)]="eventExpression.S3BucketName" [focus]="focusS3" (blur)="validateEvents(eventExpression.S3BucketName)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-left-block aw-events-s3 ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Bucket Name"  autofocus>
+                                        <input id="S3BucketName" name="S3BucketName" type="text" (focusout)="isS3InFocus=true"  minlength="3" maxlength="{{eventMaxLength.bucket_name}}" pattern="{{servicePatterns.bucketName}}" #S3BucketName="ngModel" [(ngModel)]="eventExpression.S3BucketName" [focus]="focusS3" (blur)="validateEvents(eventExpression.S3BucketName)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-left-block aw-events-s3 ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Bucket Name"  autofocus>
                                   </div>
                                 </div>
                                 <p *ngIf = "">Error</p>
-                                <p class="termsConditions error-message" *ngIf="((chkS3()) && (!S3BucketName.valid && S3BucketName.hasError('minlength') && (S3BucketName.dirty || S3BucketName.touched)))">Bucket name must contain only lowercase letters, numbers or hyphens. Enter atleast 3 characters</p>
-                                <p class="termsConditions error-message" *ngIf="(chkS3() && !S3BucketName.hasError('minlength') && S3BucketName.hasError('pattern'))">Bucket name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isS3InFocus && (eventExpression.S3BucketName.length < 3))"> Enter atleast 3 characters.</p>
+                                <p class="termsConditions error-message" *ngIf="(chkS3() && S3BucketName.hasError('pattern'))">Bucket name must contain only lowercase letters, numbers or hyphens.</p>
 
                                 <p class="learn-more">Function would be triggered when an object is added or modified inside the bucket. Creating this lambda trigger will override any previously created triggers on this bucket for any ObjectCreated:*</p>
                             </div>
@@ -648,11 +647,11 @@
                                   <div class="text">Queue ARN</div>
                                   <div class="label-input slct-bx-selected input-wrapper">
                                       <input type="text" disabled="disabled" class="inline-input input-label stream-sqs aws-events-left-block" value="{{eventsPlaceHolder.sqs}}">
-                                      <input id="SQSstreamARN" name="SQSstreamARN" type="text" #SQSstreamARN="ngModel" minlength="3" [(ngModel)]="eventExpression.SQSstreamARN" pattern="{{servicePatterns.queueName}}" maxlength="{{eventMaxLength.queue_name}}" [focus]="focusSQS" (blur)="validateEvents(eventExpression.SQSstreamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block aws-events-right-block-sqs ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid" placeholder="Queue Name" >
+                                      <input id="SQSstreamARN" name="SQSstreamARN" (focusout)="isSQSInFocus=true" type="text" #SQSstreamARN="ngModel" minlength="3" [(ngModel)]="eventExpression.SQSstreamARN" pattern="{{servicePatterns.queueName}}" maxlength="{{eventMaxLength.queue_name}}" [focus]="focusSQS" (blur)="validateEvents(eventExpression.SQSstreamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block aws-events-right-block-sqs ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid" placeholder="Queue Name" >
                                   </div>
                                 </div>
-                                <p class="termsConditions error-message" *ngIf="((chkSQS()) && (!SQSstreamARN.valid && (SQSstreamARN.dirty || SQSstreamARN.touched)))">Queue name must contain only letters, numbers, hyphens or underscores. Enter atleast 3 characters </p>
-                                <p class="termsConditions error-message" *ngIf="(chkSQS() && streamARN.hasError('patter') )">Queue name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isSQSInFocus && (eventExpression.SQSstreamARN.length < 3))"> Enter atleast 3 characters.</p>
+                                <p class="termsConditions error-message" *ngIf="(chkSQS() && SQSstreamARN.hasError('pattern') )">Queue name must contain only letters, numbers, hyphens or underscores.</p>
                                 <p class="learn-more">Function would be triggered whenever new messages are added to the source SQS queue</p>
                               </div>
 
