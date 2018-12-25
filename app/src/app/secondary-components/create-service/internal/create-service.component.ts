@@ -226,7 +226,7 @@ export class CreateServiceComponent implements OnInit {
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
-    this.selectedDeploymentTarget = '';
+    //this.selectedDeploymentTarget = '';
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
@@ -584,6 +584,8 @@ export class CreateServiceComponent implements OnInit {
       payload["appName"]=this.selectApp.appName;
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
+
+    payload["deployment_accounts"] = environment.deployment_accounts;
     this.isLoading = true;
 
     this.http.post('/jazz/create-serverless-service', payload)
@@ -1339,7 +1341,7 @@ blurApplication(){
             this.application_arr[i].appName=this.application_arr[i].appName.trim();
           }
         }
-    
+
         this.application_arr.sort((a: any, b: any) => {
           if (a.appName < b.appName) {
             return -1;
@@ -1348,7 +1350,7 @@ blurApplication(){
           } else {
             return 0;
           }
-        });   
+        });
         this.appPlaceHolder = "Start typing..."
         this.enableAppInput = true;
         this.isLoading = false;

@@ -673,6 +673,11 @@
     opacity: .5;
 }
 
+.runtime-option {
+    padding: 0 0.5em 0 15px;
+    width: 20%;
+}
+
 .pad-left0 {
     @media(max-width: 992px) {
         padding-left: 0px;
@@ -714,6 +719,15 @@
     padding-right: 0 !important;
     border-radius: 2px 0 0 2px !important;
 }
+
+.aws-events-block{
+    border: 1px solid #ccc;  
+    float: left;
+    width: 315px;
+    padding-right: 0 !important;
+    border-radius: 2px 0 0 2px !important;
+}
+
 .aws-events-left-block.stream{
     width: 25rem;
 }
@@ -947,4 +961,8 @@ p.learn-more {
   .radio-container {
     margin-right: 15px;
   }
+}
+
+.radio-label {
+    display: inline-flex;
 }
