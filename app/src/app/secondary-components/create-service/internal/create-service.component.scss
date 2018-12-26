@@ -110,6 +110,12 @@
     /*width: 40px;*/
 }
 
+.outer {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 .service-box p {
     padding-top: 1rem;
     margin: 0;
@@ -307,6 +313,9 @@
 	border-width: 25px;
 	margin-left: -20px;
 }
+
+
+
 
 .cron-fields {
     &.row {
@@ -686,15 +695,6 @@
     width: 20%;
 }
 
-//new css runtime 
-.node-wrapper{
-    width: 20.666667%;
-}
-
-.python-wrapper{
-    width: 19.666667%;
-}
-
 .pad-left0 {
     @media(max-width: 992px) {
         padding-left: 0px;
@@ -982,4 +982,5 @@ p.learn-more {
 
 .radio-label {
     display: inline-flex;
+    padding-left: 25px;
 }
