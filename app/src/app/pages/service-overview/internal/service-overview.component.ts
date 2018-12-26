@@ -1796,6 +1796,7 @@ export class ServiceOverviewComponent implements OnInit {
                 "app_id" : this.service.app_id
             };
             this.selectedApplications.push(obj);
+            this.appPlaceHolder = "";
             this.getAppName(obj);
             
         }
