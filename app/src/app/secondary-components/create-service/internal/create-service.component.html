@@ -560,25 +560,25 @@
                             <section class="col-lg-3 col-md-3  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input  type="radio" name="AWSEvents" id="dynamodb" [value]="dynamodb" [checked]="eventExpression.type == 'dynamodb'" (click)="onAWSEventChange('dynamodb')">
-                                    <label class="radio-label" for="dynamodb"><span></span><span class="background"></span>DynamoDB</label>
+                                    <label  for="dynamodb"><span></span><span class="background"></span>DynamoDB</label>
                                 </div>
                             </section>
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input  type="radio" name="AWSEvents" id="kinesis" [value]="kinesis" [checked]="eventExpression.type == 'kinesis'" (click)="onAWSEventChange('kinesis')">
-                                    <label class="radio-label" for="kinesis"><span></span><span class="background"></span>Kinesis</label>
+                                    <label  for="kinesis"><span></span><span class="background"></span>Kinesis</label>
                                 </div>
                             </section>
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input  type="radio" name="AWSEvents" id="s3" [value]="s3" [checked]="eventExpression.type == 's3'" (click)="onAWSEventChange('s3')">
-                                    <label class="radio-label" for="s3"><span></span><span class="background"></span>S3</label>
+                                    <label  for="s3"><span></span><span class="background"></span>S3</label>
                                 </div>
                             </section>
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                               <div class="radio-container">
                                   <input type="radio" name="AWSEvents" id="sqs" [value]="sqs" [checked]="eventExpression.type == 'sqs'" (click)="onAWSEventChange('sqs')">
-                                  <label class="radio-label" for="sqs"><span></span><span class="background"></span>SQS</label>
+                                  <label  for="sqs"><span></span><span class="background"></span>SQS</label>
                               </div>
                             </section>
                         </div>
