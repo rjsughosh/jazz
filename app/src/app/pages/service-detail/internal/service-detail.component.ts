@@ -155,19 +155,16 @@ export class ServiceDetailComponent implements OnInit {
         returnObject['providerMemorySize'] = service.metadata.providerMemorySize;
         returnObject['create_cloudfront_url'] = service.metadata.create_cloudfront_url;
         returnObject['eventScheduleRate'] = service.metadata.eventScheduleRate;
-        if (service.metadata.event_source) {
-          returnObject['event_source'] = service.metadata.event_source;
+        if (service.metadata.events || service.metadata.event_source) {
+          returnObject['event_type'] = service.metadata.event_source || service.metadata.events[0].type;
         }
-        if (service.metadata.event_source_dynamodb) {
-          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb;
+        if (service.metadata.events) {
+          returnObject['event_source_arn'] = service.metadata.events[0].source;
         }
-        if (service.metadata.event_source_kinesis) {
-          returnObject['event_source_arn'] = service.metadata.event_source_kinesis;
+        if (service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3 || service.metadata.event_source_sqs) {
+          returnObject['event_source_arn'] = service.metadata.event_source_dynamodb || service.metadata.event_source_kinesis || service.metadata.event_source_s3 ||service.metadata.event_source_sqs;
         }
-        if (service.metadata.event_source_s3) {
-          returnObject['event_source_arn'] = service.metadata.event_source_s3;
-        }
-        returnObject['app_name'] = service.metadata.app_name;
+        returnObject['app_name'] = service.metadata.app_name || service.app_name;
         returnObject['require_internal_access'] = service.metadata.require_internal_access;
         returnObject['enable_api_security'] = service.metadata.enable_api_security;
       }
@@ -208,7 +205,7 @@ export class ServiceDetailComponent implements OnInit {
           if (typeof service.metadata.eventScheduleRate !== "object") {
           }
           else{
-            service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S;
+            !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
           }
           return service;
         }

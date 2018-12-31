@@ -63,6 +63,8 @@ export class ServiceOverviewComponent implements OnInit {
     show_loader: boolean = false;
     plc_hldr: boolean = true;
     status_empty: boolean;
+    appNameVis: string;
+    isapplicationDisable: boolean = true;
     descriptionChanged : boolean = true;
     description_empty: boolean;
     approvers_empty: boolean;
@@ -139,10 +141,10 @@ export class ServiceOverviewComponent implements OnInit {
     eventSchedule: string = 'fixedRate';
     cronObj = new CronObject('0/5', '*', '*', '*', '?', '*')
     rateExpression = new RateExpression(undefined, undefined, 'none', '5', this.selected, '');
-    eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined);
+    eventExpression = new EventExpression("awsEventsNone", undefined, undefined, undefined,undefined);
     viewMode: boolean = true;
     cronFieldValidity: any;
-    vpcSelected: boolean = this.service.require_internal_access;
+    requireInternalAccess: boolean = this.service.require_internal_access;
     vpcInitial: boolean = this.service.require_internal_access;
     publicSelected: boolean = this.service.is_public_endpoint;
     publicInitial: boolean = this.service.is_public_endpoint;
@@ -152,12 +154,13 @@ export class ServiceOverviewComponent implements OnInit {
     saveClicked: boolean = false;
     advancedSaveClicked: boolean = false;
     showApplicationList: boolean = false;
-    selectedApplications = [];
+    selectedApplications: any = [];
     listRuntime : Object;
     initialselectedApplications = [];
     oneSelected: boolean = false;
     appPlaceHolder: string = 'Start typing(min 3 char)...';
     applc: string;
+    showAppclInput: boolean = true;
     isSlackAvailable: boolean;
     isPUTLoading: boolean = false;
     PutPayload: any;
@@ -196,7 +199,14 @@ export class ServiceOverviewComponent implements OnInit {
     selectedApprovers : any = [];
     approversListShow: any;
     changeCounterApp : number = 0;
+    dispAppError: boolean = false;
+    applc1: string ='';
+    enableApiSecurity: boolean = false;
+    isAppTouched: boolean= false;
+    selectedApplicationLocal: any = [];
+    rateData : any = ['Minutes', 'Hours', 'Days'];
     approversPlaceHolder : string = "Start typing (min 3 chars)...";
+    awsEventExpression : any; 
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -308,6 +318,7 @@ export class ServiceOverviewComponent implements OnInit {
         private authenticationservice: AuthenticationService
     ) {
         this.http = request;
+        this.awsEventExpression = environment.awsEventExpression;
         this.toastmessage = messageservice;
         this.descriptionChanged = true;
         this.isInputShow = false;
@@ -331,6 +342,7 @@ export class ServiceOverviewComponent implements OnInit {
     public getData() {
         let localApprovvs = JSON.parse(localStorage.getItem('approvers')) ||  {};
         if(Object.keys(localApprovvs).length>0){
+            this.approversListRes = localApprovvs;
             this.approversListShow= localApprovvs.data.values.slice(0, localApprovvs.data.values.length);
             this.getApproversList();
             this.isInputShow = true;
@@ -350,6 +362,7 @@ export class ServiceOverviewComponent implements OnInit {
 
     getApproversList(){
         let locArr = [];
+        this.approversListShow= this.approversListRes.data.values.slice(0, this.approversListRes.data.values.length);
         if(this.service.approvers && this.approversListShow) {
             if(this.approversListShow.length > 0)
                 {  
@@ -439,13 +452,19 @@ export class ServiceOverviewComponent implements OnInit {
 
     onEventScheduleChange(val) {
         this.rateExpression.type = val;
+        this.eventExpression.type = "awsEventsNone";
+        if(val=='cron' && this.service.eventScheduleRate){
+            this.setEventScheduleRate();
+        }
     }
     onAWSEventChange(val) {
+        this.rateExpression.type = "none";
         this.eventExpression.type = val;
     }
     public focusDynamo = new EventEmitter<boolean>();
     public focusKinesis = new EventEmitter<boolean>();
     public focusS3 = new EventEmitter<boolean>();
+    public focusSQS = new EventEmitter<boolean>();
 
     chkDynamodb() {
         this.focusDynamo.emit(true);
@@ -460,6 +479,11 @@ export class ServiceOverviewComponent implements OnInit {
     chkS3() {
         this.focusS3.emit(true);
         return this.eventExpression.type === 's3';
+    }
+
+    chkSQS() {
+        this.focusSQS.emit(true);
+        return this.eventExpression.type === 'sqs';
     }
 
     openLink(link) {
@@ -522,6 +546,9 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     selectApprovers(approver) {
+        this.applc1='';
+        this.approversPlaceHolder = "Start typing (min 3 chars)...";
+        this.approverInput.nativeElement.blur();
         this.approverInput.nativeElement.focus();
         this.approversTouched = true;
         this.selApprover = approver;
@@ -542,7 +569,6 @@ export class ServiceOverviewComponent implements OnInit {
         } else {
             this.approversSaveStatus = false;
         }
-        this.appPlaceHolder = "Start typing(min 3 char)...";
         for (var i = 0; i < this.approversListShow.length; i++) {
           if (this.approversListShow[i].displayName === approver.displayName) {
             this.approversListShow.splice(i, 1);
@@ -606,7 +632,9 @@ export class ServiceOverviewComponent implements OnInit {
     }
 
     focusInputApplication(event) {
-        document.getElementById('applc').focus();
+        let applclocal1 =  document.getElementById('applc')
+        if(applclocal1)
+            applclocal1.focus();
     }
     keypress(hash) {
         if (hash.key == 'ArrowDown') {
@@ -637,7 +665,7 @@ export class ServiceOverviewComponent implements OnInit {
         else if (hash.key == 'Enter' && this.focusindex > -1) {
           this.approverInput.nativeElement.blur();
           event.preventDefault();
-          this.appPlaceHolder = "Start typing(min 3 char)...";
+          this.approversPlaceHolder = "Start typing(min 3 char)...";
           var pinkElement;
           pinkElement = document.getElementsByClassName('pinkfocususers')[0].children;
           var approverObj = {
@@ -682,19 +710,19 @@ export class ServiceOverviewComponent implements OnInit {
             this.isInputShow = true;
       }
 
-    removeApplication(index, approver) {
+    removeApplication(index, app) {
         this.oneSelected=false;
+        this.isAppTouched = true;
+        this.dispAppError = false;
         this.selectApp={};  
+        this.showAppclInput = true;
         this.appPlaceHolder='Start typing...';
-        // this.application_arr.push(approver);
-        let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
-        this.selectedApprovers = nonRepeatedData(this.selectedApprovers);
-        this.approversListShow.splice(index, 1);
+        this.selectedApplications= [];
       }
 
     focusInput(event) {
         if(this.isInputShow)
-            document.getElementById('applc').focus();
+            document.getElementById('applc1').focus();
     }
 
     blurApplication() {
@@ -756,18 +784,19 @@ export class ServiceOverviewComponent implements OnInit {
 
     selectApp;
     selectApplication(app) {
+        this.dispAppError = true;
+        this.isAppTouched = true;
+        this.showAppclInput = false;
         this.oneSelected=true;
-        this.appPlaceHolder='';
         this.selectApp = app;
         let thisclass: any = this;
         this.showApplicationList = false;
-        thisclass.applc = '';
+        thisclass.applc1 = '';
         this.selectedApplications.push(app);
         let nonRepeatedData = (data) => data.filter((v,i) => data.indexOf(v) === i);
         this.application_arr = nonRepeatedData(this.application_arr);
         return;
       }
-
 
     generateExpression(rateExpression) {
         if (this.rateExpression !== undefined) {
@@ -818,6 +847,40 @@ export class ServiceOverviewComponent implements OnInit {
         }
     }
 
+    getAppName(app){
+        if(app){
+            this.selectedApplicationLocal = [];
+            //checking the complete app list arrived 
+            if(this.application_arr.length>200){
+                this.isapplicationDisable = false;
+                this.showAppclInput = false;
+                this.selectedApplications = [];
+                if(this.application_arr.length > 100){
+                let localRef = this.application_arr.filter((a)=> (a.appID==app.app_id || a.issueID==app.app_id));
+                if(localRef.appID == app.app_id){
+                    localRef = localRef.slice(0);
+                }
+                if(localRef.length==0){
+                    localRef[0]= app;
+                }
+                this.selectedApplications.push(localRef[0]);
+                this.selectedApplicationLocal.push(localRef[0]);
+                this.appNameVis =  this.selectedApplications[0].appName;
+                return;
+                }
+            }
+            //getting the app list
+            setTimeout(()=>{
+                this.getAppName(app);
+            },500);
+        }
+    }
+
+    onSelectedDr(selected) {
+        this.rateExpression.interval = selected;
+        this.generateExpression(this.rateExpression)
+    }
+
 
     onEditClick() {
         this.descriptionChanged = true;
@@ -843,25 +906,29 @@ export class ServiceOverviewComponent implements OnInit {
     }
     onCompleteClick() {
         this.isPUTLoading = true;
-
         this.http.put('/jazz/services/' + this.service.id, this.PutPayload)
             .subscribe(
                 (Response) => {
                     this.isPUTLoading = false;
+                    this.advancedSaveClicked = false;
                     this.disp_show = true;
+                    this.disp_show2 = true;
                     this.isLoadingService = true;
                     this.serviceDetail.onDataFetched(Response.data);
                     this.isLoadingService = false;
                     this.loadPlaceholders()
                     this.disp_show = true;
                     this.saveClicked = false;
+                    this.selectedApplications = []
                     let successMessage = this.toastmessage.successMessage(Response, "updateService");
                     this.toast_pop('success', "", "Data for service: " + this.service.name + " " + successMessage);
                 },
                 (Error) => {
                     this.isLoadingService = false;
                     this.isPUTLoading = false;
+                    this.advancedSaveClicked = false;
                     this.disp_show = true;
+                    this.disp_show2 = true;
                     this.saveClicked = false;
                     this.edit_save = 'SAVE';
                     let errorMessage = this.toastmessage.errorMessage(Error, "updateService");
@@ -875,44 +942,71 @@ export class ServiceOverviewComponent implements OnInit {
         this.saveClicked = false;
         this.advancedSaveClicked = true;
         let payload = {};
+        let obJ = {};
 
         if (this.advancedSaveClicked) {
-            if (this.rateExpression.type != 'none') {
-                this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
-                if (this.rateExpression.cronStr == 'invalid') {
-                    return;
-                } else if (this.rateExpression.cronStr !== undefined) {
-                    payload["rateExpression"] = this.rateExpression.cronStr;
+            if(this.rateExpression.type){
+                if (this.rateExpression.type != 'none') {
+                    this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+                    if (this.rateExpression.cronStr == 'invalid') {
+                        return;
+                    } else if (this.rateExpression.cronStr !== undefined) {
+                        obJ["eventScheduleRate"] = `cron(${this.rateExpression.cronStr})`;
+                    } 
+                }
+                else {
+                    obJ["eventScheduleRate"] = null;
                 }
             }
+            
+            if(this.eventExpression.type){
+                if (this.eventExpression.type !== "awsEventsNone") {
+                    var event = {};
+                    event["type"] = this.eventExpression.type;
+                    if (this.eventExpression.type === "dynamodb") {
+                        event["source"] = this.awsEventExpression.dynamodb + this.eventExpression.dynamoTable;
+                        event["action"] = "PutItem";
+                    } else if (this.eventExpression.type === "kinesis") {
+                        event["source"] = this.awsEventExpression.kinesis + this.eventExpression.streamARN;
+                        event["action"] = "PutRecord";
+                    } else if (this.eventExpression.type === "s3") {
+                        event["source"] = this.eventExpression.S3BucketName;
+                        event["action"] = "s3:ObjectCreated:*";
+                    } else if (this.eventExpression.type === "sqs") {
+                        event["source"] = this.awsEventExpression.sqs + this.eventExpression.SQSstreamARN;
+                        event["action"] = "PutItem";
+                    } 
+                    let locEventArr = [];
+                    locEventArr.push(event);
+                    obJ["events"] = locEventArr;
+                }
 
-            if (this.eventExpression.type !== "awsEventsNone") {
-                var event = {};
-                event["type"] = this.eventExpression.type;
-                if (this.eventExpression.type === "dynamodb") {
-                    event["source"] = "arn:aws:dynamodb:us-west-2:302890901340:table/" + this.eventExpression.dynamoTable;
-                    event["action"] = "PutItem";
-                } else if (this.eventExpression.type === "kinesis") {
-                    event["source"] = "arn:aws:kinesis:us-west-2:302890901340:stream/" + this.eventExpression.streamARN;
-                    event["action"] = "PutRecord";
-                } else if (this.eventExpression.type === "s3") {
-                    event["source"] = this.eventExpression.S3BucketName;
-                    event["action"] = "s3:ObjectCreated:*";
+                else {
+                    var event = {};
+                    event["type"] = "NA";
+                    event["source"] = "NA";
+                    event["action"] = "NA";
+                    let locEventArr = [];
+                    locEventArr.push(event);
+                    obJ["events"] = locEventArr;
                 }
-                payload["events"] = [];
-                payload["events"].push(event);
-            }
-            if (this.vpcInitial !== this.vpcSelected) {
-                payload["require_internal_access"] = this.vpcSelected;
+                
+             }   
+            if (this.requireInternalAccess !== this.service.require_internal_access) {
+                obJ["require_internal_access"] = this.requireInternalAccess;
             }
             if (this.publicSelected !== this.publicInitial) {
-                payload["is_public_endpoint"] = this.publicSelected;
+                obJ["is_public_endpoint"] = this.publicSelected;
             }
             if (this.cdnConfigSelected !== this.cdnConfigInitial) {
-                payload["create_cloudfront_url"] = this.cdnConfigSelected;
+                obJ["create_cloudfront_url"] = this.cdnConfigSelected;
+            }
+            if(this.service.enable_api_security !== this.enableApiSecurity){
+                obJ["enable_api_security"] = this.enableApiSecurity;
             }
 
         }
+        payload["metadata"] = obJ;
         this.PutPayload = payload;
         if (Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true
     }
@@ -941,6 +1035,12 @@ export class ServiceOverviewComponent implements OnInit {
                     "providerRuntime" : this.accSelected
                 }
             }
+            if (this.selectedApplications[0].appName != this.service.app_name){
+                payload["metadata"] = {
+                  "app_id" : this.selectedApplications[0].appID
+                }
+                payload["app_name"] = this.selectedApplications[0].appName
+            }
             if(this.compareApproversArray(this.selectedApprovers) >0){
                 let localData = [];
                 this.selectedApprovers.map(data=>{
@@ -955,11 +1055,7 @@ export class ServiceOverviewComponent implements OnInit {
                     "approvalTimeOutInMins" : this.approvalTime
                 }
             }
-            if ((this.selectedApplications.length > 0) && (this.selectedApplications[0].appName != this.initialselectedApplications[0].appName)) {
-                payload["appName"] = this.selectApp.appName;
-                if (this.selectApp.appID)
-                    payload["appID"] = this.selectApp.appID.toLowerCase();
-            }
+
 
         }
         this.PutPayload = payload;
@@ -974,12 +1070,19 @@ export class ServiceOverviewComponent implements OnInit {
 
     onCancelClick() {
         this.showApproversList = false;
+        this.isAppTouched = false;
         this.approversSaveStatus = false;
         this.changeCounterApp = 0;
         this.approversLimitStatus = false;
         this.isInputShow = true;
+        this.enableApiSecurity = this.service.enable_api_security;
+        this.requireInternalAccess = this.service.require_internal_access;
+        this.dispAppError = false;
         this.update_payload = {};
-        this.selectedApplications = [];
+        this.selectedApplications = this.selectedApplicationLocal.slice(0);
+        if(this.selectedApplications.length>0){
+            this.showAppclInput = false;
+        }
         this.oneSelected = false;
         this.disp_show = true;
         this.disp_show2 = true;
@@ -1074,7 +1177,6 @@ export class ServiceOverviewComponent implements OnInit {
                         if (isAvailable)//if valid
                         {
                             this.hide_slack_error = true;
-
                         }
                         else {
                             this.hide_slack_error = false;
@@ -1084,7 +1186,6 @@ export class ServiceOverviewComponent implements OnInit {
                     },
                     (error) => {
                         var err = error;
-                        // console.log(err);
                         this.show_loader = false;
 
                     }
@@ -1259,7 +1360,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 else {
                 this.Environments[j] = this.environ_arr[i];
-                    // console.log('--->><<---',this.environ_arr[i]);
                     this.envList[k] = this.environ_arr[i].logical_id;
                     if (this.environ_arr[i].friendly_name != undefined) {
                         this.friendlist[k++] = this.environ_arr[i].friendly_name;
@@ -1632,6 +1732,19 @@ export class ServiceOverviewComponent implements OnInit {
             });
     }
 
+    setEventScheduleRate() {
+        let localEvenSchedule = this.service.eventScheduleRate;
+        localEvenSchedule = localEvenSchedule.replace(/[\(\)']+/g,' ');
+        localEvenSchedule = localEvenSchedule.split(' ');
+        this.rateExpression.type = localEvenSchedule[0];
+        this.cronObj.minutes = localEvenSchedule[1];
+        this.cronObj.hours = localEvenSchedule[2];
+        this.cronObj.dayOfMonth = localEvenSchedule[3];
+        this.cronObj.month = localEvenSchedule[4];
+        this.cronObj.dayOfWeek = localEvenSchedule[5];
+        this.cronObj.year = localEvenSchedule[6];
+    }
+
 
     refresh_env() {
         this.envComponent.refresh();
@@ -1639,6 +1752,8 @@ export class ServiceOverviewComponent implements OnInit {
     internal_build: boolean = true;
 
     ngOnChanges(x: any) {
+        this.selectedApprovers = [];
+        this.selectedApplications = [];
         if (environment.multi_env) this.is_multi_env = true;
         if (environment.envName == 'oss') this.internal_build = false;
         var obj;
@@ -1646,7 +1761,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.service.approvalTimeOutInMins){
             this.setApprovalData();
         }
-        if(this.selectedApprovers.length === 0 &&  this.changeCounterApp == 0 && this.service.approvers){
+        if(this.service.approvers){
             this.service.approvers.map(data=>{
                 let obj = { 
                     "userId" : data
@@ -1660,11 +1775,30 @@ export class ServiceOverviewComponent implements OnInit {
             if(this.service.approvers.length == 5){
                 this.isInputShow = false;
             }
+
+        }
+        if(this.service.enable_api_security){
+            this.enableApiSecurity= this.service.enable_api_security;
         }
         if(this.service.approvers){
             if(Object.keys(this.service.approvers).length == Object.keys(this.selectedApprovers).length){
                 this.getApproversList();
             }
+        }
+        
+        if(this.service.eventScheduleRate){
+            this.setEventScheduleRate();
+        }
+
+        if(this.service.app_id){
+            let obj = { 
+                "appName" : this.service.app_name || this.service.app_id,
+                "app_id" : this.service.app_id
+            };
+            this.selectedApplications.push(obj);
+            this.appPlaceHolder = "";
+            this.getAppName(obj);
+            
         }
         this.loadPlaceholders();
 
@@ -1674,7 +1808,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.publicInitial = this.service.is_public_endpoint;
         this.cdnConfigInitial = this.service.create_cloudfront_url;
         this.vpcInitial = this.service.require_internal_access;
-        this.vpcSelected = this.service.require_internal_access;
+        this.requireInternalAccess = this.service.require_internal_access;
 
         // this.selectedApplications[0] = this.service.app_name;
         if (!this.internal_build) {
@@ -1689,11 +1823,9 @@ export class ServiceOverviewComponent implements OnInit {
             if (this.islink) {
                 if (this.internal_build) {
                     this.bitbucketRepo = "View on Bitbucket";
-
                 }
                 else {
                     this.bitbucketRepo = "Git Repo";
-
                 }
                 // this.bitbucketRepo = "View on Bitbucket";
                 this.repositorylink = this.service.repository;
@@ -1916,7 +2048,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 // var id=pinkElements.children[0].innerHTML;
             }
-            // console.log(this.focusindex);
             if (this.focusindex > 2) {
                 this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 
@@ -1962,7 +2093,6 @@ export class ServiceOverviewComponent implements OnInit {
                 }
                 // var id=pinkElements.children[0].innerHTML;
             }
-            // console.log(this.focusindex);
             if (this.focusindex > 2) {
                 this.scrollList = { 'position': 'relative', 'top': '-' + ((this.focusindex - 2) * 2.9) + 'rem' };
 

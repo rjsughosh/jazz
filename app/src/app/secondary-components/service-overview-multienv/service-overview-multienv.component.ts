@@ -295,8 +295,8 @@ export class ServiceOverviewMultienvComponent implements OnInit {
         } else {
           return moment(time).format('ll');
         }
-      }
-    }    
+      }    
+    }
   }
 
   get24HourDeployment(env){

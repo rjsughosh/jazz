@@ -662,8 +662,23 @@ section:focus
     transform: skew(-20deg);
     
 }
+
+.disableInputField{
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0.4;
+}
+.advance-baseline-wrapper{
+    align-items: baseline;
+}
 .noSlackError{
     border-bottom-color: red;
+}
+.noApproverError{
+    border-color:  red;
+}
+.radio-wrapper{
+    display: flex;
 }
 .limitWrapper{
       padding-top: 10px;
@@ -1454,7 +1469,8 @@ details summary::-webkit-details-marker {
 }
 
 .cron-field{
-  min-width: 45rem;
+  min-width: 63rem;
+  width: 63rem;
   margin-left: -3.5rem;
 }
 .event-schedule-radio{
@@ -1484,7 +1500,6 @@ details{
 }
 .down-btn-wrap-advanced{
   bottom: -4rem;
-  margin-right: 5em;
 }
 .advance-wrapper{
     margin-top : 6em;
@@ -1668,17 +1683,20 @@ input{
 .s3-fields.arrow_box:after {
   left: 61%;
 }
+.sqs-fields.arrow_box:after{
+    left:calc( 72% - 1rem );
+}
 .application-drop-wrap{
   width: calc( 100% - 11rem );
 
-  .each-app{
+.each-app{
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 }
 .fixed-rate{
-  padding-right: 2.5rem
+  padding-right: 2.5rem;
 }
 
 .first-row{
@@ -1704,18 +1722,31 @@ input{
   left: 31%;
 }
 .rate-field.arrow_box:after{
-  left: 14.5%;
+  left: calc( 12% - 14px );
 }
 
 .cron-fields.arrow_box:after {
-  left: 30.5%;
+  left: calc( 28% + 2px );
 }
 .cron-field {
-  margin-left: 0;
+  margin-left: 6px;
 }
 .internal-access{
-  width:41% !important;
+//   width:41% !important;
   .det-value{
     margin-left: 1.5rem;
   }
+}
+.aws-events-left-block.stream-sqs{
+    width: 19.5rem;
+}
+.sqs-events{
+    width: 50%;
+}
+.width-api{
+    width: 100% !important;
+}
+
+.width-api-input{
+    width: 110%;
 }

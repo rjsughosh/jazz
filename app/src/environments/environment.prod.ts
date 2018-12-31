@@ -43,6 +43,25 @@ export const environment = {
       "assets": true
     }
   },
+  charachterLimits:{
+    eventMaxLength:{
+      "stream_name":128,
+      "table_name":255,
+      "queue_name":80,
+      "bucket_name":63
+    },
+    serviceName:20,
+    domainName:20
+  },
+  servicePatterns:{
+    "serviceName":"^[A-Za-z0-9\-]+$",
+    "domainName":"^[A-Za-z0-9\-]+$",
+    "slackChannel":"^[A-Za-z0-9\-_]+$",
+    "streamName":"[a-zA-Z0-9_.-]+",
+    "tableName":"^[A-Za-z0-9\-._]+$",
+    "queueName":"[A-Za-z0-9_-]+",
+    "bucketName":"[a-z0-9-]+"
+  },
   configFile: 'config/config.json',
   baseurl: "https://cloud-api.corporate.t-mobile.com/api",
   api_doc_name: 'http://cloud-api-doc.corporate.t-mobile.com',
@@ -59,6 +78,12 @@ export const environment = {
   ],
   serviceTabs:['overview','access control','metrics','logs'],
   environmentTabs:['overview','deployments','code quality','assets', 'metrics', 'logs','clearwater'],
+  awsEventExpression: {
+    "dynamodb" :  "arn:aws:dynamodb:us-west-2:302890901340:table/",
+    "kinesis" : "arn:aws:kinesis:us-west-2:302890901340:stream/",
+    "s3" : "s3:ObjectCreated:*",
+    "sqs" : "arn:aws:sqs:us-west-2:302890901340:"
+  },
   urls:{
     docs_link: "https://docs.jazz.corporate.t-mobile.com/",
     content_base: "https://docs.jazz.corporate.t-mobile.com/external-content",

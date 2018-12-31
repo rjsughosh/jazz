@@ -200,13 +200,13 @@
                 <div class="flex-col">
                     <section class="pad-left0">
                         <div class="input-field-container">
-                            <div class="selected-approvers"      >
+                            <div class="selected-approvers" [ngClass]="{noApproverError : approversLimitStatus === true}">
                                 <ul (click)='focusInput($event)'>
                                     <li *ngFor="let selected of selectedApprovers;let i=index" >
                                         <div class="display-wrapper">{{selected.userId}}</div>
                                         <span (click)="removeApprover(i, selected)" class="icon-icon-close"></span>
                                     </li>
-                                    <input #approverInput *ngIf="isInputShow" [class.hide]='oneSelected' (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApproverChange($event)">
+                                    <input #approverInput *ngIf="isInputShow"  (keydown)="keypress($event)" (blur)='blurApplication()' placeholder="{{approversPlaceHolder}}"  autocomplete="off" id="applc1" name="applc1" type="text" class="textForm" [(ngModel)]="applc1" (ngModelChange)="onApproverChange($event)">
                                 </ul>
                              </div>    
                             <div [hidden]="!showApproversList" class="approvers-list-wrap">
@@ -228,35 +228,6 @@
       <div class='metadata-column'>
         <ul>
           <li>
-            <div class='det-label'>App Name</div>
-            <div *ngIf='disp_show || true' class='det-value'>{{service.app_name || "NA"}}</div>
-            <div *ngIf='!disp_show && false' class="det-value application-drop-wrap">
-                <div class="flex-col">
-                    <section class="pad-left0">
-                        <div class="input-field-container" >
-                            <div class="selected-approvers selected-applications">
-                                <ul (click)='focusInputApplication($event)'>
-                                    <li *ngFor="let selected of selectedApplications;let i=index"   >
-                                        {{selected.appName}}
-                                        <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
-                                    </li>
-                                    <input [class.hide]='oneSelected' (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
-
-                                </ul>
-                            </div>
-                            <div [hidden]="!showApplicationList" class="approvers-list-wrap">
-                                <div class="approvers-list typeShow open">
-                                    <div class="approvers-dets" *ngFor="let app of application_arr | myfilter:applc;let m = index;" (focus)="m==focusindex" [ngClass]="{pinkfocusapplication : m==focusindex}" [ngStyle]="scrollList" >
-                                        <div  (click)="$event.stopPropagation();selectApplication(app);" class="each-app" index="{m}" [attr.appName]='app.appName' [attr.issueID]='app.issueID'>{{app.appName}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-          </li>
-          <li>
             <div class="det-label">Status</div>
             <div class="det-value">{{service.status}}</div>
           </li>
@@ -264,7 +235,7 @@
             <div class="det-label">Repository</div>
             <div class="det-value repository-link" [ngClass]="{'link':islink, 'PlaceHolder':repository_empty}" (click)="openLink(repositorylink)">{{bitbucketRepo || 'Stay organized with a repository'}}</div>
           </li> 
-           <li [ngClass]="{'slack-wrapper' : !disp_show}">
+           <li>
             <div class='det-label'>Slack</div>
             <div *ngIf='disp_show' class='det-value' [class.PlaceHolder]="slackChannel_empty">{{service.slackChannel || 'Feeling collaborative? Add it to slack'}}</div>
             <div *ngIf='!disp_show' class='det-value slack-relative'>
@@ -275,12 +246,41 @@
         
           </li>
            <p class='limitWrapper' [class.hide]='hide_slack_error'>Slack channel is not available. Please provide a valid slack channel.</p>
+         <li>
+            <div class='det-label'>App Name</div>
+            <div *ngIf='disp_show' class='det-value'>{{ service.app_name || service.app_id || "NA"}}</div>
+            <div *ngIf='!disp_show' class="det-value application-drop-wrap">
+                <div class="flex-col">
+                    <section class="pad-left0">
+                         <div class="input-field-container"  [ngClass]="{disableInputField : isapplicationDisable}" >   
+                                <div class="selected-approvers" [ngClass]="{noApproverError : dispAppError === false && isAppTouched}">
+                                    <ul (click)='focusInputApplication($event)'>
+                                        <li *ngFor="let selected of selectedApplications;let i=index"   >
+                                            {{selected.appName}}
+                                            <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
+                                        </li>
+                                        <input [class.application-ip]='notMyApp' *ngIf="showAppclInput" (keydown)="keypressApplication($event)" (blur)='blurApplication()' placeholder="{{appPlaceHolder}}"  [disabled]='oneSelected || notMyApp' autocomplete="off" id="applc" name="applc" type="text" class="textForm" [(ngModel)]="applc" (ngModelChange)="onApplicationChange($event)">
+                                    </ul>
+                                </div>
+                                <div [hidden]="!showApplicationList" class="approvers-list-wrap">
+                                    <div class="approvers-list typeShow open">
+                                        <div class="approvers-dets" *ngFor="let app of application_arr | myfilter:applc;let m = index;" (focus)="m==focusindex" [ngClass]="{pinkfocusapplication : m==focusindex}" [ngStyle]="scrollList" >
+                                            <div  (click)="selectApplication(app);$event.stopPropagation();" index="{m}" [attr.appName]='app.appName' [attr.issueID]='app.issueID'>{{app.appName}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+                </div>
+            </div>
+          </li>
+           <p class='limitWrapper' *ngIf='!dispAppError && !disp_show && isAppTouched'>Must have App Name</p>
         </ul>
       </div>
       </div>
        <div *ngIf='!disp_show' class='down-btn-wrap'>
             <div class="custom-save-btn-wrap">
-                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
+                <btn-jazz-primary  class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !dispAppError && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged" text="SAVE" (click)='onSaveClick()'></btn-jazz-primary>
                 <a (click)="onCancelClick()">CANCEL</a>
             </div>
         </div>
@@ -297,25 +297,21 @@
     <div class='flex-center top-shift'>
       <div *ngIf="!disp_show2" class="warn-msg">
         <div>!</div>
-        <div>Any saved changes will trigger a deployment for the service.</div>
+        <div>Changes are not effective immediately. Your next deployment will use these changes</div>
       </div>
-    </div>
-    <div *ngIf='!disp_show2' class='down-btn-wrap down-btn-wrap-advanced'>
-      <btn-jazz-primary text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
-      <a (click)='onCancelClick()'>CANCEL</a>
     </div>
     <div class='metadata-body-advanced relative'>
       <div *ngIf='disp_show2' class='metadata-buttons-wrap'>
-        <btn-jazz-secondary text="EDIT" [disablebtn]="true" (click)='onEditClickAdvanced()'></btn-jazz-secondary>
+        <btn-jazz-secondary text="EDIT"  [disablebtn]="service.status != 'creation completed'"  (click)='onEditClickAdvanced()'></btn-jazz-secondary>
       </div>
-      <div class='metadata-row first-row top-margin'>
+      <div class='metadata-row  top-margin' [ngClass]="[service.serviceType == 'function' ? 'width-api' : '', service.serviceType == 'website' || service.serviceType == 'api' ? 'first-row' : '']">
         <ul class='advanced-ul'>
           <li *ngIf="service.serviceType == 'website'">
             <div class='det-label'>Publicly Accessible</div>
             <div *ngIf='disp_show2' class="det-value">{{(service.is_public_endpoint !== undefined)? service.is_public_endpoint : "NA"}}</div>
             <div *ngIf='!disp_show2'class='det-value'>
-                <div class="">
-                  <section class=" pad-left0">
+                <div>
+                  <section class=" pad-left0" >
                       <div class="input-field-container">
                           <div class="slack-checkbox custom-cb">
                               <input type="checkbox" [disabled]="service.serviceType != 'website'" id="checkbox-public" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="publicSelected" (change)="publicSelected = !publicSelected">
@@ -327,37 +323,48 @@
               </div>
             </div>
           </li>
-          <li *ngIf="service.serviceType == 'api'">
+          <li *ngIf="service.serviceType == 'api'" >
             <div class='det-label'>Security Enabled</div>
-            <div class='det-value'>{{(service.enable_api_security !== undefined)?service.enable_api_security : "NA"}}</div>
-          </li>
-          <li *ngIf="service.serviceType == 'website'">
-            <div class='det-label'>Cloudfront Enabled</div>
-            <div *ngIf='disp_show2' class="det-value">{{(service.create_cloudfront_url !== undefined)?service.create_cloudfront_url : "NA"}}</div>
+            <div *ngIf='disp_show2' class='det-value'>{{(service.enable_api_security !== undefined)?service.enable_api_security : "NA"}}</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="">
                     <section class="pad-left0">
                         <div class="input-field-container">
                             <div class="slack-checkbox custom-cb">
+                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="enableApiSecurity" (change)="enableApiSecurity = !enableApiSecurity">
+                                <label for="checkbox-vpc"></label>
+                                <div class="cb-status-dets"> Does your service require security?</div>
+                            </div>
+                        </div>
+                    </section>
+                  </div>
+              </div>
+          </li>
+          <li *ngIf="service.serviceType == 'website'">
+            <div class='det-label'>Cloudfront Enabled</div>
+            <div *ngIf='disp_show2' class="det-value">{{(service.create_cloudfront_url !== undefined)?service.create_cloudfront_url : "NA"}}</div>
+            <div *ngIf='!disp_show2' class='det-value'>
+                 <div class="input-field-container">
+                    <section class="pad-left0">
+                            <div class="slack-checkbox custom-cb">
                                 <input type="checkbox" id="checkbox-cdnconfig" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="cdnConfigSelected" (change)="cdnConfigSelected = !cdnConfigSelected">
                                 <label for="checkbox-cdnconfig"></label>
                                 <div class="cb-status-dets">Do you need CDN configured for your website?</div>
                             </div>
-                        </div>
                     </section>
                 </div>
             </div>
           </li>
-          <li *ngIf="service.serviceType != 'website'" [class.internal-access]="service.serviceType == 'function' && !disp_show2">
+          <li  *ngIf="service.serviceType != 'website'" [class.internal-access]="service.serviceType == 'function' && !disp_show2">
               <div class='det-label'>Internal Access</div>
               <div *ngIf='disp_show2' class='det-value'>{{(service.require_internal_access !== undefined)? service.require_internal_access : "NA"}}</div>
               <div *ngIf='!disp_show2' class='det-value'>
                 <div class="">
                     <section class="pad-left0">
-                        <div class="input-field-container">
+                        <div class="input-field-container" [ngClass]="service.serviceType !== 'api' ? 'width-api-input' : ''" >
                             <div class="slack-checkbox custom-cb">
-                                <input type="checkbox" id="checkbox-vpc" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="vpcSelected" (change)="vpcSelected = !vpcSelected">
-                                <label for="checkbox-vpc"></label>
+                                <input type="checkbox" id="checkbox-iA" class="ng-untouched ng-valid ng-dirty ng-valid-parse" aria-invalid="false" [checked]="requireInternalAccess" (change)="requireInternalAccess = !requireInternalAccess">
+                                <label for="checkbox-iA"></label>
                                 <div class="cb-status-dets"> Does your service require access to internal T-Mobile network and resources?</div>
                             </div>
                         </div>
@@ -376,8 +383,8 @@
 
           </li>
           <li *ngIf="service.serviceType == 'function'">
-            <div class='det-label'>Event Source Type</div>
-            <div *ngIf='disp_show2' class="det-value">{{service.event_source || "NA"}}</div>
+            <div class='det-label'>Event Type</div>
+            <div *ngIf='disp_show2' class="det-value">{{service.event_type || "NA"}}</div>
 
           </li>
           <li *ngIf="service.serviceType == 'function'">
@@ -390,7 +397,7 @@
       </div>
       <div *ngIf='!disp_show2' class='metadata-row third-row'>
         <ul>
-          <li *ngIf="service.serviceType == 'function'">
+          <li *ngIf="service.serviceType == 'function' && service.eventScheduleRate !='NA' && service.eventScheduleRate">
               <div class="det-label">Event Schedule</div>
               <div *ngIf='!disp_show2' class="det-value">
                   <div class="input-field-container event-schedule-radio row zero-margin">
@@ -406,7 +413,7 @@
                               <label for="fixedRate"><span></span><span class="background"></span>Fixed Rate of</label>
                           </div>
                       </section>
-                      <section class="   pad-left0">
+                      <section class="pad-left0">
                           <div class="radio-container">
                               <input type="radio" name="EventSchedule" id="cron" [value]="cron" [checked]="rateExpression.type == 'cron'" (click)="onEventScheduleChange('cron')">
                               <label for="cron"><span></span><span class="background"></span>Cron Expression</label>
@@ -476,8 +483,8 @@
           </li>
         </ul>
         <ul>
-          <li *ngIf="service.serviceType == 'function'">
-            <div class='det-label'>AWS events</div>
+          <li *ngIf="service.serviceType == 'function' && false">
+            <div class='det-label'>Events Type/Source</div>
             <div *ngIf='!disp_show2' class='det-value'>
                 <div class="input-field-container event-schedule-radio row zero-margin">
                     <section class="pad-left0">
@@ -504,6 +511,12 @@
                             <label for="s3"><span></span><span class="background"></span>S3</label>
                         </div>
                     </section>
+                    <section class="pad-left0">
+                        <div class="radio-container">
+                            <input type="radio" name="AWSEvents" id="sqs" [value]="sqs" [checked]="eventExpression.type == 'sqs'" (click)="onAWSEventChange('sqs')">
+                            <label for="sqs"><span></span><span class="background"></span>SQS</label>
+                        </div>
+                    </section>
                 </div>
                 <div class="aws-event-fields rate-exp-wrp zero-margin" [ngClass]="{'zero-padding': eventExpression.type == 'none'}">
                     <div class="dynamodb-fields row zero-margin arrow_box" *ngIf="chkDynamodb()">
@@ -516,7 +529,7 @@
                         <div class="col-lg-9">
                             <div class="text">Table ARN</div>
                             <div class="label-input slct-bx-selected input-wrapper">
-                                <input type="text" disabled="disabled" class="inline-input input-label aws-events-left-block" value="arn:aws:dynamodb:us-west-2:302890901340:table/">
+                                <input type="text" disabled="disabled" class="inline-input input-label aws-events-left-block" value="{{awsEventExpression.dynamodb}}">
                                 <input id="dynamoTable" name="dynamoTable" type="text" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Table Name" required>
                           </div>
                         </div>
@@ -533,7 +546,7 @@
                         <div class="col-lg-9">
                             <div class="text">Stream ARN</div>
                             <div class="label-input slct-bx-selected input-wrapper">
-                                <input type="text" disabled="disabled" class="inline-input input-label stream aws-events-left-block" value="arn:aws:kinesis:us-west-2:302890901340:stream/">
+                                <input type="text" disabled="disabled" class="inline-input input-label stream aws-events-left-block" value="{{awsEventExpression.kinesis}}">
                                 <input id="streamARN" name="streamARN" type="text" [(ngModel)]="eventExpression.streamARN" [focus]="focusKinesis" class="inline-input stream aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Stream Name" required>
                           </div>
                         </div>
@@ -556,16 +569,29 @@
                         <p class="learn-more">Function would be triggered when an object is added or modified inside the bucket</p>
                     </div>
 
+                    <div class="sqs-fields row zero-margin arrow_box" *ngIf="chkSQS()">
+                            <div class="col-lg-12">
+                                <div class="text">Queue ARN</div>
+                                <div class="label-input slct-bx-selected input-wrapper">
+                                    <input type="text" disabled="disabled" class="inline-input input-label aws-events-left-block sqs-events" value="{{awsEventExpression.sqs}}">
+                                    <input id="SQSstreamARN" name="SQSstreamARN" type="text" [(ngModel)]="eventExpression.SQSstreamARN"  [focus]="focusSQS" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Queue Name" required>
+                                </div>
+                            </div>
+                            <p class="learn-more">Function would be triggered whenever new messages are added to the source SQS queue</p>
+                    </div>
+                   
+
                 </div>
             </div>
           </li>
         </ul>
+         <div *ngIf='!disp_show2' class='down-btn-wrap down-btn-wrap-advanced'>
+          <div class="custom-save-btn-wrap">
+            <btn-jazz-primary class="save-btn-wrap" text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
+            <a (click)='onCancelClick()'>CANCEL</a>
+          </div>
+        </div>
       </div>
-
-
-
-
-
     </div>
   </details>
 
