@@ -25,35 +25,12 @@ export class ServiceAccessControlComponent implements OnInit {
   // list groups which has access for specific action//
   groupsAccess: any = {
     'api': [{
-        'name': 'group one',
-        'readOnly':true
-    },
-    {
-        'name': 'group two',
-        'readOnly':true
-    },
-    {
-        'name': 'group three',
+        'name': 'John Sminth (jSmith)',
         'readOnly':true
     }],
     'code' : [{
         'name': 'group one',
         'accessType':'read',
-        'readOnly':true
-    },
-    {
-        'name': 'group two',
-        'accessType':'admin',
-        'readOnly':true
-    },
-    {
-        'name': 'group three',
-        'accessType':'manage',
-        'readOnly':true
-    },
-    {
-        'name': 'group four',
-        'accessType':'manage',
         'readOnly':true
     }],
     'deploy' : [{
