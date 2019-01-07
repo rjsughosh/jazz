@@ -21,11 +21,13 @@
                                 <p class="step-title">Users</p>
                             </div>
                         </div>
-                         <div  *ngIf="!showDisplay" class="group-status">
-                            <p class="step-title">Admin</p>
-                        </div>
-                          <div  *ngIf="!showDisplay" class="group-status">
-                            <p class="step-title">Read</p>
+                        <div class="access-label">
+                            <div  *ngIf="!showDisplay" class="group-status">
+                                <p class="step-title">Admin</p>
+                            </div>
+                            <div  *ngIf="!showDisplay" class="group-status">
+                                <p class="step-title">Read</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,11 +91,13 @@
                                 <p class="step-title">Users</p>
                             </div>
                         </div>
-                         <div class="group-status" *ngIf="!showDisplay">
-                            <p class="step-title">Admin</p>
-                        </div>
-                          <div class="group-status" *ngIf="!showDisplay">
-                            <p class="step-title">Read</p>
+                        <div class="access-label">
+                            <div class="group-status" *ngIf="!showDisplay">
+                                <p class="step-title">Write</p>
+                            </div>
+                            <div class="group-status" *ngIf="!showDisplay">
+                                <p class="step-title">Read</p>
+                            </div>
                         </div>
                     </div>
                 </div>
