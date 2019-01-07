@@ -205,7 +205,7 @@ export class ServiceDetailComponent implements OnInit {
           if (typeof service.metadata.eventScheduleRate !== "object") {
           }
           else{
-           !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
+            !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
           }
           return service;
         }
@@ -246,19 +246,19 @@ export class ServiceDetailComponent implements OnInit {
     }
   }
 
-  getApplications() {
+  fetchApplications(){
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt=' + this.start_at)
       .subscribe((res: Response) => {
         this.applications = res;
-
         this.application_arr.push.apply(this.application_arr, this.applications.data.summary);
+        
+        localStorage.setItem('workload', JSON.stringify(this.application_arr));
+
         this.start_at = this.start_at + 100;
         if (this.applications.data.total > this.start_at) {
-
-          this.getApplications();
+          this.getapplications();
         }
         else {
-
           for (var i = 0; i < this.application_arr.length; i++) {
             if (!this.application_arr[i].appID || !this.application_arr[i].appName) {
               this.application_arr.splice(i, 1);
@@ -284,6 +284,20 @@ export class ServiceDetailComponent implements OnInit {
       }, error => {
         console.log('workloads error', error)
       });
+  }
+
+  getapplications() {
+    var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
+
+    if (localStorageWorkload.length > 0){
+      if (this.start_at + 100 >= localStorageWorkload.length) {
+        this.fetchApplications();
+      } else {
+        this.application_arr = localStorageWorkload;
+      }
+    } else {
+      this.fetchApplications();
+    }
   }
 
   fetchService(id: string) {
@@ -510,7 +524,7 @@ export class ServiceDetailComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.getApplications();
+    this.getapplications();
     this.breadcrumbs = [
       {
         'name': this.service['name'],
