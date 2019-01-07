@@ -40,6 +40,14 @@
     }
 }
 
+.node-wrapper{
+    width: 20.666667%;
+}
+
+.python-wrapper{
+    width: 19.666667%;
+}
+
 .termsConditions {
     padding: 5px 0;
     margin: 0;
@@ -100,6 +108,12 @@
     width: 88%;
     max-width: 70px;
     /*width: 40px;*/
+}
+
+.outer {
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .service-box p {
@@ -300,6 +314,9 @@
 	margin-left: -20px;
 }
 
+
+
+
 .cron-fields {
     &.row {
         margin-left: 10px;
@@ -330,7 +347,7 @@
     margin-bottom: -15px;
 }
 .s3-fields.arrow_box:after{
-    left: 58%;
+    left: calc( 58% - 3px );
     margin-left: -3px;
     margin-bottom: -15px
 }
@@ -673,6 +690,11 @@
     opacity: .5;
 }
 
+.runtime-option {
+    padding: 0 0.5em 0 15px;
+    width: 20%;
+}
+
 .pad-left0 {
     @media(max-width: 992px) {
         padding-left: 0px;
@@ -714,6 +736,15 @@
     padding-right: 0 !important;
     border-radius: 2px 0 0 2px !important;
 }
+
+.aws-events-block{
+    border: 1px solid #ccc;  
+    float: left;
+    width: 315px;
+    padding-right: 0 !important;
+    border-radius: 2px 0 0 2px !important;
+}
+
 .aws-events-left-block.stream{
     width: 25rem;
 }
@@ -947,4 +978,9 @@ p.learn-more {
   .radio-container {
     margin-right: 15px;
   }
+}
+
+.radio-label {
+    display: inline-flex;
+    padding-left: 23px;
 }

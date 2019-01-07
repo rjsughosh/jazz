@@ -68,7 +68,15 @@ export const environment = {
   envName: "jazz",
   multi_env: false,
   serviceTabs: ['overview', 'access control', 'metrics', 'logs'],
-  envLists:  {"nodejs8.10": "Nodejs 8.10", "python2.7": "Python 2.7", "python3.6": "Python 3.6", "java8": "Java 8"},
+  envLists:  {"nodejs8.10": "Nodejs 8.10", "python2.7": "Python 2.7", "python3.6": "Python 3.6", "java8": "Java 8", "go1.x": "Go 1.x"},
+  deployment_accounts:[
+    {
+      "provider": "aws",
+      "region": "us-west-2",
+      "accountId": "302890901340",
+      "primary": true
+    }
+  ],
   environmentTabs: ['overview', 'deployments', 'code quality', 'assets', 'metrics', 'logs', 'clearwater'],
   awsEventExpression: {
     "dynamodb" :  "arn:aws:dynamodb:us-west-2:302890901340:table/",
