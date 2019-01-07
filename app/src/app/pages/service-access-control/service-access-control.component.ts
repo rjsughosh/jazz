@@ -21,29 +21,29 @@ export class ServiceAccessControlComponent implements OnInit {
     'name': '',
     'accessType':'read'
   }
-  
+  showDisplay:Boolean = true;
   // list groups which has access for specific action//
   groupsAccess: any = {
     'api': [{
-        'name': 'John Sminth (jSmith)',
-        'readOnly':true
+        'name': 'John Smith (jSmith)',
+        'readOnly':false,
+        "userType": 'Admin'
     }],
     'code' : [{
-        'name': 'group one',
+        'name': 'John Smith (jSmith)',
         'accessType':'read',
-        'readOnly':true
+        'readOnly':true,
+        'userType':"Read Only"
     }],
     'deploy' : [{
-        'name': 'group one',
+        'name': 'John Smith (jSmith)',
         'readOnly':true
-    },
-    {
-        'name': 'group two',
-        'readOnly':true
-    },
-    {
-        'name': 'group three',
-        'readOnly':true
+    },{
+      'name': 'John Smith (jSmith)',
+      'readOnly':true
+    },{
+      'name': 'John Smith (jSmith)',
+      'readOnly':true
     }]
   }
 
@@ -82,7 +82,20 @@ export class ServiceAccessControlComponent implements OnInit {
        this.groupsAccess.deploy.push({'name': '','accessType':'read'});
     } 
   }
-  
+
+  onEditClick(){
+     this.showDisplay = false;
+  }
+
+  onSaveClick(){
+     this.showDisplay = true;
+  }
+  onCancelClick(){
+   this.showDisplay = true;
+  }
+  refresh(){
+
+  }
   //function for selecting group from list of groups//
   selectApprovers(group, index , category){
      if(category == 'api'){
@@ -102,9 +115,6 @@ export class ServiceAccessControlComponent implements OnInit {
       this.groupsAccess.code[index].accessType = value;
   }
 
-  refresh(){
-      
-  }
   constructor() { }
 
   ngOnInit() {
