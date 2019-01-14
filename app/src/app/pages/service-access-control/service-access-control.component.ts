@@ -27,6 +27,7 @@ export class ServiceAccessControlComponent implements OnInit {
   private toastmessage: any = '';
   approversListRes: any;
   disableCode: boolean = false;
+  disableAccess: boolean = false;
   disableManage: boolean = false;
   disableDeploy: boolean = false;
   selectedApprovers: any;
@@ -86,6 +87,8 @@ export class ServiceAccessControlComponent implements OnInit {
        this.disableCode = false;
     } else if(category == 'deploy'){
        this.groupsAccess.deploy.splice(i,1);
+       if(this.groupsAccess.code.length == 1)
+       this.disableDeploy = true;
     } 
   }
   
@@ -177,7 +180,6 @@ export class ServiceAccessControlComponent implements OnInit {
        });
     }
    this.groupList = this.approversListShow.slice(0,100);
-   console.log(this.groupList);
    }
    toast_pop(error, oops, errorMessage) {
       var tst = document.getElementById('toast-container');
@@ -197,7 +199,10 @@ ngOnChanges(){
          this.disableManage = true;
       else
          this.disableManage = false;
-
+         if(this.groupsAccess.deploy.length == 1)
+   this.disableDeploy = true;
+      else
+         this.disableDeploy = false; 
 }
 
 
@@ -219,7 +224,12 @@ ngOnChanges(){
    if(this.groupsAccess.manage.length == 1)
       this.disableManage = true;
    else
-      this.disableManage = false;
+      this.disableManage = false; 
+   if(this.groupsAccess.deploy.length == 1)
+      this.disableDeploy = true;
+   else
+      this.disableDeploy = false; 
+      
   }
 
 }

@@ -186,7 +186,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="delete-grp">
+                        <div class="delete-grp" *ngIf="!disableDeploy ">
                             <span (click)="deletegroup(i,'deploy')" class="icon-icon-close"></span>
                         </div>
                     </div>
