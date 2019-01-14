@@ -16,7 +16,7 @@
 
 .groups-input {
   display: inline-block;
-  width: 40%;
+  width: 60%;
 }
 
 .group-status {
@@ -240,4 +240,7 @@ input[type="text"] {
 }
 .step-title-head{
   padding: 0px 0px 16px 0px;
+}
+.textForm::placeholder{
+  opacity: 0.7;
 }
