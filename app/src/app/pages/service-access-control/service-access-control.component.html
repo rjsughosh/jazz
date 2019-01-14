@@ -44,12 +44,12 @@
                   <div class="col-lg-8 col-md-8" *ngIf="!showDisplay"> 
                     <div class="groups-wrap" [hidden]="accessGranted" *ngFor="let group of groupsAccess.manage;let i=index">
                         <div class="groups-input toggle-class" [ngClass]="{'disabled': accessGranted}">
-                            <div class="input-wrapper" [ngClass]="{'read-only': group.readOnly}">
-                                <input name="api_text_{{i}}" type="text" class="textForm" placeholder="User" [(ngModel)]="group.name" (ngModelChange)="ongrpNameChange('api' ,i)" [readonly]="group.readOnly">
-                               <div *ngIf="group.showGroups" class="approvers-list-wrap" (clickOutside)="group.showGroups = false">
-                                    <div class="approvers-list typeShow open">
+                              <div class="input-wrapper" [ngClass]="{'read-only': group.readOnly}">
+                                <input name="code_text_{{i}}" type="text" class="textForm" placeholder="User" [(ngModel)]="group.name" (ngModelChange)="ongrpNameChange('manage' ,i)" [readonly]="group.readOnly">
+                                <div *ngIf="group.showGroups" class="approvers-list-wrap" (clickOutside)="group.showGroups = false">
+                                       <div class="approvers-list typeShow open">
                                         <div class="approvers-dets" *ngFor="let approvers of groupList | myfilter:group.userId">
-                                            <div (click)="selectApprovers(approvers, i , 'deploy')">{{approvers.displayName}} ({{approvers.userId}})</div>
+                                            <div (click)="selectApprovers(approvers, i , 'manage')">{{approvers.displayName}} ({{approvers.userId}})</div>
                                         </div>
                                     </div>
                                 </div>
