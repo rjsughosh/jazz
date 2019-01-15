@@ -213,9 +213,10 @@ $screen-lg:                  1200px !default;
 
 .save-btn-wrap /deep/ .btn{
     font-weight: 700;
-    color : white !important;
-    border: 1px solid #ed008c !important;
-    text-align: center;    
+    color: white !important;
+    border: 2px solid white !important;
+    text-align: center;
+    padding: 8px 38px;   
 }
 
 .dropDownDisable{
@@ -1375,10 +1376,6 @@ details summary::-webkit-details-marker {
     padding-bottom:1rem
 }
 
-.service-metadata-wrap{
-  padding:2rem;
-}
-
 .metadata-heading-wrap{
   display: inline-block;
   justify-content: space-between;
@@ -1408,6 +1405,7 @@ details summary::-webkit-details-marker {
 
 .metadata-body{
   display: flex;
+  align-items: flex-start;
   .metadata-column{
     width:33%;
   }
@@ -1489,13 +1487,14 @@ details{
   z-index: 1;
   bottom: -6rem;
   right: -2rem;
-  padding: 1rem;
   btn-jazz-primary,a{
     cursor: pointer;
-    padding:1rem
+    padding: 4px
   }
   a{
     align-self:center;
+    color: white;
+    text-decoration: none;
   }
 }
 .down-btn-wrap-advanced{
@@ -1544,7 +1543,6 @@ details{
     display: flex;
     flex-direction: row-reverse;
     width: 100%;
-    background-color: #F3F2F3;
 }
 .metadata-body-advanced{
 /deep/.advanced-ul{
@@ -1749,4 +1747,55 @@ input{
 
 .width-api-input{
     width: 110%;
+}
+
+.general-block{
+    margin: 0px 5px 0px 5px;
+    border-radius: 7px;
+    background-color: white;
+}
+
+.service-details{
+    padding: 0px;
+    background-color: inherit;
+    box-shadow: none;
+}
+
+.metadata-heading{
+    margin-bottom: 15px;
+    background-color: #AEB2BB;
+    border-radius: 7px 7px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.metadata-column > ul {
+    padding-left: 10px;
+    padding-bottom: 15px;
+}
+
+.metadata-heading > p{
+    font-size: 20px;
+    font-weight: 600;
+    padding: 7px 0px 0px 10px;
+    color: white;
+    display: inline;
+}
+.extra-padding{
+    padding-bottom: 10px;
+}
+.edit-div{
+    display: inline;
+    padding: 4px 5px 4px 5px;
+    margin-right: 10px;
+    background-color: red;
+    color: white;
+    float: right;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.update-color{
+    background-color: #ed008c;
 }

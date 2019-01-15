@@ -194,6 +194,7 @@ export class ServiceOverviewComponent implements OnInit {
     approversSaveStatus : boolean = false;
     showGenDeatils : boolean = true;
     resMessage : any;
+    showGeneralField: boolean = false;
     approversList: any;
     approversListRes : any;
     selectedApprovers : any = [];
@@ -207,6 +208,7 @@ export class ServiceOverviewComponent implements OnInit {
     rateData : any = ['Minutes', 'Hours', 'Days'];
     approversPlaceHolder : string = "Start typing (min 3 chars)...";
     awsEventExpression : any; 
+    showApprovalField: boolean = false;
     endpList = [
         {
             name: 'tmo-dev-ops',
@@ -337,6 +339,15 @@ export class ServiceOverviewComponent implements OnInit {
             this.minutesArray.push(i);
         }
         this.getData();
+    }
+
+    onEditGeneral(){
+        this.showGeneralField = true;
+        console.log(this.showGeneralField);
+    }
+
+    onEditApproval(){
+        this.showApprovalField = true;
     }
 
     public getData() {
@@ -1069,6 +1080,8 @@ export class ServiceOverviewComponent implements OnInit {
 
 
     onCancelClick() {
+        this.showApprovalField = false;
+        this.showGeneralField = false;
         this.showApproversList = false;
         this.isAppTouched = false;
         this.approversSaveStatus = false;
