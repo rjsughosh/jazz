@@ -70,7 +70,14 @@ export class CreateServiceComponent implements OnInit {
   showSlackList: boolean = false;
   showRegionList:boolean = false;
   showAccountList:boolean = false;
-  oneSelected:boolean=false;
+  oneSelected:boolean = false;
+  isTableArnInFocus:boolean = false;
+  isStreamArnInFocus:boolean = false;
+  isS3InFocus:boolean = false;
+  isSQSInFocus:boolean = false;
+  
+
+
   isLoading: boolean = false;
   slackChannelLoader: boolean = false;
   serviceAvailable: boolean = false;
@@ -159,6 +166,7 @@ export class CreateServiceComponent implements OnInit {
   runtimeKeys : any;
   runtimeObject : any;
   invalidEventName:boolean = false;
+  disableBtn: boolean = true;
   public deploymentTargets = this.buildEnvironment["INSTALLER_VARS"]["CREATE_SERVICE"]["DEPLOYMENT_TARGETS"];
   public selectedDeploymentTarget = "";
   
@@ -213,6 +221,7 @@ export class CreateServiceComponent implements OnInit {
   validateEvents(value){
     if(value != null && ((value[0] === '-' || value[value.length - 1] === '-') || (value[0] === '.' || value[value.length - 1] === '.') || (value[0] === '_' || value[value.length - 1] === '_'))){
       this.invalidEventName = true;
+      console.log(this.invalidEventName);
     }
   }
 
@@ -222,7 +231,7 @@ export class CreateServiceComponent implements OnInit {
     if (serviceRequest) {
       this.servicelist.serviceCall();
     }
-    this.selectedDeploymentTarget = '';
+    //this.selectedDeploymentTarget = '';
     this.approversPlaceHolder = "Start typing (min 3 chars)...";
     this.cache.set("updateServiceList", true);
     this.serviceRequested = false;
@@ -268,9 +277,24 @@ export class CreateServiceComponent implements OnInit {
   }
   onAWSEventChange(val) {
     this.eventExpression.type = val;
+    this.eventExpression.S3BucketName = ' ';
+    this.eventExpression.SQSstreamARN = ' ';
+    this.eventExpression.dynamoTable = ' ';
+    this.eventExpression.streamARN = ' ';
+    this.isTableArnInFocus = false;
+    this.isStreamArnInFocus = false;
+    this.isS3InFocus = false;
+    this.isSQSInFocus = false;
     if(val !== `none`){
       this.rateExpression.type = 'none';
+      this.eventExpression.S3BucketName = '';
+      this.eventExpression.SQSstreamARN = '';
+      this.eventExpression.dynamoTable = '';
+      this.eventExpression.streamARN = '';
     }
+  }
+  validEvents(){
+    
   }
   onSelectedDr(selected) {
     this.rateExpression.interval = selected;
@@ -569,6 +593,8 @@ export class CreateServiceComponent implements OnInit {
       payload["appName"]=this.selectApp.appName;
       payload["appID"]=this.selectApp.appID.toLowerCase();
     }
+
+    payload["deployment_accounts"] = environment.deployment_accounts;
     this.isLoading = true;
 
     this.http.post('/jazz/create-serverless-service', payload)
@@ -1009,16 +1035,16 @@ blurApplication(){
     if (this.rateExpression.error != undefined && this.typeOfService == 'function' && this.rateExpression.type != 'none') {
       return true
     }
-    if (this.eventExpression.type == 'dynamodb' && this.eventExpression.dynamoTable == undefined) {
+    if (this.eventExpression.type == 'dynamodb' && ( this.eventExpression.dynamoTable == undefined || this.eventExpression.dynamoTable.length < 3 )) {
       return true
     }
-    if (this.eventExpression.type == 'kinesis' && this.eventExpression.streamARN == undefined) {
+    if (this.eventExpression.type == 'kinesis' && ( this.eventExpression.streamARN == undefined || this.eventExpression.streamARN.length < 3 )) {
       return true
     }
-    if (this.eventExpression.type == 's3' && this.eventExpression.S3BucketName == undefined) {
+    if (this.eventExpression.type == 's3' && ( this.eventExpression.S3BucketName == undefined || this.eventExpression.S3BucketName.length < 3 )) {
       return true
     }
-    if (this.eventExpression.type == 'sqs' && this.eventExpression.SQSstreamARN  == undefined) {
+    if (this.eventExpression.type == 'sqs' && ( this.eventExpression.SQSstreamARN  == undefined || this.eventExpression.SQSstreamARN.length < 3 )) {
       return true
     }
     if (this.invalidServiceName || this.invalidDomainName || this.invalidServiceNameNum) {
@@ -1324,7 +1350,7 @@ blurApplication(){
             this.application_arr[i].appName=this.application_arr[i].appName.trim();
           }
         }
-    
+
         this.application_arr.sort((a: any, b: any) => {
           if (a.appName < b.appName) {
             return -1;
@@ -1333,7 +1359,7 @@ blurApplication(){
           } else {
             return 0;
           }
-        });   
+        });
         this.appPlaceHolder = "Start typing..."
         this.enableAppInput = true;
         this.isLoading = false;

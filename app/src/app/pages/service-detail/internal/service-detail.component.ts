@@ -205,7 +205,7 @@ export class ServiceDetailComponent implements OnInit {
           if (typeof service.metadata.eventScheduleRate !== "object") {
           }
           else{
-           !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
+            !!service.metadata.eventScheduleRate &&( service.metadata.eventScheduleRate = service.metadata.eventScheduleRate.S);
           }
           return service;
         }

@@ -91,28 +91,34 @@
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <div class="input-field-container">
-                        <section class="col-lg-3 col-md-3 pad-left0">
+                        <section class="col-lg-2 col-md-2 pad-left0 runtime-option">
                             <div class="radio-container">
                                 <input type="radio" class='test-focus' name="runtime" [id]="runtimeKeys[0]" [value]="runtimeKeys[0]" [checked]="runtime == runtimeKeys[0]" (click)="onSelectionChange(runtimeKeys[0])">
-                                <label [for]="runtimeKeys[0]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
+                                <label [for]="runtimeKeys[0]" class="radio-label"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[0]]}}</label>
                             </div>
                         </section>
-                        <section class="col-lg-3 col-md-3 pad-left0">
+                        <section class="col-lg-2 col-md-2 pad-left0 runtime-option">
                             <div class="radio-container">
                                 <input type="radio" name="runtime" [id]="runtimeKeys[1]" [value]="runtimeKeys[1]" [checked]="runtime == runtimeKeys[1]" (click)="onSelectionChange(runtimeKeys[1])">
-                                <label [for]="runtimeKeys[1]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[1]]}}</label>
+                                <label [for]="runtimeKeys[1]" class="radio-label"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[1]]}}</label>
                             </div>
                         </section>
-                        <section class="col-lg-3 col-md-3 pad-left0">
+                        <section class="col-lg-2 col-md-2 pad-left0 runtime-option">
                             <div class="radio-container">
                                 <input type="radio" name="runtime" [id]="runtimeKeys[2]" [value]="runtimeKeys[2]" [checked]="runtime == runtimeKeys[2]" (change)="onSelectionChange(runtimeKeys[2])">
-                                <label [for]="runtimeKeys[2]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
+                                <label [for]="runtimeKeys[2]" class="radio-label"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[2]]}}</label>
                             </div>
                         </section>
-                        <section class="col-lg-3 col-md-3 pad-left0">
+                        <section class="col-lg-2 col-md-2 pad-left0 runtime-option">
                             <div class="radio-container">
                                 <input type="radio" name="runtime" [id]="runtimeKeys[3]" [value]="runtimeKeys[3]" [checked]="runtime == runtimeKeys[3]" (change)="onSelectionChange(runtimeKeys[3])">
-                                <label [for]="runtimeKeys[3]"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[3]]}}</label>
+                                <label [for]="runtimeKeys[3]" class="radio-label"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[3]]}}</label>
+                            </div>
+                        </section>
+                         <section class="col-lg-2 col-md-2 pad-left0 runtime-option">
+                            <div class="radio-container">
+                                <input type="radio" name="runtime" [id]="runtimeKeys[4]" [disabled]='true' [value]="runtimeKeys[4]" [checked]="runtime == runtimeKeys[4]" (change)="onSelectionChange(runtimeKeys[4])">
+                                <label [for]="runtimeKeys[4]" class="radio-label grey"><span class='outer'></span><span class="background"></span>{{runtimeObject[runtimeKeys[4]]}}</label>
                             </div>
                         </section>
                     </div>
@@ -548,31 +554,31 @@
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input type="radio" name="AWSEvents" id="awsEventsNone" [value]="awsEventsNone" [checked]="eventExpression.type == 'awsEventsNone'" (click)="onAWSEventChange('awsEventsNone')">
-                                    <label for="awsEventsNone"><span></span><span class="background"></span>None</label>
+                                    <label class="radio-label" for="awsEventsNone"><span class='outer'></span><span class="background"></span>None</label>
                                 </div>
                             </section>
                             <section class="col-lg-3 col-md-3  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input  type="radio" name="AWSEvents" id="dynamodb" [value]="dynamodb" [checked]="eventExpression.type == 'dynamodb'" (click)="onAWSEventChange('dynamodb')">
-                                    <label for="dynamodb"><span></span><span class="background"></span>DynamoDB</label>
+                                    <label  class="radio-label" for="dynamodb"><span class='outer'></span><span class="background"></span>DynamoDB</label>
                                 </div>
                             </section>
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input  type="radio" name="AWSEvents" id="kinesis" [value]="kinesis" [checked]="eventExpression.type == 'kinesis'" (click)="onAWSEventChange('kinesis')">
-                                    <label for="kinesis"><span></span><span class="background"></span>Kinesis</label>
+                                    <label 	class="radio-label" for="kinesis"><span class='outer'></span><span class="background"></span>Kinesis</label>
                                 </div>
                             </section>
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                                 <div class="radio-container ">
                                     <input  type="radio" name="AWSEvents" id="s3" [value]="s3" [checked]="eventExpression.type == 's3'" (click)="onAWSEventChange('s3')">
-                                    <label for="s3"><span></span><span class="background"></span>S3</label>
+                                    <label  class="radio-label" for="s3"><span class='outer'></span><span class="background"></span>S3</label>
                                 </div>
                             </section>
                             <section class="col-lg-2 col-md-2  pad-left0 events-radio">
                               <div class="radio-container">
                                   <input type="radio" name="AWSEvents" id="sqs" [value]="sqs" [checked]="eventExpression.type == 'sqs'" (click)="onAWSEventChange('sqs')">
-                                  <label for="sqs"><span></span><span class="background"></span>SQS</label>
+                                  <label class="radio-label" for="sqs"><span class='outer'></span><span class="background"></span>SQS</label>
                               </div>
                             </section>
                         </div>
@@ -588,13 +594,13 @@
                                     <div class="text">Table ARN</div>
                                     <div class="label-input slct-bx-selected input-wrapper">
                                         <input type="text" disabled="disabled" class="inline-input input-label aws-events-left-block" value="{{eventsPlaceHolder.dynamodb}}">
-                                        <input id="dynamoTable" name="dynamoTable" type="text" minlength="3" maxlength="{{eventMaxLength.table_name}}" #dynamoTable='ngModel' pattern="{{servicePatterns.tableName}}" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" (blur)="validateEvents(eventExpression.dynamoTable)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Table Name" >
+                                        <input id="dynamoTable" name="dynamoTable"  (focusout)="isTableArnInFocus=true"  type="text" minlength="3" maxlength="{{eventMaxLength.table_name}}" #dynamoTable='ngModel' pattern="{{servicePatterns.tableName}}" [(ngModel)]="eventExpression.dynamoTable"  [focus]="focusDynamo" (blur)="validateEvents(eventExpression.dynamoTable)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Table Name"  >
                                   </div>
                                 </div>
-                                <p class="termsConditions error-message" *ngIf="((chkDynamodb()) && (!dynamoTable.valid && (dynamoTable.dirty || dynamoTable.touched)))">Table name must contain only letters, numbers, hyphens, underscores or periods. Enter atleast 3 characters</p>
-                                <p class="termsConditions error-message" *ngIf="(chkDynamodb() && invalidEventName)">Table name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isTableArnInFocus && (eventExpression.dynamoTable.length< 3))">Enter atleast 3 characters</p>
+                                <p class="termsConditions error-message" *ngIf="(chkDynamodb() && dynamoTable.hasError('pattern'))">Table name must contain only letters, numbers, hyphens, underscores or periods.</p>
                                 <p class="learn-more">Function would be triggered whenever a new entry is added to the table. Note that the DynamoDB table should exist already and Jazz creates a new stream for this table</p>
-                            </div>
+                            </div>                          
 
                             <div class="kinesis-fields row zero-margin arrow_box hide" [class.show]="chkfrKinesis()">
                                 <div class="col-lg-3  padding-right-0">
@@ -607,11 +613,11 @@
                                     <div class="text">Stream ARN</div>
                                     <div class="label-input slct-bx-selected input-wrapper">
                                         <input type="text" disabled="disabled" class="inline-input input-label stream aws-events-left-block" value="{{eventsPlaceHolder.kinesis}}">
-                                        <input id="streamARN" name="streamARN" type="text" #streamARN="ngModel" maxlength="{{eventMaxLength.stream_name}}" pattern="{{servicePatterns.streamName}}" [(ngModel)]="eventExpression.streamARN" [focus]="focusKinesis" (blur)="validateEvents(eventExpression.streamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Stream Name" >
+                                        <input id="streamARN" name="streamARN"  (focusout)="isStreamArnInFocus=true" type="text" #streamARN="ngModel" minlength="3" maxlength="{{eventMaxLength.stream_name}}" pattern="{{servicePatterns.streamName}}" [(ngModel)]="eventExpression.streamARN" [focus]="focusKinesis" (blur)="validateEvents(eventExpression.streamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Stream Name" >
                                   </div>
                                 </div>
-                                <p class="termsConditions error-message" *ngIf="((chkfrKinesis()) && (!streamARN.valid && (streamARN.dirty || streamARN.touched)))">Stream name must contain only letters, numbers, hyphens, underscores or periods.</p>
-                                <p class="termsConditions error-message" *ngIf="(chkfrKinesis() && invalidEventName)">Stream name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isStreamArnInFocus && (eventExpression.streamARN.length < 3) )"> Enter atleast 3 characters.</p>
+                                <p class="termsConditions error-message" *ngIf="(chkfrKinesis() && streamARN.hasError('pattern'))">Stream name must contain only letters, numbers, hyphens, underscores or periods.</p>
                                 <p class="learn-more">Function would be triggered whenever the Lambda checkpoint has not reached the end of the Kinesis stream</p>
                             </div>
 
@@ -625,11 +631,12 @@
                                 <div class="col-lg-9">
                                     <div class="text">Bucket ARN</div>
                                     <div class="label-input slct-bx-selected input-wrapper">
-                                        <input id="S3BucketName" name="S3BucketName" type="text"  minlength="3" maxlength="{{eventMaxLength.bucket_name}}" pattern="{{servicePatterns.bucketName}}" #S3BucketName="ngModel" [(ngModel)]="eventExpression.S3BucketName" [focus]="focusS3" (blur)="validateEvents(eventExpression.S3BucketName)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-left-block aw-events-s3 ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Bucket Name"  autofocus>
+                                        <input id="S3BucketName" name="S3BucketName" type="text" (focusout)="isS3InFocus=true"  minlength="3" maxlength="{{eventMaxLength.bucket_name}}" pattern="{{servicePatterns.bucketName}}" #S3BucketName="ngModel" [(ngModel)]="eventExpression.S3BucketName" [focus]="focusS3" (blur)="validateEvents(eventExpression.S3BucketName)" (ngModelChange)="invalidEventName = false;" class="inline-input aws-events-left-block aw-events-s3 ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid " placeholder="Bucket Name"  autofocus>
                                   </div>
                                 </div>
-                                <p class="termsConditions error-message" *ngIf="((chkS3()) && (!S3BucketName.valid && (S3BucketName.dirty || S3BucketName.touched)))">Bucket name must contain only lowercase letters, numbers or hyphens. Enter atleast 3 characters</p>
-                                <p class="termsConditions error-message" *ngIf="(chkS3() && invalidEventName)">Bucket name Should not begin or end with special character.</p>
+                                <p *ngIf = "">Error</p>
+                                <p class="termsConditions error-message" *ngIf="(isS3InFocus && (eventExpression.S3BucketName.length < 3))"> Enter atleast 3 characters.</p>
+                                <p class="termsConditions error-message" *ngIf="(chkS3() && S3BucketName.hasError('pattern'))">Bucket name must contain only lowercase letters, numbers or hyphens.</p>
 
                                 <p class="learn-more">Function would be triggered when an object is added or modified inside the bucket. Creating this lambda trigger will override any previously created triggers on this bucket for any ObjectCreated:*</p>
                             </div>
@@ -640,11 +647,11 @@
                                   <div class="text">Queue ARN</div>
                                   <div class="label-input slct-bx-selected input-wrapper">
                                       <input type="text" disabled="disabled" class="inline-input input-label stream-sqs aws-events-left-block" value="{{eventsPlaceHolder.sqs}}">
-                                      <input id="SQSstreamARN" name="SQSstreamARN" type="text" #SQSstreamARN="ngModel" [(ngModel)]="eventExpression.SQSstreamARN" pattern="{{servicePatterns.queueName}}" maxlength="{{eventMaxLength.queue_name}}" [focus]="focusSQS" (blur)="validateEvents(eventExpression.SQSstreamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block aws-events-right-block-sqs ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required" placeholder="Queue Name" >
+                                      <input id="SQSstreamARN" name="SQSstreamARN" (focusout)="isSQSInFocus=true" type="text" #SQSstreamARN="ngModel" minlength="3" [(ngModel)]="eventExpression.SQSstreamARN" pattern="{{servicePatterns.queueName}}" maxlength="{{eventMaxLength.queue_name}}" [focus]="focusSQS" (blur)="validateEvents(eventExpression.SQSstreamARN)" (ngModelChange)="invalidEventName = false;" class="inline-input stream aws-events-right-block aws-events-right-block-sqs ng-touched ng-not-empty ng-dirty ng-valid-parse ng-valid" placeholder="Queue Name" >
                                   </div>
                                 </div>
-                                <p class="termsConditions error-message" *ngIf="((chkSQS()) && (!SQSstreamARN.valid && (SQSstreamARN.dirty || SQSstreamARN.touched)))">Queue name must contain only letters, numbers, hyphens or underscores.</p>
-                                <p class="termsConditions error-message" *ngIf="(chkSQS() && invalidEventName)">Queue name Should not begin or end with special character.</p>
+                                <p class="termsConditions error-message" *ngIf="(isSQSInFocus && (eventExpression.SQSstreamARN.length < 3))"> Enter atleast 3 characters.</p>
+                                <p class="termsConditions error-message" *ngIf="(chkSQS() && SQSstreamARN.hasError('pattern') )">Queue name must contain only letters, numbers, hyphens or underscores.</p>
                                 <p class="learn-more">Function would be triggered whenever new messages are added to the source SQS queue</p>
                               </div>
 

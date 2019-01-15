@@ -30,7 +30,7 @@
 		</div>
 	</div>
 </div>
-<div class='service-details row env-details bottom-10' *ngIf='environmnt.endpoint != undefined' >
+<div class='service-details row env-details bottom-10' *ngIf='environment.endpoint != undefined' >
 	<ul class=" col-md-12 col-sm-12">
 		<li class='det-wrp'>
 			<!-- *ngIf='service.endpoints.dev != undefined' -->
@@ -40,7 +40,7 @@
 			<div class='det-value endpoint-url align-slf'>
 				<div class="popupcopy" (mouseover)="myFunction()" (click)='copyClipboard("copyapilinkdev")'>
                     <span >
-                        {{environmnt.endpoint}}
+                        {{environment.endpoint}}
                         <span class='relative'>
                             <img src="./../../../assets/images/icons/icon-link.png"/>
                             <div class="tooltip-content" >
@@ -49,7 +49,7 @@
                         </span>
                     </span>
                 </div>
-				<textarea id="copyapilinkdev">{{environmnt.endpoint}}</textarea>
+				<textarea id="copyapilinkdev">{{environment.endpoint}}</textarea>
 			</div>
         </li>
     </ul>
@@ -258,7 +258,6 @@
 </div>
 
 <div class="separator-row"></div>
-<div class="disclaimer-static-data"><i>This data is for representational purpose only and may not be accurate</i></div>
 <div class="service-overview-wrp">
 	<div class="stage-wrp left-item" >
 		<div class="stage-title">Code Quality</div>
@@ -310,49 +309,70 @@
 		</div>
 	</div>
 	<div class="stage-wrp right-item" >
-		<div class="stage-title">Deployments</div>
-		<div class="stage-overview">
-			<ul class="service-overview">
-				<li class="overview-item">
-					<div class="overview-value">
-						NA
-					</div>
-					<div class="overview-label"># of Deployments<br>(Last 24 hours)</div>
-					<!-- <div class="overview-label"></div> -->
-				</li>
-				<li class="overview-item" >
-					<div class="overview-value">
-						NA
-					</div>
-					<div class="overview-label">Last Successful Deployment</div>
-				</li>
-				<li class="overview-item">
-					<div class="overview-value">
-						NA
-					</div>
-					<div class="overview-label">Last Failed Deployment</div>
-				</li>
-			</ul>
-			<ul class="service-overview">
-				<li class="overview-item">
-					<div class="overview-value"></div>
-					<div class="overview-label"></div>
-				</li>
-				<li class="overview-item bottom-right">
-					<div class="overview-value">
-						<!-- <img src='assets\images\icons\icon-good@2x.png' height='30px' title='Success' > -->
-						NA
-					</div>
-					<div class="overview-label">
-						Last Deployment Status
-					</div>
-				</li>
-				<li class="overview-item">
-					<div class="overview-value"></div>
-					<div class="overview-label">
-					</div>
-				</li>
-			</ul>
+		<div class="loading-row" [class.show]="isDeploymentLoading">
+			<div class="loading-circle"></div>
 		</div>
+		<div *ngIf="!isDeploymentLoading">
+			<div class="stage-title">Deployments</div>
+			<div class="stage-overview">
+				<ul class="service-overview">
+					<li class="overview-item">
+						<div class="overview-value">
+							{{deployments.deploymentsCountvalue || 'NA'}}
+						</div>
+						<div class="overview-label"># of Deployments<br>(Last 24 hours)</div>
+						<!-- <div class="overview-label"></div> -->
+					</li>
+					<li class="overview-item" >
+						<div class="overview-value">
+							{{deployments.lastSuccessfulDeployment || 'NA'}}
+						</div>
+						<div class="overview-label">Last Successful Deployment</div>
+					</li>
+					<li class="overview-item">
+						<div class="overview-value">
+							{{deployments.lastFailedDeployment || 'NA'}}
+						</div>
+						<div class="overview-label">Last Failed Deployment</div>
+					</li>
+				</ul>
+				<ul class="service-overview">
+					<li class="overview-item">
+						<div class="overview-value"></div>
+						<div class="overview-label"></div>
+					</li>
+					<li class="overview-item bottom-right">
+						<div class="overview-value" [ngSwitch]="deployments.lastDeploymentStatus">
+							<!-- {{deployments.lastDeploymentStatus || 'NA'}} -->
+							<span class='icon-icon-good' title='{{deployments.lastDeploymentStatus}}' *ngSwitchCase='"successful"'>
+	
+							<span class="path1"></span><span class="path2"></span>
+	
+							</span>
+							<span class='icon-icon-good' title='{{deployments.lastDeploymentStatus}}' *ngSwitchCase='"active"'>
+	
+									<span class="path1"></span><span class="path2"></span>
+	
+							</span>
+	
+							<span title='{{deployments.lastDeploymentStatus}} '*ngSwitchCase='"failed"' class='icon-icon-bad' >
+									<span class="path1"></span><span class="path2"></span>
+							</span>
+							<span title='{{deployments.lastDeploymentStatus}}' class='icon-icon-inactive' *ngSwitchDefault ></span>
+							<span title='{{deployments.lastDeploymentStatus}}' class='icon-In-Progress' *ngSwitchCase='"started"'></span>
+						</div>
+						<div class="overview-label">
+							Last Deployment Status
+						</div>
+					</li>
+					<li class="overview-item">
+						<div class="overview-value"></div>
+						<div class="overview-label">
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
 	</div>
 </div>

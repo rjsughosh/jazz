@@ -544,6 +544,12 @@
             </div>
           </li>
         </ul>
+         <div *ngIf='!disp_show2' class='down-btn-wrap down-btn-wrap-advanced'>
+          <div class="custom-save-btn-wrap">
+            <btn-jazz-primary class="save-btn-wrap" text="SAVE" (click)='onAdvancedSaveClick()'></btn-jazz-primary>
+            <a (click)='onCancelClick()'>CANCEL</a>
+          </div>
+        </div>
       </div>
       </div>
        <div *ngIf='!disp_show' class='down-btn-wrap'>
