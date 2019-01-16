@@ -1380,7 +1380,6 @@ details summary::-webkit-details-marker {
 
 .metadata-body {
   display: flex;
-  align-items: flex-start;
   .metadata-column {
     width: 33%;
   }
@@ -1772,4 +1771,43 @@ btn-jazz-primary {
 
 .update-color {
   background-color: #ed008c;
+}
+
+.approval-security-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+  justify-content: space-between;
+}
+
+.toggled-metadata-column {
+  width: auto !important;
+  height: 49%;
+  background-color: white;
+}
+
+.toggled-margin {
+  padding: 0px 5px 0px 3px;
+}
+
+.toggled-approvals {
+  padding-bottom: 15px;
+  background: white;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 8px;
+}
+.toggled-ul {
+  padding: 0px 10px 0px 10px !important;
+}
+.approval-wrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 66%;
+}
+
+.approval-security-div-wrapper {
+  width: 49%;
+  background-color: white;
+  border-radius: 7px;
 }
