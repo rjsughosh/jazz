@@ -160,7 +160,7 @@ export class ServiceOverviewComponent implements OnInit {
   selected: string = 'Minutes';
   eventSchedule: string = 'fixedRate';
   cronObj = new CronObject('0/5', '*', '*', '*', '?', '*');
-  advanceSaveEnabled: boolean = true;
+  advanceSaveEnabled: boolean = false;
   rateExpression = new RateExpression(
     undefined,
     undefined,
@@ -1116,29 +1116,39 @@ export class ServiceOverviewComponent implements OnInit {
 
   onInternalAccessChange() {
     this.requireInternalAccess = !this.requireInternalAccess;
-    if (this.requireInternalAccess == this.service.require_internal_access)
-      this.advanceSaveEnabled = true;
-    else this.advanceSaveEnabled = false;
+    this.shouldSaveUpdate();
   }
 
   onEnableApiSecurityChange() {
     this.enableApiSecurity = !this.enableApiSecurity;
-    if (this.enableApiSecurity == this.service.enable_api_security)
-      this.advanceSaveEnabled = true;
-    else this.advanceSaveEnabled = false;
+    this.shouldSaveUpdate();
   }
   onPublicSelected() {
     this.publicSelected = !this.publicSelected;
-    if (this.publicSelected == this.service.is_public_endpoint)
-      this.advanceSaveEnabled = true;
-    else this.advanceSaveEnabled = false;
+    this.shouldSaveUpdate();
   }
 
   onCdnConfigChanged() {
     this.cdnConfigSelected = !this.cdnConfigSelected;
-    if (this.cdnConfigSelected == this.service.create_cloudfront_url)
-      this.advanceSaveEnabled = true;
-    else this.advanceSaveEnabled = false;
+    this.shouldSaveUpdate();
+  }
+
+  shouldSaveUpdate(){
+    if(this.service.serviceType == 'website'){
+      if (this.publicSelected == this.service.is_public_endpoint && this.cdnConfigSelected == this.service.create_cloudfront_url)
+        this.advanceSaveEnabled = false;
+      else this.advanceSaveEnabled = true;
+    }
+    if(this.service.serviceType == 'api'){
+      if (this.enableApiSecurity == this.service.enable_api_security && this.requireInternalAccess == this.service.require_internal_access)
+        this.advanceSaveEnabled = false;
+      else this.advanceSaveEnabled = true;
+    }
+    if(this.service.serviceType == 'function'){
+      if (this.requireInternalAccess == this.service.require_internal_access)
+        this.advanceSaveEnabled = false;
+      else this.advanceSaveEnabled = true;
+    }
   }
 
   onSaveClick() {
