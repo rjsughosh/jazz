@@ -1812,3 +1812,11 @@ btn-jazz-primary {
   background-color: white;
   border-radius: 7px;
 }
+
+.appNameWrapper{
+  overflow-x: hidden;
+  overflow-y:hidden;
+  text-align:left;
+  text-overflow:ellipsis;
+}
+
