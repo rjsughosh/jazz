@@ -718,6 +718,7 @@
                   <btn-jazz-primary
                     class="save-btn-wrap"
                     text="SAVE"
+                    [disablePrimaryBtn]="advanceSaveEnabled"
                     (click)="onAdvancedSaveClick()"
                   ></btn-jazz-primary>
                   <a (click)="onCancelClick()">CANCEL</a>
@@ -746,7 +747,7 @@
                             class="ng-untouched ng-valid ng-dirty ng-valid-parse"
                             aria-invalid="false"
                             [checked]="publicSelected"
-                            (change)="publicSelected = !publicSelected"
+                            (change)="onPublicSelected()"
                           />
                           <label
                             for="checkbox-public"
@@ -785,7 +786,7 @@
                             class="ng-untouched ng-valid ng-dirty ng-valid-parse"
                             aria-invalid="false"
                             [checked]="enableApiSecurity"
-                            (change)="enableApiSecurity = !enableApiSecurity"
+                            (change)="onEnableApiSecurityChange()"
                           />
                           <label for="checkbox-vpc"></label>
                           <div class="cb-status-dets">
@@ -816,7 +817,7 @@
                           class="ng-untouched ng-valid ng-dirty ng-valid-parse"
                           aria-invalid="false"
                           [checked]="cdnConfigSelected"
-                          (change)="cdnConfigSelected = !cdnConfigSelected"
+                          (change)="onCdnConfigChanged()"
                         />
                         <label for="checkbox-cdnconfig"></label>
                         <div class="cb-status-dets">
@@ -858,7 +859,7 @@
                             aria-invalid="false"
                             [checked]="requireInternalAccess"
                             (change)="
-                              requireInternalAccess = !requireInternalAccess
+                              onInternalAccessChange()
                             "
                           />
                           <label for="checkbox-iA"></label>
@@ -881,7 +882,6 @@
         >
           <div
             class="metadata-heading"
-            [ngClass]="showGeneralField ? 'update-color' : ''"
           >
             <p>Events</p>
           </div>

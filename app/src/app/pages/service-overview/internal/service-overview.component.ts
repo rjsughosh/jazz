@@ -160,6 +160,8 @@ export class ServiceOverviewComponent implements OnInit {
   selected: string = 'Minutes';
   eventSchedule: string = 'fixedRate';
   cronObj = new CronObject('0/5', '*', '*', '*', '?', '*');
+  advanceSaveEnabled: boolean = true
+  ;
   rateExpression = new RateExpression(
     undefined,
     undefined,
@@ -375,6 +377,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onEditGeneral() {
+    this.disp_show2 = true; //resetting the other fields
     if (this.showApprovalField) {
       this.showApprovalField = false;
       this.onCancelClick();
@@ -383,6 +386,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onEditApproval() {
+    this.disp_show2 = true;
     if (this.showGeneralField) {
       this.showGeneralField = false;
       this.onCancelClick();
@@ -984,6 +988,11 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onEditClickAdvanced() {
+    if (this.showApprovalField) {
+      this.showApprovalField = false;
+      this.showGeneralField = false;
+      this.onCancelClick();
+    }
     this.disp_show2 = false;
     this.publicSelected = this.publicInitial;
     this.cdnConfigSelected = this.cdnConfigInitial;
@@ -1106,6 +1115,38 @@ export class ServiceOverviewComponent implements OnInit {
     if (Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true;
   }
 
+  onInternalAccessChange(){
+    this.requireInternalAccess = !this.requireInternalAccess;
+    if(this.requireInternalAccess == this.service.require_internal_access)
+    this.advanceSaveEnabled = true;
+    else
+    this.advanceSaveEnabled = false;
+    
+  }
+
+  onEnableApiSecurityChange(){
+    this.enableApiSecurity = !this.enableApiSecurity;
+    if(this.enableApiSecurity == this.service.enable_api_security)
+      this.advanceSaveEnabled = true;
+    else
+      this.advanceSaveEnabled = false;
+  }
+  onPublicSelected(){
+    this.publicSelected = !this.publicSelected;
+    if(this.publicSelected == this.service.is_public_endpoint)
+    this.advanceSaveEnabled = true;
+  else
+    this.advanceSaveEnabled = false;
+  }
+
+  onCdnConfigChanged(){
+    this.cdnConfigSelected= !this.cdnConfigSelected;
+    if(this.cdnConfigSelected == this.service.create_cloudfront_url)
+    this.advanceSaveEnabled = true;
+    else
+    this.advanceSaveEnabled = false;
+  }
+
   onSaveClick() {
     this.changeCounterApp = 0;
     this.showApprovalField = false;
@@ -1173,6 +1214,7 @@ export class ServiceOverviewComponent implements OnInit {
   onCancelClick() {
     this.showApprovalField = false;
     this.showGeneralField = false;
+    this.advanceSaveEnabled = false;
     this.showApproversList = false;
     this.isAppTouched = false;
     this.approversSaveStatus = false;
@@ -1509,10 +1551,10 @@ export class ServiceOverviewComponent implements OnInit {
 
     if (this.environ_arr != undefined)
       for (var i = 0; i < this.environ_arr.length; i++) {
-        this.environ_arr[i].status = this.environ_arr[i].status.replace(
+        !! this.environ_arr[i].status && (this.environ_arr[i].status = this.environ_arr[i].status.replace(
           '_',
           ' '
-        );
+        ));
         // this.environ_arr[i].status=this.environ_arr[i].status.split(" ").join("\ n")
         if (
           this.environ_arr[i].logical_id == 'prd' ||
@@ -1846,18 +1888,18 @@ export class ServiceOverviewComponent implements OnInit {
     var arrEnv = data.data.environment;
     if (environment.multi_env) {
       for (var i = 0; i < arrEnv.length; i++) {
-        arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
+        !!arrEnv[i].status && (arrEnv[i].status = arrEnv[i].status.replace('_', ' '));
         if (arrEnv[i].logical_id == 'prod') this.prodEnv = arrEnv[i];
         else this.Environments.push(arrEnv[i]);
       }
     } else {
       for (var i = 0; i < arrEnv.length; i++) {
-        arrEnv[i].status = arrEnv[i].status.replace('_', ' ');
+        !!arrEnv[i].status && (arrEnv[i].status = arrEnv[i].status.replace('_', ' '));
         if (arrEnv[i].logical_id == 'prod') this.prodEnv = arrEnv[i];
         else this.stgEnv = arrEnv[i];
       }
     }
-    arrEnv[0].status.replace('_', ' ');
+    !!arrEnv[0].status && (arrEnv[0].status.replace('_', ' '));
   }
 
   envfoross() {
@@ -1917,7 +1959,7 @@ export class ServiceOverviewComponent implements OnInit {
 
   setEventScheduleRate() {
     let localEvenSchedule = this.service.eventScheduleRate;
-    localEvenSchedule = localEvenSchedule.replace(/[\(\)']+/g, ' ');
+    !!localEvenSchedule && (localEvenSchedule = localEvenSchedule.replace(/[\(\)']+/g, ' '));
     localEvenSchedule = localEvenSchedule.split(' ');
     this.rateExpression.type = localEvenSchedule[0];
     this.cronObj.minutes = localEvenSchedule[1];
