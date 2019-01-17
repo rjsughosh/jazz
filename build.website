@@ -2,5 +2,7 @@ cd app
 cp -rf . ..
 cd ..
 rm -rf app
+rm -rf node_modules
+rm -rf package-lock.json
 npm install --save
 ng build --prod --aot=false --output-path=app
