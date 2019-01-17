@@ -61,7 +61,6 @@ for(let i in specificComponents){
     // ToasterModule,
     //PopoverModule,
     //ChartsModule,
-    //IonRangeSliderModule,
     //SharedModule,
     
   ],
