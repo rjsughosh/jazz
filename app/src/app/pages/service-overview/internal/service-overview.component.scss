@@ -1557,6 +1557,7 @@ details {
 }
 .confirm-overlay {
   padding: 1rem;
+  z-index: 2;
   position: fixed;
   display: flex;
   width: 100%;
@@ -1583,6 +1584,7 @@ details {
     width: calc(36rem - 20px);
   }
   .overlay-btns {
+  
     display: flex;
     align-items: center;
     justify-content: center;
