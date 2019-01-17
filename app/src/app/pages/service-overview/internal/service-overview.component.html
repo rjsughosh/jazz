@@ -41,22 +41,15 @@
     <span> .</span>
   </div>
   <div class="current-meter-bar">
-    <span id="current-status-val" [ngClass]="
-        statusCompleted || serviceStatusCompleted
-          ? 'completed-bar'
-          : 'under-progress-bar'
-      "
+    <span id="current-status-val" [ngClass]="statusCompleted || serviceStatusCompleted ? 'completed-bar' : 'under-progress-bar'"
       [class.deletion-bar]="statusFailed"></span>
-
     <div class="status-result" [ngClass]="serviceStatusStarted ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusStarted"></div>
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusStartedD"></div>
       <div class="status-lable">Started</div>
     </div>
-    <div class="status-result" [ngClass]="
-        serviceStatusValidate ? 'under-progress-bar' : 'under-progress'
-      "
+    <div class="status-result" [ngClass]="serviceStatusValidate ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusValidate"></div>
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusValidateD"></div>
@@ -68,17 +61,13 @@
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusRepoD"></div>
       <div class="status-lable repoCreation">Repository Creation</div>
     </div>
-    <div class="status-result" [ngClass]="
-        serviceStatusPermission ? 'under-progress-bar' : 'under-progress'
-      "
+    <div class="status-result" [ngClass]="serviceStatusPermission ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusPermission"></div>
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusPermissionD"></div>
       <div class="status-lable">Permissions</div>
     </div>
-    <div class="status-result" [ngClass]="
-        serviceStatusCompleted ? 'under-progress-bar' : 'under-progress'
-      "
+    <div class="status-result" [ngClass]="serviceStatusCompleted ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusCompleted"></div>
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusCompletedD"></div>
@@ -93,13 +82,8 @@
     <span> .</span>
   </div>
   <div class="current-meter-bar">
-    <span id="current-status-val" [ngClass]="
-        statusCompleted || serviceStatusCompleted
-          ? 'completed-bar'
-          : 'under-progress-bar'
-      "
+    <span id="current-status-val" [ngClass]="statusCompleted || serviceStatusCompleted ? 'completed-bar' : 'under-progress-bar'"
       [class.deletion-bar]="statusFailed"></span>
-
     <div class="status-result-delete" [ngClass]="serviceStatusStarted ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusStarted"></div>
@@ -107,9 +91,7 @@
       <div class="status-lable">Deletion Started</div>
     </div>
 
-    <div class="status-result-delete" [ngClass]="
-        serviceStatusValidate ? 'under-progress-bar' : 'under-progress'
-      "
+    <div class="status-result-delete" [ngClass]="serviceStatusValidate ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusValidate"></div>
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusValidateD"></div>
@@ -122,9 +104,7 @@
       <div class="status-lable repoCreation">Backed Up Project</div>
     </div>
 
-    <div class="status-result-delete" [ngClass]="
-        serviceStatusCompleted ? 'under-progress-bar' : 'under-progress'
-      "
+    <div class="status-result-delete" [ngClass]="serviceStatusCompleted ? 'under-progress-bar' : 'under-progress'"
       [class.completed-bar]="statusCompleted" [class.deletion-status]="statusFailed">
       <div class="status-icon icon-icon-confirmcheck" *ngIf="serviceStatusCompleted"></div>
       <div class="status-icon icon-icon-close" *ngIf="serviceStatusCompletedD"></div>
@@ -145,14 +125,7 @@
             </div>
             <div *ngIf="showGeneralField" class="down-btn-wrap">
               <div class="custom-save-btn-wrap">
-                <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="
-                    descriptionChanged &&
-                    !isSlackAvailable &&
-                    !dispAppError &&
-                    !approversSaveStatus &&
-                    !isEnvChanged &&
-                    !approvalTimeChanged
-                  "
+                <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="descriptionChanged && !isSlackAvailable && !dispAppError && !approversSaveStatus && !isEnvChanged && !approvalTimeChanged"
                   text="SAVE" (click)="onSaveClick()"></btn-jazz-primary>
                 <a (click)="onCancelClick()">CANCEL</a>
               </div>
@@ -177,9 +150,7 @@
                 {{ listRuntime[service.runtime] || service.runtime || 'NA' }}
               </div>
               <div *ngIf="showGeneralField">
-                <dropdown class="dropdown-3" [dropdwnContent]="environList" title="Select Runtime" [selected]="
-                    listRuntime[service.runtime] || service.runtime || 'NA'
-                  "
+                <dropdown class="dropdown-3" [dropdwnContent]="environList" title="Select Runtime" [selected]="listRuntime[service.runtime] || service.runtime || 'NA'"
                   (onSelected)="onenvSelected($event)"></dropdown>
               </div>
             </li>
@@ -201,16 +172,13 @@
               </div>
               <div *ngIf="showGeneralField" class="det-value slack-relative">
                 <input [(ngModel)]="slackChannel_temp" [ngClass]="{ noSlackError: hide_slack_error === false }" type="text"
-                  (blur)="checkSlackNameAvailability()" (ngModelChange)="
-                    update_payload.slack_channel = slackChannel_temp
-                  "
+                  (blur)="checkSlackNameAvailability()" (ngModelChange)="update_payload.slack_channel = slackChannel_temp"
                   class="det-value-input" placeholder="Feeling collaborative? Add it to slack" />
                 <img *ngIf="show_loader" class="input-loader" src="../assets/images/icons/loading.png" />
               </div>
             </li>
             <p class="limitWrapper" [class.hide]="hide_slack_error">
-              Slack channel is not available. Please provide a valid slack
-              channel.
+              Slack channel is not available. Please provide a valid slack channel.
             </p>
             <li>
               <div class="det-label">Created By</div>
@@ -242,15 +210,9 @@
                 <div class="flex-col">
                   <section class="pad-left0">
                     <div class="input-field-container" [ngClass]="{ disableInputField: isapplicationDisable }">
-                      <div class="selected-approvers" [ngClass]="{
-                          noApproverError:
-                            dispAppError === false && isAppTouched
-                        }">
+                      <div class="selected-approvers" [ngClass]="{noApproverError: dispAppError === false && isAppTouched}">
                         <ul (click)="focusInputApplication($event)">
-                          <li *ngFor="
-                              let selected of selectedApplications;
-                              let i = index
-                            ">
+                          <li *ngFor="let selected of selectedApplications;let i = index">
                             {{ selected.appName }}
                             <span (click)="removeApplication(i, selected)" class="icon-icon-close"></span>
                           </li>
@@ -262,18 +224,10 @@
                       </div>
                       <div [hidden]="!showApplicationList" class="approvers-list-wrap">
                         <div class="approvers-list typeShow open">
-                          <div class="approvers-dets" *ngFor="
-                              let app of (application_arr | myfilter: applc);
-                              let m = index
-                            "
-                            (focus)="(m == focusindex)" [ngClass]="{
-                              pinkfocusapplication: m == focusindex
-                            }"
-                            [ngStyle]="scrollList">
-                            <div (click)="
-                                selectApplication(app); $event.stopPropagation()
-                              "
-                              index="{m}" [attr.appName]="app.appName" [attr.issueID]="app.issueID">
+                          <div class="approvers-dets" *ngFor="let app of (application_arr | myfilter: applc); let m = index"
+                            (focus)="(m == focusindex)" [ngClass]="{pinkfocusapplication: m == focusindex}" [ngStyle]="scrollList">
+                            <div (click)="selectApplication(app); $event.stopPropagation()" index="{m}" [attr.appName]="app.appName"
+                              [attr.issueID]="app.issueID">
                               <div class="approvers-text">
                                 {{ app.appName }}
                               </div>
