@@ -858,9 +858,7 @@
                             class="ng-untouched ng-valid ng-dirty ng-valid-parse"
                             aria-invalid="false"
                             [checked]="requireInternalAccess"
-                            (change)="
-                              onInternalAccessChange()
-                            "
+                            (change)="onInternalAccessChange()"
                           />
                           <label for="checkbox-iA"></label>
                           <div class="cb-status-dets">
@@ -880,11 +878,7 @@
           class="metadata-column general-block"
           *ngIf="service.serviceType == 'function'"
         >
-          <div
-            class="metadata-heading"
-          >
-            <p>Events</p>
-          </div>
+          <div class="metadata-heading"><p>Events</p></div>
           <ul>
             <li *ngIf="service.serviceType == 'function'">
               <div class="det-label">Event Schedule</div>
