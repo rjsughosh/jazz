@@ -1214,8 +1214,7 @@ export class ServiceOverviewComponent implements OnInit {
     this.selectedApprovers = this.selectedApproversLocal.slice(0);
   }
 
-  cancelAdvanceSave() {
-    event.stopPropagation();
+  cancelAdvanceSave() {  
     this.saveClicked = false;
     this.advancedSaveClicked = false;
     this.onCancelClick();

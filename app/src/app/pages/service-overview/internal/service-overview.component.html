@@ -1368,10 +1368,10 @@
 
   <div
     class="confirm-overlay"
-    (click)="cancelAdvanceSave()"
+    (click)="cancelAdvanceSave();"
     *ngIf="saveClicked || advancedSaveClicked"
   >
-    <div class="confirm-overlay-inner-wrap">
+    <div class="confirm-overlay-inner-wrap" (click)="$event.stopPropagation();">
       <div class="overlay-header">Submitting Changes</div>
       <div *ngIf="isPUTLoading" class="loader-confirmation">
         <div class="loading-row-confirm show" [class.show]="isPUTLoading">
