@@ -1133,18 +1133,24 @@ export class ServiceOverviewComponent implements OnInit {
     this.shouldSaveUpdate();
   }
 
-  shouldSaveUpdate(){
-    if(this.service.serviceType == 'website'){
-      if (this.publicSelected == this.service.is_public_endpoint && this.cdnConfigSelected == this.service.create_cloudfront_url)
+  shouldSaveUpdate() {
+    if (this.service.serviceType == 'website') {
+      if (
+        this.publicSelected == this.service.is_public_endpoint &&
+        this.cdnConfigSelected == this.service.create_cloudfront_url
+      )
         this.advanceSaveEnabled = false;
       else this.advanceSaveEnabled = true;
     }
-    if(this.service.serviceType == 'api'){
-      if (this.enableApiSecurity == this.service.enable_api_security && this.requireInternalAccess == this.service.require_internal_access)
+    if (this.service.serviceType == 'api') {
+      if (
+        this.enableApiSecurity == this.service.enable_api_security &&
+        this.requireInternalAccess == this.service.require_internal_access
+      )
         this.advanceSaveEnabled = false;
       else this.advanceSaveEnabled = true;
     }
-    if(this.service.serviceType == 'function'){
+    if (this.service.serviceType == 'function') {
       if (this.requireInternalAccess == this.service.require_internal_access)
         this.advanceSaveEnabled = false;
       else this.advanceSaveEnabled = true;
