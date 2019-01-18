@@ -1221,6 +1221,8 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.slackChannel_temp = this.service.slackChannel;
+    this.desc_temp = this.service.description;
     this.showApprovalField = false;
     this.showGeneralField = false;
     this.advanceSaveEnabled = false;
