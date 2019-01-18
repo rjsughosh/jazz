@@ -125,7 +125,7 @@
             </div>
             <div *ngIf="showGeneralField" class="down-btn-wrap">
               <div class="custom-save-btn-wrap">
-                <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="!isSlackAvailable && descriptionChanged && !dispAppError"
+                <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="generalAdvanceDisable"
                   text="SAVE" (click)="onSaveClick()"></btn-jazz-primary>
                 <a (click)="onCancelClick()">CANCEL</a>
               </div>
@@ -263,9 +263,6 @@
               <div *ngIf="showApprovalField" class="down-btn-wrap">
                 <div class="custom-save-btn-wrap">
                   <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="
-                      descriptionChanged &&
-                      !isSlackAvailable &&
-                      !dispAppError &&
                       !approversSaveStatus &&
                       !isEnvChanged &&
                       !approvalTimeChanged

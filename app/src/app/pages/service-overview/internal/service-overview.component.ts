@@ -242,6 +242,7 @@ export class ServiceOverviewComponent implements OnInit {
   rateData: any = ['Minutes', 'Hours', 'Days'];
   approversPlaceHolder: string = 'Start typing (min 3 chars)...';
   awsEventExpression: any;
+  generalAdvanceDisable: boolean = true;
   showApprovalField: boolean = false;
   endpList = [
     {
@@ -656,6 +657,7 @@ export class ServiceOverviewComponent implements OnInit {
     } else {
       this.descriptionChanged = true;
     }
+    this.checkGeneralAdvanceDisable();
   }
 
   loadPlaceholders() {
@@ -859,6 +861,7 @@ export class ServiceOverviewComponent implements OnInit {
     this.selectedApplications.push(app);
     let nonRepeatedData = data => data.filter((v, i) => data.indexOf(v) === i);
     this.application_arr = nonRepeatedData(this.application_arr);
+    this.checkGeneralAdvanceDisable();
     return;
   }
 
@@ -1157,6 +1160,14 @@ export class ServiceOverviewComponent implements OnInit {
     }
   }
 
+  checkGeneralAdvanceDisable(){
+    if(this.selectedApplications[0].appName == this.service.app_name &&  this.slackChannel_temp == this.service.slackChannel && this.update_payload.description == this.service.description)
+      this.generalAdvanceDisable = true;
+    else
+        this.generalAdvanceDisable = false;
+    if(!this.hide_slack_error)
+      this.generalAdvanceDisable = true;
+  }
   onSaveClick() {
     this.changeCounterApp = 0;
     this.showApprovalField = false;
@@ -1221,6 +1232,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.generalAdvanceDisable = true;
     this.slackChannel_temp = this.service.slackChannel;
     this.desc_temp = this.service.description;
     this.showApprovalField = false;
@@ -1282,6 +1294,7 @@ export class ServiceOverviewComponent implements OnInit {
     if (this.slackChannel_temp == '') {
       this.hide_slack_error = true;
       this.isSlackAvailable = true;
+      this.checkGeneralAdvanceDisable();
       return;
     }
     this.validateChannelName();
@@ -1340,6 +1353,7 @@ export class ServiceOverviewComponent implements OnInit {
               this.hide_slack_error = false;
             }
             this.show_loader = false;
+            this.checkGeneralAdvanceDisable();
           },
           error => {
             var err = error;
