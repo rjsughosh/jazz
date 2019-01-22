@@ -474,6 +474,7 @@ export class ServiceOverviewComponent implements OnInit {
     } else {
       this.isEnvChanged = false;
     }
+    this.shouldGeneralUpdate()
   }
 
   //method to watch changes on minute tab
@@ -1136,6 +1137,15 @@ export class ServiceOverviewComponent implements OnInit {
     this.shouldSaveUpdate();
   }
 
+  shouldGeneralUpdate(){
+    if(this.isEnvChanged){
+      this.generalAdvanceDisable = false;
+    }
+    else{
+      this.generalAdvanceDisable = true;
+    }
+  }
+
   shouldSaveUpdate() {
     if (this.service.serviceType == 'website') {
       if (
@@ -1212,9 +1222,7 @@ export class ServiceOverviewComponent implements OnInit {
         this.approvalTime != this.service.approvalTimeOutInMins &&
         this.approvalTime
       ) {
-        payload['metadata'] = {
-          approvalTimeOutInMins: this.approvalTime,
-        };
+        payload['metadata'].approvalTimeOutInMins = this.approvalTime;
       }
     }
     this.PutPayload = payload;
@@ -1247,11 +1255,13 @@ export class ServiceOverviewComponent implements OnInit {
     this.enableApiSecurity = this.service.enable_api_security;
     this.requireInternalAccess = this.service.require_internal_access;
     this.dispAppError = false;
+    this.onUpdateApprovers();
     this.update_payload = {};
     this.selectedApplications = this.selectedApplicationLocal.slice(0);
     if (this.selectedApplications.length > 0) {
       this.showAppclInput = false;
     }
+
     this.setApprovalData();
     this.approvalTimeChanged = false;
     this.accSelected = this.service.runtime;
@@ -1999,21 +2009,8 @@ export class ServiceOverviewComponent implements OnInit {
     this.cronObj.year = localEvenSchedule[6];
   }
 
-  refresh_env() {
-    this.envComponent.refresh();
-  }
-  internal_build: boolean = true;
-
-  ngOnChanges(x: any) {
+  onUpdateApprovers(){
     this.selectedApprovers = [];
-    this.selectedApplications = [];
-    if (environment.multi_env) this.is_multi_env = true;
-    if (environment.envName == 'oss') this.internal_build = false;
-    var obj;
-    //setting the value of approvalTimeOut
-    if (this.service.approvalTimeOutInMins) {
-      this.setApprovalData();
-    }
     if (this.service.approvers) {
       this.service.approvers.map(data => {
         let obj = {
@@ -2029,9 +2026,6 @@ export class ServiceOverviewComponent implements OnInit {
         this.isInputShow = false;
       }
     }
-    if (this.service.enable_api_security) {
-      this.enableApiSecurity = this.service.enable_api_security;
-    }
     if (this.service.approvers) {
       if (
         Object.keys(this.service.approvers).length ==
@@ -2040,6 +2034,26 @@ export class ServiceOverviewComponent implements OnInit {
         this.getApproversList();
       }
     }
+  }
+
+  refresh_env() {
+    this.envComponent.refresh();
+  }
+  internal_build: boolean = true;
+
+  ngOnChanges(x: any) {
+    this.selectedApplications = [];
+    if (environment.multi_env) this.is_multi_env = true;
+    if (environment.envName == 'oss') this.internal_build = false;
+    var obj;
+    //setting the value of approvalTimeOut
+    if (this.service.approvalTimeOutInMins) {
+      this.setApprovalData();
+    }
+    if (this.service.enable_api_security) {
+      this.enableApiSecurity = this.service.enable_api_security;
+    }
+    this.onUpdateApprovers();
 
     if (this.service.eventScheduleRate) {
       this.setEventScheduleRate();
