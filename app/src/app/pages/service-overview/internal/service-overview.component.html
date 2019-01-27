@@ -489,16 +489,25 @@
           </div>
         </div>
         <div class="metadata-column general-block" *ngIf="service.serviceType == 'function'">
-          <div class="metadata-heading">
-            <p>Events</p>
-          </div>
-          <ul>
-            <li *ngIf="service.serviceType == 'function'">
-              <div class="det-label">Event Schedule</div>
-              <div *ngIf="true" class="det-value">
-                {{ service.eventScheduleRate || 'NA' }}
+           <div class="metadata-heading" [ngClass]="editEvents ? 'update-color' : ''">
+              <p>Events</p>
+              <div class="edit-div" *ngIf="!editEvents" (click)="onClickEventsEdit()">
+                <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
-            </li>
+              <div *ngIf="editEvents" class="down-btn-wrap">
+                <div class="custom-save-btn-wrap">
+                  <btn-jazz-primary class="save-btn-wrap" text="SAVE" [disablePrimaryBtn]="eventDisable" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                  <a (click)="onCancelClick()">CANCEL</a>
+                </div>
+              </div>
+            </div>
+             <div class='flex-center top-shift'>
+          <div *ngIf="editEvents" class="warn-msg">
+            <div>!</div>
+            <div>Changes are not effective immediately. Your next deployment will use these changes</div>
+          </div>
+        </div>
+          <ul>
             <li *ngIf="service.serviceType == 'function'">
               <div class="det-label">Event Type</div>
               <div *ngIf="true" class="det-value">
@@ -517,7 +526,10 @@
                 service.eventScheduleRate
               ">
               <div class="det-label">Event Schedule</div>
-              <div *ngIf="false" class="det-value">
+               <div *ngIf="!editEvents" class="det-value">
+                {{ service.eventScheduleRate || 'NA' }}
+               </div>
+              <div *ngIf="editEvents" class="det-value">
                 <div class="input-field-container event-schedule-radio row zero-margin">
                   <section class="   pad-left0">
                     <div class="radio-container">
@@ -546,42 +558,42 @@
                 <div class="col-lg-8 col-md-8 event-schedule-fields cron-field" [ngClass]="{ 'zero-padding': rateExpression.type == 'none' }">
                   <div class="clearfix">
                     <div class="cron-fields row zero-margin arrow_box" *ngIf="rateExpression.type == 'cron'">
-                      <div class="col-lg-2">
+                      <div class="col-lg-2 full-width">
                         <p class="sm-input-label">Minutes</p>
                         <div class="input-wrapper">
                           <input name="rateMinute" type="text" class="textForm" required [(ngModel)]="cronObj.minutes"
                             #rateMinute="ngModel" (ngModelChange)="generateExpression(rateExpression)" />
                         </div>
                       </div>
-                      <div class="col-lg-2">
+                      <div class="col-lg-2 full-width">
                         <p class="sm-input-label">Hours</p>
                         <div class="input-wrapper">
                           <input name="rateHour" type="text" class="textForm" [(ngModel)]="cronObj.hours" #rateHour="ngModel"
                             (ngModelChange)="generateExpression(rateExpression)" required />
                         </div>
                       </div>
-                      <div class="col-lg-2">
+                      <div class="col-lg-2 full-width">
                         <p class="sm-input-label">Day-of-month</p>
                         <div class="input-wrapper">
                           <input name="rateDayofMonth" type="text" class="textForm" [(ngModel)]="cronObj.dayOfMonth"
                             #rateDayofMonth="ngModel" (ngModelChange)="generateExpression(rateExpression)" required />
                         </div>
                       </div>
-                      <div class="col-lg-2">
+                      <div class="col-lg-2 full-width">
                         <p class="sm-input-label">Month</p>
                         <div class="input-wrapper">
                           <input name="rateMonth" type="text" class="textForm" [(ngModel)]="cronObj.month" #rateMonth="ngModel"
                             (ngModelChange)="generateExpression(rateExpression)" required />
                         </div>
                       </div>
-                      <div class="col-lg-2">
+                      <div class="col-lg-2 full-width">
                         <p class="sm-input-label">Day-of-week</p>
                         <div class="input-wrapper">
                           <input name="rateDayOfWeek" type="text" class="textForm" [(ngModel)]="cronObj.dayOfWeek"
                             #rateDayOfWeek="ngModel" (ngModelChange)="generateExpression(rateExpression)" required />
                         </div>
                       </div>
-                      <div class="col-lg-2">
+                      <div class="col-lg-2 full-width">
                         <p class="sm-input-label">Year</p>
                         <div class="input-wrapper">
                           <input name="rateYear" type="text" class="textForm" required [(ngModel)]="cronObj.year"

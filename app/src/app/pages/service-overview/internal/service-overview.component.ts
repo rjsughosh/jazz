@@ -244,6 +244,8 @@ export class ServiceOverviewComponent implements OnInit {
   awsEventExpression: any;
   generalAdvanceDisable: boolean = true;
   showApprovalField: boolean = false;
+  editEvents : boolean = false;
+  eventDisable  : boolean = true;
   endpList = [
     {
       name: 'tmo-dev-ops',
@@ -930,6 +932,14 @@ export class ServiceOverviewComponent implements OnInit {
         );
       }
     }
+    if (this.rateExpression.type != 'none') {
+      this.rateExpression.cronStr = this.cronParserService.getCronExpression(this.cronObj);
+      let tempExp = `cron(${this.rateExpression.cronStr})`;
+      if( tempExp == this.service.eventScheduleRate){
+        this.eventDisable = true;
+      }
+      this.eventDisable = false;
+    }
 
     if (this.rateExpression.isValid === undefined) {
       return undefined;
@@ -938,6 +948,10 @@ export class ServiceOverviewComponent implements OnInit {
     } else if (this.rateExpression.isValid === true) {
       return this.rateExpression.cronStr;
     }
+  }
+
+  onClickEventsEdit(){
+  this.editEvents = true;
   }
 
   getAppName(app) {
@@ -1017,6 +1031,7 @@ export class ServiceOverviewComponent implements OnInit {
           this.disp_show = true;
           this.saveClicked = false;
           this.selectedApplications = [];
+          this.editEvents = false;
           let successMessage = this.toastmessage.successMessage(
             Response,
             'updateService'
@@ -1240,6 +1255,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.editEvents = false;
     this.generalAdvanceDisable = true;
     this.slackChannel_temp = this.service.slackChannel;
     this.desc_temp = this.service.description;
@@ -1256,6 +1272,7 @@ export class ServiceOverviewComponent implements OnInit {
     this.requireInternalAccess = this.service.require_internal_access;
     this.dispAppError = false;
     this.onUpdateApprovers();
+    this.setEventScheduleRate();
     this.update_payload = {};
     this.selectedApplications = this.selectedApplicationLocal.slice(0);
     if (this.selectedApplications.length > 0) {
