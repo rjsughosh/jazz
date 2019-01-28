@@ -375,6 +375,12 @@
                 </div>
               </div>
             </div>
+            <div class='flex-center top-shift'>
+          <div *ngIf="!disp_show2" class="warn-msg">
+            <div>!</div>
+            <div>Changes are not effective immediately. Your next deployment will use these changes</div>
+          </div>
+        </div>
             <ul class="toggled-ul">
               <li *ngIf="service.serviceType == 'website'">
                 <div class="det-label">Publicly Accessible</div>
