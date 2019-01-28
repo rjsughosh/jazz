@@ -1840,3 +1840,9 @@ btn-jazz-primary {
 .full-width {
     width: 100%;
 }
+
+.disableDiv {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: pointer;
+}

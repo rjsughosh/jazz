@@ -365,7 +365,7 @@
             ">
             <div class="metadata-heading" [ngClass]="!disp_show2 ? 'update-color' : ''">
               <p>Security</p>
-              <div class="edit-div" *ngIf="disp_show2" (click)="onEditClickAdvanced()">
+              <div [class]="service.status == 'creation completed' ? 'edit-div' : 'edit-div disableDiv'" *ngIf="disp_show2" (click)="onEditClickAdvanced()">
                 <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
               <div *ngIf="!disp_show2" class="down-btn-wrap">
