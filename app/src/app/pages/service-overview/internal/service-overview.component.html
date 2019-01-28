@@ -377,8 +377,7 @@
             </div>
             <div class='flex-center top-shift'>
           <div *ngIf="!disp_show2" class="warn-msg">
-            <div>!</div>
-            <div>Changes are not effective immediately. Your next deployment will use these changes</div>
+            <div><span>!</span>Changes are not effective immediately. Your next deployment will use these changes</div>
           </div>
         </div>
             <ul class="toggled-ul">
@@ -497,7 +496,8 @@
         <div class="metadata-column general-block" *ngIf="service.serviceType == 'function'">
            <div class="metadata-heading" [ngClass]="editEvents ? 'update-color' : ''">
               <p>Events</p>
-              <div class="edit-div" *ngIf="!editEvents" (click)="onClickEventsEdit()">
+              <div class="edit-div" *ngIf="!editEvents && service.eventScheduleRate != 'NA' &&
+                service.eventScheduleRate" (click)="onClickEventsEdit()">
                 <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
               <div *ngIf="editEvents" class="down-btn-wrap">
@@ -509,8 +509,7 @@
             </div>
              <div class='flex-center top-shift'>
           <div *ngIf="editEvents" class="warn-msg">
-            <div>!</div>
-            <div>Changes are not effective immediately. Your next deployment will use these changes</div>
+            <div><span>!</span>Changes are not effective immediately. Your next deployment will use these changes</div>
           </div>
         </div>
           <ul>

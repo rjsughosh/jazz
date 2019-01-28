@@ -1542,21 +1542,15 @@ details {
 }
 
 .warn-msg {
-    display: inline-flex;
     border-radius: 3px;
     background: #f9ada4;
     padding: 3px 10px;
     margin: 5px;
-    div {
-        &:first-child {
-            background: white;
-            border-radius: 50%;
-            padding: 3px 10px;
-            margin: 5px;
-        }
-        &:last-child {
-            align-self: center;
-        }
+    span {
+        background: white;
+        border-radius: 50%;
+        padding: 3px 10px;
+        margin: 5px;
     }
 }
 
