@@ -125,8 +125,10 @@
             </div>
             <div *ngIf="showGeneralField" class="down-btn-wrap">
               <div class="custom-save-btn-wrap">
-                <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="generalAdvanceDisable"
+              <div [ngClass]="generalAdvanceDisable ? 'disableBTN' : ''">
+                <btn-jazz-primary class="save-btn-wrap" [ngClass]="generalAdvanceDisable ? 'disabledPrimary' : '' " [disablePrimaryBtn]="generalAdvanceDisable"
                   text="SAVE" (click)="onSaveClick()"></btn-jazz-primary>
+                </div>
                 <a (click)="onCancelClick()">CANCEL</a>
               </div>
             </div>
@@ -262,12 +264,19 @@
               </div>
               <div *ngIf="showApprovalField" class="down-btn-wrap">
                 <div class="custom-save-btn-wrap">
+                <div  [ngClass]="(!approversSaveStatus &&
+                      !isEnvChanged &&
+                      !approvalTimeChanged) ? 'disableBTN' : ''">
                   <btn-jazz-primary class="save-btn-wrap" [disablePrimaryBtn]="
                       !approversSaveStatus &&
                       !isEnvChanged &&
                       !approvalTimeChanged
                     "
+                    [ngClass]="(!approversSaveStatus &&
+                      !isEnvChanged &&
+                      !approvalTimeChanged) ? 'disabledPrimary' : '' "
                     text="SAVE" (click)="onSaveClick()"></btn-jazz-primary>
+                  </div>
                   <a (click)="onCancelClick()">CANCEL</a>
                 </div>
               </div>
@@ -370,7 +379,9 @@
               </div>
               <div *ngIf="!disp_show2" class="down-btn-wrap">
                 <div class="custom-save-btn-wrap">
-                  <btn-jazz-primary class="save-btn-wrap" text="SAVE" [disablePrimaryBtn]="!advanceSaveEnabled" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                <div [ngClass]="!advanceSaveEnabled ? 'disableBTN' : ''">
+                  <btn-jazz-primary  [ngClass]="!advanceSaveEnabled ? 'disabledPrimary' : '' " class="save-btn-wrap" text="SAVE" [disablePrimaryBtn]="!advanceSaveEnabled" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                  </div>
                   <a (click)="onCancelClick()">CANCEL</a>
                 </div>
               </div>
@@ -502,7 +513,9 @@
               </div>
               <div *ngIf="editEvents" class="down-btn-wrap">
                 <div class="custom-save-btn-wrap">
-                  <btn-jazz-primary class="save-btn-wrap" text="SAVE" [disablePrimaryBtn]="eventDisable" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                  <div [ngClass]="eventDisable ? 'disableBTN' : ''">
+                  <btn-jazz-primary class="save-btn-wrap"  [ngClass]="eventDisable ? 'disabledPrimary' : '' " text="SAVE" [disablePrimaryBtn]="eventDisable" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                  </div>
                   <a (click)="onCancelClick()">CANCEL</a>
                 </div>
               </div>

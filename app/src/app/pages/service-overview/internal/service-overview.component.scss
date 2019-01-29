@@ -1841,8 +1841,10 @@ btn-jazz-primary {
     width: 100%;
 }
 
-.disableDiv {
+.disableBTN {
+    cursor: not-allowed;
+}
+
+.disabledPrimary {
     pointer-events: none;
-    opacity: 0.6;
-    cursor: pointer;
 }
