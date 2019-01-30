@@ -63,6 +63,7 @@ export class ClearWaterComponent implements OnInit {
   headerObj = {
     'accept': 'application/json'
   };
+  clearwater_ntid:string = environment.clearwater.ntid;
 
 
   constructor(
@@ -248,7 +249,7 @@ export class ClearWaterComponent implements OnInit {
     else{
       swaggerLintPayload ={
         'swaggerDoc': swagger_json,
-        'ntid': 'jazz',
+        'ntid': this.clearwater_ntid,
         'swaggerId': `${this.service.domain}_${this.service.name}_${this.env}`
       };
     }
