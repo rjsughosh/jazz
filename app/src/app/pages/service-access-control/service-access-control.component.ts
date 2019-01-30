@@ -96,7 +96,7 @@ export class ServiceAccessControlComponent implements OnInit {
   }
   
   //function for adding group
-  addgroup(i,category){
+  addgroup(i,category){   
      this.saveEnabled = true;
     if(category == 'manage'){
        this.groupsAccess.manage.push({'name': '','accessType':'read', 'userType':"Read Only"});
