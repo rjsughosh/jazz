@@ -120,7 +120,7 @@
         <div class="metadata-column general-block ">
           <div class="metadata-heading" [ngClass]="showGeneralField ? 'update-color' : ''">
             <p>General</p>
-            <div class="edit-div" *ngIf="!showGeneralField" (click)="onEditGeneral()">
+            <div class="edit-div" *ngIf="(!showGeneralField) && (service.status == 'creation completed')" (click)="onEditGeneral()">
               <img class="pre-image" src="/assets/erser/icon-edit.svg" />
             </div>
             <div *ngIf="showGeneralField" class="down-btn-wrap">
@@ -259,7 +259,7 @@
             ">
             <div class="metadata-heading" [ngClass]="showApprovalField ? 'update-color' : ''">
               <p>Approvals</p>
-              <div class="edit-div" *ngIf="!showApprovalField" (click)="onEditApproval()">
+              <div class="edit-div" *ngIf="!showApprovalField && (service.status == 'creation completed')" (click)="onEditApproval()">
                 <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
               <div *ngIf="showApprovalField" class="down-btn-wrap">
@@ -374,7 +374,7 @@
             ">
             <div class="metadata-heading" [ngClass]="!disp_show2 ? 'update-color' : ''">
               <p>Security</p>
-              <div [class]="service.status == 'creation completed' ? 'edit-div' : 'edit-div disableDiv'" *ngIf="disp_show2" (click)="onEditClickAdvanced()">
+              <div class="edit-div" *ngIf="disp_show2  && (service.status == 'creation completed')" (click)="onEditClickAdvanced()">
                 <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
               <div *ngIf="!disp_show2" class="down-btn-wrap">
@@ -508,7 +508,7 @@
            <div class="metadata-heading" [ngClass]="editEvents ? 'update-color' : ''">
               <p>Events</p>
               <div class="edit-div" *ngIf="!editEvents && service.eventScheduleRate != 'NA' &&
-                service.eventScheduleRate" (click)="onClickEventsEdit()">
+                service.eventScheduleRate  && (service.status == 'creation completed')" (click)="onClickEventsEdit()">
                 <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
               <div *ngIf="editEvents" class="down-btn-wrap">

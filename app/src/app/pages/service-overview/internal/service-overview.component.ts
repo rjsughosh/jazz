@@ -673,12 +673,14 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   updateTags() {
+    if(this.tags_temp){
     var payloag_tags;
     payloag_tags = this.tags_temp.split(',');
     payloag_tags.forEach(function(item, index) {
       payloag_tags[index] = item.trim();
     });
     this.update_payload.tags = payloag_tags;
+  }
   }
 
   openSidebar() {
@@ -1005,10 +1007,10 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onEditClickAdvanced() {
-    if (this.showApprovalField) {
+    if (this.showApprovalField || this.showGeneralField) {
+      this.onCancelClick();
       this.showApprovalField = false;
       this.showGeneralField = false;
-      this.onCancelClick();
     }
     this.disp_show2 = false;
     this.publicSelected = this.publicInitial;
@@ -2014,6 +2016,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   setEventScheduleRate() {
+    if(this.service.eventScheduleRate){
     let localEvenSchedule = this.service.eventScheduleRate;
     !!localEvenSchedule &&
       (localEvenSchedule = localEvenSchedule.replace(/[\(\)']+/g, ' '));
@@ -2025,6 +2028,7 @@ export class ServiceOverviewComponent implements OnInit {
     this.cronObj.month = localEvenSchedule[4];
     this.cronObj.dayOfWeek = localEvenSchedule[5];
     this.cronObj.year = localEvenSchedule[6];
+    }
   }
 
   onUpdateApprovers(){
