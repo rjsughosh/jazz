@@ -83,12 +83,15 @@ export class ServiceAccessControlComponent implements OnInit {
        this.groupsAccess.code.splice(i,1);
        if(this.groupsAccess.code.length == 1)
        this.disableCode = true;
-    else
+       else
        this.disableCode = false;
     } else if(category == 'deploy'){
        this.groupsAccess.deploy.splice(i,1);
-       if(this.groupsAccess.code.length == 1)
+       if(this.groupsAccess.deploy.length == 1)
        this.disableDeploy = true;
+       else
+       this.disableDeploy = false;
+       console.log(this.disableDeploy);
     } 
   }
   
@@ -111,8 +114,8 @@ export class ServiceAccessControlComponent implements OnInit {
       else
          this.disableCode = false;
     } else if(category == 'deploy'){
-       this.groupsAccess.deploy.push({'name': '','accessType':'read', 'userType':"Read Only"});
-       if(this.groupsAccess.code.length == 1)
+       this.groupsAccess.deploy.push({'name': ''});
+       if(this.groupsAccess.deploy.length == 1)
          this.disableDeploy = true;
       else
          this.disableDeploy = false;
@@ -199,8 +202,8 @@ ngOnChanges(){
          this.disableManage = true;
       else
          this.disableManage = false;
-         if(this.groupsAccess.deploy.length == 1)
-   this.disableDeploy = true;
+      if(this.groupsAccess.deploy.length == 1)
+         this.disableDeploy = true;
       else
          this.disableDeploy = false; 
 }
