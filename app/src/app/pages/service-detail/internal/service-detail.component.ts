@@ -272,7 +272,6 @@ export class ServiceDetailComponent implements OnInit {
           this.getapplications();
         }
         else {
-
           for (var i = 0; i < this.application_arr.length; i++) {
             if (!this.application_arr[i].appID || !this.application_arr[i].appName) {
               this.application_arr.splice(i, 1);
@@ -298,6 +297,20 @@ export class ServiceDetailComponent implements OnInit {
       }, error => {
         console.log('workloads error', error)
       });
+  }
+
+  getapplications() {
+    var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
+
+    if (localStorageWorkload.length > 0){
+      if (this.start_at + 100 >= localStorageWorkload.length) {
+        this.fetchApplications();
+      } else {
+        this.application_arr = localStorageWorkload;
+      }
+    } else {
+      this.fetchApplications();
+    }
   }
 
   fetchService(id: string) {
