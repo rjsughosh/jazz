@@ -246,20 +246,7 @@ export class ServiceDetailComponent implements OnInit {
     }
   }
 
-  getapplications() {
-    var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
-
-    if (localStorageWorkload.length > 0){
-      if (this.start_at + 100 >= localStorageWorkload.length) {
-        this.fetchApplications();
-      } else {
-        this.application_arr = localStorageWorkload;
-      }
-    } else {
-      this.fetchApplications();
-    }
-  }
-
+ 
   fetchApplications() {
     this.http.get('https://cloud-api.corporate.t-mobile.com/api/cloud/workloads?startAt=' + this.start_at)
       .subscribe((res: Response) => {
@@ -298,6 +285,7 @@ export class ServiceDetailComponent implements OnInit {
         console.log('workloads error', error)
       });
   }
+  
 
   getapplications() {
     var localStorageWorkload = JSON.parse(localStorage.getItem('workload')) || [];
