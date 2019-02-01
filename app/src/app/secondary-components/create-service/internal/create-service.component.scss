@@ -435,6 +435,10 @@
     }
 }
 
+.each-step-wrap.aws-events input[type="radio"] + label span.background, .each-step-wrap.run-time input[type="radio"] + label span.background{
+    top: 4px;
+}
+
 .learn-more {
     margin-bottom: 0;
     font-size: 1rem;

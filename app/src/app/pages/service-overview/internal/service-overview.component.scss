@@ -421,6 +421,10 @@ $screen-lg: 1200px !default;
     padding: 0.5rem 1rem;
 }
 
+.det-value-container{
+    width: calc(100% - 11rem);
+}
+
 .det-value-input {
     width: 70%;
     border: none;
@@ -1439,9 +1443,27 @@ details summary::-webkit-details-marker {
     padding-right: 1rem;
 }
 
+.cron-exp{
+    width: calc(100% - 3em);
+}
+
 .cron-field {
-    width: 100%;
-    margin-left: -3.5rem !important;
+    width: 80%;
+    // margin-left: -3.5rem !important;
+}
+
+.cron-container{
+    padding: 0.5em;
+    margin: 1em 0;
+}
+
+input.textForm{
+    height: 33px;
+}
+
+.rate-field-cron-container{
+    margin: 1em 0;
+    padding: 1em 0.5em;
 }
 
 .event-schedule-radio {
@@ -1542,15 +1564,22 @@ details {
 }
 
 .warn-msg {
-    border-radius: 3px;
+    border-radius: 5px;
     background: #f9ada4;
-    padding: 3px 10px;
+    padding: 6px;
     margin: 5px;
+    .warn-msg-content {
+        display: flex;
+        align-items: center;
+    }
     span {
         background: white;
         border-radius: 50%;
-        padding: 3px 10px;
+        padding: 2px 10px;
         margin: 5px;
+    }
+    .warn-msg-text{
+        font-size: 12px;
     }
 }
 
@@ -1580,7 +1609,9 @@ details {
     }
     .overlay-body {
         padding: 4rem 3rem;
-        width: calc(36rem - 20px);
+        // width: calc(36rem - 20px);
+        width: 100%;
+        margin: 0 auto;
     }
     .overlay-btns {
         display: flex;
@@ -1702,12 +1733,17 @@ btn-jazz-primary {
     margin: auto;
 }
 
+.bottom-shift{
+    margin-bottom: 15px;
+}
+
 .rate-field.arrow_box:after {
-    left: calc(39% - 14px);
+    left: calc(20% - 14px);
 }
 
 .cron-fields.arrow_box:after {
-    left: calc(75% - 5px);
+    left: calc(15% - 5px);
+    border-width: 19px;
 }
 
 .cron-field {

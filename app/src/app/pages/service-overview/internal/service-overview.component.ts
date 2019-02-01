@@ -380,7 +380,7 @@ export class ServiceOverviewComponent implements OnInit {
 
   onEditGeneral() {
     this.disp_show2 = true; //resetting the other fields
-    if (this.showApprovalField) {
+    if (this.showApprovalField || this.editEvents) {
       this.showApprovalField = false;
       this.onCancelClick();
     }
@@ -389,7 +389,7 @@ export class ServiceOverviewComponent implements OnInit {
 
   onEditApproval() {
     this.disp_show2 = true;
-    if (this.showGeneralField) {
+    if (this.showGeneralField || this.editEvents) {
       this.showGeneralField = false;
       this.onCancelClick();
     }
@@ -528,6 +528,10 @@ export class ServiceOverviewComponent implements OnInit {
     this.eventExpression.type = 'awsEventsNone';
     if (val == 'cron' && this.service.eventScheduleRate) {
       this.setEventScheduleRate();
+    } else if(this.service.eventScheduleRate === null){
+      this.eventDisable = false;
+    } else if(val == 'none'){
+      this.eventDisable = false;
     }
   }
   onAWSEventChange(val) {
@@ -953,7 +957,8 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onClickEventsEdit(){
-  this.editEvents = true;
+    this.onCancelClick();
+    this.editEvents = true;
   }
 
   getAppName(app) {
@@ -1007,7 +1012,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onEditClickAdvanced() {
-    if (this.showApprovalField || this.showGeneralField) {
+    if (this.showApprovalField || this.showGeneralField || this.editEvents) {
       this.onCancelClick();
       this.showApprovalField = false;
       this.showGeneralField = false;
@@ -1034,6 +1039,7 @@ export class ServiceOverviewComponent implements OnInit {
           this.saveClicked = false;
           this.selectedApplications = [];
           this.editEvents = false;
+          this.eventDisable = true;
           let successMessage = this.toastmessage.successMessage(
             Response,
             'updateService'
@@ -1061,6 +1067,38 @@ export class ServiceOverviewComponent implements OnInit {
         }
       );
   }
+
+  onAdvancedSaveClickEvents(){
+    this.saveClicked = false;
+    this.advancedSaveClicked = true;
+    let payload = {};
+    let obJ = {};
+
+    if (this.advancedSaveClicked) {
+      if (this.rateExpression.type) {
+        if (this.rateExpression.type != 'none') {
+          this.rateExpression.cronStr = this.cronParserService.getCronExpression(
+            this.cronObj
+          );
+          if (this.rateExpression.cronStr == 'invalid') {
+            return;
+          } else if (this.rateExpression.cronStr !== undefined) {
+            obJ['eventScheduleRate'] = `cron(${this.rateExpression.cronStr})`;
+            obJ['eventScheduleEnable'] = true;
+          }
+        } else {
+          obJ['eventScheduleRate'] = null;
+          obJ['eventScheduleEnable'] = false;
+        }
+      }
+    }
+    payload['metadata'] = obJ;
+    this.PutPayload = payload;
+    if (Object.keys(this.PutPayload).length > 0) this.isPayloadAvailable = true;
+
+  }
+
+
   onAdvancedSaveClick() {
     this.saveClicked = false;
     this.advancedSaveClicked = true;
@@ -1257,6 +1295,7 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.eventDisable = true;
     this.editEvents = false;
     this.disp_show2 = true;
     this.generalAdvanceDisable = true;
@@ -2064,6 +2103,11 @@ export class ServiceOverviewComponent implements OnInit {
   internal_build: boolean = true;
 
   ngOnChanges(x: any) {
+    if(this.service){
+      if(this.service.eventScheduleEnable !== undefined){
+        this.service['eventScheduleEnablePresent'] = true
+      }
+    }
     this.selectedApplications = [];
     if (environment.multi_env) this.is_multi_env = true;
     if (environment.envName == 'oss') this.internal_build = false;

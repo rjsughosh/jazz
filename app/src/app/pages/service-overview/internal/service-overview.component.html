@@ -379,18 +379,18 @@
               </div>
               <div *ngIf="!disp_show2" class="down-btn-wrap">
                 <div class="custom-save-btn-wrap">
-                <div [ngClass]="!advanceSaveEnabled ? 'disableBTN' : ''">
-                  <btn-jazz-primary  [ngClass]="!advanceSaveEnabled ? 'disabledPrimary' : '' " class="save-btn-wrap" text="SAVE" [disablePrimaryBtn]="!advanceSaveEnabled" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                  <div [ngClass]="!advanceSaveEnabled ? 'disableBTN' : ''">
+                    <btn-jazz-primary  [ngClass]="!advanceSaveEnabled ? 'disabledPrimary' : '' " class="save-btn-wrap" text="SAVE" [disablePrimaryBtn]="!advanceSaveEnabled" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
                   </div>
                   <a (click)="onCancelClick()">CANCEL</a>
                 </div>
               </div>
             </div>
-            <div class='flex-center top-shift'>
-          <div *ngIf="!disp_show2" class="warn-msg">
-            <div><span>!</span>Changes are not effective immediately. Your next deployment will use these changes</div>
-          </div>
-        </div>
+            <div class='flex-center top-shift bottom-shift'>
+              <div *ngIf="!disp_show2" class="warn-msg">
+                <div class="warn-msg-content"><span>!</span><div class="warn-msg-text">Changes are not effective immediately. Your next deployment will use these changes</div></div>
+              </div>
+            </div>
             <ul class="toggled-ul">
               <li *ngIf="service.serviceType == 'website'">
                 <div class="det-label">Publicly Accessible</div>
@@ -507,23 +507,23 @@
         <div class="metadata-column general-block" *ngIf="service.serviceType == 'function'">
            <div class="metadata-heading" [ngClass]="editEvents ? 'update-color' : ''">
               <p>Events</p>
-              <div class="edit-div" *ngIf="!editEvents && service.eventScheduleRate != 'NA' &&
-                service.eventScheduleRate  && (service.status == 'creation completed')" (click)="onClickEventsEdit()">
+              <div class="edit-div" *ngIf="!editEvents &&
+                service.eventScheduleEnablePresent && (service.status == 'creation completed')" (click)="onClickEventsEdit()">
                 <img class="pre-image" src="/assets/erser/icon-edit.svg" />
               </div>
               <div *ngIf="editEvents" class="down-btn-wrap">
                 <div class="custom-save-btn-wrap">
                   <div [ngClass]="eventDisable ? 'disableBTN' : ''">
-                  <btn-jazz-primary class="save-btn-wrap"  [ngClass]="eventDisable ? 'disabledPrimary' : '' " text="SAVE" [disablePrimaryBtn]="eventDisable" (click)="onAdvancedSaveClick()"></btn-jazz-primary>
+                  <btn-jazz-primary class="save-btn-wrap"  [ngClass]="eventDisable ? 'disabledPrimary' : '' " text="SAVE" [disablePrimaryBtn]="eventDisable" (click)="onAdvancedSaveClickEvents()"></btn-jazz-primary>
                   </div>
                   <a (click)="onCancelClick()">CANCEL</a>
                 </div>
               </div>
             </div>
-             <div class='flex-center top-shift'>
-          <div *ngIf="editEvents" class="warn-msg">
-            <div><span>!</span>Changes are not effective immediately. Your next deployment will use these changes</div>
-          </div>
+             <div class='flex-center top-shift bottom-shift'>
+              <div *ngIf="editEvents" class="warn-msg">
+                <div class="warn-msg-content"><span>!</span><div class="warn-msg-text">Changes are not effective immediately. Your next deployment will use these changes</div></div>
+              </div>
         </div>
           <ul>
             <li *ngIf="service.serviceType == 'function'">
@@ -540,15 +540,14 @@
             </li>
             <li *ngIf="
                 service.serviceType == 'function' &&
-                service.eventScheduleRate != 'NA' &&
-                service.eventScheduleRate
+                service.eventScheduleEnablePresent
               ">
               <div class="det-label">Event Schedule</div>
                <div *ngIf="!editEvents" class="det-value">
                 {{ service.eventScheduleRate || 'NA' }}
                </div>
-              <div *ngIf="editEvents" class="det-value">
-                <div class="input-field-container event-schedule-radio row zero-margin">
+              <div *ngIf="editEvents" class="det-value det-value-container">
+                <div class="input-field-container event-schedule-radio row zero-margin show">
                   <section class="   pad-left0">
                     <div class="radio-container">
                       <input type="radio" name="EventSchedule" id="none" [value]="none" [checked]="rateExpression.type == 'none'"
@@ -564,7 +563,38 @@
                         of</label>
                     </div>
                   </section>
-                  <section class="pad-left0">
+                  <div class="col-lg-8 col-md-8 event-schedule-fields cron-field cron-container rate-field-cron-container" [ngClass]="{ 'zero-padding': rateExpression.type == 'none' }" *ngIf="rateExpression.type == 'rate'">
+                    <div class="clearfix">
+                      <div class="rate-field row  zero-margin arrow_box">
+                        <div class="col-lg-5 padding-right-0">
+                          <div class="input-wrapper" [ngClass]="{
+                              available:
+                                rateField.valid &&
+                                (rateField.dirty || rateField.touched),
+                              unavailable:
+                                !rateField.valid &&
+                                (rateField.dirty || rateField.touched)
+                            }">
+                            <input name="rateField" type="number" class="textForm" required [(ngModel)]="rateExpression.duration"
+                              (ngModelChange)="generateExpression(rateExpression)" #rateField="ngModel" OnlyNumber="true" />
+                            <img class="input-loader ng-hide" />
+                          </div>
+                        </div>
+                        <div class="col-lg-7">
+                          <div class="input-wrapper">
+                            <dropdown [dropdwnContent]="rateData" title="Select interval" [selected]="rateExpression.interval"
+                              [statusFilter]="statusFilter" (onSelected)="onSelectedDr($event)"></dropdown>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p *ngIf="rateExpression.type == 'rate'" class="learn-more">
+                      <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Learn
+                        more</a>
+                      about CloudWatch Event schedules
+                    </p>
+                  </div>
+                  <section class="pad-left0 cron-exp">
                     <div class="radio-container">
                       <input type="radio" name="EventSchedule" id="cron" [value]="cron" [checked]="rateExpression.type == 'cron'"
                         (click)="onEventScheduleChange('cron')" />
@@ -572,84 +602,62 @@
                         Expression</label>
                     </div>
                   </section>
-                </div>
-                <div class="col-lg-8 col-md-8 event-schedule-fields cron-field" [ngClass]="{ 'zero-padding': rateExpression.type == 'none' }">
-                  <div class="clearfix">
-                    <div class="cron-fields row zero-margin arrow_box" *ngIf="rateExpression.type == 'cron'">
-                      <div class="col-lg-2 full-width">
-                        <p class="sm-input-label">Minutes</p>
-                        <div class="input-wrapper">
-                          <input name="rateMinute" type="text" class="textForm" required [(ngModel)]="cronObj.minutes"
-                            #rateMinute="ngModel" (ngModelChange)="generateExpression(rateExpression)" />
+                  <div class="col-lg-8 col-md-8 event-schedule-fields cron-field cron-container" [ngClass]="{ 'zero-padding': rateExpression.type == 'none' }" *ngIf="rateExpression.type == 'cron'">
+                    <div class="clearfix">
+                      <div class="cron-fields row zero-margin arrow_box">
+                        <div class="col-lg-2 full-width">
+                          <p class="sm-input-label">Minutes</p>
+                          <div class="input-wrapper">
+                            <input name="rateMinute" type="text" class="textForm" required [(ngModel)]="cronObj.minutes"
+                              #rateMinute="ngModel" (ngModelChange)="generateExpression(rateExpression)" />
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-lg-2 full-width">
-                        <p class="sm-input-label">Hours</p>
-                        <div class="input-wrapper">
-                          <input name="rateHour" type="text" class="textForm" [(ngModel)]="cronObj.hours" #rateHour="ngModel"
-                            (ngModelChange)="generateExpression(rateExpression)" required />
+                        <div class="col-lg-2 full-width">
+                          <p class="sm-input-label">Hours</p>
+                          <div class="input-wrapper">
+                            <input name="rateHour" type="text" class="textForm" [(ngModel)]="cronObj.hours" #rateHour="ngModel"
+                              (ngModelChange)="generateExpression(rateExpression)" required />
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-lg-2 full-width">
-                        <p class="sm-input-label">Day-of-month</p>
-                        <div class="input-wrapper">
-                          <input name="rateDayofMonth" type="text" class="textForm" [(ngModel)]="cronObj.dayOfMonth"
-                            #rateDayofMonth="ngModel" (ngModelChange)="generateExpression(rateExpression)" required />
+                        <div class="col-lg-2 full-width">
+                          <p class="sm-input-label">Day-of-month</p>
+                          <div class="input-wrapper">
+                            <input name="rateDayofMonth" type="text" class="textForm" [(ngModel)]="cronObj.dayOfMonth"
+                              #rateDayofMonth="ngModel" (ngModelChange)="generateExpression(rateExpression)" required />
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-lg-2 full-width">
-                        <p class="sm-input-label">Month</p>
-                        <div class="input-wrapper">
-                          <input name="rateMonth" type="text" class="textForm" [(ngModel)]="cronObj.month" #rateMonth="ngModel"
-                            (ngModelChange)="generateExpression(rateExpression)" required />
+                        <div class="col-lg-2 full-width">
+                          <p class="sm-input-label">Month</p>
+                          <div class="input-wrapper">
+                            <input name="rateMonth" type="text" class="textForm" [(ngModel)]="cronObj.month" #rateMonth="ngModel"
+                              (ngModelChange)="generateExpression(rateExpression)" required />
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-lg-2 full-width">
-                        <p class="sm-input-label">Day-of-week</p>
-                        <div class="input-wrapper">
-                          <input name="rateDayOfWeek" type="text" class="textForm" [(ngModel)]="cronObj.dayOfWeek"
-                            #rateDayOfWeek="ngModel" (ngModelChange)="generateExpression(rateExpression)" required />
+                        <div class="col-lg-2 full-width">
+                          <p class="sm-input-label">Day-of-week</p>
+                          <div class="input-wrapper">
+                            <input name="rateDayOfWeek" type="text" class="textForm" [(ngModel)]="cronObj.dayOfWeek"
+                              #rateDayOfWeek="ngModel" (ngModelChange)="generateExpression(rateExpression)" required />
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-lg-2 full-width">
-                        <p class="sm-input-label">Year</p>
-                        <div class="input-wrapper">
-                          <input name="rateYear" type="text" class="textForm" required [(ngModel)]="cronObj.year"
-                            #rateYear="ngModel" (ngModelChange)="generateExpression(rateExpression)" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="rate-field row  zero-margin arrow_box" *ngIf="rateExpression.type == 'rate'">
-                      <div class="col-lg-7 padding-right-0">
-                        <div class="input-wrapper" [ngClass]="{
-                            available:
-                              rateField.valid &&
-                              (rateField.dirty || rateField.touched),
-                            unavailable:
-                              !rateField.valid &&
-                              (rateField.dirty || rateField.touched)
-                          }">
-                          <input name="rateField" type="number" class="textForm" required [(ngModel)]="rateExpression.duration"
-                            (ngModelChange)="generateExpression(rateExpression)" #rateField="ngModel" OnlyNumber="true" />
-                          <img class="input-loader ng-hide" />
-                        </div>
-                      </div>
-                      <div class="col-lg-5">
-                        <div class="input-wrapper">
-                          <dropdown [dropdwnContent]="rateData" title="Select interval" [selected]="rateExpression.interval"
-                            [statusFilter]="statusFilter" (onSelected)="onSelectedDr($event)"></dropdown>
+                        <div class="col-lg-2 full-width">
+                          <p class="sm-input-label">Year</p>
+                          <div class="input-wrapper">
+                            <input name="rateYear" type="text" class="textForm" required [(ngModel)]="cronObj.year"
+                              #rateYear="ngModel" (ngModelChange)="generateExpression(rateExpression)" />
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <div class="form-error" *ngIf="rateExpression.error != undefined">
+                      {{ rateExpression.error }}
+                    </div>
+                    <p *ngIf="rateExpression.type == 'cron'" class="learn-more">
+                      <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Learn
+                        more</a>
+                      about CloudWatch Event schedules
+                    </p>
                   </div>
-                  <div class="form-error" *ngIf="rateExpression.error != undefined">
-                    {{ rateExpression.error }}
-                  </div>
-                  <p *ngIf="rateExpression.type != 'none'" class="learn-more">
-                    <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Learn
-                      more</a>
-                    about CloudWatch Event schedules
-                  </p>
                 </div>
               </div>
             </li>
