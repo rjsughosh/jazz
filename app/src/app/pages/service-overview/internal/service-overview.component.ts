@@ -1295,6 +1295,9 @@ export class ServiceOverviewComponent implements OnInit {
   }
 
   onCancelClick() {
+    if(this.service.eventScheduleEnable === false){
+      this.rateExpression.type = "none"
+    }
     this.eventDisable = true;
     this.editEvents = false;
     this.disp_show2 = true;

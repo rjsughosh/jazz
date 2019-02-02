@@ -166,6 +166,7 @@ $screen-lg: 1200px !default;
 
 .loading-row-edit {
     display: none;
+    z-index: 1;
     top: 0;
     height: 100%;
     width: 100%;
