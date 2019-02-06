@@ -1609,10 +1609,12 @@ details {
         border-bottom: 1px solid #d3d3d3;
     }
     .overlay-body {
-        padding: 4rem 3rem;
-        // width: calc(36rem - 20px);
-        width: 100%;
-        margin: 0 auto;
+        text-align: center;
+        width: 34rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 7em;
     }
     .overlay-btns {
         display: flex;

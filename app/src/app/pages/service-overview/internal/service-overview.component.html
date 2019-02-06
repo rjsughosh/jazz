@@ -588,6 +588,9 @@
                         </div>
                       </div>
                     </div>
+                    <div class="form-error" *ngIf="rateExpressionFixed.error != undefined">
+                      {{ rateExpression.error }}
+                    </div>
                     <p *ngIf="rateExpression.type == 'rate'" class="learn-more">
                       <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Learn
                         more</a>
@@ -816,13 +819,11 @@
   >
     <div class="confirm-overlay-inner-wrap" (click)="$event.stopPropagation();">
       <div class="overlay-header">Submitting Changes</div>
-      <div *ngIf="isPUTLoading" class="loader-confirmation">
-        <div class="loading-row-confirm show" [class.show]="isPUTLoading">
-          <div class="loading-circle"></div>
+      <div class='overlay-body'>
+        <div *ngIf="!isPUTLoading" class="overlay-text">Are you sure you want to make this edit?</div>
+        <div *ngIf="isPUTLoading" class="loading-row-confirm show" [class.show]="isPUTLoading">
+            <div class="loading-circle"></div>
         </div>
-      </div>
-      <div *ngIf="!isPUTLoading" class="overlay-body">
-        Are you sure you want to make this edit?
       </div>
       <div class="overlay-btns">
         <btn-jazz-primary text="COMPLETE" [disablePrimaryBtn]="!isPayloadAvailable" (click)="onCompleteClick()"></btn-jazz-primary>
