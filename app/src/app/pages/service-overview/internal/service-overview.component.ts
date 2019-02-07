@@ -943,7 +943,7 @@ export class ServiceOverviewComponent implements OnInit {
         if(this.rateExpression.interval === "Minutes" || this.rateExpression.interval === "Hours"){
           let cronExp = JSON.parse(JSON.stringify(this.rateExpression.cronStr));
           cronExp = cronExp.split(" ");
-          if((cronExp[0].includes("0/") && cronExp[1].includes("*")) || (cronExp[1].includes("0/") && cronExp[0].includes("*"))){
+          if((cronExp[0].includes("0/") && cronExp[1].includes("*")) || (cronExp[1].includes("0/") && cronExp[0].includes("0"))){
             if(cronExp[0].includes("0/")){
               let duration = cronExp[0].split("/");
               duration = parseInt(duration[1]);
@@ -2112,6 +2112,23 @@ export class ServiceOverviewComponent implements OnInit {
         localEvenSchedule.shift();
       } else {
         localEvenSchedule = localEvenSchedule.split(' ');
+      }
+
+      if((localEvenSchedule[0].includes("0/") && localEvenSchedule[1].includes("*")) || (localEvenSchedule[1].includes("0/") && localEvenSchedule[0].includes("0"))){
+        if(localEvenSchedule[0].includes("0/")){
+          let duration = localEvenSchedule[0].split("/");
+          duration = parseInt(duration[1]);
+          this.rateExpression.duration = duration;
+          this.rateExpression.interval = "Minutes";
+        } else {
+          let duration = localEvenSchedule[1].split("/");
+          duration = parseInt(duration[1]);
+          this.rateExpression.duration = duration;
+          this.rateExpression.interval = "Hours";
+        }
+      } else {
+        this.rateExpression.duration = "5";
+        this.rateExpression.interval = "Minutes";
       }
       
       this.cronObj.minutes = localEvenSchedule[0];
