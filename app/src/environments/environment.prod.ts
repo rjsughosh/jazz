@@ -91,6 +91,9 @@ export const environment = {
     swaggerApiUrl: 'https://swagger-lint-ui-DLAB03.dev.px-npe01.cf.t-mobile.com/api-center-of-excellence/v1/swagger-lint',
     clearwaterAppUrl: 'http://flows.corporate.t-mobile.com/'
   },
+  clearwater:{
+    ntid:"jazz"
+  },
   userJourney: {
     registrationMessage: ''
   },
