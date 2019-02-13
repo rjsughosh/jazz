@@ -155,6 +155,7 @@ export class ServiceDetailComponent implements OnInit {
         returnObject['providerMemorySize'] = service.metadata.providerMemorySize;
         returnObject['create_cloudfront_url'] = service.metadata.create_cloudfront_url;
         returnObject['eventScheduleRate'] = service.metadata.eventScheduleRate;
+        returnObject['eventScheduleEnable'] = service.metadata.eventScheduleEnable;
         if (service.metadata.events || service.metadata.event_source) {
           returnObject['event_type'] = service.metadata.event_source || service.metadata.events[0].type;
         }
