@@ -43,7 +43,8 @@
     "ng2-dropdown": "0.0.21",
     "ng2-popover": "0.0.14",
     "really-relaxed-json": "^0.2.24",
-    "rxjs": "^5.4.1"
+    "rxjs": "^5.4.1",
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
     "@angular/cli": "^1.0.2",
