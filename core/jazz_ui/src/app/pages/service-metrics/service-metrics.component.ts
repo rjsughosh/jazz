@@ -142,6 +142,28 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   refresh() {
     this.ngAfterViewInit();
   }
+
+  setAssetNames(assets,assetSelected){
+    
+    if(assetSelected == 'apigateway'){
+
+    }
+    else if(assetSelected == 'lambda' || true){
+      let lambdaResourceNameArr = assets.map( asset => asset.provider_id && asset.asset_type == "lambda");
+      for( let i = 0 ; i<lambdaResourceNameArr.length; i++ ){
+        let tokens = lambdaResourceNameArr[i].split(':');
+        let reduced = tokens[tokens.length-1];
+        let reducedTokens = reduced.split('-');
+        lambdaResourceNameArr[i] = reducedTokens[reducedTokens.length-1];
+      }
+      lambdaResourceNameArr = _.uniq(lambdaResourceNameArr);
+      debugger
+
+      return lambdaResourceNameArr;
+    }
+
+  }
+
   getAssetType(data?) {
     try{
       let self = this;
@@ -154,14 +176,9 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
           if(assets){
             self.assetWithDefaultValue = assets;
             let validAssetList = assets.filter(asset => (env_oss.assetTypeList.indexOf(asset) > -1));
-            let lambdaResourceNameArr = response.data.assets.map( asset => asset.provider_id );
-            for( let i = 0 ; i<lambdaResourceNameArr.length; i++ ){
-              let tokens = lambdaResourceNameArr[i].split(':');
-              let reduced = tokens[tokens.length-1];
-              let reducedTokens = reduced.split('-');
-              lambdaResourceNameArr[i] = reducedTokens[reducedTokens.length-1];
-            }
-            lambdaResourceNameArr = _.uniq(lambdaResourceNameArr);
+            debugger
+            let lambdaResourceNameArr = this.setAssetNames(response.data.assets, this.assetSelected);
+             
             self.assetWithDefaultValue = validAssetList;
             if(validAssetList.length){
               for (var i = 0; i < self.assetWithDefaultValue.length; i++) {
@@ -256,6 +273,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter(changedFilter?) {
+    // debugger
     if (changedFilter) {
       let index = this.findIndexOfObjectWithKey(this.formFields, 'label', 'PERIOD');
       if (this.service.deployment_targets === 'gcp_apigee') {
@@ -347,7 +365,7 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
       this.slsLambdaselected = changedFilter.selected;
       this.setAsset();
     }
-    if (changedFilter && (changedFilter.label === 'ASSET' ||
+    if (changedFilter && (changedFilter.label === 'ASSET TYPE' ||
       changedFilter.label === 'METHOD' ||
       changedFilter.label === 'PATH')) {
       this.setAsset();
@@ -429,16 +447,27 @@ export class ServiceMetricsComponent implements OnInit, AfterViewInit {
 
 
   setAsset() {
+    debugger
+    let asseT;
     switch (this.serviceType) {
       case 'api':
         let method = this.filters.getFieldValueOfLabel('METHOD');
         let path = this.filters.getFieldValueOfLabel('PATH');
+         asseT = this.filters.getFieldValueOfLabel('ASSET TYPE');
+        debugger
+        // this.selectedAsset = _.find(this.queryDataRaw.assets, (asset) => {
+        //   return asset.asset_name.Method === method && asset.asset_name.Resource === path;
+        // });
+        this.queryDataRaw.assets.type
         this.selectedAsset = _.find(this.queryDataRaw.assets, (asset) => {
-          return asset.asset_name.Method === method && asset.asset_name.Resource === path;
+          return asset.asset_name.Method === method && asset.asset_name.Resource === path && asset.type == asseT;
         });
         break;
       case 'function':
-        this.selectedAsset = this.queryDataRaw.assets[0];
+       asseT = this.filters.getFieldValueOfLabel('ASSET TYPE');
+        _.find(this.queryDataRaw.assets, (asset) => {
+          return asset.type == asseT;
+        });
         break;
       case 'sls-app':
         if(this.queryDataRaw){

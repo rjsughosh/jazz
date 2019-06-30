@@ -123,6 +123,7 @@ export class FilterModalComponent implements OnInit {
     this.formChange.emit(filterField);
   }
   getFieldValueOfLabel(fieldLabel) {
+    // debugger
     try {
       let foundField = this.getAllFields().find((field) => {
 
@@ -139,6 +140,7 @@ export class FilterModalComponent implements OnInit {
   }
 
   getAllFields() {
+    // debugger
     return this.form.columns.reduce((accumulator, column) => {
       return accumulator.concat(column.fields)
     }, []);

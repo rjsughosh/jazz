@@ -209,7 +209,7 @@ export class ServiceDetailComponent implements OnInit {
       this.cache.set(id, service);
       this.onDataFetched(service);
       this.isGraphLoading = false;
-      this.selectedTabComponent.refresh_env();
+      // this.selectedTabComponent.refresh_env();
       this.setTabs();
       if(service && service.policies && service.policies.length) {
         service.policies.forEach(policy => {
